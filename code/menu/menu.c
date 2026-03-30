@@ -93,6 +93,7 @@ static uint8 pid_kd_step_index = 1U;
 static char menu_status_message[32] = "";
 static uint32 menu_status_expire_ms = 0U;
 static uint8 menu_footer_needs_update = 1U;
+static char gps_record_menu_label[48] = "2. Track Record [IDLE]";
 
 static void ips200_fill_rect(uint16 x_start, uint16 y_start, uint16 x_end, uint16 y_end, uint16 color);
 static void show_string_fit(uint16 x, uint16 y, const char *s);
@@ -105,6 +106,7 @@ static void menu_reset_dynamic_region(void);
 static void menu_request_redraw(uint8 full_redraw);
 static void menu_process_status_timeout(uint32 now_ms);
 static void menu_update_selection_from_encoder(void);
+static void menu_sync_gps_record_item(void);
 static void menu_draw_item(int index, uint8 selected);
 static void menu_draw_page(void);
 static void menu_enter_page(MenuPage *page);
@@ -449,7 +451,7 @@ static void gps_draw_map_page(void)
     show_string_fit_width_pad(10, 76, (uint16)(ips200_width_max - 20U), line2);
 
     path_display_set_area(map_x, map_y, map_w, map_h);
-    path_display_draw_map(RGB565_BLUE);
+    path_display_draw_map(RGB565_CYAN);
     menu_full_redraw = 0;
 }
 
@@ -735,7 +737,7 @@ static void gps_action_map(void)
 
 static MenuItem gps_items[] = {
     {"1. GPS Data", gps_action_display_data, NULL},
-    {"2. Track Record", gps_action_toggle_record, NULL},
+    {gps_record_menu_label, gps_action_toggle_record, NULL},
     {"3. Track Map", gps_action_map, NULL},
 };
 
@@ -999,6 +1001,38 @@ static void menu_update_selection_from_encoder(void)
     }
 }
 
+static void menu_sync_gps_record_item(void)
+{
+    char new_label[48];
+    uint16 point_count = path_recorder_get_point_count();
+
+    switch (path_recorder_get_state())
+    {
+        case PATH_STATE_RECORDING:
+            sprintf(new_label, "2. Track Record [REC:%d]", point_count);
+            break;
+        case PATH_STATE_COMPLETED:
+            sprintf(new_label, "2. Track Record [DONE:%d]", point_count);
+            break;
+        case PATH_STATE_IDLE:
+        default:
+            sprintf(new_label, "2. Track Record [IDLE]");
+            break;
+    }
+
+    if (0 != strcmp(gps_record_menu_label, new_label))
+    {
+        strcpy(gps_record_menu_label, new_label);
+
+        if ((current_page == &gps_menu) &&
+            (GPS_VIEW_NONE == gps_display_mode) &&
+            !menu_full_redraw)
+        {
+            menu_draw_item(1, (uint8)(current_selection == 1));
+        }
+    }
+}
+
 static void menu_draw_item(int index, uint8 selected)
 {
     uint16 y_pos;
@@ -1029,7 +1063,10 @@ static void menu_draw_item(int index, uint8 selected)
     {
         ips200_set_color(current_font_color, RGB565_BLACK);
     }
-    ips200_show_string(10U, y_pos, current_page->items[index].name);
+    show_string_fit_width(10U,
+                          y_pos,
+                          (uint16)(ips200_width_max - 20U),
+                          current_page->items[index].name);
 }
 
 static void menu_draw_page(void)
@@ -1259,6 +1296,7 @@ void menu_task(void)
     my_key_scanner();
     Get_Switch_Num();
     menu_process_status_timeout(now_ms);
+    menu_sync_gps_record_item();
 
     if (current_page == NULL || current_page->num_items <= 0)
     {
