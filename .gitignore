@@ -1,0 +1,31 @@
+# Build outputs
+Debug/
+Release/
+build/
+out/
+output/
+
+# Temporary / logs
+*.log
+*.tmp
+*.temp
+*.bak
+*.cache
+*.d
+*.o
+*.obj
+*.lst
+
+# OS / editor
+Thumbs.db
+Desktop.ini
+.vscode/
+
+# Python / misc helpers
+__pycache__/
+*.pyc
+
+# Keep ADS project files
+!.project
+!.cproject
+!.settings/
