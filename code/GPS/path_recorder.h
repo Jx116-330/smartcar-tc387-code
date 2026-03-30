@@ -29,6 +29,14 @@ typedef enum
 
 typedef struct
 {
+    float min_record_distance;
+    uint32 min_record_interval_ms;
+    uint8 min_satellites;
+    float max_record_speed_kph;
+} path_record_config_t;
+
+typedef struct
+{
     float latitude;
     float longitude;
     uint32 timestamp;
@@ -53,11 +61,17 @@ typedef struct
 extern path_data_t path_data;
 
 void path_recorder_init(void);
+void path_recorder_reset_config(void);
 uint8 path_recorder_start(void);
 uint8 path_recorder_start_new(void);
 void path_recorder_stop(void);
 void path_recorder_clear(void);
 void path_recorder_task(void);
+const path_record_config_t *path_recorder_get_config(void);
+void path_recorder_set_min_distance(float value);
+void path_recorder_set_min_interval_ms(uint32 value);
+void path_recorder_set_min_satellites(uint8 value);
+void path_recorder_set_max_speed_kph(float value);
 void path_recorder_get_stats(float* distance, uint32* time, float* avg_speed);
 path_state_enum path_recorder_get_state(void);
 uint16 path_recorder_get_point_count(void);

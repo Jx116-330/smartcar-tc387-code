@@ -68,6 +68,34 @@ static  gps_state_enum      gnss_ths_state = GPS_STATE_RECEIVING;           // r
 static  uint8               gps_gga_buffer[GNSS_BUFFER_SIZE];
 static  uint8               gps_rmc_buffer[GNSS_BUFFER_SIZE];
 static  uint8               gps_ths_buffer[GNSS_BUFFER_SIZE];
+static  uint32              gnss_rmc_frame_count = 0;
+static  uint32              gnss_gga_frame_count = 0;
+static  uint32              gnss_ths_frame_count = 0;
+static  uint32              gnss_parse_error_count = 0;
+
+static void gnss_copy_debug_sentence (char *dst, uint32 dst_size, const uint8 *src)
+{
+    uint32 i = 0;
+
+    if((NULL == dst) || (0U == dst_size))
+    {
+        return;
+    }
+
+    if(NULL == src)
+    {
+        dst[0] = '\0';
+        return;
+    }
+
+    while((i + 1U < dst_size) && (0x00 != src[i]) && ('\r' != src[i]) && ('\n' != src[i]))
+    {
+        dst[i] = (char)src[i];
+        i ++;
+    }
+
+    dst[i] = '\0';
+}
 
 //-------------------------------------------------------------------------------------------------------------------
 // 函数简介     获取指定 ',' 后面的索引
@@ -427,6 +455,7 @@ uint8 gnss_data_parse (void)
             if(bbc_xor_calculation != bbc_xor_origin)
             {
                 // 数据校验失败
+                gnss_parse_error_count ++;
                 return_state = 1;
                 break;
             }
@@ -448,6 +477,7 @@ uint8 gnss_data_parse (void)
             if(bbc_xor_calculation != bbc_xor_origin)
             {
                 // 数据校验失败
+                gnss_parse_error_count ++;
                 return_state = 1;
                 break;
             }
@@ -469,6 +499,7 @@ uint8 gnss_data_parse (void)
             if(bbc_xor_calculation != bbc_xor_origin)
             {
                 // 数据校验失败
+                gnss_parse_error_count ++;
                 return_state = 1;
                 break;
             }
@@ -496,13 +527,15 @@ void gnss_uart_callback (void)
 
     if(gnss_state)
     {
-        uint8 dat;
+        uint8 dat = 0;
+        uint8 received_byte = 0;
         while(uart_query_byte(GNSS_UART, &dat))
         {
+            received_byte = 1;
             fifo_write_buffer(&gnss_receiver_fifo, &dat, 1);
         }
         
-        if('\n' == dat)
+        if(received_byte && '\n' == dat)
         {
             // 读取前6个数据 用于判断语句类型
             temp_length = 6;
@@ -517,6 +550,12 @@ void gnss_uart_callback (void)
                     gnss_rmc_state = GPS_STATE_RECEIVED;
                     temp_length = fifo_used(&gnss_receiver_fifo);
                     fifo_read_buffer(&gnss_receiver_fifo, gps_rmc_buffer, &temp_length, FIFO_READ_AND_CLEAN);
+                    if(temp_length >= GNSS_BUFFER_SIZE)
+                    {
+                        temp_length = GNSS_BUFFER_SIZE - 1;
+                    }
+                    gps_rmc_buffer[temp_length] = '\0';
+                    gnss_rmc_frame_count ++;
                 }
             }
             else if(0 == strncmp((char *)&temp_gps[3], "GGA", 3))
@@ -527,6 +566,12 @@ void gnss_uart_callback (void)
                     gnss_gga_state = GPS_STATE_RECEIVED;
                     temp_length = fifo_used(&gnss_receiver_fifo);
                     fifo_read_buffer(&gnss_receiver_fifo, gps_gga_buffer, &temp_length, FIFO_READ_AND_CLEAN);
+                    if(temp_length >= GNSS_BUFFER_SIZE)
+                    {
+                        temp_length = GNSS_BUFFER_SIZE - 1;
+                    }
+                    gps_gga_buffer[temp_length] = '\0';
+                    gnss_gga_frame_count ++;
                 }
             }
             else if(0 == strncmp((char *)&temp_gps[3], "THS", 3))
@@ -537,6 +582,12 @@ void gnss_uart_callback (void)
                     gnss_ths_state = GPS_STATE_RECEIVED;
                     temp_length = fifo_used(&gnss_receiver_fifo);
                     fifo_read_buffer(&gnss_receiver_fifo, gps_ths_buffer, &temp_length, FIFO_READ_AND_CLEAN);
+                    if(temp_length >= GNSS_BUFFER_SIZE)
+                    {
+                        temp_length = GNSS_BUFFER_SIZE - 1;
+                    }
+                    gps_ths_buffer[temp_length] = '\0';
+                    gnss_ths_frame_count ++;
                 }
             }
             
@@ -546,6 +597,27 @@ void gnss_uart_callback (void)
             gnss_flag = 1;
         }
     }
+}
+
+void gnss_get_debug_info (gnss_debug_info_t *info)
+{
+    if(NULL == info)
+    {
+        return;
+    }
+
+    info->initialized = gnss_state;
+    info->rx_flag = gnss_flag;
+    info->rmc_state = (uint8)gnss_rmc_state;
+    info->gga_state = (uint8)gnss_gga_state;
+    info->ths_state = (uint8)gnss_ths_state;
+    info->rmc_frame_count = gnss_rmc_frame_count;
+    info->gga_frame_count = gnss_gga_frame_count;
+    info->ths_frame_count = gnss_ths_frame_count;
+    info->parse_error_count = gnss_parse_error_count;
+    gnss_copy_debug_sentence(info->rmc_sentence, sizeof(info->rmc_sentence), gps_rmc_buffer);
+    gnss_copy_debug_sentence(info->gga_sentence, sizeof(info->gga_sentence), gps_gga_buffer);
+    gnss_copy_debug_sentence(info->ths_sentence, sizeof(info->ths_sentence), gps_ths_buffer);
 }
 
 //-------------------------------------------------------------------------------------------------------------------
@@ -570,6 +642,17 @@ void gnss_init (gps_device_enum gps_device)
     const uint8 close_gst[]     = {0xF1, 0xD9, 0x06, 0x01, 0x03, 0x00, 0xF0, 0x08, 0x00, 0x02, 0x1F};
     const uint8 close_txt[]     = {0xF1, 0xD9, 0x06, 0x01, 0x03, 0x00, 0xF0, 0x40, 0x00, 0x3A, 0x8F};
     const uint8 close_txt_ant[] = {0xF1, 0xD9, 0x06, 0x01, 0x03, 0x00, 0xF0, 0x20, 0x00, 0x1A, 0x4F};
+
+    gnss_rmc_frame_count = 0;
+    gnss_gga_frame_count = 0;
+    gnss_ths_frame_count = 0;
+    gnss_parse_error_count = 0;
+    gnss_state = 0;
+    gnss_flag = 0;
+    memset(&gnss, 0, sizeof(gnss));
+    memset(gps_rmc_buffer, 0, sizeof(gps_rmc_buffer));
+    memset(gps_gga_buffer, 0, sizeof(gps_gga_buffer));
+    memset(gps_ths_buffer, 0, sizeof(gps_ths_buffer));
     
     if((TAU1201 == gps_device) || (GN42A == gps_device))
     {

@@ -334,6 +334,14 @@ menu.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\libraries\\zf_components\s
 "E:\\ads\\Seekfree_TC387_Opensource_Library\\libraries\\zf_components\seekfree_assistant_interface.h" :
 menu.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\GPS\path_config.h"
 "E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\GPS\path_config.h" :
+menu.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\GPS\path_recorder.h"
+"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\GPS\path_recorder.h" :
+menu.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\libraries\\zf_common\zf_common_headfile.h"
+"E:\\ads\\Seekfree_TC387_Opensource_Library\\libraries\\zf_common\zf_common_headfile.h" :
+menu.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\GPS\path_display.h"
+"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\GPS\path_display.h" :
+menu.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\libraries\\zf_common\zf_common_headfile.h"
+"E:\\ads\\Seekfree_TC387_Opensource_Library\\libraries\\zf_common\zf_common_headfile.h" :
 menu.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\MyKey\MyKey.h"
 "E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\MyKey\MyKey.h" :
 menu.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\myhead.h"
@@ -354,9 +362,5 @@ menu.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\ips.h"
 "E:\\ads\\Seekfree_TC387_Opensource_Library\\code\ips.h" :
 menu.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\GPS\path_recorder.h"
 "E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\GPS\path_recorder.h" :
-menu.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\libraries\\zf_common\zf_common_headfile.h"
-"E:\\ads\\Seekfree_TC387_Opensource_Library\\libraries\\zf_common\zf_common_headfile.h" :
 menu.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\GPS\path_display.h"
 "E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\GPS\path_display.h" :
-menu.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\libraries\\zf_common\zf_common_headfile.h"
-"E:\\ads\\Seekfree_TC387_Opensource_Library\\libraries\\zf_common\zf_common_headfile.h" :

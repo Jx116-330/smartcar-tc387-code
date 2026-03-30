@@ -15,7 +15,7 @@
 #include <GPS/display_gps.h>
 
 /** 轨迹缩放后的四周预留边距，避免线条贴边显示 */
-#define GPS_DISPLAY_PADDING      (6.0)
+#define GPS_DISPLAY_PADDING      (14.0)
 
 /** 当前映射区域左上角 X */
 static int16 display_start_x = 0;

@@ -1,6 +1,6 @@
 	; Module start
 	.compiler_version	"TASKING VX-toolset for AURIX Development Studio (non-commercial): C compiler v1.1r8 Build 22011964"
-	.compiler_invocation	"ctc -f cc9344a --dep-file=code/GPS/display_gps.d -c99 --fp-model=3cflnrSTz -D__CPU__=tc38x -D__CPU_TC38X__ --core=tc1.6.2 --fp-model=+float -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\code -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\code\\\\Beep -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\code\\\\GPS -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\code\\\\MyEncoder -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\code\\\\MyKey -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\code\\\\menu -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Configurations -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Infra -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Platform -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Platform\\\\Tricore -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Platform\\\\Tricore\\\\Compilers -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Sfr -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Sfr\\\\TC38A -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Sfr\\\\TC38A\\\\_Reg -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Ssw -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Ssw\\\\TC38A -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Ssw\\\\TC38A\\\\Tricore -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Service -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric\\\\If -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric\\\\If\\\\Ccu6If -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric\\\\StdIf -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric\\\\SysSe -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric\\\\SysSe\\\\Bsp -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric\\\\SysSe\\\\Math -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric\\\\_Utilities -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Asclin -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Asclin\\\\Asc -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Asclin\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Ccu6 -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Ccu6\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Ccu6\\\\Timer -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Cpu -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Cpu\\\\Irq -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Cpu\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Dma -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Dma\\\\Dma -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Dma\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Evadc -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Evadc\\\\Adc -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Evadc\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Flash -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Flash\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Gpt12 -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Gpt12\\\\IncrEnc -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Gpt12\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Gtm -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Gtm\\\\Atom -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Gtm\\\\Atom\\\\Pwm -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Gtm\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Mtu -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Mtu\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Pms -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Pms\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Port -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Port\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Qspi -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Qspi\\\\SpiMaster -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Qspi\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Scu -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Scu\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Src -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Src\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Stm -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Stm\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\_Impl -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\_Lib -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\_Lib\\\\DataHandling -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\_PinMap -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\zf_common -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\zf_components -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\zf_device -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\zf_driver -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\user -g2 -w544 -w557 -t4 --language=+volatile -N0 -O0 -Y0 -Z0 --compact-max-size=200 --misrac-version=2004 -o code/GPS/display_gps.src ../code/GPS/display_gps.c"
+	.compiler_invocation	"ctc -f cc29980a --dep-file=code/GPS/display_gps.d -c99 --fp-model=3cflnrSTz -D__CPU__=tc38x -D__CPU_TC38X__ --core=tc1.6.2 --fp-model=+float -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\code -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\code\\\\Beep -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\code\\\\GPS -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\code\\\\MyEncoder -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\code\\\\MyKey -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\code\\\\menu -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Configurations -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Infra -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Platform -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Platform\\\\Tricore -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Platform\\\\Tricore\\\\Compilers -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Sfr -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Sfr\\\\TC38A -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Sfr\\\\TC38A\\\\_Reg -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Ssw -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Ssw\\\\TC38A -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Ssw\\\\TC38A\\\\Tricore -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Service -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric\\\\If -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric\\\\If\\\\Ccu6If -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric\\\\StdIf -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric\\\\SysSe -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric\\\\SysSe\\\\Bsp -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric\\\\SysSe\\\\Math -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric\\\\_Utilities -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Asclin -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Asclin\\\\Asc -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Asclin\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Ccu6 -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Ccu6\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Ccu6\\\\Timer -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Cpu -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Cpu\\\\Irq -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Cpu\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Dma -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Dma\\\\Dma -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Dma\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Evadc -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Evadc\\\\Adc -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Evadc\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Flash -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Flash\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Gpt12 -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Gpt12\\\\IncrEnc -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Gpt12\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Gtm -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Gtm\\\\Atom -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Gtm\\\\Atom\\\\Pwm -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Gtm\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Mtu -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Mtu\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Pms -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Pms\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Port -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Port\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Qspi -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Qspi\\\\SpiMaster -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Qspi\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Scu -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Scu\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Src -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Src\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Stm -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Stm\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\_Impl -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\_Lib -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\_Lib\\\\DataHandling -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\_PinMap -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\zf_common -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\zf_components -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\zf_device -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\zf_driver -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\user -g2 -w544 -w557 -t4 --language=+volatile -N0 -O0 -Y0 -Z0 --compact-max-size=200 --misrac-version=2004 -o code/GPS/display_gps.src ../code/GPS/display_gps.c"
 	.compiler_name		"ctc"
 	;source	'../code/GPS/display_gps.c'
 
@@ -92,31 +92,31 @@ __gps_convert_single_to_xy_function_end:
 gps_set_display_area:	.type	func
 	movh.a	a15,#@his(display_start_x)
 	lea	a15,[a15]@los(display_start_x)
-.L292:
-	st.h	[a15],d4
 .L293:
+	st.h	[a15],d4
+.L294:
 	movh.a	a15,#@his(display_start_y)
 	lea	a15,[a15]@los(display_start_y)
-.L294:
-	st.h	[a15],d5
 .L295:
+	st.h	[a15],d5
+.L296:
 	movh.a	a15,#@his(display_width)
 	lea	a15,[a15]@los(display_width)
-.L296:
-	st.h	[a15],d6
 .L297:
+	st.h	[a15],d6
+.L298:
 	movh.a	a15,#@his(display_high)
 	lea	a15,[a15]@los(display_high)
-.L298:
-	st.h	[a15],d7
 .L299:
+	st.h	[a15],d7
+.L300:
 	movh.a	a15,#@his(transform_valid)
 	lea	a15,[a15]@los(transform_valid)
-.L300:
-	mov	d15,#0
 .L301:
-	st.b	[a15],d15
+	mov	d15,#0
 .L302:
+	st.b	[a15],d15
+.L303:
 	ret
 .L157:
 	
@@ -135,31 +135,31 @@ __gps_set_display_area_function_end:
 gps_set_xy_bounds:	.type	func
 	movh.a	a15,#@his(transform_bounds_min_x)
 	lea	a15,[a15]@los(transform_bounds_min_x)
-.L307:
-	st.w	[a15],d4
 .L308:
+	st.w	[a15],d4
+.L309:
 	movh.a	a15,#@his(transform_bounds_max_x)
 	lea	a15,[a15]@los(transform_bounds_max_x)
-.L309:
-	st.w	[a15],d5
 .L310:
+	st.w	[a15],d5
+.L311:
 	movh.a	a15,#@his(transform_bounds_min_y)
 	lea	a15,[a15]@los(transform_bounds_min_y)
-.L311:
-	st.w	[a15],d6
 .L312:
+	st.w	[a15],d6
+.L313:
 	movh.a	a15,#@his(transform_bounds_max_y)
 	lea	a15,[a15]@los(transform_bounds_max_y)
-.L313:
-	st.w	[a15],d7
 .L314:
+	st.w	[a15],d7
+.L315:
 	movh.a	a15,#@his(transform_bounds_override_valid)
 	lea	a15,[a15]@los(transform_bounds_override_valid)
-.L315:
-	mov	d15,#1
 .L316:
-	st.b	[a15],d15
+	mov	d15,#1
 .L317:
+	st.b	[a15],d15
+.L318:
 	ret
 .L163:
 	
@@ -178,11 +178,11 @@ __gps_set_xy_bounds_function_end:
 gps_clear_xy_bounds:	.type	func
 	movh.a	a15,#@his(transform_bounds_override_valid)
 	lea	a15,[a15]@los(transform_bounds_override_valid)
-.L322:
-	mov	d15,#0
 .L323:
-	st.b	[a15],d15
+	mov	d15,#0
 .L324:
+	st.b	[a15],d15
+.L325:
 	ret
 .L169:
 	
@@ -207,58 +207,58 @@ gps_to_xy:	.type	func
 .L235:
 	movh.a	a2,#@his(transform_ref_lat)
 	lea	a2,[a2]@los(transform_ref_lat)
-.L337:
-	ld.w	d15,[a15]
 .L338:
+	ld.w	d15,[a15]
+.L339:
 	mov	d0,#4059
 	addih	d0,d0,#16457
-.L339:
-	mul.f	d15,d15,d0
 .L340:
-	movh	d0,#17204
+	mul.f	d15,d15,d0
 .L341:
-	div.f	d15,d15,d0
+	movh	d0,#17204
 .L342:
-	st.w	[a2],d15
+	div.f	d15,d15,d0
 .L343:
+	st.w	[a2],d15
+.L344:
 	movh.a	a2,#@his(transform_ref_lon)
 	lea	a2,[a2]@los(transform_ref_lon)
-.L344:
-	ld.w	d15,[a15]4
 .L345:
+	ld.w	d15,[a15]4
+.L346:
 	mov	d0,#4059
 	addih	d0,d0,#16457
-.L346:
-	mul.f	d15,d15,d0
 .L347:
-	movh	d0,#17204
+	mul.f	d15,d15,d0
 .L348:
-	div.f	d15,d15,d0
+	movh	d0,#17204
 .L349:
-	st.w	[a2],d15
+	div.f	d15,d15,d0
 .L350:
+	st.w	[a2],d15
+.L351:
 	mov	d8,#0
 .L236:
 	j	.L2
 .L3:
 	mul	d15,d8,#8
 	addsc.a	a4,a15,d15,#0
-.L351:
+.L352:
 	mul	d15,d8,#4
 	addsc.a	a5,a12,d15,#0
-.L352:
+.L353:
 	mul	d15,d8,#4
 	addsc.a	a6,a13,d15,#0
 	call	gps_convert_single_to_xy
-.L353:
+.L354:
 	add	d8,#1
 .L2:
 	movh.a	a2,#@his(transition_point_num)
 	lea	a2,[a2]@los(transition_point_num)
 	ld.h	d15,[a2]
-.L354:
-	jlt	d8,d15,.L3
 .L355:
+	jlt	d8,d15,.L3
+.L356:
 	ret
 .L175:
 	
@@ -292,25 +292,25 @@ xy_to_screen:	.type	func
 	movh.a	a15,#@his(transform_bounds_override_valid)
 	lea	a15,[a15]@los(transform_bounds_override_valid)
 	ld.bu	d15,[a15]
-.L360:
-	jeq	d15,#0,.L4
 .L361:
+	jeq	d15,#0,.L4
+.L362:
 	movh.a	a15,#@his(transform_bounds_min_x)
 	lea	a15,[a15]@los(transform_bounds_min_x)
 	ld.w	d10,[a15]
-.L362:
+.L363:
 	movh.a	a15,#@his(transform_bounds_max_x)
 	lea	a15,[a15]@los(transform_bounds_max_x)
 	ld.w	d0,[a15]
-.L363:
+.L364:
 	movh.a	a15,#@his(transform_bounds_min_y)
 	lea	a15,[a15]@los(transform_bounds_min_y)
 	ld.w	d8,[a15]
-.L364:
+.L365:
 	movh.a	a15,#@his(transform_bounds_max_y)
 	lea	a15,[a15]@los(transform_bounds_max_y)
 	ld.w	d1,[a15]
-.L365:
+.L366:
 	j	.L5
 .L4:
 	mov	d2,#1
@@ -320,12 +320,12 @@ xy_to_screen:	.type	func
 	mul	d15,d2,#4
 	addsc.a	a15,a12,d15,#0
 	ld.w	d15,[a15]
-.L366:
+.L367:
 	cmp.f	d15,d15,d10
 	extr.u	d15,d15,#0,#1
-.L367:
-	jeq	d15,#0,.L8
 .L368:
+	jeq	d15,#0,.L8
+.L369:
 	mul	d15,d2,#4
 	addsc.a	a15,a12,d15,#0
 	ld.w	d10,[a15]
@@ -333,12 +333,12 @@ xy_to_screen:	.type	func
 	mul	d15,d2,#4
 	addsc.a	a15,a12,d15,#0
 	ld.w	d15,[a15]
-.L369:
+.L370:
 	cmp.f	d15,d15,d0
 	extr.u	d15,d15,#2,#1
-.L370:
-	jeq	d15,#0,.L9
 .L371:
+	jeq	d15,#0,.L9
+.L372:
 	mul	d15,d2,#4
 	addsc.a	a15,a12,d15,#0
 	ld.w	d0,[a15]
@@ -346,12 +346,12 @@ xy_to_screen:	.type	func
 	mul	d15,d2,#4
 	addsc.a	a15,a13,d15,#0
 	ld.w	d15,[a15]
-.L372:
+.L373:
 	cmp.f	d15,d15,d8
 	extr.u	d15,d15,#0,#1
-.L373:
-	jeq	d15,#0,.L10
 .L374:
+	jeq	d15,#0,.L10
+.L375:
 	mul	d15,d2,#4
 	addsc.a	a15,a13,d15,#0
 	ld.w	d8,[a15]
@@ -359,12 +359,12 @@ xy_to_screen:	.type	func
 	mul	d15,d2,#4
 	addsc.a	a15,a13,d15,#0
 	ld.w	d15,[a15]
-.L375:
+.L376:
 	cmp.f	d15,d15,d1
 	extr.u	d15,d15,#2,#1
-.L376:
-	jeq	d15,#0,.L11
 .L377:
+	jeq	d15,#0,.L11
+.L378:
 	mul	d15,d2,#4
 	addsc.a	a15,a13,d15,#0
 	ld.w	d1,[a15]
@@ -375,107 +375,107 @@ xy_to_screen:	.type	func
 .L5:
 	sub.f	d15,d0,d10
 	insert	d15,d15,#0,#31,#1
-.L378:
+.L379:
 	mov	d2,#28767
 	addih	d2,d2,#12425
-.L379:
+.L380:
 	cmp.f	d15,d15,d2
 	extr.u	d15,d15,#0,#1
-.L380:
-	jeq	d15,#0,.L12
 .L381:
-	add.f	d15,d0,d10
+	jeq	d15,#0,.L12
 .L382:
+	add.f	d15,d0,d10
+.L383:
 	movh	d0,#16384
 .L242:
 	div.f	d15,d15,d0
 .L247:
 	movh	d0,#16128
-.L383:
-	sub.f	d10,d15,d0
 .L384:
-	movh	d0,#16128
+	sub.f	d10,d15,d0
 .L385:
+	movh	d0,#16128
+.L386:
 	add.f	d0,d15,d0
 .L12:
 	sub.f	d15,d1,d8
 	insert	d15,d15,#0,#31,#1
-.L386:
+.L387:
 	mov	d2,#28767
 	addih	d2,d2,#12425
-.L387:
+.L388:
 	cmp.f	d15,d15,d2
 	extr.u	d15,d15,#0,#1
-.L388:
-	jeq	d15,#0,.L13
 .L389:
-	add.f	d15,d1,d8
+	jeq	d15,#0,.L13
 .L390:
+	add.f	d15,d1,d8
+.L391:
 	movh	d1,#16384
 .L245:
 	div.f	d15,d15,d1
 .L249:
 	movh	d1,#16128
-.L391:
-	sub.f	d8,d15,d1
 .L392:
-	movh	d1,#16128
+	sub.f	d8,d15,d1
 .L393:
+	movh	d1,#16128
+.L394:
 	add.f	d1,d15,d1
 .L13:
 	movh.a	a15,#@his(display_width)
 	lea	a15,[a15]@los(display_width)
 	ld.h	d15,[a15]
 	itof	d15,d15
-.L394:
-	movh	d2,#16704
 .L395:
+	movh	d2,#16864
+.L396:
 	sub.f	d3,d15,d2
 .L251:
 	movh.a	a15,#@his(display_high)
 	lea	a15,[a15]@los(display_high)
 	ld.h	d15,[a15]
 	itof	d15,d15
-.L396:
-	movh	d2,#16704
 .L397:
+	movh	d2,#16864
+.L398:
 	sub.f	d2,d15,d2
 .L253:
 	movh	d15,#16256
-.L398:
+.L399:
 	cmp.f	d15,d3,d15
 	extr.u	d15,d15,#0,#1
-.L399:
-	jeq	d15,#0,.L14
 .L400:
+	jeq	d15,#0,.L14
+.L401:
 	movh	d3,#16256
 .L14:
 	movh	d15,#16256
-.L401:
+.L402:
 	cmp.f	d15,d2,d15
 	extr.u	d15,d15,#0,#1
-.L402:
-	jeq	d15,#0,.L15
 .L403:
+	jeq	d15,#0,.L15
+.L404:
 	movh	d2,#16256
 .L15:
 	sub.f	d15,d0,d10
-.L404:
+.L405:
 	div.f	d3,d3,d15
 .L252:
 	sub.f	d15,d1,d8
-.L405:
+.L406:
 	div.f	d11,d2,d15
 .L254:
 	cmp.f	d15,d3,d11
 	jnz.t	d15:0,.L16
-.L406:
+.L407:
 	j	.L17
 .L16:
 	mov	d11,d3
 .L17:
 	sub.f	d15,d0,d10
-.L407:
+.L408:
 	mul.f	d15,d15,d11
 .L255:
 	sub.f	d0,d1,d8
@@ -484,78 +484,78 @@ xy_to_screen:	.type	func
 .L257:
 	movh.a	a15,#@his(transform_min_x)
 	lea	a15,[a15]@los(transform_min_x)
-.L408:
-	st.w	[a15],d10
 .L409:
+	st.w	[a15],d10
+.L410:
 	movh.a	a15,#@his(transform_min_y)
 	lea	a15,[a15]@los(transform_min_y)
-.L410:
-	st.w	[a15],d8
 .L411:
+	st.w	[a15],d8
+.L412:
 	movh.a	a15,#@his(transform_scale)
 	lea	a15,[a15]@los(transform_scale)
-.L412:
-	st.w	[a15],d11
 .L413:
+	st.w	[a15],d11
+.L414:
 	movh.a	a15,#@his(transform_offset_x)
 	lea	a15,[a15]@los(transform_offset_x)
-.L414:
+.L415:
 	movh.a	a2,#@his(display_start_x)
 	lea	a2,[a2]@los(display_start_x)
 	ld.h	d0,[a2]
 	itof	d0,d0
-.L415:
+.L416:
 	movh.a	a2,#@his(display_width)
 	lea	a2,[a2]@los(display_width)
 	ld.h	d1,[a2]
 .L250:
 	itof	d1,d1
-.L416:
+.L417:
 	sub.f	d15,d1,d15
 .L256:
 	movh	d1,#16384
-.L417:
-	div.f	d15,d15,d1
 .L418:
-	add.f	d15,d0,d15
+	div.f	d15,d15,d1
 .L419:
-	st.w	[a15],d15
+	add.f	d15,d0,d15
 .L420:
+	st.w	[a15],d15
+.L421:
 	movh.a	a15,#@his(transform_offset_y)
 	lea	a15,[a15]@los(transform_offset_y)
-.L421:
+.L422:
 	movh.a	a2,#@his(display_start_y)
 	lea	a2,[a2]@los(display_start_y)
 	ld.h	d15,[a2]
 	itof	d15,d15
-.L422:
+.L423:
 	movh.a	a2,#@his(display_high)
 	lea	a2,[a2]@los(display_high)
 	ld.h	d0,[a2]
 	itof	d0,d0
-.L423:
-	sub.f	d0,d0,d12
 .L424:
-	movh	d1,#16384
+	sub.f	d0,d0,d12
 .L425:
-	div.f	d0,d0,d1
+	movh	d1,#16384
 .L426:
-	add.f	d15,d15,d0
+	div.f	d0,d0,d1
 .L427:
-	st.w	[a15],d15
+	add.f	d15,d15,d0
 .L428:
+	st.w	[a15],d15
+.L429:
 	movh.a	a15,#@his(transform_content_height)
 	lea	a15,[a15]@los(transform_content_height)
-.L429:
-	st.w	[a15],d12
 .L430:
+	st.w	[a15],d12
+.L431:
 	movh.a	a15,#@his(transform_valid)
 	lea	a15,[a15]@los(transform_valid)
-.L431:
-	mov	d15,#1
 .L432:
-	st.b	[a15],d15
+	mov	d15,#1
 .L433:
+	st.b	[a15],d15
+.L434:
 	mov	d13,#0
 .L258:
 	j	.L18
@@ -563,87 +563,87 @@ xy_to_screen:	.type	func
 	mul	d15,d13,#4
 	addsc.a	a15,a12,d15,#0
 	ld.w	d15,[a15]
-.L434:
-	sub.f	d15,d15,d10
 .L435:
+	sub.f	d15,d15,d10
+.L436:
 	movh.a	a15,#@his(transform_offset_x)
 	lea	a15,[a15]@los(transform_offset_x)
 	ld.w	d0,[a15]
-.L436:
+.L437:
 	madd.f	d4,d0,d15,d11
 .L259:
 	movh.a	a15,#@his(transform_offset_y)
 	lea	a15,[a15]@los(transform_offset_y)
 	ld.w	d15,[a15]
-.L437:
-	add.f	d0,d15,d12
 .L438:
+	add.f	d0,d15,d12
+.L439:
 	mul	d15,d13,#4
 	addsc.a	a15,a13,d15,#0
 	ld.w	d15,[a15]
-.L439:
-	sub.f	d15,d15,d8
 .L440:
+	sub.f	d15,d15,d8
+.L441:
 	msub.f	d14,d0,d15,d11
 .L261:
 	mov.u	d15,#65024
 	addih	d15,d15,#18175
-.L441:
+.L442:
 	cmp.f	d15,d4,d15
 	extr.u	d15,d15,#2,#1
-.L442:
-	jeq	d15,#0,.L20
 .L443:
+	jeq	d15,#0,.L20
+.L444:
 	mov.u	d4,#65024
 	addih	d4,d4,#18175
 .L20:
 	movh	d15,#50944
-.L444:
+.L445:
 	cmp.f	d15,d4,d15
 	extr.u	d15,d15,#0,#1
-.L445:
-	jeq	d15,#0,.L21
 .L446:
+	jeq	d15,#0,.L21
+.L447:
 	movh	d4,#50944
 .L21:
 	mov.u	d15,#65024
 	addih	d15,d15,#18175
-.L447:
+.L448:
 	cmp.f	d15,d14,d15
 	extr.u	d15,d15,#2,#1
-.L448:
-	jeq	d15,#0,.L22
 .L449:
+	jeq	d15,#0,.L22
+.L450:
 	mov.u	d14,#65024
 	addih	d14,d14,#18175
 .L22:
 	movh	d15,#50944
-.L450:
+.L451:
 	cmp.f	d15,d14,d15
 	extr.u	d15,d15,#0,#1
-.L451:
-	jeq	d15,#0,.L23
 .L452:
+	jeq	d15,#0,.L23
+.L453:
 	movh	d14,#50944
 .L23:
 	mul	d15,d13,#4
-.L453:
+.L454:
 	movh.a	a15,#@his(screen_point_data)
 	lea	a15,[a15]@los(screen_point_data)
-.L454:
-	addsc.a	a15,a15,d15,#0
 .L455:
+	addsc.a	a15,a15,d15,#0
+.L456:
 	call	__f_ftos
 .L260:
 	st.h	[a15],d2
-.L456:
-	mul	d15,d13,#4
 .L457:
+	mul	d15,d13,#4
+.L458:
 	movh.a	a15,#@his(screen_point_data)
 	lea	a15,[a15]@los(screen_point_data)
-.L458:
-	addsc.a	a15,a15,d15,#0
 .L459:
+	addsc.a	a15,a15,d15,#0
+.L460:
 	mov	d4,d14
 .L262:
 	call	__f_ftos
@@ -653,7 +653,7 @@ xy_to_screen:	.type	func
 	add	d13,#1
 .L18:
 	jlt	d13,d9,.L19
-.L460:
+.L461:
 	ret
 .L181:
 	
@@ -670,49 +670,49 @@ __xy_to_screen_function_end:
 ; Function get_transition
 .L56:
 get_transition:	.type	func
-	lea	a10,[a10]-1600
+	lea	a10,[a10]-2400
 .L264:
-	mov	d8,d4
+	mov	d15,d4
 .L266:
-	jge	d8,#1,.L24
-.L465:
+	jge	d15,#1,.L24
+.L466:
 	movh.a	a15,#@his(transform_valid)
 	lea	a15,[a15]@los(transform_valid)
-.L466:
-	mov	d15,#0
 .L467:
+	mov	d15,#0
+.L267:
 	st.b	[a15],d15
 .L468:
 	j	.L25
 .L24:
-	mov	d15,#200
+	mov	d0,#300
 .L469:
-	jge	d15,d8,.L26
+	jge	d0,d15,.L26
 .L470:
-	mov	d8,#200
+	mov	d15,#300
 .L26:
-	mov	d15,#32767
+	mov	d0,#32767
 .L471:
-	jge	d15,d8,.L27
+	jge	d0,d15,.L27
 .L472:
-	mov	d8,#32767
+	mov	d15,#32767
 .L27:
 	movh.a	a15,#@his(transition_point_num)
 	lea	a15,[a15]@los(transition_point_num)
 .L473:
-	st.h	[a15],d8
+	st.h	[a15],d15
 .L474:
 	lea	a5,[a10]0
 .L475:
-	lea	a6,[a10]800
+	lea	a6,[a10]1200
 	call	gps_to_xy
 .L265:
 	lea	a4,[a10]0
 .L476:
-	lea	a5,[a10]800
+	lea	a5,[a10]1200
 .L477:
-	mov	d4,d8
-.L267:
+	mov	d4,d15
+.L268:
 	call	xy_to_screen
 .L25:
 	ret
@@ -732,35 +732,35 @@ __get_transition_function_end:
 .L58:
 user_gps_transition:	.type	func
 	mov.aa	a15,a4
-.L269:
-	mov	d15,d4
 .L270:
+	mov	d15,d4
+.L271:
 	movh.a	a2,#@his(display_width)
 	lea	a2,[a2]@los(display_width)
 	ld.h	d0,[a2]
 	jlt	d0,#1,.L28
-.L329:
+.L330:
 	movh.a	a2,#@his(display_high)
 	lea	a2,[a2]@los(display_high)
 	ld.h	d0,[a2]
-.L330:
+.L331:
 	jge	d0,#1,.L29
 .L28:
 	mov	d4,#0
-.L268:
+.L269:
 	mov	d5,#0
-.L331:
-	mov	d6,#220
 .L332:
+	mov	d6,#220
+.L333:
 	mov	d7,#120
 	call	gps_set_display_area
 .L29:
 	mov.aa	a4,a15
-.L271:
-	mov	d4,d15
-.L273:
-	call	get_transition
 .L272:
+	mov	d4,d15
+.L274:
+	call	get_transition
+.L273:
 	ret
 .L170:
 	
@@ -778,9 +778,9 @@ __user_gps_transition_function_end:
 .L60:
 gps_point_to_screen:	.type	func
 	sub.a	a10,#8
-.L274:
+.L275:
 	mov.aa	a15,a5
-.L277:
+.L278:
 	mov.a	a2,#0
 	jeq.a	a2,a4,.L30
 .L482:
@@ -799,10 +799,10 @@ gps_point_to_screen:	.type	func
 	j	.L33
 .L32:
 	lea	a5,[a10]0
-.L276:
+.L277:
 	lea	a6,[a10]4
 	call	gps_convert_single_to_xy
-.L275:
+.L276:
 	ld.w	d15,[a10]
 .L486:
 	movh.a	a2,#@his(transform_min_x)
@@ -820,7 +820,7 @@ gps_point_to_screen:	.type	func
 	ld.w	d1,[a2]
 .L490:
 	madd.f	d4,d1,d15,d0
-.L278:
+.L279:
 	movh.a	a2,#@his(transform_offset_y)
 	lea	a2,[a2]@los(transform_offset_y)
 	ld.w	d15,[a2]
@@ -844,7 +844,7 @@ gps_point_to_screen:	.type	func
 	ld.w	d1,[a2]
 .L497:
 	msub.f	d8,d0,d15,d1
-.L280:
+.L281:
 	mov.u	d15,#65024
 	addih	d15,d15,#18175
 .L498:
@@ -886,13 +886,13 @@ gps_point_to_screen:	.type	func
 	movh	d8,#50944
 .L37:
 	call	__f_ftos
-.L279:
+.L280:
 	st.h	[a15],d2
 .L510:
 	mov	d4,d8
-.L281:
-	call	__f_ftos
 .L282:
+	call	__f_ftos
+.L283:
 	st.h	[a15]2,d2
 .L511:
 	mov	d2,#1
@@ -917,7 +917,7 @@ __gps_point_to_screen_function_end:
 .L62:
 screen_print_gps_point:	.type	func
 	mov	d8,#0
-.L283:
+.L284:
 	j	.L39
 .L40:
 	mul	d15,d8,#4
@@ -1097,8 +1097,8 @@ transform_bounds_max_y:	.type	object
 	.global	screen_point_data
 	.align	2
 screen_point_data:	.type	object
-	.size	screen_point_data,800
-	.space	800
+	.size	screen_point_data,1200
+	.space	1200
 	.calls	'xy_to_screen','__f_ftos'
 	.calls	'gps_point_to_screen','__f_ftos'
 	.calls	'gps_convert_single_to_xy','cos'
@@ -1115,7 +1115,7 @@ screen_point_data:	.type	object
 	.calls	'gps_clear_xy_bounds','',0
 	.calls	'gps_to_xy','',0
 	.calls	'xy_to_screen','',0
-	.calls	'get_transition','',1600
+	.calls	'get_transition','',2400
 	.calls	'user_gps_transition','',0
 	.calls	'gps_point_to_screen','',8
 	.extern	cos
@@ -6503,9 +6503,9 @@ screen_point_data:	.type	object
 	.byte	3
 	.word	229
 .L204:
-	.byte	15,160,6
+	.byte	15,176,9
 	.word	229
-	.byte	16,199,1,0,30
+	.byte	16,171,2,0,30
 	.word	33315
 .L209:
 	.byte	3
@@ -21304,9 +21304,9 @@ screen_point_data:	.type	object
 	.byte	'screen_point',0,22,48,3
 	.word	33378
 .L225:
-	.byte	15,160,6
+	.byte	15,176,9
 	.word	33378
-	.byte	16,199,1,0,0
+	.byte	16,171,2,0,0
 	.sdecl	'.debug_abbrev',debug
 	.sect	'.debug_abbrev'
 .L65:
@@ -21324,11 +21324,11 @@ screen_point_data:	.type	object
 	.sdecl	'.debug_line',debug
 	.sect	'.debug_line'
 .L66:
-	.word	.L285-.L284
-.L284:
+	.word	.L286-.L285
+.L285:
 	.half	3
-	.word	.L287-.L286
-.L286:
+	.word	.L288-.L287
+.L287:
 	.byte	2,1,-4,9,10,0,1,1,1,1,0,0,0,1
 	.byte	'E:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Sfr\\\\TC38A\\\\_Reg',0
 	.byte	'E:\\ZNC\\AURIX-Studio-1.10.6\\tools\\Compilers\\Tasking_1.1r8\\ctc\\include\\',0
@@ -21414,8 +21414,8 @@ screen_point_data:	.type	object
 	.byte	'zf_device_wifi_uart.h',0,3,0,0
 	.byte	'zf_device_wifi_spi.h',0,3,0,0
 	.byte	'seekfree_assistant.h',0,11,0,0,0
-.L287:
-.L285:
+.L288:
+.L286:
 	.sdecl	'.debug_info',debug,cluster('gps_set_display_area')
 	.sect	'.debug_info'
 .L67:
@@ -21455,42 +21455,42 @@ screen_point_data:	.type	object
 	.sdecl	'.debug_line',debug,cluster('gps_set_display_area')
 	.sect	'.debug_line'
 .L69:
-	.word	.L289-.L288
-.L288:
+	.word	.L290-.L289
+.L289:
 	.half	3
-	.word	.L291-.L290
-.L290:
+	.word	.L292-.L291
+.L291:
 	.byte	2,1,-4,9,10,0,1,1,1,1,0,0,0,1,0
 	.byte	'../code/GPS/display_gps.c',0,0,0,0,0
-.L291:
+.L292:
 	.byte	5,5,7,0,5,2
 	.word	.L46
 	.byte	3,203,0,1,5,21,9
-	.half	.L292-.L46
+	.half	.L293-.L46
 	.byte	1,5,5,9
-	.half	.L293-.L292
-	.byte	3,1,1,5,21,9
 	.half	.L294-.L293
-	.byte	1,5,5,9
+	.byte	3,1,1,5,21,9
 	.half	.L295-.L294
-	.byte	3,1,1,5,19,9
+	.byte	1,5,5,9
 	.half	.L296-.L295
-	.byte	1,5,5,9
+	.byte	3,1,1,5,19,9
 	.half	.L297-.L296
-	.byte	3,1,1,5,18,9
-	.half	.L298-.L297
 	.byte	1,5,5,9
+	.half	.L298-.L297
+	.byte	3,1,1,5,18,9
 	.half	.L299-.L298
-	.byte	3,3,1,5,23,9
+	.byte	1,5,5,9
 	.half	.L300-.L299
-	.byte	1,5,21,9
+	.byte	3,3,1,5,23,9
 	.half	.L301-.L300
-	.byte	1,5,1,9
+	.byte	1,5,21,9
 	.half	.L302-.L301
+	.byte	1,5,1,9
+	.half	.L303-.L302
 	.byte	3,1,1,7,9
-	.half	.L71-.L302
+	.half	.L71-.L303
 	.byte	0,1,1
-.L289:
+.L290:
 	.sdecl	'.debug_ranges',debug,cluster('gps_set_display_area')
 	.sect	'.debug_ranges'
 .L70:
@@ -21534,42 +21534,42 @@ screen_point_data:	.type	object
 	.sdecl	'.debug_line',debug,cluster('gps_set_xy_bounds')
 	.sect	'.debug_line'
 .L74:
-	.word	.L304-.L303
-.L303:
+	.word	.L305-.L304
+.L304:
 	.half	3
-	.word	.L306-.L305
-.L305:
+	.word	.L307-.L306
+.L306:
 	.byte	2,1,-4,9,10,0,1,1,1,1,0,0,0,1,0
 	.byte	'../code/GPS/display_gps.c',0,0,0,0,0
-.L306:
+.L307:
 	.byte	5,5,7,0,5,2
 	.word	.L48
 	.byte	3,214,0,1,5,28,9
-	.half	.L307-.L48
+	.half	.L308-.L48
 	.byte	1,5,5,9
-	.half	.L308-.L307
-	.byte	3,1,1,5,28,9
 	.half	.L309-.L308
-	.byte	1,5,5,9
+	.byte	3,1,1,5,28,9
 	.half	.L310-.L309
-	.byte	3,1,1,5,28,9
+	.byte	1,5,5,9
 	.half	.L311-.L310
-	.byte	1,5,5,9
-	.half	.L312-.L311
 	.byte	3,1,1,5,28,9
-	.half	.L313-.L312
+	.half	.L312-.L311
 	.byte	1,5,5,9
+	.half	.L313-.L312
+	.byte	3,1,1,5,28,9
 	.half	.L314-.L313
-	.byte	3,1,1,5,39,9
+	.byte	1,5,5,9
 	.half	.L315-.L314
-	.byte	1,5,37,9
+	.byte	3,1,1,5,39,9
 	.half	.L316-.L315
-	.byte	1,5,1,9
+	.byte	1,5,37,9
 	.half	.L317-.L316
+	.byte	1,5,1,9
+	.half	.L318-.L317
 	.byte	3,1,1,7,9
-	.half	.L76-.L317
+	.half	.L76-.L318
 	.byte	0,1,1
-.L304:
+.L305:
 	.sdecl	'.debug_ranges',debug,cluster('gps_set_xy_bounds')
 	.sect	'.debug_ranges'
 .L75:
@@ -21601,26 +21601,26 @@ screen_point_data:	.type	object
 	.sdecl	'.debug_line',debug,cluster('gps_clear_xy_bounds')
 	.sect	'.debug_line'
 .L79:
-	.word	.L319-.L318
-.L318:
+	.word	.L320-.L319
+.L319:
 	.half	3
-	.word	.L321-.L320
-.L320:
+	.word	.L322-.L321
+.L321:
 	.byte	2,1,-4,9,10,0,1,1,1,1,0,0,0,1,0
 	.byte	'../code/GPS/display_gps.c',0,0,0,0,0
-.L321:
+.L322:
 	.byte	5,5,7,0,5,2
 	.word	.L50
 	.byte	3,223,0,1,5,39,9
-	.half	.L322-.L50
+	.half	.L323-.L50
 	.byte	1,5,37,9
-	.half	.L323-.L322
-	.byte	1,5,1,9
 	.half	.L324-.L323
+	.byte	1,5,1,9
+	.half	.L325-.L324
 	.byte	3,1,1,7,9
-	.half	.L81-.L324
+	.half	.L81-.L325
 	.byte	0,1,1
-.L319:
+.L320:
 	.sdecl	'.debug_ranges',debug,cluster('gps_clear_xy_bounds')
 	.sect	'.debug_ranges'
 .L80:
@@ -21658,38 +21658,38 @@ screen_point_data:	.type	object
 	.sdecl	'.debug_line',debug,cluster('user_gps_transition')
 	.sect	'.debug_line'
 .L84:
-	.word	.L326-.L325
-.L325:
+	.word	.L327-.L326
+.L326:
 	.half	3
-	.word	.L328-.L327
-.L327:
+	.word	.L329-.L328
+.L328:
 	.byte	2,1,-4,9,10,0,1,1,1,1,0,0,0,1,0
 	.byte	'../code/GPS/display_gps.c',0,0,0,0,0
-.L328:
+.L329:
 	.byte	5,6,7,0,5,2
 	.word	.L58
 	.byte	3,212,1,1,5,9,9
-	.half	.L270-.L58
+	.half	.L271-.L58
 	.byte	3,3,1,5,31,9
-	.half	.L329-.L270
+	.half	.L330-.L271
 	.byte	1,5,44,9
-	.half	.L330-.L329
+	.half	.L331-.L330
 	.byte	1,5,30,7,9
-	.half	.L28-.L330
+	.half	.L28-.L331
 	.byte	3,2,1,5,33,9
-	.half	.L268-.L28
+	.half	.L269-.L28
 	.byte	1,5,36,9
-	.half	.L331-.L268
+	.half	.L332-.L269
 	.byte	1,5,41,9
-	.half	.L332-.L331
+	.half	.L333-.L332
 	.byte	1,5,25,9
-	.half	.L29-.L332
+	.half	.L29-.L333
 	.byte	3,2,1,5,1,9
-	.half	.L272-.L29
+	.half	.L273-.L29
 	.byte	3,1,1,7,9
-	.half	.L86-.L272
+	.half	.L86-.L273
 	.byte	0,1,1
-.L326:
+.L327:
 	.sdecl	'.debug_ranges',debug,cluster('user_gps_transition')
 	.sect	'.debug_ranges'
 .L85:
@@ -21734,66 +21734,66 @@ screen_point_data:	.type	object
 	.sdecl	'.debug_line',debug,cluster('gps_to_xy')
 	.sect	'.debug_line'
 .L89:
-	.word	.L334-.L333
-.L333:
+	.word	.L335-.L334
+.L334:
 	.half	3
-	.word	.L336-.L335
-.L335:
+	.word	.L337-.L336
+.L336:
 	.byte	2,1,-4,9,10,0,1,1,1,1,0,0,0,1,0
 	.byte	'../code/GPS/display_gps.c',0,0,0,0,0
-.L336:
+.L337:
 	.byte	5,6,7,0,5,2
 	.word	.L52
 	.byte	3,226,0,1,5,5,9
 	.half	.L235-.L52
 	.byte	3,5,1,5,31,9
-	.half	.L337-.L235
+	.half	.L338-.L235
 	.byte	1,5,38,9
-	.half	.L338-.L337
-	.byte	1,5,36,9
 	.half	.L339-.L338
-	.byte	1,5,48,9
-	.half	.L340-.L339
-	.byte	1,5,46,9
-	.half	.L341-.L340
-	.byte	1,5,23,9
-	.half	.L342-.L341
-	.byte	1,5,5,9
-	.half	.L343-.L342
-	.byte	3,1,1,5,31,9
-	.half	.L344-.L343
-	.byte	1,5,38,9
-	.half	.L345-.L344
 	.byte	1,5,36,9
-	.half	.L346-.L345
+	.half	.L340-.L339
 	.byte	1,5,48,9
-	.half	.L347-.L346
+	.half	.L341-.L340
 	.byte	1,5,46,9
-	.half	.L348-.L347
+	.half	.L342-.L341
 	.byte	1,5,23,9
+	.half	.L343-.L342
+	.byte	1,5,5,9
+	.half	.L344-.L343
+	.byte	3,1,1,5,31,9
+	.half	.L345-.L344
+	.byte	1,5,38,9
+	.half	.L346-.L345
+	.byte	1,5,36,9
+	.half	.L347-.L346
+	.byte	1,5,48,9
+	.half	.L348-.L347
+	.byte	1,5,46,9
 	.half	.L349-.L348
-	.byte	1,5,12,9
+	.byte	1,5,23,9
 	.half	.L350-.L349
+	.byte	1,5,12,9
+	.half	.L351-.L350
 	.byte	3,2,1,5,41,9
-	.half	.L236-.L350
+	.half	.L236-.L351
 	.byte	1,5,38,9
 	.half	.L3-.L236
 	.byte	3,2,1,5,45,9
-	.half	.L351-.L3
+	.half	.L352-.L3
 	.byte	1,5,52,9
-	.half	.L352-.L351
-	.byte	1,5,44,9
 	.half	.L353-.L352
+	.byte	1,5,44,9
+	.half	.L354-.L353
 	.byte	3,126,1,5,21,9
-	.half	.L2-.L353
+	.half	.L2-.L354
 	.byte	1,5,41,9
-	.half	.L354-.L2
+	.half	.L355-.L2
 	.byte	1,5,1,7,9
-	.half	.L355-.L354
+	.half	.L356-.L355
 	.byte	3,4,1,7,9
-	.half	.L91-.L355
+	.half	.L91-.L356
 	.byte	0,1,1
-.L334:
+.L335:
 	.sdecl	'.debug_ranges',debug,cluster('gps_to_xy')
 	.sect	'.debug_ranges'
 .L90:
@@ -21882,14 +21882,14 @@ screen_point_data:	.type	object
 	.sdecl	'.debug_line',debug,cluster('xy_to_screen')
 	.sect	'.debug_line'
 .L94:
-	.word	.L357-.L356
-.L356:
+	.word	.L358-.L357
+.L357:
 	.half	3
-	.word	.L359-.L358
-.L358:
+	.word	.L360-.L359
+.L359:
 	.byte	2,1,-4,9,10,0,1,1,1,1,0,0,0,1,0
 	.byte	'../code/GPS/display_gps.c',0,0,0,0,0
-.L359:
+.L360:
 	.byte	5,6,7,0,5,2
 	.word	.L54
 	.byte	3,240,0,1,5,21,9
@@ -21903,289 +21903,289 @@ screen_point_data:	.type	object
 	.byte	1,5,9,9
 	.half	.L244-.L243
 	.byte	3,8,1,5,5,9
-	.half	.L360-.L244
+	.half	.L361-.L244
 	.byte	1,5,17,7,9
-	.half	.L361-.L360
-	.byte	3,2,1,9
 	.half	.L362-.L361
-	.byte	3,1,1,9
+	.byte	3,2,1,9
 	.half	.L363-.L362
 	.byte	3,1,1,9
 	.half	.L364-.L363
-	.byte	3,1,1,5,39,9
+	.byte	3,1,1,9
 	.half	.L365-.L364
+	.byte	3,1,1,5,39,9
+	.half	.L366-.L365
 	.byte	3,125,1,5,16,9
-	.half	.L4-.L365
+	.half	.L4-.L366
 	.byte	3,8,1,5,34,9
 	.half	.L246-.L4
 	.byte	1,5,18,9
 	.half	.L7-.L246
 	.byte	3,2,1,5,22,9
-	.half	.L366-.L7
+	.half	.L367-.L7
 	.byte	1,5,13,9
-	.half	.L367-.L366
-	.byte	1,5,40,7,9
 	.half	.L368-.L367
-	.byte	1,5,18,9
-	.half	.L8-.L368
-	.byte	3,1,1,5,22,9
-	.half	.L369-.L8
-	.byte	1,5,13,9
-	.half	.L370-.L369
 	.byte	1,5,40,7,9
+	.half	.L369-.L368
+	.byte	1,5,18,9
+	.half	.L8-.L369
+	.byte	3,1,1,5,22,9
+	.half	.L370-.L8
+	.byte	1,5,13,9
 	.half	.L371-.L370
-	.byte	1,5,18,9
-	.half	.L9-.L371
-	.byte	3,1,1,5,22,9
-	.half	.L372-.L9
-	.byte	1,5,13,9
-	.half	.L373-.L372
 	.byte	1,5,40,7,9
+	.half	.L372-.L371
+	.byte	1,5,18,9
+	.half	.L9-.L372
+	.byte	3,1,1,5,22,9
+	.half	.L373-.L9
+	.byte	1,5,13,9
 	.half	.L374-.L373
-	.byte	1,5,18,9
-	.half	.L10-.L374
-	.byte	3,1,1,5,22,9
-	.half	.L375-.L10
-	.byte	1,5,13,9
-	.half	.L376-.L375
 	.byte	1,5,40,7,9
+	.half	.L375-.L374
+	.byte	1,5,18,9
+	.half	.L10-.L375
+	.byte	3,1,1,5,22,9
+	.half	.L376-.L10
+	.byte	1,5,13,9
 	.half	.L377-.L376
+	.byte	1,5,40,7,9
+	.half	.L378-.L377
 	.byte	1,5,37,9
-	.half	.L11-.L377
+	.half	.L11-.L378
 	.byte	3,123,1,5,34,9
 	.half	.L6-.L11
 	.byte	1,5,9,7,9
 	.half	.L5-.L6
 	.byte	3,10,1,5,31,9
-	.half	.L378-.L5
+	.half	.L379-.L5
 	.byte	1,5,29,9
-	.half	.L379-.L378
-	.byte	1,5,5,9
 	.half	.L380-.L379
-	.byte	1,5,31,7,9
+	.byte	1,5,5,9
 	.half	.L381-.L380
-	.byte	3,2,1,5,42,9
+	.byte	1,5,31,7,9
 	.half	.L382-.L381
+	.byte	3,2,1,5,42,9
+	.half	.L383-.L382
 	.byte	1,5,40,9
-	.half	.L242-.L382
+	.half	.L242-.L383
 	.byte	1,5,32,9
 	.half	.L247-.L242
 	.byte	3,1,1,5,30,9
-	.half	.L383-.L247
+	.half	.L384-.L247
 	.byte	1,5,32,9
-	.half	.L384-.L383
-	.byte	3,1,1,5,30,9
 	.half	.L385-.L384
+	.byte	3,1,1,5,30,9
+	.half	.L386-.L385
 	.byte	1,5,9,9
-	.half	.L12-.L385
+	.half	.L12-.L386
 	.byte	3,2,1,5,31,9
-	.half	.L386-.L12
+	.half	.L387-.L12
 	.byte	1,5,29,9
-	.half	.L387-.L386
-	.byte	1,5,5,9
 	.half	.L388-.L387
-	.byte	1,5,31,7,9
+	.byte	1,5,5,9
 	.half	.L389-.L388
-	.byte	3,2,1,5,42,9
+	.byte	1,5,31,7,9
 	.half	.L390-.L389
+	.byte	3,2,1,5,42,9
+	.half	.L391-.L390
 	.byte	1,5,40,9
-	.half	.L245-.L390
+	.half	.L245-.L391
 	.byte	1,5,32,9
 	.half	.L249-.L245
 	.byte	3,1,1,5,30,9
-	.half	.L391-.L249
+	.half	.L392-.L249
 	.byte	1,5,32,9
-	.half	.L392-.L391
-	.byte	3,1,1,5,30,9
 	.half	.L393-.L392
+	.byte	3,1,1,5,30,9
+	.half	.L394-.L393
 	.byte	1,5,23,9
-	.half	.L13-.L393
+	.half	.L13-.L394
 	.byte	3,3,1,5,60,9
-	.half	.L394-.L13
+	.half	.L395-.L13
 	.byte	1,5,37,9
-	.half	.L395-.L394
+	.half	.L396-.L395
 	.byte	1,5,24,9
-	.half	.L251-.L395
+	.half	.L251-.L396
 	.byte	3,1,1,5,60,9
-	.half	.L396-.L251
+	.half	.L397-.L251
 	.byte	1,5,37,9
-	.half	.L397-.L396
+	.half	.L398-.L397
 	.byte	1,5,27,9
-	.half	.L253-.L397
+	.half	.L253-.L398
 	.byte	3,2,1,5,25,9
-	.half	.L398-.L253
+	.half	.L399-.L253
 	.byte	1,5,5,9
-	.half	.L399-.L398
-	.byte	1,5,50,7,9
 	.half	.L400-.L399
+	.byte	1,5,50,7,9
+	.half	.L401-.L400
 	.byte	1,5,28,9
-	.half	.L14-.L400
+	.half	.L14-.L401
 	.byte	3,1,1,5,26,9
-	.half	.L401-.L14
+	.half	.L402-.L14
 	.byte	1,5,5,9
-	.half	.L402-.L401
-	.byte	1,5,52,7,9
 	.half	.L403-.L402
+	.byte	1,5,52,7,9
+	.half	.L404-.L403
 	.byte	1,5,40,9
-	.half	.L15-.L403
+	.half	.L15-.L404
 	.byte	3,2,1,5,31,9
-	.half	.L404-.L15
+	.half	.L405-.L15
 	.byte	1,5,41,9
-	.half	.L252-.L404
+	.half	.L252-.L405
 	.byte	3,1,1,5,32,9
-	.half	.L405-.L252
+	.half	.L406-.L252
 	.byte	1,5,13,9
-	.half	.L254-.L405
+	.half	.L254-.L406
 	.byte	3,1,1,5,43,9
-	.half	.L406-.L254
+	.half	.L407-.L254
 	.byte	1,5,33,9
-	.half	.L16-.L406
+	.half	.L16-.L407
 	.byte	1,5,28,9
 	.half	.L17-.L16
 	.byte	3,1,1,5,37,9
-	.half	.L407-.L17
+	.half	.L408-.L17
 	.byte	1,5,29,9
-	.half	.L255-.L407
+	.half	.L255-.L408
 	.byte	3,1,1,5,38,9
 	.half	.L248-.L255
 	.byte	1,5,5,9
 	.half	.L257-.L248
 	.byte	3,3,1,5,21,9
-	.half	.L408-.L257
+	.half	.L409-.L257
 	.byte	1,5,5,9
-	.half	.L409-.L408
-	.byte	3,1,1,5,21,9
 	.half	.L410-.L409
-	.byte	1,5,5,9
-	.half	.L411-.L410
 	.byte	3,1,1,5,21,9
+	.half	.L411-.L410
+	.byte	1,5,5,9
 	.half	.L412-.L411
-	.byte	1,5,5,9
+	.byte	3,1,1,5,21,9
 	.half	.L413-.L412
-	.byte	3,1,1,5,26,9
+	.byte	1,5,5,9
 	.half	.L414-.L413
-	.byte	1,5,46,9
-	.half	.L415-.L414
-	.byte	1,5,60,9
-	.half	.L416-.L415
-	.byte	1,5,79,9
-	.half	.L256-.L416
-	.byte	1,5,77,9
-	.half	.L417-.L256
-	.byte	1,5,42,9
-	.half	.L418-.L417
-	.byte	1,5,24,9
-	.half	.L419-.L418
-	.byte	1,5,5,9
-	.half	.L420-.L419
 	.byte	3,1,1,5,26,9
-	.half	.L421-.L420
+	.half	.L415-.L414
 	.byte	1,5,46,9
-	.half	.L422-.L421
-	.byte	1,5,59,9
-	.half	.L423-.L422
+	.half	.L416-.L415
+	.byte	1,5,60,9
+	.half	.L417-.L416
 	.byte	1,5,79,9
-	.half	.L424-.L423
+	.half	.L256-.L417
 	.byte	1,5,77,9
-	.half	.L425-.L424
+	.half	.L418-.L256
 	.byte	1,5,42,9
-	.half	.L426-.L425
+	.half	.L419-.L418
 	.byte	1,5,24,9
+	.half	.L420-.L419
+	.byte	1,5,5,9
+	.half	.L421-.L420
+	.byte	3,1,1,5,26,9
+	.half	.L422-.L421
+	.byte	1,5,46,9
+	.half	.L423-.L422
+	.byte	1,5,59,9
+	.half	.L424-.L423
+	.byte	1,5,79,9
+	.half	.L425-.L424
+	.byte	1,5,77,9
+	.half	.L426-.L425
+	.byte	1,5,42,9
 	.half	.L427-.L426
-	.byte	1,5,5,9
+	.byte	1,5,24,9
 	.half	.L428-.L427
-	.byte	3,1,1,5,30,9
-	.half	.L429-.L428
 	.byte	1,5,5,9
+	.half	.L429-.L428
+	.byte	3,1,1,5,30,9
 	.half	.L430-.L429
-	.byte	3,1,1,5,23,9
+	.byte	1,5,5,9
 	.half	.L431-.L430
-	.byte	1,5,21,9
+	.byte	3,1,1,5,23,9
 	.half	.L432-.L431
-	.byte	1,5,12,9
+	.byte	1,5,21,9
 	.half	.L433-.L432
+	.byte	1,5,12,9
+	.half	.L434-.L433
 	.byte	3,2,1,5,30,9
-	.half	.L258-.L433
+	.half	.L258-.L434
 	.byte	1,5,29,9
 	.half	.L19-.L258
 	.byte	3,2,1,5,33,9
-	.half	.L434-.L19
+	.half	.L435-.L19
 	.byte	1,5,52,9
-	.half	.L435-.L434
-	.byte	1,5,50,9
 	.half	.L436-.L435
+	.byte	1,5,50,9
+	.half	.L437-.L436
 	.byte	1,5,27,9
-	.half	.L259-.L436
+	.half	.L259-.L437
 	.byte	3,1,1,5,46,9
-	.half	.L437-.L259
+	.half	.L438-.L259
 	.byte	1,5,78,9
-	.half	.L438-.L437
-	.byte	1,5,82,9
 	.half	.L439-.L438
-	.byte	1,5,73,9
+	.byte	1,5,82,9
 	.half	.L440-.L439
+	.byte	1,5,73,9
+	.half	.L441-.L440
 	.byte	1,5,24,9
-	.half	.L261-.L440
+	.half	.L261-.L441
 	.byte	3,3,1,5,22,9
-	.half	.L441-.L261
+	.half	.L442-.L261
 	.byte	1,5,9,9
-	.half	.L442-.L441
-	.byte	1,5,44,7,9
 	.half	.L443-.L442
-	.byte	1,5,24,9
-	.half	.L20-.L443
-	.byte	3,1,1,5,22,9
-	.half	.L444-.L20
-	.byte	1,5,9,9
-	.half	.L445-.L444
-	.byte	1,5,45,7,9
-	.half	.L446-.L445
-	.byte	1,5,24,9
-	.half	.L21-.L446
-	.byte	3,1,1,5,22,9
-	.half	.L447-.L21
-	.byte	1,5,9,9
-	.half	.L448-.L447
 	.byte	1,5,44,7,9
-	.half	.L449-.L448
+	.half	.L444-.L443
 	.byte	1,5,24,9
-	.half	.L22-.L449
+	.half	.L20-.L444
 	.byte	3,1,1,5,22,9
-	.half	.L450-.L22
+	.half	.L445-.L20
 	.byte	1,5,9,9
-	.half	.L451-.L450
+	.half	.L446-.L445
 	.byte	1,5,45,7,9
+	.half	.L447-.L446
+	.byte	1,5,24,9
+	.half	.L21-.L447
+	.byte	3,1,1,5,22,9
+	.half	.L448-.L21
+	.byte	1,5,9,9
+	.half	.L449-.L448
+	.byte	1,5,44,7,9
+	.half	.L450-.L449
+	.byte	1,5,24,9
+	.half	.L22-.L450
+	.byte	3,1,1,5,22,9
+	.half	.L451-.L22
+	.byte	1,5,9,9
 	.half	.L452-.L451
+	.byte	1,5,45,7,9
+	.half	.L453-.L452
 	.byte	1,5,26,9
-	.half	.L23-.L452
+	.half	.L23-.L453
 	.byte	3,2,1,5,9,9
-	.half	.L453-.L23
+	.half	.L454-.L23
 	.byte	1,5,26,9
-	.half	.L454-.L453
-	.byte	1,5,34,9
 	.half	.L455-.L454
-	.byte	1,5,32,9
-	.half	.L260-.L455
-	.byte	1,5,26,9
-	.half	.L456-.L260
-	.byte	3,1,1,5,9,9
-	.half	.L457-.L456
-	.byte	1,5,26,9
-	.half	.L458-.L457
 	.byte	1,5,34,9
-	.half	.L459-.L458
+	.half	.L456-.L455
 	.byte	1,5,32,9
-	.half	.L263-.L459
+	.half	.L260-.L456
+	.byte	1,5,26,9
+	.half	.L457-.L260
+	.byte	3,1,1,5,9,9
+	.half	.L458-.L457
+	.byte	1,5,26,9
+	.half	.L459-.L458
+	.byte	1,5,34,9
+	.half	.L460-.L459
+	.byte	1,5,32,9
+	.half	.L263-.L460
 	.byte	1,5,33,9
 	.half	.L198-.L263
 	.byte	3,116,1,5,30,9
 	.half	.L18-.L198
 	.byte	1,5,1,7,9
-	.half	.L460-.L18
+	.half	.L461-.L18
 	.byte	3,14,1,7,9
-	.half	.L96-.L460
+	.half	.L96-.L461
 	.byte	0,1,1
-.L357:
+.L358:
 	.sdecl	'.debug_ranges',debug,cluster('xy_to_screen')
 	.sect	'.debug_ranges'
 .L95:
@@ -22230,26 +22230,26 @@ screen_point_data:	.type	object
 	.sdecl	'.debug_line',debug,cluster('get_transition')
 	.sect	'.debug_line'
 .L99:
-	.word	.L462-.L461
-.L461:
+	.word	.L463-.L462
+.L462:
 	.half	3
-	.word	.L464-.L463
-.L463:
+	.word	.L465-.L464
+.L464:
 	.byte	2,1,-4,9,10,0,1,1,1,1,0,0,0,1,0
 	.byte	'../code/GPS/display_gps.c',0,0,0,0,0
-.L464:
+.L465:
 	.byte	5,6,7,0,5,2
 	.word	.L56
 	.byte	3,194,1,1,5,5,9
 	.half	.L266-.L56
 	.byte	3,5,1,5,9,7,9
-	.half	.L465-.L266
+	.half	.L466-.L266
 	.byte	3,2,1,5,27,9
-	.half	.L466-.L465
-	.byte	1,5,25,9
 	.half	.L467-.L466
+	.byte	1,5,25,9
+	.half	.L267-.L467
 	.byte	1,5,9,9
-	.half	.L468-.L467
+	.half	.L468-.L267
 	.byte	3,1,1,5,21,9
 	.half	.L24-.L468
 	.byte	3,2,1,5,5,9
@@ -22281,7 +22281,7 @@ screen_point_data:	.type	object
 	.byte	3,1,1,7,9
 	.half	.L101-.L25
 	.byte	0,1,1
-.L462:
+.L463:
 	.sdecl	'.debug_ranges',debug,cluster('get_transition')
 	.sect	'.debug_ranges'
 .L100:
@@ -22345,9 +22345,9 @@ screen_point_data:	.type	object
 	.byte	5,7,7,0,5,2
 	.word	.L60
 	.byte	3,222,1,1,5,9,9
-	.half	.L277-.L60
+	.half	.L278-.L60
 	.byte	3,7,1,5,24,9
-	.half	.L482-.L277
+	.half	.L482-.L278
 	.byte	1,5,29,9
 	.half	.L483-.L482
 	.byte	1,5,42,7,9
@@ -22359,11 +22359,11 @@ screen_point_data:	.type	object
 	.byte	1,5,36,9
 	.half	.L32-.L485
 	.byte	3,3,1,5,40,9
-	.half	.L276-.L32
+	.half	.L277-.L32
 	.byte	1,5,17,9
-	.half	.L275-.L276
+	.half	.L276-.L277
 	.byte	3,2,1,5,21,9
-	.half	.L486-.L275
+	.half	.L486-.L276
 	.byte	1,5,19,9
 	.half	.L487-.L486
 	.byte	1,5,40,9
@@ -22373,9 +22373,9 @@ screen_point_data:	.type	object
 	.byte	1,5,56,9
 	.half	.L490-.L489
 	.byte	1,5,16,9
-	.half	.L278-.L490
+	.half	.L279-.L490
 	.byte	3,1,1,5,37,9
-	.half	.L491-.L278
+	.half	.L491-.L279
 	.byte	1,5,35,9
 	.half	.L492-.L491
 	.byte	1,5,66,9
@@ -22389,9 +22389,9 @@ screen_point_data:	.type	object
 	.byte	1,5,62,9
 	.half	.L497-.L496
 	.byte	1,5,20,9
-	.half	.L280-.L497
+	.half	.L281-.L497
 	.byte	3,2,1,5,18,9
-	.half	.L498-.L280
+	.half	.L498-.L281
 	.byte	1,5,5,9
 	.half	.L499-.L498
 	.byte	1,5,40,7,9
@@ -22423,13 +22423,13 @@ screen_point_data:	.type	object
 	.byte	1,5,16,9
 	.half	.L37-.L509
 	.byte	3,2,1,5,14,9
-	.half	.L279-.L37
+	.half	.L280-.L37
 	.byte	1,5,16,9
-	.half	.L510-.L279
+	.half	.L510-.L280
 	.byte	3,1,1,5,14,9
-	.half	.L282-.L510
+	.half	.L283-.L510
 	.byte	1,5,12,9
-	.half	.L511-.L282
+	.half	.L511-.L283
 	.byte	3,1,1,5,5,9
 	.half	.L512-.L511
 	.byte	1,5,1,9
@@ -22483,9 +22483,9 @@ screen_point_data:	.type	object
 	.byte	5,12,7,0,5,2
 	.word	.L62
 	.byte	3,253,1,1,5,41,9
-	.half	.L283-.L62
+	.half	.L284-.L62
 	.byte	1,5,30,9
-	.half	.L40-.L283
+	.half	.L40-.L284
 	.byte	3,2,1,5,13,9
 	.half	.L517-.L40
 	.byte	1,5,30,9
@@ -23074,7 +23074,7 @@ screen_point_data:	.type	object
 	.byte	138,0
 	.word	.L264-.L56,.L201-.L56
 	.half	3
-	.byte	138,192,12
+	.byte	138,224,18
 	.word	.L201-.L56,.L201-.L56
 	.half	2
 	.byte	138,0
@@ -23088,22 +23088,25 @@ screen_point_data:	.type	object
 	.word	-1,.L56,0,.L26-.L56
 	.half	1
 	.byte	84
-	.word	.L266-.L56,.L201-.L56
+	.word	.L266-.L56,.L267-.L56
 	.half	1
-	.byte	88
-	.word	.L267-.L56,.L25-.L56
+	.byte	95
+	.word	.L24-.L56,.L25-.L56
+	.half	1
+	.byte	95
+	.word	.L268-.L56,.L25-.L56
 	.half	1
 	.byte	84
 	.word	0,0
 .L205:
 	.word	-1,.L56,0,.L201-.L56
 	.half	3
-	.byte	145,192,115
+	.byte	145,160,109
 	.word	0,0
 .L206:
 	.word	-1,.L56,0,.L201-.L56
 	.half	3
-	.byte	145,224,121
+	.byte	145,208,118
 	.word	0,0
 	.sdecl	'.debug_loc',debug,cluster('gps_clear_xy_bounds')
 	.sect	'.debug_loc'
@@ -23153,15 +23156,15 @@ screen_point_data:	.type	object
 	.sdecl	'.debug_loc',debug,cluster('gps_point_to_screen')
 	.sect	'.debug_loc'
 .L210:
-	.word	-1,.L60,0,.L275-.L60
+	.word	-1,.L60,0,.L276-.L60
 	.half	1
 	.byte	100
 	.word	0,0
 .L59:
-	.word	-1,.L60,0,.L274-.L60
+	.word	-1,.L60,0,.L275-.L60
 	.half	2
 	.byte	138,0
-	.word	.L274-.L60,.L208-.L60
+	.word	.L275-.L60,.L208-.L60
 	.half	2
 	.byte	138,8
 	.word	.L208-.L60,.L208-.L60
@@ -23169,23 +23172,23 @@ screen_point_data:	.type	object
 	.byte	138,0
 	.word	0,0
 .L212:
-	.word	-1,.L60,0,.L276-.L60
+	.word	-1,.L60,0,.L277-.L60
 	.half	1
 	.byte	101
-	.word	.L277-.L60,.L208-.L60
+	.word	.L278-.L60,.L208-.L60
 	.half	1
 	.byte	111
 	.word	0,0
 .L215:
-	.word	-1,.L60,.L278-.L60,.L279-.L60
+	.word	-1,.L60,.L279-.L60,.L280-.L60
 	.half	1
 	.byte	84
 	.word	0,0
 .L216:
-	.word	-1,.L60,.L280-.L60,.L33-.L60
+	.word	-1,.L60,.L281-.L60,.L33-.L60
 	.half	1
 	.byte	88
-	.word	.L281-.L60,.L282-.L60
+	.word	.L282-.L60,.L283-.L60
 	.half	1
 	.byte	84
 	.word	0,0
@@ -23292,7 +23295,7 @@ screen_point_data:	.type	object
 	.sdecl	'.debug_loc',debug,cluster('screen_print_gps_point')
 	.sect	'.debug_loc'
 .L218:
-	.word	-1,.L62,.L283-.L62,.L217-.L62
+	.word	-1,.L62,.L284-.L62,.L217-.L62
 	.half	1
 	.byte	88
 	.word	0,0
@@ -23307,21 +23310,21 @@ screen_point_data:	.type	object
 	.word	-1,.L58,0,.L29-.L58
 	.half	1
 	.byte	100
-	.word	.L269-.L58,.L170-.L58
+	.word	.L270-.L58,.L170-.L58
 	.half	1
 	.byte	111
-	.word	.L271-.L58,.L272-.L58
+	.word	.L272-.L58,.L273-.L58
 	.half	1
 	.byte	100
 	.word	0,0
 .L174:
-	.word	-1,.L58,0,.L268-.L58
+	.word	-1,.L58,0,.L269-.L58
 	.half	1
 	.byte	84
-	.word	.L270-.L58,.L170-.L58
+	.word	.L271-.L58,.L170-.L58
 	.half	1
 	.byte	95
-	.word	.L273-.L58,.L272-.L58
+	.word	.L274-.L58,.L273-.L58
 	.half	1
 	.byte	84
 	.word	0,0
@@ -23488,7 +23491,7 @@ screen_point_data:	.type	object
 	.word	.L559,.L56,.L201-.L56
 	.byte	4
 	.word	(.L264-.L56)/2
-	.byte	19,192,12,22,26,4,19,138,192,12,4
+	.byte	19,224,18,22,26,4,19,138,224,18,4
 	.word	(.L201-.L264)/2
 	.byte	19,0,8,26
 	.sdecl	'.debug_frame',debug,cluster('user_gps_transition')
@@ -23500,9 +23503,9 @@ screen_point_data:	.type	object
 	.word	36
 	.word	.L559,.L60,.L208-.L60
 	.byte	4
-	.word	(.L274-.L60)/2
+	.word	(.L275-.L60)/2
 	.byte	19,8,22,26,3,19,138,8,4
-	.word	(.L208-.L274)/2
+	.word	(.L208-.L275)/2
 	.byte	19,0,8,26,0,0
 	.sdecl	'.debug_frame',debug,cluster('screen_print_gps_point')
 	.sect	'.debug_frame'

@@ -16,11 +16,11 @@
 // -----------------------------------------------------------------------------
 
 /** @brief 最大轨迹点数量 */
-#define MAX_PATH_POINTS             200
+#define MAX_PATH_POINTS             300
 /** @brief 最小记录距离，单位米 */
-#define MIN_RECORD_DISTANCE         0.5f
+#define MIN_RECORD_DISTANCE         0.2f
 /** @brief 最小记录时间间隔，单位毫秒 */
-#define MIN_RECORD_INTERVAL_MS      100
+#define MIN_RECORD_INTERVAL_MS      50
 /** @brief GPS最小有效卫星数 */
 #define GPS_MIN_SATELLITES          4
 /** @brief 最大记录速度，单位km/h */

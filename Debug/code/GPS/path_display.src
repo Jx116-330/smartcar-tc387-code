@@ -1,6 +1,6 @@
 	; Module start
 	.compiler_version	"TASKING VX-toolset for AURIX Development Studio (non-commercial): C compiler v1.1r8 Build 22011964"
-	.compiler_invocation	"ctc -f cc27672a --dep-file=code/GPS/path_display.d -c99 --fp-model=3cflnrSTz -D__CPU__=tc38x -D__CPU_TC38X__ --core=tc1.6.2 --fp-model=+float -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\code -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\code\\\\Beep -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\code\\\\GPS -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\code\\\\MyEncoder -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\code\\\\MyKey -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\code\\\\menu -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Configurations -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Infra -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Platform -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Platform\\\\Tricore -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Platform\\\\Tricore\\\\Compilers -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Sfr -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Sfr\\\\TC38A -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Sfr\\\\TC38A\\\\_Reg -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Ssw -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Ssw\\\\TC38A -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Ssw\\\\TC38A\\\\Tricore -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Service -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric\\\\If -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric\\\\If\\\\Ccu6If -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric\\\\StdIf -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric\\\\SysSe -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric\\\\SysSe\\\\Bsp -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric\\\\SysSe\\\\Math -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric\\\\_Utilities -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Asclin -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Asclin\\\\Asc -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Asclin\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Ccu6 -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Ccu6\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Ccu6\\\\Timer -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Cpu -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Cpu\\\\Irq -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Cpu\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Dma -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Dma\\\\Dma -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Dma\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Evadc -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Evadc\\\\Adc -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Evadc\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Flash -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Flash\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Gpt12 -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Gpt12\\\\IncrEnc -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Gpt12\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Gtm -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Gtm\\\\Atom -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Gtm\\\\Atom\\\\Pwm -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Gtm\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Mtu -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Mtu\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Pms -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Pms\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Port -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Port\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Qspi -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Qspi\\\\SpiMaster -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Qspi\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Scu -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Scu\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Src -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Src\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Stm -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Stm\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\_Impl -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\_Lib -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\_Lib\\\\DataHandling -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\_PinMap -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\zf_common -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\zf_components -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\zf_device -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\zf_driver -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\user -g2 -w544 -w557 -t4 --language=+volatile -N0 -O0 -Y0 -Z0 --compact-max-size=200 --misrac-version=2004 -o code/GPS/path_display.src ../code/GPS/path_display.c"
+	.compiler_invocation	"ctc -f cc40068a --dep-file=code/GPS/path_display.d -c99 --fp-model=3cflnrSTz -D__CPU__=tc38x -D__CPU_TC38X__ --core=tc1.6.2 --fp-model=+float -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\code -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\code\\\\Beep -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\code\\\\GPS -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\code\\\\MyEncoder -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\code\\\\MyKey -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\code\\\\menu -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Configurations -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Infra -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Platform -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Platform\\\\Tricore -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Platform\\\\Tricore\\\\Compilers -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Sfr -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Sfr\\\\TC38A -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Sfr\\\\TC38A\\\\_Reg -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Ssw -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Ssw\\\\TC38A -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Ssw\\\\TC38A\\\\Tricore -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Service -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric\\\\If -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric\\\\If\\\\Ccu6If -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric\\\\StdIf -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric\\\\SysSe -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric\\\\SysSe\\\\Bsp -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric\\\\SysSe\\\\Math -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric\\\\_Utilities -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Asclin -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Asclin\\\\Asc -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Asclin\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Ccu6 -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Ccu6\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Ccu6\\\\Timer -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Cpu -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Cpu\\\\Irq -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Cpu\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Dma -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Dma\\\\Dma -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Dma\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Evadc -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Evadc\\\\Adc -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Evadc\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Flash -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Flash\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Gpt12 -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Gpt12\\\\IncrEnc -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Gpt12\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Gtm -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Gtm\\\\Atom -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Gtm\\\\Atom\\\\Pwm -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Gtm\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Mtu -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Mtu\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Pms -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Pms\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Port -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Port\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Qspi -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Qspi\\\\SpiMaster -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Qspi\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Scu -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Scu\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Src -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Src\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Stm -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Stm\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\_Impl -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\_Lib -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\_Lib\\\\DataHandling -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\_PinMap -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\zf_common -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\zf_components -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\zf_device -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\zf_driver -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\user -g2 -w544 -w557 -t4 --language=+volatile -N0 -O0 -Y0 -Z0 --compact-max-size=200 --misrac-version=2004 -o code/GPS/path_display.src ../code/GPS/path_display.c"
 	.compiler_name		"ctc"
 	;source	'../code/GPS/path_display.c'
 
@@ -445,7 +445,7 @@ path_display_collect_points:	.type	func
 	movh.a	a15,#@his(path_data)
 	lea	a15,[a15]@los(path_data)
 .L628:
-	ld.hu	d0,[a15]4800
+	ld.hu	d0,[a15]7200
 .L445:
 	jne	d0,#0,.L28
 .L629:
@@ -455,11 +455,11 @@ path_display_collect_points:	.type	func
 .L28:
 	mov	d4,d0
 .L447:
-	mov	d15,#200
+	mov	d1,#300
 .L631:
-	jge.u	d15,d0,.L30
+	jge.u	d1,d0,.L30
 .L632:
-	mov	d4,#200
+	mov	d4,#300
 .L30:
 	jne	d4,d0,.L31
 .L633:
@@ -622,7 +622,7 @@ path_display_collect_bounds:	.type	func
 	movh.a	a15,#@his(path_data)
 	lea	a15,[a15]@los(path_data)
 .L680:
-	ld.hu	d15,[a15]4800
+	ld.hu	d15,[a15]7200
 .L681:
 	jne	d15,#0,.L44
 .L43:
@@ -781,7 +781,7 @@ path_display_collect_bounds:	.type	func
 	movh.a	a15,#@his(path_data)
 	lea	a15,[a15]@los(path_data)
 .L728:
-	ld.hu	d15,[a15]4800
+	ld.hu	d15,[a15]7200
 .L729:
 	jlt.u	d10,d15,.L47
 .L730:
@@ -1272,7 +1272,7 @@ path_display_get_path_screen_point:	.type	func
 	movh.a	a15,#@his(path_data)
 	lea	a15,[a15]@los(path_data)
 .L877:
-	ld.hu	d15,[a15]4800
+	ld.hu	d15,[a15]7200
 .L878:
 	jlt.u	d4,d15,.L86
 .L85:
@@ -1324,7 +1324,7 @@ __path_display_get_path_screen_point_function_end:
 ; Function path_display_draw_trajectory
 .L163:
 path_display_draw_trajectory:	.type	func
-	lea	a10,[a10]-1616
+	lea	a10,[a10]-2416
 .L492:
 	mov	d9,d4
 .L494:
@@ -1336,7 +1336,7 @@ path_display_draw_trajectory:	.type	func
 	movh.a	a15,#@his(path_data)
 	lea	a15,[a15]@los(path_data)
 .L895:
-	ld.hu	d15,[a15]4800
+	ld.hu	d15,[a15]7200
 .L896:
 	jne	d15,#0,.L90
 .L89:
@@ -1368,24 +1368,24 @@ path_display_draw_trajectory:	.type	func
 	extr	d7,d0,#0,#16
 	call	gps_set_display_area
 .L495:
-	lea	a4,[a10]1600
+	lea	a4,[a10]2400
 .L903:
-	lea	a5,[a10]1604
+	lea	a5,[a10]2404
 .L904:
-	lea	a6,[a10]1608
+	lea	a6,[a10]2408
 .L905:
-	lea	a7,[a10]1612
+	lea	a7,[a10]2412
 	call	path_display_collect_bounds
 .L906:
 	jeq	d2,#0,.L94
 .L907:
-	ld.w	d4,[a10]1600
+	ld.w	d4,[a10]2400
 .L908:
-	ld.w	d5,[a10]1604
+	ld.w	d5,[a10]2404
 .L909:
-	ld.w	d6,[a10]1608
+	ld.w	d6,[a10]2408
 .L910:
-	ld.w	d7,[a10]1612
+	ld.w	d7,[a10]2412
 	call	gps_set_xy_bounds
 .L94:
 	lea	a4,[a10]0
@@ -1459,7 +1459,7 @@ path_display_draw_new_segments:	.type	func
 	movh.a	a15,#@his(path_data)
 	lea	a15,[a15]@los(path_data)
 .L926:
-	ld.hu	d15,[a15]4800
+	ld.hu	d15,[a15]7200
 .L927:
 	jlt.u	d15,#2,.L100
 .L928:
@@ -1470,7 +1470,7 @@ path_display_draw_new_segments:	.type	func
 	movh.a	a15,#@his(path_data)
 	lea	a15,[a15]@los(path_data)
 .L930:
-	ld.hu	d0,[a15]4800
+	ld.hu	d0,[a15]7200
 .L931:
 	jlt.u	d15,d0,.L101
 .L100:
@@ -1524,7 +1524,7 @@ path_display_draw_new_segments:	.type	func
 	movh.a	a15,#@his(path_data)
 	lea	a15,[a15]@los(path_data)
 .L942:
-	ld.hu	d0,[a15]4800
+	ld.hu	d0,[a15]7200
 .L943:
 	jlt.u	d15,d0,.L106
 .L102:
@@ -1621,7 +1621,7 @@ path_display_draw_current_position:	.type	func
 	movh.a	a15,#@his(path_data)
 	lea	a15,[a15]@los(path_data)
 .L967:
-	ld.hu	d15,[a15]4800
+	ld.hu	d15,[a15]7200
 .L968:
 	jlt.u	d15,#1,.L114
 .L969:
@@ -1918,7 +1918,7 @@ path_display_draw_map:	.type	func
 	movh.a	a15,#@his(path_data)
 	lea	a15,[a15]@los(path_data)
 .L1061:
-	ld.hu	d0,[a15]4800
+	ld.hu	d0,[a15]7200
 .L1062:
 	movh.a	a15,#@his(rendered_point_count)
 	lea	a15,[a15]@los(rendered_point_count)
@@ -2053,7 +2053,7 @@ path_display_draw_map:	.type	func
 	movh.a	a2,#@his(path_data)
 	lea	a2,[a2]@los(path_data)
 .L1103:
-	ld.hu	d15,[a2]4800
+	ld.hu	d15,[a2]7200
 .L1104:
 	st.h	[a15],d15
 .L1105:
@@ -2083,7 +2083,7 @@ path_display_draw_map:	.type	func
 	movh.a	a2,#@his(path_data)
 	lea	a2,[a2]@los(path_data)
 .L1111:
-	ld.hu	d15,[a2]4800
+	ld.hu	d15,[a2]7200
 .L1112:
 	st.h	[a15],d15
 .L1113:
@@ -2254,7 +2254,7 @@ _999002_y_offsets:	.type	object
 	.calls	'path_display_reset_cache','',0
 	.calls	'path_display_update_bounds_cache','',0
 	.calls	'path_display_get_path_screen_point','',8
-	.calls	'path_display_draw_trajectory','',1616
+	.calls	'path_display_draw_trajectory','',2416
 	.calls	'path_display_draw_new_segments','',8
 	.calls	'path_display_clear_current_marker','',0
 	.calls	'path_display_draw_current_position','',16
@@ -2277,7 +2277,7 @@ _999002_y_offsets:	.type	object
 	.sdecl	'.debug_info',debug
 	.sect	'.debug_info'
 .L177:
-	.word	154005
+	.word	154006
 	.half	3
 	.word	.L178
 	.byte	4
@@ -7743,9 +7743,9 @@ _999002_y_offsets:	.type	object
 	.byte	28
 	.word	33826
 .L382:
-	.byte	15,192,12
+	.byte	15,224,18
 	.word	33605
-	.byte	16,199,1,0,31
+	.byte	16,171,2,0,31
 	.byte	'__wchar_t',0,23,1,1
 	.word	31897
 	.byte	31
@@ -22537,7 +22537,7 @@ _999002_y_offsets:	.type	object
 	.byte	'gnss_info_struct',0,48,106,2
 	.word	152299
 	.byte	36
-	.byte	'gnss',0,48,115,25
+	.byte	'gnss',0,48,131,1,25
 	.word	152299
 	.byte	1,1,36
 	.byte	'ips200_width_max',0,21,164,1,17
@@ -22549,23 +22549,23 @@ _999002_y_offsets:	.type	object
 	.byte	'WIFI_UART_STATION',0,0,18
 	.byte	'WIFI_UART_SOFTAP',0,1,0,31
 	.byte	'wifi_uart_mode_enum',0,49,87,2
-	.word	152775
+	.word	152776
 	.byte	17,49,89,9,1,18
 	.byte	'WIFI_UART_COMMAND',0,0,18
 	.byte	'WIFI_UART_SERIANET',0,1,0,31
 	.byte	'wifi_uart_transfer_mode_enum',0,49,93,2
-	.word	152848
+	.word	152849
 	.byte	17,49,95,9,1,18
 	.byte	'WIFI_UART_TCP_CLIENT',0,0,18
 	.byte	'WIFI_UART_TCP_SERVER',0,1,18
 	.byte	'WIFI_UART_UDP_CLIENT',0,2,0,31
 	.byte	'wifi_uart_connect_mode_enum',0,49,100,2
-	.word	152932
+	.word	152933
 	.byte	17,49,102,9,1,18
 	.byte	'WIFI_UART_SERVER_OFF',0,0,18
 	.byte	'WIFI_UART_SERVER_ON',0,1,0,31
 	.byte	'wifi_uart_connect_state_enum',0,49,106,2
-	.word	153043
+	.word	153044
 	.byte	20,50,123,9,4,13
 	.byte	'command',0
 	.word	609
@@ -22577,7 +22577,7 @@ _999002_y_offsets:	.type	object
 	.word	626
 	.byte	2,2,35,2,0,31
 	.byte	'wifi_spi_head_struct',0,50,128,1,2
-	.word	153131
+	.word	153132
 	.byte	17,51,75,9,1,18
 	.byte	'SEEKFREE_ASSISTANT_BINARY',0,1,18
 	.byte	'SEEKFREE_ASSISTANT_OV7725_BIN',0,1,18
@@ -22586,14 +22586,14 @@ _999002_y_offsets:	.type	object
 	.byte	'SEEKFREE_ASSISTANT_RGB565',0,3,18
 	.byte	'SEEKFREE_ASSISTANT_SCC8660',0,3,0,31
 	.byte	'seekfree_assistant_image_type_enum',0,51,86,2
-	.word	153217
+	.word	153218
 	.byte	17,52,23,9,1,18
 	.byte	'PATH_STATE_IDLE',0,0,18
 	.byte	'PATH_STATE_RECORDING',0,1,18
 	.byte	'PATH_STATE_COMPLETED',0,2,0,31
 	.byte	'path_state_enum',0,52,28,3
-	.word	153438
-	.byte	20,52,30,9,24,13
+	.word	153439
+	.byte	20,52,38,9,24,13
 	.byte	'latitude',0
 	.word	230
 	.byte	4,2,35,0,13
@@ -22615,51 +22615,51 @@ _999002_y_offsets:	.type	object
 	.byte	'fix_quality',0
 	.word	609
 	.byte	1,2,35,21,0,31
-	.byte	'path_point_t',0,52,39,3
-	.word	153532
-	.byte	15,192,37
-	.word	153532
-	.byte	16,199,1,0,20,52,41,9,216,37,13
+	.byte	'path_point_t',0,52,47,3
+	.word	153533
+	.byte	15,160,56
+	.word	153533
+	.byte	16,171,2,0,20,52,49,9,184,56,13
 	.byte	'points',0
-	.word	153695
-	.byte	192,37,2,35,0,13
+	.word	153696
+	.byte	160,56,2,35,0,13
 	.byte	'point_count',0
 	.word	626
-	.byte	2,3,35,192,37,13
+	.byte	2,3,35,160,56,13
 	.byte	'state',0
-	.word	153438
-	.byte	1,3,35,194,37,13
+	.word	153439
+	.byte	1,3,35,162,56,13
 	.byte	'last_record_time',0
 	.word	10347
-	.byte	4,3,35,196,37,13
+	.byte	4,3,35,164,56,13
 	.byte	'last_latitude',0
 	.word	230
-	.byte	4,3,35,200,37,13
+	.byte	4,3,35,168,56,13
 	.byte	'last_longitude',0
 	.word	230
-	.byte	4,3,35,204,37,13
+	.byte	4,3,35,172,56,13
 	.byte	'total_distance',0
 	.word	230
-	.byte	4,3,35,208,37,13
+	.byte	4,3,35,176,56,13
 	.byte	'total_time',0
 	.word	10347
-	.byte	4,3,35,212,37,0,31
-	.byte	'path_data_t',0,52,51,3
-	.word	153706
+	.byte	4,3,35,180,56,0,31
+	.byte	'path_data_t',0,52,59,3
+	.word	153707
 	.byte	36
-	.byte	'path_data',0,52,53,20
-	.word	153706
+	.byte	'path_data',0,52,61,20
+	.word	153707
 	.byte	1,1,31
 	.byte	'gps_point',0,22,39,3
 	.word	33605
 	.byte	31
 	.byte	'screen_point',0,22,48,3
 	.word	33711
-	.byte	15,160,6
+	.byte	15,176,9
 	.word	33711
-	.byte	16,199,1,0,36
+	.byte	16,171,2,0,36
 	.byte	'screen_point_data',0,22,55,21
-	.word	153969
+	.word	153970
 	.byte	1,1,0
 	.sdecl	'.debug_abbrev',debug
 	.sect	'.debug_abbrev'
@@ -26082,7 +26082,7 @@ _999002_y_offsets:	.type	object
 .L383:
 	.word	-1,.L163,0,.L380-.L163
 	.half	3
-	.byte	145,176,115
+	.byte	145,144,109
 	.word	0,0
 .L389:
 	.word	-1,.L163,.L499-.L163,.L500-.L163
@@ -26118,7 +26118,7 @@ _999002_y_offsets:	.type	object
 	.byte	138,0
 	.word	.L492-.L163,.L380-.L163
 	.half	3
-	.byte	138,208,12
+	.byte	138,240,18
 	.word	.L380-.L163,.L380-.L163
 	.half	2
 	.byte	138,0
@@ -26423,7 +26423,7 @@ _999002_y_offsets:	.type	object
 	.word	.L1114,.L163,.L380-.L163
 	.byte	4
 	.word	(.L492-.L163)/2
-	.byte	19,208,12,22,26,4,19,138,208,12,4
+	.byte	19,240,18,22,26,4,19,138,240,18,4
 	.word	(.L380-.L492)/2
 	.byte	19,0,8,26
 	.sdecl	'.debug_frame',debug,cluster('path_display_draw_new_segments')

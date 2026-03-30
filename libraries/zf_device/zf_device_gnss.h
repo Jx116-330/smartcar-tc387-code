@@ -112,6 +112,22 @@ typedef enum
     GPS_STATE_PARSING,                                                          // 正在解析
 }gps_state_enum;
 
+typedef struct
+{
+    uint8       initialized;
+    uint8       rx_flag;
+    uint8       rmc_state;
+    uint8       gga_state;
+    uint8       ths_state;
+    uint32      rmc_frame_count;
+    uint32      gga_frame_count;
+    uint32      ths_frame_count;
+    uint32      parse_error_count;
+    char        rmc_sentence[64];
+    char        gga_sentence[64];
+    char        ths_sentence[64];
+}gnss_debug_info_t;
+
 extern gnss_info_struct gnss;
 extern uint8            gnss_flag;
 
@@ -121,5 +137,6 @@ double      get_two_points_azimuth      (double lat1, double lon1, double lat2, 
 uint8       gnss_data_parse             (void);
 void        gnss_uart_callback          (void);
 void        gnss_init                   (gps_device_enum gps_device);
+void        gnss_get_debug_info         (gnss_debug_info_t *info);
 
 #endif

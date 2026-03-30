@@ -16,6 +16,7 @@
 #define get_current_time_ms()   system_getval_ms()
 
 path_data_t path_data;
+static path_record_config_t path_record_config;
 
 static uint8 is_valid_gps_fix(void);
 static void update_path_statistics(path_point_t* new_point);
@@ -23,11 +24,37 @@ static uint8 path_recorder_should_record(double lat, double lon, uint32 current_
 static uint8 path_recorder_add_point(path_point_t* point);
 static float path_recorder_calculate_distance(double lat1, double lon1, double lat2, double lon2);
 
+static float path_recorder_clamp_float(float value, float min_value, float max_value)
+{
+    if (value < min_value)
+    {
+        return min_value;
+    }
+    if (value > max_value)
+    {
+        return max_value;
+    }
+    return value;
+}
+
+static uint32 path_recorder_clamp_u32(uint32 value, uint32 min_value, uint32 max_value)
+{
+    if (value < min_value)
+    {
+        return min_value;
+    }
+    if (value > max_value)
+    {
+        return max_value;
+    }
+    return value;
+}
+
 static uint8 is_valid_gps_fix(void)
 {
     return (gnss.state == 1 &&
-            gnss.satellite_used >= GPS_MIN_SATELLITES &&
-            gnss.speed <= MAX_RECORD_SPEED_KPH &&
+            gnss.satellite_used >= path_record_config.min_satellites &&
+            gnss.speed <= path_record_config.max_record_speed_kph &&
             gnss.latitude != 0.0 &&
             gnss.longitude != 0.0);
 }
@@ -36,6 +63,15 @@ void path_recorder_init(void)
 {
     memset(&path_data, 0, sizeof(path_data));
     path_data.state = PATH_STATE_IDLE;
+    path_recorder_reset_config();
+}
+
+void path_recorder_reset_config(void)
+{
+    path_record_config.min_record_distance = MIN_RECORD_DISTANCE;
+    path_record_config.min_record_interval_ms = MIN_RECORD_INTERVAL_MS;
+    path_record_config.min_satellites = GPS_MIN_SATELLITES;
+    path_record_config.max_record_speed_kph = MAX_RECORD_SPEED_KPH;
 }
 
 uint8 path_recorder_start(void)
@@ -91,13 +127,13 @@ static uint8 path_recorder_should_record(double lat, double lon, uint32 current_
         return 1;
     }
 
-    if (current_time - path_data.last_record_time < MIN_RECORD_INTERVAL_MS)
+    if (current_time - path_data.last_record_time < path_record_config.min_record_interval_ms)
     {
         return 0;
     }
 
     distance = path_recorder_calculate_distance(path_data.last_latitude, path_data.last_longitude, lat, lon);
-    return (distance >= MIN_RECORD_DISTANCE);
+    return (distance >= path_record_config.min_record_distance);
 }
 
 static uint8 path_recorder_add_point(path_point_t* point)
@@ -141,6 +177,31 @@ void path_recorder_task(void)
         point.fix_quality = gnss.state;
         path_recorder_add_point(&point);
     }
+}
+
+const path_record_config_t *path_recorder_get_config(void)
+{
+    return &path_record_config;
+}
+
+void path_recorder_set_min_distance(float value)
+{
+    path_record_config.min_record_distance = path_recorder_clamp_float(value, 0.05f, 5.0f);
+}
+
+void path_recorder_set_min_interval_ms(uint32 value)
+{
+    path_record_config.min_record_interval_ms = path_recorder_clamp_u32(value, 10U, 1000U);
+}
+
+void path_recorder_set_min_satellites(uint8 value)
+{
+    path_record_config.min_satellites = (uint8)path_recorder_clamp_u32(value, 3U, 12U);
+}
+
+void path_recorder_set_max_speed_kph(float value)
+{
+    path_record_config.max_record_speed_kph = path_recorder_clamp_float(value, 5.0f, 120.0f);
 }
 
 static float path_recorder_calculate_distance(double lat1, double lon1, double lat2, double lon2)
