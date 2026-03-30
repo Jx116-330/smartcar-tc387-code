@@ -27,7 +27,7 @@
 #define USER_PI        (3.1415926535898)
 
 /** 当前地图模式最多参与显示变换的轨迹点数 */
-#define DISPLAY_POINT_MAX  (PATH_DISPLAY_SAMPLE_POINTS)
+#define DISPLAY_POINT_MAX  (MAX_PATH_POINTS)
 
 /**
  * @brief GPS 经纬度点
