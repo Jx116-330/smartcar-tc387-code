@@ -3,8 +3,8 @@
 
 #define WIFI_SSID_TEST          "Jx116"
 #define WIFI_PASSWORD_TEST      "777888999"
-#define UDP_TARGET_IP           "172.20.10.3"
-#define UDP_TARGET_PORT         "8086"
+#define TCP_TARGET_IP           "172.20.10.3"
+#define TCP_TARGET_PORT         "8086"
 #define WIFI_LOCAL_PORT         "6666"
 
 uint8 wifi_spi_test_buffer[] = "this is wifi spi test buffer";
@@ -28,9 +28,9 @@ int core0_main(void)
 
     if (0 == WIFI_SPI_AUTO_CONNECT)
     {
-        while (wifi_spi_socket_connect("UDP", UDP_TARGET_IP, UDP_TARGET_PORT, WIFI_LOCAL_PORT))
+        while (wifi_spi_socket_connect("TCP", TCP_TARGET_IP, TCP_TARGET_PORT, WIFI_LOCAL_PORT))
         {
-            printf("\r\n Connect UDP Servers error, try again.");
+            printf("\r\n Connect TCP Servers error, try again.");
             system_delay_ms(100);
         }
     }
@@ -54,7 +54,6 @@ int core0_main(void)
             printf("\r\n Get data: <%s>.", wifi_spi_get_data_buffer);
             if (!wifi_spi_send_buffer(wifi_spi_get_data_buffer, data_length))
             {
-                wifi_spi_udp_send_now();
                 printf("\r\n send success.");
                 memset(wifi_spi_get_data_buffer, 0, data_length);
             }
