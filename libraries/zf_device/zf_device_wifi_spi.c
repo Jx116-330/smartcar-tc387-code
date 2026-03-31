@@ -106,7 +106,7 @@ static uint8 wifi_spi_wait_idle (uint32 wait_time)
     uint32 time = 0;
     
     wait_time = wait_time*100;
-    while(0 == gpio_get_level(WIFI_SPI_INT_PIN))
+    while(1 == gpio_get_level(WIFI_SPI_INT_PIN))
     {
         system_delay_us(10);
         time++;
