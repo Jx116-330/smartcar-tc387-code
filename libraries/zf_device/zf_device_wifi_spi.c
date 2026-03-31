@@ -24,13 +24,13 @@
 * 文件名称          zf_device_wifi_spi
 * 公司名称          成都逐飞科技有限公司
 * 版本信息          查看 libraries/doc 文件夹内 version 文件 版本说明
-* 开发环境          ADS v1.9.4
-* 适用平台          TC387D
+* 开发环境          ADS v1.10.2
+* 适用平台          TC387QP
 * 店铺链接          https://seekfree.taobao.com/
 * 
 * 修改记录
 * 日期              作者                备注
-* 2022-09-21        SeekFree            first version
+* 2024-01-18        SeekFree            first version
 *********************************************************************************************************************/
 /*********************************************************************************************************************
 * 接线定义：
@@ -47,7 +47,6 @@
 *                   其余引脚悬空
 *                   ------------------------------------
 *********************************************************************************************************************/
-
 #include "stdio.h"
 #include "zf_common_clock.h"
 #include "zf_common_debug.h"
@@ -59,18 +58,22 @@
 
 #include "zf_device_wifi_spi.h"
 
-#define WIFI_CONNECT_TIME_OUT       10000
-#define SOCKET_CONNECT_TIME_OUT     50000
-#define OTHER_TIME_OUT              1000
+#define WIFI_CONNECT_TIME_OUT       10000       // 单位毫秒
+#define SOCKET_CONNECT_TIME_OUT     50000       // 单位毫秒
+#define OTHER_TIME_OUT              1000        // 单位毫秒
 
-char wifi_spi_version[12];
-char wifi_spi_mac_addr[20];
-char wifi_spi_ip_addr_port[25];
+char wifi_spi_version[12];                      // 保存模块固件版本信息
+char wifi_spi_mac_addr[20];                     // 保存模块MAC地址信息
+char wifi_spi_ip_addr_port[25];                 // 保存模块IP地址与端口信息
 
 static fifo_struct  wifi_spi_fifo;
 static uint8        wifi_spi_buffer[WIFI_SPI_RECVIVE_FIFO_SIZE];
 static volatile     wifi_spi_state_enum wifi_spi_mutex;
-
+//-------------------------------------------------------------------------------------------------------------------
+// 函数简介     等待WIFI SPI就绪
+// 参数说明     wait_time       最大等待时间 单位毫秒
+// 返回参数     uint8           状态 0-成功 1-错误
+//-------------------------------------------------------------------------------------------------------------------
 static uint8 wifi_spi_wait_idle (uint32 wait_time)
 {
     uint32 time = 0;
@@ -105,11 +108,14 @@ static void wifi_spi_write (const uint8 *buffer1, uint16 length1, const uint8 *b
 static void wifi_spi_transfer_command (wifi_spi_packets_struct *packets, uint16 length)
 {
     gpio_low(WIFI_SPI_CS_PIN);
+    
     spi_transfer_8bit(WIFI_SPI_INDEX, (uint8 *)&(packets->head), (uint8 *)&(packets->head), sizeof(wifi_spi_head_struct));
+    
     if(length)
     {
         spi_transfer_8bit(WIFI_SPI_INDEX, (const uint8 *)(packets->buffer), packets->buffer, length);
     }
+    
     gpio_high(WIFI_SPI_CS_PIN);
 }
 
@@ -205,6 +211,8 @@ static uint8 wifi_spi_get_version (void)
     {
         memcpy(wifi_spi_version, temp_packets.buffer, temp_packets.head.length);
     }
+    return_state = (return_state == 0) ? (WIFI_SPI_REPLY_VERSION != temp_packets.head.command) : 1;
+
     return return_state;
 }
 
@@ -218,6 +226,8 @@ static uint8 wifi_spi_get_mac_addr (void)
     {
         memcpy(wifi_spi_mac_addr, temp_packets.buffer, temp_packets.head.length);
     }
+    return_state = (return_state == 0) ? (WIFI_SPI_REPLY_MAC_ADDR != temp_packets.head.command) : 1;
+
     return return_state;
 }
 
@@ -231,6 +241,8 @@ static uint8 wifi_spi_get_ip_addr_port (void)
     {
         memcpy(wifi_spi_ip_addr_port, temp_packets.buffer, temp_packets.head.length);
     }
+    return_state = (return_state == 0) ? (WIFI_SPI_REPLY_IP_ADDR != temp_packets.head.command) : 1;
+
     return return_state;
 }
 
@@ -239,11 +251,6 @@ uint8 wifi_spi_wifi_connect (char *wifi_ssid, char *pass_word)
     uint8 return_state;
     uint8 temp_buffer[64];
     uint16 length;
-
-    if(NULL == wifi_ssid)
-    {
-        return 0;
-    }
     
     if(NULL != pass_word)
     {
@@ -277,6 +284,7 @@ uint8 wifi_spi_socket_connect (char *transport_type, char *ip_addr, char *port, 
 uint8 wifi_spi_socket_disconnect (void)
 {
     wifi_spi_packets_struct temp_packets;
+
     return wifi_spi_get_parameter(WIFI_SPI_CLOSE_SOCKET, &temp_packets, OTHER_TIME_OUT);
 }
 
@@ -344,7 +352,7 @@ uint8 wifi_spi_udp_send_now (void)
         }while(0);
         
         wifi_spi_mutex = WIFI_SPI_IDLE;
-    }
+    } 
     
     return return_state;
 }
@@ -433,7 +441,7 @@ uint32 wifi_spi_read_buffer (uint8 *buffer, uint32 length)
         }while(WIFI_SPI_REPLY_DATA_START == temp_packets.head.command);
         wifi_spi_mutex = WIFI_SPI_IDLE;
     }
-#endif
+#endif 
     
     fifo_read_buffer(&wifi_spi_fifo, buffer, &data_len, FIFO_READ_AND_CLEAN);
     return data_len;
@@ -444,7 +452,7 @@ uint8 wifi_spi_init (char *wifi_ssid, char *pass_word)
     uint8 return_state = 0;
     
     fifo_init(&wifi_spi_fifo, FIFO_DATA_8BIT, wifi_spi_buffer, WIFI_SPI_RECVIVE_FIFO_SIZE);
-    spi_init(WIFI_SPI_INDEX, SPI_MODE3, WIFI_SPI_SPEED, WIFI_SPI_SCK_PIN, WIFI_SPI_MOSI_PIN, WIFI_SPI_MISO_PIN, SPI_CS_NULL);
+    spi_init(WIFI_SPI_INDEX, SPI_MODE0, WIFI_SPI_SPEED, WIFI_SPI_SCK_PIN, WIFI_SPI_MOSI_PIN, WIFI_SPI_MISO_PIN, SPI_CS_NULL);
     gpio_init(WIFI_SPI_CS_PIN,  GPO, 1, GPO_PUSH_PULL);
     gpio_init(WIFI_SPI_RST_PIN, GPO, 1, GPO_PUSH_PULL);
     gpio_init(WIFI_SPI_INT_PIN, GPI, 0, GPI_PULL_DOWN);
