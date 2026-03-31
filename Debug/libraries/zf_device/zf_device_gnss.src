@@ -1,6 +1,6 @@
 	; Module start
 	.compiler_version	"TASKING VX-toolset for AURIX Development Studio (non-commercial): C compiler v1.1r8 Build 22011964"
-	.compiler_invocation	"ctc -f cc14808a --dep-file=libraries/zf_device/zf_device_gnss.d -c99 --fp-model=3cflnrSTz -D__CPU__=tc38x -D__CPU_TC38X__ --core=tc1.6.2 --fp-model=+float -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\code -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\code\\\\Beep -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\code\\\\GPS -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\code\\\\MyEncoder -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\code\\\\MyKey -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\code\\\\menu -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Configurations -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Infra -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Platform -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Platform\\\\Tricore -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Platform\\\\Tricore\\\\Compilers -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Sfr -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Sfr\\\\TC38A -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Sfr\\\\TC38A\\\\_Reg -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Ssw -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Ssw\\\\TC38A -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Ssw\\\\TC38A\\\\Tricore -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Service -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric\\\\If -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric\\\\If\\\\Ccu6If -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric\\\\StdIf -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric\\\\SysSe -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric\\\\SysSe\\\\Bsp -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric\\\\SysSe\\\\Math -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric\\\\_Utilities -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Asclin -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Asclin\\\\Asc -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Asclin\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Ccu6 -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Ccu6\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Ccu6\\\\Timer -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Cpu -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Cpu\\\\Irq -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Cpu\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Dma -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Dma\\\\Dma -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Dma\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Evadc -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Evadc\\\\Adc -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Evadc\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Flash -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Flash\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Gpt12 -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Gpt12\\\\IncrEnc -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Gpt12\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Gtm -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Gtm\\\\Atom -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Gtm\\\\Atom\\\\Pwm -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Gtm\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Mtu -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Mtu\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Pms -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Pms\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Port -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Port\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Qspi -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Qspi\\\\SpiMaster -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Qspi\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Scu -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Scu\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Src -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Src\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Stm -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Stm\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\_Impl -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\_Lib -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\_Lib\\\\DataHandling -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\_PinMap -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\zf_common -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\zf_components -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\zf_device -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\zf_driver -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\user -g2 -w544 -w557 -t4 --language=+volatile -N0 -O0 -Y0 -Z0 --compact-max-size=200 --misrac-version=2004 -o libraries/zf_device/zf_device_gnss.src ../libraries/zf_device/zf_device_gnss.c"
+	.compiler_invocation	"ctc -f cc38792a --dep-file=libraries/zf_device/zf_device_gnss.d -c99 --fp-model=3cflnrSTz -D__CPU__=tc38x -D__CPU_TC38X__ --core=tc1.6.2 --fp-model=+float -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\code -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\code\\\\Beep -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\code\\\\GPS -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\code\\\\MyEncoder -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\code\\\\MyKey -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\code\\\\menu -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Configurations -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Infra -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Platform -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Platform\\\\Tricore -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Platform\\\\Tricore\\\\Compilers -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Sfr -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Sfr\\\\TC38A -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Sfr\\\\TC38A\\\\_Reg -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Ssw -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Ssw\\\\TC38A -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Ssw\\\\TC38A\\\\Tricore -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Service -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric\\\\If -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric\\\\If\\\\Ccu6If -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric\\\\StdIf -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric\\\\SysSe -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric\\\\SysSe\\\\Bsp -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric\\\\SysSe\\\\Math -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric\\\\_Utilities -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Asclin -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Asclin\\\\Asc -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Asclin\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Ccu6 -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Ccu6\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Ccu6\\\\Timer -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Cpu -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Cpu\\\\Irq -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Cpu\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Dma -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Dma\\\\Dma -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Dma\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Evadc -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Evadc\\\\Adc -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Evadc\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Flash -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Flash\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Gpt12 -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Gpt12\\\\IncrEnc -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Gpt12\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Gtm -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Gtm\\\\Atom -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Gtm\\\\Atom\\\\Pwm -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Gtm\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Mtu -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Mtu\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Pms -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Pms\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Port -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Port\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Qspi -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Qspi\\\\SpiMaster -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Qspi\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Scu -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Scu\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Src -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Src\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Stm -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Stm\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\_Impl -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\_Lib -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\_Lib\\\\DataHandling -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\_PinMap -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\zf_common -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\zf_components -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\zf_device -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\zf_driver -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\user -g2 -w544 -w557 -t4 --language=+volatile -N0 -O0 -Y0 -Z0 --compact-max-size=200 --misrac-version=2004 -o libraries/zf_device/zf_device_gnss.src ../libraries/zf_device/zf_device_gnss.c"
 	.compiler_name		"ctc"
 	;source	'../libraries/zf_device/zf_device_gnss.c'
 
@@ -17,61 +17,61 @@ gnss_copy_debug_sentence:	.type	func
 	mov	d15,#0
 .L379:
 	mov.a	a15,#0
-.L931:
-	jeq.a	a15,a4,.L2
 .L932:
+	jeq.a	a15,a4,.L2
+.L933:
 	jne	d4,#0,.L3
 .L2:
 	j	.L4
 .L3:
 	mov.a	a15,#0
-.L933:
-	jne.a	a15,a5,.L5
 .L934:
+	jne.a	a15,a5,.L5
+.L935:
 	mov	d15,#0
 .L380:
 	st.b	[a4],d15
-.L935:
+.L936:
 	j	.L6
 .L5:
 	j	.L7
 .L8:
 	addsc.a	a15,a4,d15,#0
-.L936:
+.L937:
 	addsc.a	a2,a5,d15,#0
 	ld.bu	d0,[a2]
-.L937:
-	st.b	[a15],d0
 .L938:
+	st.b	[a15],d0
+.L939:
 	add	d15,#1
 .L7:
 	add	d0,d15,#1
-.L939:
-	jge.u	d0,d4,.L9
 .L940:
-	addsc.a	a15,a5,d15,#0
-	ld.bu	d0,[a15]
+	jge.u	d0,d4,.L9
 .L941:
-	jeq	d0,#0,.L10
+	addsc.a	a15,a5,d15,#0
+	ld.bu	d0,[a15]
 .L942:
-	addsc.a	a15,a5,d15,#0
-	ld.bu	d0,[a15]
+	jeq	d0,#0,.L10
 .L943:
-	mov	d1,#13
-.L944:
-	jeq	d0,d1,.L11
-.L945:
 	addsc.a	a15,a5,d15,#0
 	ld.bu	d0,[a15]
+.L944:
+	mov	d1,#13
+.L945:
+	jeq	d0,d1,.L11
 .L946:
-	mov	d1,#10
+	addsc.a	a15,a5,d15,#0
+	ld.bu	d0,[a15]
 .L947:
+	mov	d1,#10
+.L948:
 	jne	d0,d1,.L8
 .L11:
 .L10:
 .L9:
 	addsc.a	a15,a4,d15,#0
-.L948:
+.L949:
 	mov	d15,#0
 .L381:
 	st.b	[a15],d15
@@ -108,9 +108,9 @@ get_parameter_index:	.type	func
 	mov	d2,#0
 .L390:
 	mov.a	a4,#0
-.L953:
-	jeq.a	a4,a2,.L12
 .L954:
+	jeq.a	a4,a2,.L12
+.L955:
 	mov.d	d0,a2
 .L389:
 	mov.d	d1,a15
@@ -118,7 +118,7 @@ get_parameter_index:	.type	func
 	sub	d0,d1
 .L391:
 	add	d0,#1
-.L955:
+.L956:
 	extr.u	d0,d0,#0,#8
 .L12:
 	mov	d15,#0
@@ -127,21 +127,21 @@ get_parameter_index:	.type	func
 .L14:
 	addsc.a	a2,a15,d15,#0
 	ld.b	d1,[a2]0
-.L956:
-	mov	d3,#44
 .L957:
-	jne	d1,d3,.L15
+	mov	d3,#44
 .L958:
+	jne	d1,d3,.L15
+.L959:
 	add	d9,#1
 .L387:
 	extr.u	d9,d9,#0,#8
 .L15:
 	jne	d9,d8,.L16
-.L959:
+.L960:
 	add	d15,#1
 .L394:
 	extr.u	d2,d15,#0,#8
-.L960:
+.L961:
 	j	.L17
 .L16:
 	add	d15,#1
@@ -172,7 +172,7 @@ get_int_number:	.type	func
 	mov.aa	a15,a4
 .L398:
 	mov	d4,#1
-.L965:
+.L966:
 	mov.aa	a4,a15
 	call	get_parameter_index
 .L397:
@@ -181,7 +181,7 @@ get_int_number:	.type	func
 	extr.u	d15,d2,#0,#8
 .L401:
 	lea	a4,[a10]0
-.L966:
+.L967:
 	mov.aa	a5,a15
 .L403:
 	mov	d4,d15
@@ -193,7 +193,7 @@ get_int_number:	.type	func
 	mov	d15,#0
 .L402:
 	st.b	[a15],d15
-.L967:
+.L968:
 	lea	a4,[a10]0
 	call	func_str_to_int
 .L406:
@@ -219,7 +219,7 @@ get_float_number:	.type	func
 	mov.aa	a15,a4
 .L409:
 	mov	d4,#1
-.L972:
+.L973:
 	mov.aa	a4,a15
 	call	get_parameter_index
 .L408:
@@ -228,7 +228,7 @@ get_float_number:	.type	func
 	extr.u	d15,d2,#0,#8
 .L412:
 	lea	a4,[a10]0
-.L973:
+.L974:
 	mov.aa	a5,a15
 .L414:
 	mov	d4,d15
@@ -240,7 +240,7 @@ get_float_number:	.type	func
 	mov	d15,#0
 .L413:
 	st.b	[a15],d15
-.L974:
+.L975:
 	lea	a4,[a10]0
 	call	func_str_to_double
 .L417:
@@ -266,7 +266,7 @@ get_double_number:	.type	func
 	mov.aa	a15,a4
 .L420:
 	mov	d4,#1
-.L979:
+.L980:
 	mov.aa	a4,a15
 	call	get_parameter_index
 .L419:
@@ -275,7 +275,7 @@ get_double_number:	.type	func
 	extr.u	d15,d2,#0,#8
 .L423:
 	lea	a4,[a10]0
-.L980:
+.L981:
 	mov.aa	a5,a15
 .L425:
 	mov	d4,d15
@@ -287,7 +287,7 @@ get_double_number:	.type	func
 	mov	d15,#0
 .L424:
 	st.b	[a15],d15
-.L981:
+.L982:
 	lea	a4,[a10]0
 	call	func_str_to_double
 .L428:
@@ -309,55 +309,55 @@ __get_double_number_function_end:
 .L110:
 utc_to_btc:	.type	func
 	ld.bu	d15,[a4]4
-.L986:
-	add	d15,d15,#8
 .L987:
-	st.b	[a4]4,d15
+	add	d15,d15,#8
 .L988:
-	ld.bu	d15,[a4]4
+	st.b	[a4]4,d15
 .L989:
-	mov	d0,#23
-.L990:
-	jge.u	d0,d15,.L22
-.L991:
 	ld.bu	d15,[a4]4
+.L990:
+	mov	d0,#23
+.L991:
+	jge.u	d0,d15,.L22
 .L992:
+	ld.bu	d15,[a4]4
+.L993:
 	add	d15,d15,#-24
 	st.b	[a4]4,d15
-.L993:
-	ld.bu	d15,[a4]3
 .L994:
+	ld.bu	d15,[a4]3
+.L995:
 	add	d15,#1
 	st.b	[a4]3,d15
-.L995:
-	ld.bu	d15,[a4]2
 .L996:
-	jne	d15,#2,.L23
+	ld.bu	d15,[a4]2
 .L997:
+	jne	d15,#2,.L23
+.L998:
 	mov	d2,#28
 .L429:
 	ld.hu	d0,[a4]0
-.L998:
-	mov	d1,#4
 .L999:
-	div	e0,d0,d1
+	mov	d1,#4
 .L1000:
-	jne	d1,#0,.L24
+	div	e0,d0,d1
 .L1001:
-	ld.hu	d0,[a4]0
+	jne	d1,#0,.L24
 .L1002:
-	mov	d15,#100
+	ld.hu	d0,[a4]0
 .L1003:
-	div	e0,d0,d15
+	mov	d15,#100
 .L1004:
+	div	e0,d0,d15
+.L1005:
 	jne	d1,#0,.L25
 .L24:
 	ld.hu	d0,[a4]0
-.L1005:
-	mov	d1,#400
 .L1006:
-	div	e0,d0,d1
+	mov	d1,#400
 .L1007:
+	div	e0,d0,d1
+.L1008:
 	jne	d1,#0,.L26
 .L25:
 	add	d2,#1
@@ -367,23 +367,23 @@ utc_to_btc:	.type	func
 	mov	d2,#31
 .L430:
 	ld.bu	d15,[a4]2
-.L1008:
-	jeq	d15,#4,.L28
 .L1009:
-	ld.bu	d15,[a4]2
+	jeq	d15,#4,.L28
 .L1010:
-	jeq	d15,#6,.L29
+	ld.bu	d15,[a4]2
 .L1011:
-	ld.bu	d0,[a4]2
+	jeq	d15,#6,.L29
 .L1012:
-	mov	d15,#9
-.L1013:
-	jeq	d15,d0,.L30
-.L1014:
 	ld.bu	d0,[a4]2
+.L1013:
+	mov	d15,#9
+.L1014:
+	jeq	d15,d0,.L30
 .L1015:
-	mov	d15,#11
+	ld.bu	d0,[a4]2
 .L1016:
+	mov	d15,#11
+.L1017:
 	jne	d15,d0,.L31
 .L30:
 .L29:
@@ -392,29 +392,29 @@ utc_to_btc:	.type	func
 .L31:
 .L27:
 	ld.bu	d15,[a4]3
-.L1017:
-	jge.u	d2,d15,.L32
 .L1018:
-	mov	d15,#1
+	jge.u	d2,d15,.L32
 .L1019:
-	st.b	[a4]3,d15
+	mov	d15,#1
 .L1020:
-	ld.bu	d15,[a4]2
+	st.b	[a4]3,d15
 .L1021:
+	ld.bu	d15,[a4]2
+.L1022:
 	add	d15,#1
 	st.b	[a4]2,d15
-.L1022:
-	ld.bu	d15,[a4]2
 .L1023:
-	jlt.u	d15,#13,.L33
-.L1024:
 	ld.bu	d15,[a4]2
+.L1024:
+	jlt.u	d15,#13,.L33
 .L1025:
+	ld.bu	d15,[a4]2
+.L1026:
 	add	d15,d15,#-12
 	st.b	[a4]2,d15
-.L1026:
-	ld.hu	d15,[a4]0
 .L1027:
+	ld.hu	d15,[a4]0
+.L1028:
 	add	d15,#1
 	st.h	[a4],d15
 .L33:
@@ -442,7 +442,7 @@ gps_gnrmc_parse:	.type	func
 	mov	d8,#0
 .L434:
 	mov	d4,#2
-.L1032:
+.L1033:
 	mov.aa	a4,a12
 	call	get_parameter_index
 .L431:
@@ -452,41 +452,41 @@ gps_gnrmc_parse:	.type	func
 .L435:
 	mov	d15,#65
 	jeq	d15,d0,.L34
-.L1033:
-	mov	d15,#68
 .L1034:
+	mov	d15,#68
+.L1035:
 	jne	d15,d0,.L35
 .L34:
 	mov	d8,#1
-.L1035:
-	mov	d15,#1
 .L1036:
-	st.b	[a15]8,d15
+	mov	d15,#1
 .L1037:
-	mov	d4,#4
+	st.b	[a15]8,d15
 .L1038:
+	mov	d4,#4
+.L1039:
 	mov.aa	a4,a12
 .L437:
 	call	get_parameter_index
 .L436:
 	addsc.a	a2,a12,d2,#0
 	ld.b	d15,[a2]0
-.L1039:
-	st.b	[a15]30,d15
 .L1040:
-	mov	d4,#6
+	st.b	[a15]30,d15
 .L1041:
+	mov	d4,#6
+.L1042:
 	mov.aa	a4,a12
 .L438:
 	call	get_parameter_index
 .L439:
 	addsc.a	a2,a12,d2,#0
 	ld.b	d15,[a2]0
-.L1042:
-	st.b	[a15]31,d15
 .L1043:
-	mov	d4,#3
+	st.b	[a15]31,d15
 .L1044:
+	mov	d4,#3
+.L1045:
 	mov.aa	a4,a12
 .L440:
 	call	get_parameter_index
@@ -497,7 +497,7 @@ gps_gnrmc_parse:	.type	func
 	mov	d9,d2
 .L444:
 	mov	d4,#5
-.L1045:
+.L1046:
 	mov.aa	a4,a12
 .L445:
 	call	get_parameter_index
@@ -506,95 +506,95 @@ gps_gnrmc_parse:	.type	func
 	call	get_double_number
 .L446:
 	ftoiz	d0,d9
-.L1046:
-	mov	d15,#100
 .L1047:
-	div	e0,d0,d15
+	mov	d15,#100
 .L1048:
-	st.h	[a15]10,d0
+	div	e0,d0,d15
 .L1049:
-	ld.hu	d15,[a15]10
+	st.h	[a15]10,d0
 .L1050:
+	ld.hu	d15,[a15]10
+.L1051:
 	mul	d15,d15,#100
 	itof	d15,d15
-.L1051:
+.L1052:
 	sub.f	d3,d9,d15
 .L448:
 	ftoiz	d15,d3
-.L1052:
-	st.h	[a15]12,d15
 .L1053:
+	st.h	[a15]12,d15
+.L1054:
 	ld.hu	d15,[a15]12
 	utof	d15,d15
-.L1054:
-	sub.f	d15,d3,d15
 .L1055:
+	sub.f	d15,d3,d15
+.L1056:
 	mov.u	d0,#32768
 	addih	d0,d0,#17851
-.L1056:
+.L1057:
 	mul.f	d15,d15,d0
 .L449:
 	ftoiz	d15,d15
 .L450:
 	st.h	[a15]14,d15
-.L1057:
-	ftoiz	d0,d2
 .L1058:
-	mov	d15,#100
+	ftoiz	d0,d2
 .L1059:
-	div	e0,d0,d15
+	mov	d15,#100
 .L1060:
-	st.h	[a15]16,d0
+	div	e0,d0,d15
 .L1061:
-	ld.hu	d15,[a15]16
+	st.h	[a15]16,d0
 .L1062:
+	ld.hu	d15,[a15]16
+.L1063:
 	mul	d15,d15,#100
 	itof	d15,d15
-.L1063:
+.L1064:
 	sub.f	d1,d2,d15
 .L451:
 	ftoiz	d15,d1
-.L1064:
-	st.h	[a15]18,d15
 .L1065:
+	st.h	[a15]18,d15
+.L1066:
 	ld.hu	d15,[a15]18
 	utof	d15,d15
-.L1066:
-	sub.f	d15,d1,d15
 .L1067:
+	sub.f	d15,d1,d15
+.L1068:
 	mov.u	d0,#32768
 	addih	d0,d0,#17851
-.L1068:
+.L1069:
 	mul.f	d15,d15,d0
 .L452:
 	ftoiz	d15,d15
 .L453:
 	st.h	[a15]20,d15
-.L1069:
+.L1070:
 	ld.hu	d15,[a15]10
 	utof	d15,d15
-.L1070:
-	movh	d0,#17008
 .L1071:
-	div.f	d0,d3,d0
+	movh	d0,#17008
 .L1072:
-	add.f	d15,d15,d0
+	div.f	d0,d3,d0
 .L1073:
-	st.w	[a15]22,d15
+	add.f	d15,d15,d0
 .L1074:
+	st.w	[a15]22,d15
+.L1075:
 	ld.hu	d15,[a15]16
 	utof	d15,d15
-.L1075:
-	movh	d0,#17008
 .L1076:
-	div.f	d0,d1,d0
+	movh	d0,#17008
 .L1077:
-	add.f	d15,d15,d0
+	div.f	d0,d1,d0
 .L1078:
-	st.w	[a15]26,d15
+	add.f	d15,d15,d0
 .L1079:
-	mov	d4,#7
+	st.w	[a15]26,d15
 .L1080:
+	mov	d4,#7
+.L1081:
 	mov.aa	a4,a12
 .L454:
 	call	get_parameter_index
@@ -604,126 +604,126 @@ gps_gnrmc_parse:	.type	func
 .L455:
 	mov.u	d15,#52429
 	addih	d15,d15,#16364
-.L1081:
-	mul.f	d15,d2,d15
 .L1082:
-	st.w	[a15]32,d15
+	mul.f	d15,d2,d15
 .L1083:
-	mov	d4,#8
+	st.w	[a15]32,d15
 .L1084:
+	mov	d4,#8
+.L1085:
 	mov.aa	a4,a12
 .L457:
 	call	get_parameter_index
 .L456:
 	addsc.a	a4,a12,d2,#0
 	call	get_float_number
-.L1085:
-	st.w	[a15]36,d2
 .L1086:
+	st.w	[a15]36,d2
+.L1087:
 	j	.L36
 .L35:
 	mov	d15,#0
-.L1087:
+.L1088:
 	st.b	[a15]8,d15
 .L36:
 	ld.b	d15,[a12]7
-.L1088:
-	add	d0,d15,#-48
 .L1089:
-	mov	d15,#10
+	add	d0,d15,#-48
 .L1090:
-	ld.b	d1,[a12]8
+	mov	d15,#10
 .L1091:
-	add	d1,d1,#-48
+	ld.b	d1,[a12]8
 .L1092:
-	madd	d15,d1,d0,d15
+	add	d1,d1,#-48
 .L1093:
-	st.b	[a15]4,d15
+	madd	d15,d1,d0,d15
 .L1094:
-	ld.b	d15,[a12]9
+	st.b	[a15]4,d15
 .L1095:
-	add	d0,d15,#-48
+	ld.b	d15,[a12]9
 .L1096:
-	mov	d15,#10
-.L1097:
-	ld.b	d1,[a12]10
-.L1098:
-	add	d1,d1,#-48
-.L1099:
-	madd	d15,d1,d0,d15
-.L1100:
-	st.b	[a15]5,d15
-.L1101:
-	ld.b	d15,[a12]11
-.L1102:
 	add	d0,d15,#-48
-.L1103:
+.L1097:
 	mov	d15,#10
-.L1104:
-	ld.b	d1,[a12]12
-.L1105:
+.L1098:
+	ld.b	d1,[a12]10
+.L1099:
 	add	d1,d1,#-48
-.L1106:
+.L1100:
 	madd	d15,d1,d0,d15
+.L1101:
+	st.b	[a15]5,d15
+.L1102:
+	ld.b	d15,[a12]11
+.L1103:
+	add	d0,d15,#-48
+.L1104:
+	mov	d15,#10
+.L1105:
+	ld.b	d1,[a12]12
+.L1106:
+	add	d1,d1,#-48
 .L1107:
-	st.b	[a15]6,d15
+	madd	d15,d1,d0,d15
 .L1108:
-	mov	d4,#9
+	st.b	[a15]6,d15
 .L1109:
+	mov	d4,#9
+.L1110:
 	mov.aa	a4,a12
 .L458:
 	call	get_parameter_index
 .L459:
 	addsc.a	a2,a12,d2,#0
 	ld.b	d15,[a2]0
-.L1110:
-	add	d0,d15,#-48
 .L1111:
-	mov	d15,#10
+	add	d0,d15,#-48
 .L1112:
+	mov	d15,#10
+.L1113:
 	addsc.a	a2,a12,d2,#0
 	ld.b	d1,[a2]1
-.L1113:
-	add	d1,d1,#-48
 .L1114:
-	madd	d15,d1,d0,d15
+	add	d1,d1,#-48
 .L1115:
-	st.b	[a15]3,d15
+	madd	d15,d1,d0,d15
 .L1116:
+	st.b	[a15]3,d15
+.L1117:
 	addsc.a	a2,a12,d2,#0
 	ld.b	d15,[a2]2
-.L1117:
-	add	d0,d15,#-48
 .L1118:
-	mov	d15,#10
+	add	d0,d15,#-48
 .L1119:
+	mov	d15,#10
+.L1120:
 	addsc.a	a2,a12,d2,#0
 	ld.b	d1,[a2]3
-.L1120:
-	add	d1,d1,#-48
 .L1121:
-	madd	d15,d1,d0,d15
+	add	d1,d1,#-48
 .L1122:
-	st.b	[a15]2,d15
+	madd	d15,d1,d0,d15
 .L1123:
+	st.b	[a15]2,d15
+.L1124:
 	addsc.a	a2,a12,d2,#0
 	ld.b	d15,[a2]4
-.L1124:
-	add	d0,d15,#-48
 .L1125:
-	mov	d15,#10
+	add	d0,d15,#-48
 .L1126:
+	mov	d15,#10
+.L1127:
 	addsc.a	a2,a12,d2,#0
 	ld.b	d1,[a2]5
-.L1127:
-	add	d1,d1,#-48
 .L1128:
-	madd	d15,d1,d0,d15
+	add	d1,d1,#-48
 .L1129:
-	addi	d15,d15,#2000
+	madd	d15,d1,d0,d15
 .L1130:
-	st.h	[a15],d15
+	addi	d15,d15,#2000
 .L1131:
+	st.h	[a15],d15
+.L1132:
 	mov.aa	a4,a15
 .L461:
 	call	utc_to_btc
@@ -754,7 +754,7 @@ gps_gngga_parse:	.type	func
 	mov	d8,#0
 .L467:
 	mov	d4,#2
-.L1136:
+.L1137:
 	mov.aa	a4,a12
 	call	get_parameter_index
 .L463:
@@ -763,30 +763,30 @@ gps_gngga_parse:	.type	func
 	extr.u	d0,d15,#0,#8
 .L468:
 	mov	d15,#44
-.L1137:
-	jeq	d15,d0,.L38
 .L1138:
-	mov	d4,#7
+	jeq	d15,d0,.L38
 .L1139:
+	mov	d4,#7
+.L1140:
 	mov.aa	a4,a12
 .L470:
 	call	get_parameter_index
 .L469:
 	addsc.a	a4,a12,d2,#0
 	call	get_int_number
-.L1140:
-	st.b	[a15]46,d2
 .L1141:
-	mov	d4,#9
+	st.b	[a15]46,d2
 .L1142:
+	mov	d4,#9
+.L1143:
 	mov.aa	a4,a12
 .L471:
 	call	get_parameter_index
 .L472:
 	addsc.a	a13,a12,d2,#0
-.L1143:
-	mov	d4,#11
 .L1144:
+	mov	d4,#11
+.L1145:
 	mov.aa	a4,a12
 .L473:
 	call	get_parameter_index
@@ -795,16 +795,16 @@ gps_gngga_parse:	.type	func
 .L465:
 	mov.aa	a4,a13
 	call	get_float_number
-.L1145:
-	mov	d15,d2
 .L1146:
+	mov	d15,d2
+.L1147:
 	mov.aa	a4,a12
 	call	get_float_number
-.L1147:
-	add.f	d15,d15,d2
 .L1148:
-	st.w	[a15]48,d15
+	add.f	d15,d15,d2
 .L1149:
+	st.w	[a15]48,d15
+.L1150:
 	mov	d8,#1
 .L38:
 	mov	d2,d8
@@ -833,7 +833,7 @@ gps_gnths_parse:	.type	func
 	mov	d8,#0
 .L479:
 	mov	d4,#2
-.L1154:
+.L1155:
 	mov.aa	a4,a15
 	call	get_parameter_index
 .L476:
@@ -842,30 +842,30 @@ gps_gnths_parse:	.type	func
 	extr.u	d0,d15,#0,#8
 .L480:
 	mov	d15,#65
-.L1155:
-	jne	d15,d0,.L40
 .L1156:
-	mov	d15,#1
+	jne	d15,d0,.L40
 .L1157:
-	st.b	[a12]40,d15
+	mov	d15,#1
 .L1158:
-	mov	d4,#1
+	st.b	[a12]40,d15
 .L1159:
+	mov	d4,#1
+.L1160:
 	mov.aa	a4,a15
 .L482:
 	call	get_parameter_index
 .L481:
 	addsc.a	a4,a15,d2,#0
 	call	get_float_number
-.L1160:
-	st.w	[a12]42,d2
 .L1161:
-	mov	d8,#1
+	st.w	[a12]42,d2
 .L1162:
+	mov	d8,#1
+.L1163:
 	j	.L41
 .L40:
 	mov	d15,#0
-.L1163:
+.L1164:
 	st.b	[a12]40,d15
 .L41:
 	mov	d2,d8
@@ -1677,11 +1677,13 @@ gnss_uart_callback:	.type	func
 	lea	a4,[a4]@los(gnss_receiver_fifo)
 	call	fifo_clear
 .L762:
+	call	gnss_data_parse
+.L763:
 	movh.a	a15,#@his(gnss_flag)
 	lea	a15,[a15]@los(gnss_flag)
-.L763:
-	mov	d15,#1
 .L764:
+	mov	d15,#1
+.L765:
 	st.b	[a15],d15
 .L69:
 .L68:
@@ -1705,85 +1707,85 @@ gnss_get_debug_info:	.type	func
 	mov.aa	a15,a4
 .L538:
 	mov.a	a2,#0
-.L900:
-	jne.a	a2,a15,.L81
 .L901:
+	jne.a	a2,a15,.L81
+.L902:
 	j	.L82
 .L81:
 	movh.a	a2,#@his(gnss_state)
 	lea	a2,[a2]@los(gnss_state)
 	ld.bu	d15,[a2]
-.L902:
-	st.b	[a15],d15
 .L903:
+	st.b	[a15],d15
+.L904:
 	movh.a	a2,#@his(gnss_flag)
 	lea	a2,[a2]@los(gnss_flag)
 	ld.bu	d15,[a2]
-.L904:
-	st.b	[a15]1,d15
 .L905:
+	st.b	[a15]1,d15
+.L906:
 	movh.a	a2,#@his(gnss_rmc_state)
 	lea	a2,[a2]@los(gnss_rmc_state)
 	ld.bu	d15,[a2]
-.L906:
-	st.b	[a15]2,d15
 .L907:
+	st.b	[a15]2,d15
+.L908:
 	movh.a	a2,#@his(gnss_gga_state)
 	lea	a2,[a2]@los(gnss_gga_state)
 	ld.bu	d15,[a2]
-.L908:
-	st.b	[a15]3,d15
 .L909:
+	st.b	[a15]3,d15
+.L910:
 	movh.a	a2,#@his(gnss_ths_state)
 	lea	a2,[a2]@los(gnss_ths_state)
 	ld.bu	d15,[a2]
-.L910:
-	st.b	[a15]4,d15
 .L911:
+	st.b	[a15]4,d15
+.L912:
 	movh.a	a2,#@his(gnss_rmc_frame_count)
 	lea	a2,[a2]@los(gnss_rmc_frame_count)
 	ld.w	d15,[a2]
-.L912:
-	st.w	[a15]6,d15
 .L913:
+	st.w	[a15]6,d15
+.L914:
 	movh.a	a2,#@his(gnss_gga_frame_count)
 	lea	a2,[a2]@los(gnss_gga_frame_count)
 	ld.w	d15,[a2]
-.L914:
-	st.w	[a15]10,d15
 .L915:
+	st.w	[a15]10,d15
+.L916:
 	movh.a	a2,#@his(gnss_ths_frame_count)
 	lea	a2,[a2]@los(gnss_ths_frame_count)
 	ld.w	d15,[a2]
-.L916:
-	st.w	[a15]14,d15
 .L917:
+	st.w	[a15]14,d15
+.L918:
 	movh.a	a2,#@his(gnss_parse_error_count)
 	lea	a2,[a2]@los(gnss_parse_error_count)
 	ld.w	d15,[a2]
-.L918:
-	st.w	[a15]18,d15
 .L919:
+	st.w	[a15]18,d15
+.L920:
 	lea	a4,[a15]22
 .L537:
 	mov	d4,#64
-.L920:
+.L921:
 	movh.a	a5,#@his(gps_rmc_buffer)
 	lea	a5,[a5]@los(gps_rmc_buffer)
 	call	gnss_copy_debug_sentence
-.L921:
-	lea	a4,[a15]86
 .L922:
-	mov	d4,#64
+	lea	a4,[a15]86
 .L923:
+	mov	d4,#64
+.L924:
 	movh.a	a5,#@his(gps_gga_buffer)
 	lea	a5,[a5]@los(gps_gga_buffer)
 	call	gnss_copy_debug_sentence
-.L924:
-	lea	a4,[a15]150
 .L925:
-	mov	d4,#64
+	lea	a4,[a15]150
 .L926:
+	mov	d4,#64
+.L927:
 	movh.a	a5,#@his(gps_ths_buffer)
 	lea	a5,[a5]@los(gps_ths_buffer)
 	call	gnss_copy_debug_sentence
@@ -1811,403 +1813,403 @@ gnss_init:	.type	func
 	movh.a	a15,#@his(.6.ini)
 	lea	a15,[a15]@los(.6.ini)
 	lea	a15,[a15]0
-.L769:
+.L770:
 	lea	a2,[a10]0
 	lea	a4,27
 .L83:
 	ld.bu	d0,[a15+]
 	st.b	[a2+],d0
 	loop	a4,.L83
-.L770:
+.L771:
 	movh.a	a15,#@his(.7.ini)
 	lea	a15,[a15]@los(.7.ini)
 	lea	a15,[a15]0
-.L771:
+.L772:
 	lea	a2,[a10]28
 	mov.a	a4,#10
 .L84:
 	ld.bu	d0,[a15+]
 	st.b	[a2+],d0
 	loop	a4,.L84
-.L772:
+.L773:
 	movh.a	a15,#@his(.8.ini)
 	lea	a15,[a15]@los(.8.ini)
 	lea	a15,[a15]0
-.L773:
+.L774:
 	lea	a2,[a10]39
 	mov.a	a4,#10
 .L85:
 	ld.bu	d0,[a15+]
 	st.b	[a2+],d0
 	loop	a4,.L85
-.L774:
+.L775:
 	movh.a	a15,#@his(.9.ini)
 	lea	a15,[a15]@los(.9.ini)
 	lea	a15,[a15]0
-.L775:
+.L776:
 	lea	a2,[a10]50
 	mov.a	a4,#10
 .L86:
 	ld.bu	d0,[a15+]
 	st.b	[a2+],d0
 	loop	a4,.L86
-.L776:
+.L777:
 	movh.a	a15,#@his(.10.ini)
 	lea	a15,[a15]@los(.10.ini)
 	lea	a15,[a15]0
-.L777:
+.L778:
 	lea	a2,[a10]61
 	mov.a	a4,#10
 .L87:
 	ld.bu	d0,[a15+]
 	st.b	[a2+],d0
 	loop	a4,.L87
-.L778:
+.L779:
 	movh.a	a15,#@his(.11.ini)
 	lea	a15,[a15]@los(.11.ini)
 	lea	a15,[a15]0
-.L779:
+.L780:
 	lea	a2,[a10]72
 	mov.a	a4,#10
 .L88:
 	ld.bu	d0,[a15+]
 	st.b	[a2+],d0
 	loop	a4,.L88
-.L780:
+.L781:
 	movh.a	a15,#@his(.12.ini)
 	lea	a15,[a15]@los(.12.ini)
 	lea	a15,[a15]0
-.L781:
+.L782:
 	lea	a2,[a10]83
 	mov.a	a4,#10
 .L89:
 	ld.bu	d0,[a15+]
 	st.b	[a2+],d0
 	loop	a4,.L89
-.L782:
+.L783:
 	movh.a	a15,#@his(.13.ini)
 	lea	a15,[a15]@los(.13.ini)
 	lea	a15,[a15]0
-.L783:
+.L784:
 	lea	a2,[a10]94
 	mov.a	a4,#10
 .L90:
 	ld.bu	d0,[a15+]
 	st.b	[a2+],d0
 	loop	a4,.L90
-.L784:
+.L785:
 	movh.a	a15,#@his(.14.ini)
 	lea	a15,[a15]@los(.14.ini)
 	lea	a15,[a15]0
-.L785:
+.L786:
 	lea	a2,[a10]105
 	mov.a	a4,#10
 .L91:
 	ld.bu	d0,[a15+]
 	st.b	[a2+],d0
 	loop	a4,.L91
-.L786:
+.L787:
 	movh.a	a15,#@his(.15.ini)
 	lea	a15,[a15]@los(.15.ini)
 	lea	a15,[a15]0
-.L787:
+.L788:
 	lea	a2,[a10]116
 	mov.a	a4,#10
 .L92:
 	ld.bu	d0,[a15+]
 	st.b	[a2+],d0
 	loop	a4,.L92
-.L788:
+.L789:
 	movh.a	a15,#@his(.16.ini)
 	lea	a15,[a15]@los(.16.ini)
 	lea	a15,[a15]0
-.L789:
+.L790:
 	lea	a2,[a10]127
 	mov.a	a4,#10
 .L93:
 	ld.bu	d0,[a15+]
 	st.b	[a2+],d0
 	loop	a4,.L93
-.L790:
+.L791:
 	movh.a	a15,#@his(.17.ini)
 	lea	a15,[a15]@los(.17.ini)
 	lea	a15,[a15]0
-.L791:
+.L792:
 	lea	a2,[a10]138
 	mov.a	a4,#10
 .L94:
 	ld.bu	d0,[a15+]
 	st.b	[a2+],d0
 	loop	a4,.L94
-.L792:
+.L793:
 	movh.a	a15,#@his(gnss_rmc_frame_count)
 	lea	a15,[a15]@los(gnss_rmc_frame_count)
-.L793:
-	mov	d0,#0
 .L794:
-	st.w	[a15],d0
+	mov	d0,#0
 .L795:
+	st.w	[a15],d0
+.L796:
 	movh.a	a15,#@his(gnss_gga_frame_count)
 	lea	a15,[a15]@los(gnss_gga_frame_count)
-.L796:
-	mov	d0,#0
 .L797:
-	st.w	[a15],d0
+	mov	d0,#0
 .L798:
+	st.w	[a15],d0
+.L799:
 	movh.a	a15,#@his(gnss_ths_frame_count)
 	lea	a15,[a15]@los(gnss_ths_frame_count)
-.L799:
-	mov	d0,#0
 .L800:
-	st.w	[a15],d0
+	mov	d0,#0
 .L801:
+	st.w	[a15],d0
+.L802:
 	movh.a	a15,#@his(gnss_parse_error_count)
 	lea	a15,[a15]@los(gnss_parse_error_count)
-.L802:
-	mov	d0,#0
 .L803:
-	st.w	[a15],d0
+	mov	d0,#0
 .L804:
+	st.w	[a15],d0
+.L805:
 	movh.a	a15,#@his(gnss_state)
 	lea	a15,[a15]@los(gnss_state)
-.L805:
-	mov	d0,#0
 .L806:
-	st.b	[a15],d0
+	mov	d0,#0
 .L807:
+	st.b	[a15],d0
+.L808:
 	movh.a	a15,#@his(gnss_flag)
 	lea	a15,[a15]@los(gnss_flag)
-.L808:
-	mov	d0,#0
 .L809:
-	st.b	[a15],d0
+	mov	d0,#0
 .L810:
+	st.b	[a15],d0
+.L811:
 	movh.a	a4,#@his(gnss)
 	lea	a4,[a4]@los(gnss)
-.L811:
+.L812:
 	mov	d4,#0
 .L540:
 	mov	d5,#52
 	call	memset
-.L812:
+.L813:
 	movh.a	a4,#@his(gps_rmc_buffer)
 	lea	a4,[a4]@los(gps_rmc_buffer)
-.L813:
-	mov	d4,#0
 .L814:
+	mov	d4,#0
+.L815:
 	mov	d5,#128
 	call	memset
-.L815:
+.L816:
 	movh.a	a4,#@his(gps_gga_buffer)
 	lea	a4,[a4]@los(gps_gga_buffer)
-.L816:
-	mov	d4,#0
 .L817:
+	mov	d4,#0
+.L818:
 	mov	d5,#128
 	call	memset
-.L818:
+.L819:
 	movh.a	a4,#@his(gps_ths_buffer)
 	lea	a4,[a4]@los(gps_ths_buffer)
-.L819:
-	mov	d4,#0
 .L820:
+	mov	d4,#0
+.L821:
 	mov	d5,#128
 	call	memset
-.L821:
-	jeq	d15,#1,.L95
 .L822:
+	jeq	d15,#1,.L95
+.L823:
 	jne	d15,#1,.L96
 .L95:
 	movh.a	a4,#@his(gnss_receiver_fifo)
 	lea	a4,[a4]@los(gnss_receiver_fifo)
-.L823:
-	mov	d4,#0
 .L824:
+	mov	d4,#0
+.L825:
 	movh.a	a5,#@his(gnss_receiver_buffer)
 	lea	a5,[a5]@los(gnss_receiver_buffer)
-.L825:
+.L826:
 	mov	d5,#128
 	call	fifo_init
-.L826:
+.L827:
 	mov	d4,#500
 	call	system_delay_ms
-.L827:
-	mov	d4,#3
 .L828:
+	mov	d4,#3
+.L829:
 	mov.u	d5,#49664
 	addih	d5,d5,#1
-.L829:
-	mov	d6,#21
 .L830:
+	mov	d6,#21
+.L831:
 	mov	d7,#14
 	call	uart_init
-.L831:
-	mov	d4,#3
 .L832:
-	lea	a4,[a10]0
+	mov	d4,#3
 .L833:
+	lea	a4,[a10]0
+.L834:
 	mov	d5,#28
 	call	uart_write_buffer
-.L834:
+.L835:
 	mov	d4,#200
 	call	system_delay_ms
-.L835:
-	mov	d4,#3
 .L836:
-	lea	a4,[a10]39
+	mov	d4,#3
 .L837:
-	mov	d5,#11
-	call	uart_write_buffer
+	lea	a4,[a10]39
 .L838:
-	mov	d4,#50
-	call	system_delay_ms
+	mov	d5,#11
+	call	uart_write_buffer
 .L839:
-	mov	d4,#3
+	mov	d4,#50
+	call	system_delay_ms
 .L840:
-	lea	a4,[a10]28
+	mov	d4,#3
 .L841:
-	mov	d5,#11
-	call	uart_write_buffer
+	lea	a4,[a10]28
 .L842:
-	mov	d4,#50
-	call	system_delay_ms
+	mov	d5,#11
+	call	uart_write_buffer
 .L843:
-	mov	d4,#3
+	mov	d4,#50
+	call	system_delay_ms
 .L844:
-	lea	a4,[a10]50
+	mov	d4,#3
 .L845:
-	mov	d5,#11
-	call	uart_write_buffer
+	lea	a4,[a10]50
 .L846:
-	mov	d4,#50
-	call	system_delay_ms
+	mov	d5,#11
+	call	uart_write_buffer
 .L847:
-	mov	d4,#3
+	mov	d4,#50
+	call	system_delay_ms
 .L848:
-	lea	a4,[a10]61
+	mov	d4,#3
 .L849:
-	mov	d5,#11
-	call	uart_write_buffer
+	lea	a4,[a10]61
 .L850:
-	mov	d4,#50
-	call	system_delay_ms
+	mov	d5,#11
+	call	uart_write_buffer
 .L851:
-	mov	d4,#3
+	mov	d4,#50
+	call	system_delay_ms
 .L852:
-	lea	a4,[a10]72
+	mov	d4,#3
 .L853:
-	mov	d5,#11
-	call	uart_write_buffer
+	lea	a4,[a10]72
 .L854:
-	mov	d4,#50
-	call	system_delay_ms
+	mov	d5,#11
+	call	uart_write_buffer
 .L855:
-	mov	d4,#3
+	mov	d4,#50
+	call	system_delay_ms
 .L856:
-	lea	a4,[a10]83
+	mov	d4,#3
 .L857:
-	mov	d5,#11
-	call	uart_write_buffer
+	lea	a4,[a10]83
 .L858:
-	mov	d4,#50
-	call	system_delay_ms
+	mov	d5,#11
+	call	uart_write_buffer
 .L859:
-	mov	d4,#3
+	mov	d4,#50
+	call	system_delay_ms
 .L860:
-	lea	a4,[a10]94
+	mov	d4,#3
 .L861:
-	mov	d5,#11
-	call	uart_write_buffer
+	lea	a4,[a10]94
 .L862:
-	mov	d4,#50
-	call	system_delay_ms
+	mov	d5,#11
+	call	uart_write_buffer
 .L863:
-	mov	d4,#3
+	mov	d4,#50
+	call	system_delay_ms
 .L864:
-	lea	a4,[a10]105
+	mov	d4,#3
 .L865:
-	mov	d5,#11
-	call	uart_write_buffer
+	lea	a4,[a10]105
 .L866:
-	mov	d4,#50
-	call	system_delay_ms
+	mov	d5,#11
+	call	uart_write_buffer
 .L867:
-	mov	d4,#3
+	mov	d4,#50
+	call	system_delay_ms
 .L868:
-	lea	a4,[a10]116
+	mov	d4,#3
 .L869:
-	mov	d5,#11
-	call	uart_write_buffer
+	lea	a4,[a10]116
 .L870:
-	mov	d4,#50
-	call	system_delay_ms
+	mov	d5,#11
+	call	uart_write_buffer
 .L871:
-	mov	d4,#3
+	mov	d4,#50
+	call	system_delay_ms
 .L872:
-	lea	a4,[a10]127
-.L873:
-	mov	d5,#11
-	call	uart_write_buffer
-.L874:
-	mov	d4,#50
-	call	system_delay_ms
-.L875:
 	mov	d4,#3
-.L876:
-	lea	a4,[a10]138
-.L877:
+.L873:
+	lea	a4,[a10]127
+.L874:
 	mov	d5,#11
 	call	uart_write_buffer
-.L878:
+.L875:
 	mov	d4,#50
 	call	system_delay_ms
+.L876:
+	mov	d4,#3
+.L877:
+	lea	a4,[a10]138
+.L878:
+	mov	d5,#11
+	call	uart_write_buffer
 .L879:
+	mov	d4,#50
+	call	system_delay_ms
+.L880:
 	movh.a	a15,#@his(gnss_state)
 	lea	a15,[a15]@los(gnss_state)
-.L880:
+.L881:
 	mov	d15,#1
 .L542:
 	st.b	[a15],d15
-.L881:
-	mov	d4,#3
 .L882:
+	mov	d4,#3
+.L883:
 	mov	d5,#1
 	call	uart_rx_interrupt
-.L883:
+.L884:
 	j	.L97
 .L96:
 	jne	d15,#2,.L98
-.L884:
+.L885:
 	movh.a	a4,#@his(gnss_receiver_fifo)
 	lea	a4,[a4]@los(gnss_receiver_fifo)
-.L885:
-	mov	d4,#0
 .L886:
+	mov	d4,#0
+.L887:
 	movh.a	a5,#@his(gnss_receiver_buffer)
 	lea	a5,[a5]@los(gnss_receiver_buffer)
-.L887:
+.L888:
 	mov	d5,#128
 	call	fifo_init
-.L888:
-	mov	d4,#3
 .L889:
+	mov	d4,#3
+.L890:
 	mov.u	d5,#49664
 	addih	d5,d5,#1
-.L890:
-	mov	d6,#21
 .L891:
+	mov	d6,#21
+.L892:
 	mov	d7,#14
 	call	uart_init
-.L892:
+.L893:
 	movh.a	a15,#@his(gnss_state)
 	lea	a15,[a15]@los(gnss_state)
-.L893:
+.L894:
 	mov	d15,#1
 .L543:
 	st.b	[a15],d15
-.L894:
-	mov	d4,#3
 .L895:
+	mov	d4,#3
+.L896:
 	mov	d5,#1
 	call	uart_rx_interrupt
 .L98:
@@ -2493,6 +2495,7 @@ gnss_parse_error_count:	.type	object
 	.calls	'gnss_uart_callback','strncmp'
 	.calls	'gnss_uart_callback','fifo_used'
 	.calls	'gnss_uart_callback','fifo_clear'
+	.calls	'gnss_uart_callback','gnss_data_parse'
 	.calls	'gnss_get_debug_info','gnss_copy_debug_sentence'
 	.calls	'gnss_init','memset'
 	.calls	'gnss_init','fifo_init'
@@ -19560,14 +19563,16 @@ gnss_parse_error_count:	.type	object
 	.half	.L761-.L760
 	.byte	1,5,25,9
 	.half	.L73-.L761
-	.byte	3,5,1,5,13,9
+	.byte	3,5,1,5,28,9
 	.half	.L762-.L73
-	.byte	3,2,1,5,25,9
+	.byte	3,4,1,5,13,9
 	.half	.L763-.L762
-	.byte	1,5,23,9
+	.byte	3,1,1,5,25,9
 	.half	.L764-.L763
+	.byte	1,5,23,9
+	.half	.L765-.L764
 	.byte	1,5,1,9
-	.half	.L65-.L764
+	.half	.L65-.L765
 	.byte	3,3,1,7,9
 	.half	.L152-.L65
 	.byte	0,1,1
@@ -19590,48 +19595,48 @@ gnss_parse_error_count:	.type	object
 	.byte	2
 	.word	.L129
 	.byte	3
-	.byte	'gnss_init',0,1,249,4,6,1,1,1
+	.byte	'gnss_init',0,1,252,4,6,1,1,1
 	.word	.L128,.L281,.L127
 	.byte	4
-	.byte	'gps_device',0,1,249,4,33
+	.byte	'gps_device',0,1,252,4,33
 	.word	.L282,.L283
 	.byte	5
 	.word	.L128,.L281
 	.byte	6
-	.byte	'set_rate',0,1,251,4,17
+	.byte	'set_rate',0,1,254,4,17
 	.word	.L284,.L285
 	.byte	6
-	.byte	'open_gga',0,1,252,4,17
+	.byte	'open_gga',0,1,255,4,17
 	.word	.L286,.L287
 	.byte	6
-	.byte	'open_rmc',0,1,253,4,17
+	.byte	'open_rmc',0,1,128,5,17
 	.word	.L288,.L289
 	.byte	6
-	.byte	'close_gll',0,1,255,4,17
+	.byte	'close_gll',0,1,130,5,17
 	.word	.L290,.L291
 	.byte	6
-	.byte	'close_gsa',0,1,128,5,17
+	.byte	'close_gsa',0,1,131,5,17
 	.word	.L292,.L293
 	.byte	6
-	.byte	'close_grs',0,1,129,5,17
+	.byte	'close_grs',0,1,132,5,17
 	.word	.L294,.L295
 	.byte	6
-	.byte	'close_gsv',0,1,130,5,17
+	.byte	'close_gsv',0,1,133,5,17
 	.word	.L296,.L297
 	.byte	6
-	.byte	'close_vtg',0,1,131,5,17
+	.byte	'close_vtg',0,1,134,5,17
 	.word	.L298,.L299
 	.byte	6
-	.byte	'close_zda',0,1,132,5,17
+	.byte	'close_zda',0,1,135,5,17
 	.word	.L300,.L301
 	.byte	6
-	.byte	'close_gst',0,1,133,5,17
+	.byte	'close_gst',0,1,136,5,17
 	.word	.L302,.L303
 	.byte	6
-	.byte	'close_txt',0,1,134,5,17
+	.byte	'close_txt',0,1,137,5,17
 	.word	.L304,.L305
 	.byte	6
-	.byte	'close_txt_ant',0,1,135,5,17
+	.byte	'close_txt_ant',0,1,138,5,17
 	.word	.L306,.L307
 	.byte	0,0,0
 	.sdecl	'.debug_abbrev',debug,cluster('gnss_init')
@@ -19643,288 +19648,288 @@ gnss_parse_error_count:	.type	object
 	.sdecl	'.debug_line',debug,cluster('gnss_init')
 	.sect	'.debug_line'
 .L155:
-	.word	.L766-.L765
-.L765:
+	.word	.L767-.L766
+.L766:
 	.half	3
-	.word	.L768-.L767
-.L767:
+	.word	.L769-.L768
+.L768:
 	.byte	2,1,-4,9,10,0,1,1,1,1,0,0,0,1,0
 	.byte	'../libraries/zf_device/zf_device_gnss.c',0,0,0,0,0
-.L768:
+.L769:
 	.byte	5,6,7,0,5,2
 	.word	.L128
-	.byte	3,248,4,1,5,35,9
+	.byte	3,251,4,1,5,35,9
 	.half	.L541-.L128
 	.byte	3,2,1,5,33,9
-	.half	.L769-.L541
+	.half	.L770-.L541
 	.byte	1,5,35,9
-	.half	.L770-.L769
-	.byte	3,1,1,5,33,9
 	.half	.L771-.L770
-	.byte	1,5,35,9
+	.byte	3,1,1,5,33,9
 	.half	.L772-.L771
-	.byte	3,1,1,5,33,9
+	.byte	1,5,35,9
 	.half	.L773-.L772
-	.byte	1,5,35,9
+	.byte	3,1,1,5,33,9
 	.half	.L774-.L773
-	.byte	3,2,1,5,33,9
+	.byte	1,5,35,9
 	.half	.L775-.L774
-	.byte	1,5,35,9
+	.byte	3,2,1,5,33,9
 	.half	.L776-.L775
-	.byte	3,1,1,5,33,9
+	.byte	1,5,35,9
 	.half	.L777-.L776
-	.byte	1,5,35,9
+	.byte	3,1,1,5,33,9
 	.half	.L778-.L777
-	.byte	3,1,1,5,33,9
+	.byte	1,5,35,9
 	.half	.L779-.L778
-	.byte	1,5,35,9
+	.byte	3,1,1,5,33,9
 	.half	.L780-.L779
-	.byte	3,1,1,5,33,9
+	.byte	1,5,35,9
 	.half	.L781-.L780
-	.byte	1,5,35,9
+	.byte	3,1,1,5,33,9
 	.half	.L782-.L781
-	.byte	3,1,1,5,33,9
+	.byte	1,5,35,9
 	.half	.L783-.L782
-	.byte	1,5,35,9
+	.byte	3,1,1,5,33,9
 	.half	.L784-.L783
-	.byte	3,1,1,5,33,9
+	.byte	1,5,35,9
 	.half	.L785-.L784
-	.byte	1,5,35,9
+	.byte	3,1,1,5,33,9
 	.half	.L786-.L785
-	.byte	3,1,1,5,33,9
+	.byte	1,5,35,9
 	.half	.L787-.L786
-	.byte	1,5,35,9
+	.byte	3,1,1,5,33,9
 	.half	.L788-.L787
-	.byte	3,1,1,5,33,9
-	.half	.L789-.L788
 	.byte	1,5,35,9
-	.half	.L790-.L789
+	.half	.L789-.L788
 	.byte	3,1,1,5,33,9
+	.half	.L790-.L789
+	.byte	1,5,35,9
 	.half	.L791-.L790
-	.byte	1,5,5,9
+	.byte	3,1,1,5,33,9
 	.half	.L792-.L791
-	.byte	3,2,1,5,28,9
+	.byte	1,5,5,9
 	.half	.L793-.L792
-	.byte	1,5,26,9
+	.byte	3,2,1,5,28,9
 	.half	.L794-.L793
-	.byte	1,5,5,9
+	.byte	1,5,26,9
 	.half	.L795-.L794
-	.byte	3,1,1,5,28,9
+	.byte	1,5,5,9
 	.half	.L796-.L795
-	.byte	1,5,26,9
+	.byte	3,1,1,5,28,9
 	.half	.L797-.L796
-	.byte	1,5,5,9
-	.half	.L798-.L797
-	.byte	3,1,1,5,28,9
-	.half	.L799-.L798
 	.byte	1,5,26,9
+	.half	.L798-.L797
+	.byte	1,5,5,9
+	.half	.L799-.L798
+	.byte	3,1,1,5,28,9
 	.half	.L800-.L799
-	.byte	1,5,5,9
+	.byte	1,5,26,9
 	.half	.L801-.L800
-	.byte	3,1,1,5,30,9
+	.byte	1,5,5,9
 	.half	.L802-.L801
-	.byte	1,5,28,9
+	.byte	3,1,1,5,30,9
 	.half	.L803-.L802
-	.byte	1,5,5,9
+	.byte	1,5,28,9
 	.half	.L804-.L803
-	.byte	3,1,1,5,18,9
-	.half	.L805-.L804
-	.byte	1,5,16,9
-	.half	.L806-.L805
 	.byte	1,5,5,9
+	.half	.L805-.L804
+	.byte	3,1,1,5,18,9
+	.half	.L806-.L805
+	.byte	1,5,16,9
 	.half	.L807-.L806
-	.byte	3,1,1,5,17,9
+	.byte	1,5,5,9
 	.half	.L808-.L807
-	.byte	1,5,15,9
+	.byte	3,1,1,5,17,9
 	.half	.L809-.L808
-	.byte	1,5,13,9
+	.byte	1,5,15,9
 	.half	.L810-.L809
-	.byte	3,1,1,5,19,9
+	.byte	1,5,13,9
 	.half	.L811-.L810
-	.byte	1,5,22,9
-	.half	.L540-.L811
-	.byte	1,5,12,9
-	.half	.L812-.L540
-	.byte	3,1,1,5,28,9
-	.half	.L813-.L812
-	.byte	1,5,31,9
-	.half	.L814-.L813
-	.byte	1,5,12,9
-	.half	.L815-.L814
-	.byte	3,1,1,5,28,9
-	.half	.L816-.L815
-	.byte	1,5,31,9
-	.half	.L817-.L816
-	.byte	1,5,12,9
-	.half	.L818-.L817
-	.byte	3,1,1,5,28,9
-	.half	.L819-.L818
-	.byte	1,5,31,9
-	.half	.L820-.L819
-	.byte	1,5,8,9
-	.half	.L821-.L820
-	.byte	3,2,1,5,42,7,9
-	.half	.L822-.L821
-	.byte	1,5,20,7,9
-	.half	.L95-.L822
-	.byte	3,2,1,5,40,9
-	.half	.L823-.L95
-	.byte	1,5,56,9
-	.half	.L824-.L823
-	.byte	1,5,78,9
-	.half	.L825-.L824
-	.byte	1,5,25,9
-	.half	.L826-.L825
 	.byte	3,1,1,5,19,9
-	.half	.L827-.L826
-	.byte	3,1,1,5,30,9
-	.half	.L828-.L827
-	.byte	1,5,38,9
-	.half	.L829-.L828
-	.byte	1,5,47,9
-	.half	.L830-.L829
-	.byte	1,5,27,9
-	.half	.L831-.L830
-	.byte	3,2,1,5,47,9
-	.half	.L832-.L831
-	.byte	1,5,57,9
-	.half	.L833-.L832
-	.byte	1,5,25,9
-	.half	.L834-.L833
-	.byte	3,1,1,5,27,9
-	.half	.L835-.L834
-	.byte	3,2,1,5,47,9
-	.half	.L836-.L835
-	.byte	1,5,57,9
-	.half	.L837-.L836
-	.byte	1,5,25,9
-	.half	.L838-.L837
-	.byte	3,1,1,5,27,9
-	.half	.L839-.L838
-	.byte	3,1,1,5,47,9
-	.half	.L840-.L839
-	.byte	1,5,57,9
-	.half	.L841-.L840
-	.byte	1,5,25,9
-	.half	.L842-.L841
-	.byte	3,1,1,5,27,9
-	.half	.L843-.L842
-	.byte	3,1,1,5,47,9
-	.half	.L844-.L843
-	.byte	1,5,58,9
-	.half	.L845-.L844
-	.byte	1,5,25,9
-	.half	.L846-.L845
-	.byte	3,1,1,5,27,9
-	.half	.L847-.L846
-	.byte	3,1,1,5,47,9
-	.half	.L848-.L847
-	.byte	1,5,58,9
-	.half	.L849-.L848
-	.byte	1,5,25,9
-	.half	.L850-.L849
-	.byte	3,1,1,5,27,9
-	.half	.L851-.L850
-	.byte	3,1,1,5,47,9
-	.half	.L852-.L851
-	.byte	1,5,58,9
-	.half	.L853-.L852
-	.byte	1,5,25,9
-	.half	.L854-.L853
-	.byte	3,1,1,5,27,9
-	.half	.L855-.L854
-	.byte	3,1,1,5,47,9
-	.half	.L856-.L855
-	.byte	1,5,58,9
-	.half	.L857-.L856
-	.byte	1,5,25,9
-	.half	.L858-.L857
-	.byte	3,1,1,5,27,9
-	.half	.L859-.L858
-	.byte	3,1,1,5,47,9
-	.half	.L860-.L859
-	.byte	1,5,58,9
-	.half	.L861-.L860
-	.byte	1,5,25,9
-	.half	.L862-.L861
-	.byte	3,1,1,5,27,9
-	.half	.L863-.L862
-	.byte	3,1,1,5,47,9
-	.half	.L864-.L863
-	.byte	1,5,58,9
-	.half	.L865-.L864
-	.byte	1,5,25,9
-	.half	.L866-.L865
-	.byte	3,1,1,5,27,9
-	.half	.L867-.L866
-	.byte	3,1,1,5,47,9
-	.half	.L868-.L867
-	.byte	1,5,58,9
-	.half	.L869-.L868
-	.byte	1,5,25,9
-	.half	.L870-.L869
-	.byte	3,1,1,5,27,9
-	.half	.L871-.L870
-	.byte	3,1,1,5,47,9
-	.half	.L872-.L871
-	.byte	1,5,58,9
-	.half	.L873-.L872
-	.byte	1,5,25,9
-	.half	.L874-.L873
-	.byte	3,1,1,5,27,9
-	.half	.L875-.L874
-	.byte	3,1,1,5,47,9
-	.half	.L876-.L875
-	.byte	1,5,62,9
-	.half	.L877-.L876
-	.byte	1,5,25,9
-	.half	.L878-.L877
-	.byte	3,1,1,5,9,9
-	.half	.L879-.L878
-	.byte	3,2,1,5,22,9
-	.half	.L880-.L879
-	.byte	1,5,20,9
-	.half	.L542-.L880
-	.byte	1,5,27,9
-	.half	.L881-.L542
-	.byte	3,1,1,5,38,9
-	.half	.L882-.L881
-	.byte	1,5,95,9
-	.half	.L883-.L882
-	.byte	3,97,1,5,10,9
-	.half	.L96-.L883
-	.byte	3,33,1,5,20,7,9
-	.half	.L884-.L96
-	.byte	3,3,1,5,40,9
-	.half	.L885-.L884
+	.half	.L812-.L811
+	.byte	1,5,22,9
+	.half	.L540-.L812
+	.byte	1,5,12,9
+	.half	.L813-.L540
+	.byte	3,1,1,5,28,9
+	.half	.L814-.L813
+	.byte	1,5,31,9
+	.half	.L815-.L814
+	.byte	1,5,12,9
+	.half	.L816-.L815
+	.byte	3,1,1,5,28,9
+	.half	.L817-.L816
+	.byte	1,5,31,9
+	.half	.L818-.L817
+	.byte	1,5,12,9
+	.half	.L819-.L818
+	.byte	3,1,1,5,28,9
+	.half	.L820-.L819
+	.byte	1,5,31,9
+	.half	.L821-.L820
+	.byte	1,5,8,9
+	.half	.L822-.L821
+	.byte	3,2,1,5,42,7,9
+	.half	.L823-.L822
+	.byte	1,5,20,7,9
+	.half	.L95-.L823
+	.byte	3,2,1,5,40,9
+	.half	.L824-.L95
 	.byte	1,5,56,9
-	.half	.L886-.L885
+	.half	.L825-.L824
 	.byte	1,5,78,9
-	.half	.L887-.L886
-	.byte	1,5,19,9
-	.half	.L888-.L887
+	.half	.L826-.L825
+	.byte	1,5,25,9
+	.half	.L827-.L826
+	.byte	3,1,1,5,19,9
+	.half	.L828-.L827
 	.byte	3,1,1,5,30,9
-	.half	.L889-.L888
+	.half	.L829-.L828
 	.byte	1,5,38,9
-	.half	.L890-.L889
+	.half	.L830-.L829
 	.byte	1,5,47,9
-	.half	.L891-.L890
-	.byte	1,5,9,9
-	.half	.L892-.L891
-	.byte	3,1,1,5,22,9
-	.half	.L893-.L892
-	.byte	1,5,20,9
-	.half	.L543-.L893
+	.half	.L831-.L830
 	.byte	1,5,27,9
-	.half	.L894-.L543
+	.half	.L832-.L831
+	.byte	3,2,1,5,47,9
+	.half	.L833-.L832
+	.byte	1,5,57,9
+	.half	.L834-.L833
+	.byte	1,5,25,9
+	.half	.L835-.L834
+	.byte	3,1,1,5,27,9
+	.half	.L836-.L835
+	.byte	3,2,1,5,47,9
+	.half	.L837-.L836
+	.byte	1,5,57,9
+	.half	.L838-.L837
+	.byte	1,5,25,9
+	.half	.L839-.L838
+	.byte	3,1,1,5,27,9
+	.half	.L840-.L839
+	.byte	3,1,1,5,47,9
+	.half	.L841-.L840
+	.byte	1,5,57,9
+	.half	.L842-.L841
+	.byte	1,5,25,9
+	.half	.L843-.L842
+	.byte	3,1,1,5,27,9
+	.half	.L844-.L843
+	.byte	3,1,1,5,47,9
+	.half	.L845-.L844
+	.byte	1,5,58,9
+	.half	.L846-.L845
+	.byte	1,5,25,9
+	.half	.L847-.L846
+	.byte	3,1,1,5,27,9
+	.half	.L848-.L847
+	.byte	3,1,1,5,47,9
+	.half	.L849-.L848
+	.byte	1,5,58,9
+	.half	.L850-.L849
+	.byte	1,5,25,9
+	.half	.L851-.L850
+	.byte	3,1,1,5,27,9
+	.half	.L852-.L851
+	.byte	3,1,1,5,47,9
+	.half	.L853-.L852
+	.byte	1,5,58,9
+	.half	.L854-.L853
+	.byte	1,5,25,9
+	.half	.L855-.L854
+	.byte	3,1,1,5,27,9
+	.half	.L856-.L855
+	.byte	3,1,1,5,47,9
+	.half	.L857-.L856
+	.byte	1,5,58,9
+	.half	.L858-.L857
+	.byte	1,5,25,9
+	.half	.L859-.L858
+	.byte	3,1,1,5,27,9
+	.half	.L860-.L859
+	.byte	3,1,1,5,47,9
+	.half	.L861-.L860
+	.byte	1,5,58,9
+	.half	.L862-.L861
+	.byte	1,5,25,9
+	.half	.L863-.L862
+	.byte	3,1,1,5,27,9
+	.half	.L864-.L863
+	.byte	3,1,1,5,47,9
+	.half	.L865-.L864
+	.byte	1,5,58,9
+	.half	.L866-.L865
+	.byte	1,5,25,9
+	.half	.L867-.L866
+	.byte	3,1,1,5,27,9
+	.half	.L868-.L867
+	.byte	3,1,1,5,47,9
+	.half	.L869-.L868
+	.byte	1,5,58,9
+	.half	.L870-.L869
+	.byte	1,5,25,9
+	.half	.L871-.L870
+	.byte	3,1,1,5,27,9
+	.half	.L872-.L871
+	.byte	3,1,1,5,47,9
+	.half	.L873-.L872
+	.byte	1,5,58,9
+	.half	.L874-.L873
+	.byte	1,5,25,9
+	.half	.L875-.L874
+	.byte	3,1,1,5,27,9
+	.half	.L876-.L875
+	.byte	3,1,1,5,47,9
+	.half	.L877-.L876
+	.byte	1,5,62,9
+	.half	.L878-.L877
+	.byte	1,5,25,9
+	.half	.L879-.L878
+	.byte	3,1,1,5,9,9
+	.half	.L880-.L879
+	.byte	3,2,1,5,22,9
+	.half	.L881-.L880
+	.byte	1,5,20,9
+	.half	.L542-.L881
+	.byte	1,5,27,9
+	.half	.L882-.L542
 	.byte	3,1,1,5,38,9
-	.half	.L895-.L894
+	.half	.L883-.L882
+	.byte	1,5,95,9
+	.half	.L884-.L883
+	.byte	3,97,1,5,10,9
+	.half	.L96-.L884
+	.byte	3,33,1,5,20,7,9
+	.half	.L885-.L96
+	.byte	3,3,1,5,40,9
+	.half	.L886-.L885
+	.byte	1,5,56,9
+	.half	.L887-.L886
+	.byte	1,5,78,9
+	.half	.L888-.L887
+	.byte	1,5,19,9
+	.half	.L889-.L888
+	.byte	3,1,1,5,30,9
+	.half	.L890-.L889
+	.byte	1,5,38,9
+	.half	.L891-.L890
+	.byte	1,5,47,9
+	.half	.L892-.L891
+	.byte	1,5,9,9
+	.half	.L893-.L892
+	.byte	3,1,1,5,22,9
+	.half	.L894-.L893
+	.byte	1,5,20,9
+	.half	.L543-.L894
+	.byte	1,5,27,9
+	.half	.L895-.L543
+	.byte	3,1,1,5,38,9
+	.half	.L896-.L895
 	.byte	1,5,1,9
-	.half	.L97-.L895
+	.half	.L97-.L896
 	.byte	3,3,1,7,9
 	.half	.L157-.L97
 	.byte	0,1,1
-.L766:
+.L767:
 	.sdecl	'.debug_ranges',debug,cluster('gnss_init')
 	.sect	'.debug_ranges'
 .L156:
@@ -19943,10 +19948,10 @@ gnss_parse_error_count:	.type	object
 	.byte	2
 	.word	.L129
 	.byte	3
-	.byte	'gnss_get_debug_info',0,1,221,4,6,1,1,1
+	.byte	'gnss_get_debug_info',0,1,224,4,6,1,1,1
 	.word	.L126,.L308,.L125
 	.byte	4
-	.byte	'info',0,1,221,4,46
+	.byte	'info',0,1,224,4,46
 	.word	.L309,.L310
 	.byte	5
 	.word	.L126,.L308
@@ -19959,82 +19964,82 @@ gnss_parse_error_count:	.type	object
 	.sdecl	'.debug_line',debug,cluster('gnss_get_debug_info')
 	.sect	'.debug_line'
 .L160:
-	.word	.L897-.L896
-.L896:
+	.word	.L898-.L897
+.L897:
 	.half	3
-	.word	.L899-.L898
-.L898:
+	.word	.L900-.L899
+.L899:
 	.byte	2,1,-4,9,10,0,1,1,1,1,0,0,0,1,0
 	.byte	'../libraries/zf_device/zf_device_gnss.c',0,0,0,0,0
-.L899:
+.L900:
 	.byte	5,6,7,0,5,2
 	.word	.L126
-	.byte	3,220,4,1,5,8,9
+	.byte	3,223,4,1,5,8,9
 	.half	.L538-.L126
 	.byte	3,2,1,5,5,9
-	.half	.L900-.L538
+	.half	.L901-.L538
 	.byte	1,5,9,7,9
-	.half	.L901-.L900
+	.half	.L902-.L901
 	.byte	3,2,1,5,25,9
-	.half	.L81-.L901
+	.half	.L81-.L902
 	.byte	3,3,1,5,23,9
-	.half	.L902-.L81
+	.half	.L903-.L81
 	.byte	1,5,21,9
-	.half	.L903-.L902
-	.byte	3,1,1,5,19,9
 	.half	.L904-.L903
-	.byte	1,5,30,9
+	.byte	3,1,1,5,19,9
 	.half	.L905-.L904
-	.byte	3,1,1,5,21,9
+	.byte	1,5,30,9
 	.half	.L906-.L905
-	.byte	1,5,30,9
+	.byte	3,1,1,5,21,9
 	.half	.L907-.L906
-	.byte	3,1,1,5,21,9
-	.half	.L908-.L907
 	.byte	1,5,30,9
-	.half	.L909-.L908
+	.half	.L908-.L907
 	.byte	3,1,1,5,21,9
+	.half	.L909-.L908
+	.byte	1,5,30,9
 	.half	.L910-.L909
-	.byte	1,5,29,9
+	.byte	3,1,1,5,21,9
 	.half	.L911-.L910
-	.byte	3,1,1,5,27,9
+	.byte	1,5,29,9
 	.half	.L912-.L911
-	.byte	1,5,29,9
+	.byte	3,1,1,5,27,9
 	.half	.L913-.L912
-	.byte	3,1,1,5,27,9
-	.half	.L914-.L913
 	.byte	1,5,29,9
-	.half	.L915-.L914
+	.half	.L914-.L913
 	.byte	3,1,1,5,27,9
+	.half	.L915-.L914
+	.byte	1,5,29,9
 	.half	.L916-.L915
-	.byte	1,5,31,9
+	.byte	3,1,1,5,27,9
 	.half	.L917-.L916
-	.byte	3,1,1,5,29,9
+	.byte	1,5,31,9
 	.half	.L918-.L917
-	.byte	1,5,34,9
+	.byte	3,1,1,5,29,9
 	.half	.L919-.L918
-	.byte	3,1,1,5,50,9
-	.half	.L537-.L919
-	.byte	1,5,78,9
-	.half	.L920-.L537
 	.byte	1,5,34,9
-	.half	.L921-.L920
+	.half	.L920-.L919
 	.byte	3,1,1,5,50,9
+	.half	.L537-.L920
+	.byte	1,5,78,9
+	.half	.L921-.L537
+	.byte	1,5,34,9
 	.half	.L922-.L921
-	.byte	1,5,78,9
-	.half	.L923-.L922
-	.byte	1,5,34,9
-	.half	.L924-.L923
 	.byte	3,1,1,5,50,9
-	.half	.L925-.L924
+	.half	.L923-.L922
 	.byte	1,5,78,9
+	.half	.L924-.L923
+	.byte	1,5,34,9
+	.half	.L925-.L924
+	.byte	3,1,1,5,50,9
 	.half	.L926-.L925
+	.byte	1,5,78,9
+	.half	.L927-.L926
 	.byte	1,5,1,9
-	.half	.L82-.L926
+	.half	.L82-.L927
 	.byte	3,1,1,7,9
 	.half	.L162-.L82
 	.byte	0,1,1
-.L897:
+.L898:
 	.sdecl	'.debug_ranges',debug,cluster('gnss_get_debug_info')
 	.sect	'.debug_ranges'
 .L161:
@@ -20079,76 +20084,76 @@ gnss_parse_error_count:	.type	object
 	.sdecl	'.debug_line',debug,cluster('gnss_copy_debug_sentence')
 	.sect	'.debug_line'
 .L165:
-	.word	.L928-.L927
-.L927:
+	.word	.L929-.L928
+.L928:
 	.half	3
-	.word	.L930-.L929
-.L929:
+	.word	.L931-.L930
+.L930:
 	.byte	2,1,-4,9,10,0,1,1,1,1,0,0,0,1,0
 	.byte	'../libraries/zf_device/zf_device_gnss.c',0,0,0,0,0
-.L930:
+.L931:
 	.byte	5,14,7,0,5,2
 	.word	.L100
 	.byte	3,205,0,1,5,9,9
 	.half	.L379-.L100
 	.byte	3,2,1,5,8,9
-	.half	.L931-.L379
+	.half	.L932-.L379
 	.byte	1,5,29,7,9
-	.half	.L932-.L931
+	.half	.L933-.L932
 	.byte	1,5,9,7,9
-	.half	.L2-.L932
+	.half	.L2-.L933
 	.byte	3,2,1,5,8,9
 	.half	.L3-.L2
 	.byte	3,3,1,5,5,9
-	.half	.L933-.L3
+	.half	.L934-.L3
 	.byte	1,5,18,7,9
-	.half	.L934-.L933
+	.half	.L935-.L934
 	.byte	3,2,1,5,16,9
-	.half	.L380-.L934
+	.half	.L380-.L935
 	.byte	1,5,9,9
-	.half	.L935-.L380
+	.half	.L936-.L380
 	.byte	3,1,1,5,90,9
-	.half	.L5-.L935
+	.half	.L5-.L936
 	.byte	3,3,1,5,12,9
 	.half	.L8-.L5
 	.byte	3,2,1,5,27,9
-	.half	.L936-.L8
+	.half	.L937-.L8
 	.byte	1,5,16,9
-	.half	.L937-.L936
-	.byte	1,5,11,9
 	.half	.L938-.L937
+	.byte	1,5,11,9
+	.half	.L939-.L938
 	.byte	3,1,1,5,14,9
-	.half	.L7-.L938
+	.half	.L7-.L939
 	.byte	3,125,1,5,11,9
-	.half	.L939-.L7
+	.half	.L940-.L7
 	.byte	1,5,46,7,9
-	.half	.L940-.L939
-	.byte	1,5,40,9
 	.half	.L941-.L940
-	.byte	1,5,66,7,9
+	.byte	1,5,40,9
 	.half	.L942-.L941
-	.byte	1,5,55,9
+	.byte	1,5,66,7,9
 	.half	.L943-.L942
-	.byte	1,5,60,9
+	.byte	1,5,55,9
 	.half	.L944-.L943
-	.byte	1,5,86,7,9
+	.byte	1,5,60,9
 	.half	.L945-.L944
-	.byte	1,5,75,9
+	.byte	1,5,86,7,9
 	.half	.L946-.L945
-	.byte	1,5,80,9
+	.byte	1,5,75,9
 	.half	.L947-.L946
+	.byte	1,5,80,9
+	.half	.L948-.L947
 	.byte	1,5,8,7,9
-	.half	.L9-.L947
+	.half	.L9-.L948
 	.byte	3,6,1,5,14,9
-	.half	.L948-.L9
+	.half	.L949-.L9
 	.byte	1,5,12,9
-	.half	.L381-.L948
+	.half	.L381-.L949
 	.byte	1,5,1,9
 	.half	.L4-.L381
 	.byte	3,1,1,7,9
 	.half	.L167-.L4
 	.byte	0,1,1
-.L928:
+.L929:
 	.sdecl	'.debug_ranges',debug,cluster('gnss_copy_debug_sentence')
 	.sect	'.debug_ranges'
 .L166:
@@ -20204,14 +20209,14 @@ gnss_parse_error_count:	.type	object
 	.sdecl	'.debug_line',debug,cluster('get_parameter_index')
 	.sect	'.debug_line'
 .L170:
-	.word	.L950-.L949
-.L949:
+	.word	.L951-.L950
+.L950:
 	.half	3
-	.word	.L952-.L951
-.L951:
+	.word	.L953-.L952
+.L952:
 	.byte	2,1,-4,9,10,0,1,1,1,1,0,0,0,1,0
 	.byte	'../libraries/zf_device/zf_device_gnss.c',0,0,0,0,0
-.L952:
+.L953:
 	.byte	5,14,7,0,5,2
 	.word	.L102
 	.byte	3,235,0,1,5,20,9
@@ -20225,37 +20230,37 @@ gnss_parse_error_count:	.type	object
 	.byte	1,5,8,9
 	.half	.L390-.L388
 	.byte	3,2,1,5,5,9
-	.half	.L953-.L390
+	.half	.L954-.L390
 	.byte	1,5,31,7,9
-	.half	.L954-.L953
+	.half	.L955-.L954
 	.byte	3,2,1,5,46,9
-	.half	.L389-.L954
+	.half	.L389-.L955
 	.byte	1,5,36,9
 	.half	.L392-.L389
 	.byte	1,5,50,9
 	.half	.L391-.L392
 	.byte	1,5,15,9
-	.half	.L955-.L391
+	.half	.L956-.L391
 	.byte	1,5,11,9
-	.half	.L12-.L955
+	.half	.L12-.L956
 	.byte	3,3,1,5,23,9
 	.half	.L393-.L12
 	.byte	1,5,22,9
 	.half	.L14-.L393
 	.byte	3,2,1,5,12,9
-	.half	.L956-.L14
+	.half	.L957-.L14
 	.byte	1,5,9,9
-	.half	.L957-.L956
-	.byte	1,5,15,7,9
 	.half	.L958-.L957
+	.byte	1,5,15,7,9
+	.half	.L959-.L958
 	.byte	3,2,1,5,9,9
-	.half	.L15-.L958
+	.half	.L15-.L959
 	.byte	3,2,1,5,23,7,9
-	.half	.L959-.L15
+	.half	.L960-.L15
 	.byte	3,2,1,5,13,9
-	.half	.L960-.L959
+	.half	.L961-.L960
 	.byte	3,1,1,5,27,9
-	.half	.L16-.L960
+	.half	.L16-.L961
 	.byte	3,119,1,5,23,9
 	.half	.L13-.L16
 	.byte	1,5,5,7,9
@@ -20265,7 +20270,7 @@ gnss_parse_error_count:	.type	object
 	.byte	3,1,1,7,9
 	.half	.L172-.L18
 	.byte	0,1,1
-.L950:
+.L951:
 	.sdecl	'.debug_ranges',debug,cluster('get_parameter_index')
 	.sect	'.debug_ranges'
 .L171:
@@ -20312,42 +20317,42 @@ gnss_parse_error_count:	.type	object
 	.sdecl	'.debug_line',debug,cluster('get_int_number')
 	.sect	'.debug_line'
 .L175:
-	.word	.L962-.L961
-.L961:
+	.word	.L963-.L962
+.L962:
 	.half	3
-	.word	.L964-.L963
-.L963:
+	.word	.L965-.L964
+.L964:
 	.byte	2,1,-4,9,10,0,1,1,1,1,0,0,0,1,0
 	.byte	'../libraries/zf_device/zf_device_gnss.c',0,0,0,0,0
-.L964:
+.L965:
 	.byte	5,12,7,0,5,2
 	.word	.L104
 	.byte	3,141,1,1,5,29,9
 	.half	.L398-.L104
 	.byte	3,5,1,5,32,9
-	.half	.L965-.L398
+	.half	.L966-.L398
 	.byte	1,5,11,9
-	.half	.L397-.L965
+	.half	.L397-.L966
 	.byte	3,1,1,5,13,9
 	.half	.L401-.L397
 	.byte	3,1,1,5,21,9
-	.half	.L966-.L401
+	.half	.L967-.L401
 	.byte	1,5,8,9
-	.half	.L404-.L966
+	.half	.L404-.L967
 	.byte	3,1,1,5,14,9
 	.half	.L399-.L404
 	.byte	1,5,12,9
 	.half	.L402-.L399
 	.byte	1,5,36,9
-	.half	.L967-.L402
+	.half	.L968-.L402
 	.byte	3,1,1,5,5,9
-	.half	.L406-.L967
+	.half	.L406-.L968
 	.byte	3,1,1,5,1,9
 	.half	.L19-.L406
 	.byte	3,1,1,7,9
 	.half	.L177-.L19
 	.byte	0,1,1
-.L962:
+.L963:
 	.sdecl	'.debug_ranges',debug,cluster('get_int_number')
 	.sect	'.debug_ranges'
 .L176:
@@ -20394,42 +20399,42 @@ gnss_parse_error_count:	.type	object
 	.sdecl	'.debug_line',debug,cluster('get_float_number')
 	.sect	'.debug_line'
 .L180:
-	.word	.L969-.L968
-.L968:
+	.word	.L970-.L969
+.L969:
 	.half	3
-	.word	.L971-.L970
-.L970:
+	.word	.L972-.L971
+.L971:
 	.byte	2,1,-4,9,10,0,1,1,1,1,0,0,0,1,0
 	.byte	'../libraries/zf_device/zf_device_gnss.c',0,0,0,0,0
-.L971:
+.L972:
 	.byte	5,14,7,0,5,2
 	.word	.L106
 	.byte	3,161,1,1,5,29,9
 	.half	.L409-.L106
 	.byte	3,6,1,5,32,9
-	.half	.L972-.L409
+	.half	.L973-.L409
 	.byte	1,5,11,9
-	.half	.L408-.L972
+	.half	.L408-.L973
 	.byte	3,1,1,5,13,9
 	.half	.L412-.L408
 	.byte	3,1,1,5,21,9
-	.half	.L973-.L412
+	.half	.L974-.L412
 	.byte	1,5,8,9
-	.half	.L415-.L973
+	.half	.L415-.L974
 	.byte	3,1,1,5,14,9
 	.half	.L410-.L415
 	.byte	1,5,12,9
 	.half	.L413-.L410
 	.byte	1,5,46,9
-	.half	.L974-.L413
+	.half	.L975-.L413
 	.byte	3,1,1,5,5,9
-	.half	.L417-.L974
+	.half	.L417-.L975
 	.byte	3,1,1,5,1,9
 	.half	.L20-.L417
 	.byte	3,1,1,7,9
 	.half	.L182-.L20
 	.byte	0,1,1
-.L969:
+.L970:
 	.sdecl	'.debug_ranges',debug,cluster('get_float_number')
 	.sect	'.debug_ranges'
 .L181:
@@ -20476,42 +20481,42 @@ gnss_parse_error_count:	.type	object
 	.sdecl	'.debug_line',debug,cluster('get_double_number')
 	.sect	'.debug_line'
 .L185:
-	.word	.L976-.L975
-.L975:
+	.word	.L977-.L976
+.L976:
 	.half	3
-	.word	.L978-.L977
-.L977:
+	.word	.L979-.L978
+.L978:
 	.byte	2,1,-4,9,10,0,1,1,1,1,0,0,0,1,0
 	.byte	'../libraries/zf_device/zf_device_gnss.c',0,0,0,0,0
-.L978:
+.L979:
 	.byte	5,15,7,0,5,2
 	.word	.L108
 	.byte	3,182,1,1,5,29,9
 	.half	.L420-.L108
 	.byte	3,6,1,5,32,9
-	.half	.L979-.L420
+	.half	.L980-.L420
 	.byte	1,5,11,9
-	.half	.L419-.L979
+	.half	.L419-.L980
 	.byte	3,1,1,5,13,9
 	.half	.L423-.L419
 	.byte	3,1,1,5,21,9
-	.half	.L980-.L423
+	.half	.L981-.L423
 	.byte	1,5,8,9
-	.half	.L426-.L980
+	.half	.L426-.L981
 	.byte	3,1,1,5,14,9
 	.half	.L421-.L426
 	.byte	1,5,12,9
 	.half	.L424-.L421
 	.byte	1,5,39,9
-	.half	.L981-.L424
+	.half	.L982-.L424
 	.byte	3,1,1,5,5,9
-	.half	.L428-.L981
+	.half	.L428-.L982
 	.byte	3,1,1,5,1,9
 	.half	.L21-.L428
 	.byte	3,1,1,7,9
 	.half	.L187-.L21
 	.byte	0,1,1
-.L976:
+.L977:
 	.sdecl	'.debug_ranges',debug,cluster('get_double_number')
 	.sect	'.debug_ranges'
 .L186:
@@ -20550,66 +20555,66 @@ gnss_parse_error_count:	.type	object
 	.sdecl	'.debug_line',debug,cluster('utc_to_btc')
 	.sect	'.debug_line'
 .L190:
-	.word	.L983-.L982
-.L982:
+	.word	.L984-.L983
+.L983:
 	.half	3
-	.word	.L985-.L984
-.L984:
+	.word	.L986-.L985
+.L985:
 	.byte	2,1,-4,9,10,0,1,1,1,1,0,0,0,1,0
 	.byte	'../libraries/zf_device/zf_device_gnss.c',0,0,0,0,0
-.L985:
+.L986:
 	.byte	5,22,7,0,5,2
 	.word	.L110
 	.byte	3,207,1,1,5,29,9
-	.half	.L986-.L110
+	.half	.L987-.L110
 	.byte	1,5,16,9
-	.half	.L987-.L986
-	.byte	1,5,17,9
 	.half	.L988-.L987
-	.byte	3,1,1,5,8,9
-	.half	.L989-.L988
-	.byte	1,5,5,9
-	.half	.L990-.L989
-	.byte	1,5,13,7,9
-	.half	.L991-.L990
-	.byte	3,2,1,5,20,9
-	.half	.L992-.L991
-	.byte	1,5,13,9
-	.half	.L993-.L992
-	.byte	3,1,1,5,19,9
-	.half	.L994-.L993
-	.byte	1,5,21,9
-	.half	.L995-.L994
-	.byte	3,2,1,5,9,9
-	.half	.L996-.L995
-	.byte	1,5,21,7,9
-	.half	.L997-.L996
-	.byte	3,2,1,5,26,9
-	.half	.L429-.L997
-	.byte	3,1,1,5,35,9
-	.half	.L998-.L429
-	.byte	1,5,33,9
-	.half	.L999-.L998
 	.byte	1,5,17,9
+	.half	.L989-.L988
+	.byte	3,1,1,5,8,9
+	.half	.L990-.L989
+	.byte	1,5,5,9
+	.half	.L991-.L990
+	.byte	1,5,13,7,9
+	.half	.L992-.L991
+	.byte	3,2,1,5,20,9
+	.half	.L993-.L992
+	.byte	1,5,13,9
+	.half	.L994-.L993
+	.byte	3,1,1,5,19,9
+	.half	.L995-.L994
+	.byte	1,5,21,9
+	.half	.L996-.L995
+	.byte	3,2,1,5,9,9
+	.half	.L997-.L996
+	.byte	1,5,21,7,9
+	.half	.L998-.L997
+	.byte	3,2,1,5,26,9
+	.half	.L429-.L998
+	.byte	3,1,1,5,35,9
+	.half	.L999-.L429
+	.byte	1,5,33,9
 	.half	.L1000-.L999
-	.byte	1,5,49,7,9
+	.byte	1,5,17,9
 	.half	.L1001-.L1000
-	.byte	1,5,58,9
+	.byte	1,5,49,7,9
 	.half	.L1002-.L1001
-	.byte	1,5,56,9
+	.byte	1,5,58,9
 	.half	.L1003-.L1002
-	.byte	1,5,42,9
+	.byte	1,5,56,9
 	.half	.L1004-.L1003
+	.byte	1,5,42,9
+	.half	.L1005-.L1004
 	.byte	1,5,75,7,9
-	.half	.L24-.L1004
+	.half	.L24-.L1005
 	.byte	1,5,84,9
-	.half	.L1005-.L24
+	.half	.L1006-.L24
 	.byte	1,5,82,9
-	.half	.L1006-.L1005
-	.byte	1,5,68,9
 	.half	.L1007-.L1006
+	.byte	1,5,68,9
+	.half	.L1008-.L1007
 	.byte	1,5,25,7,9
-	.half	.L25-.L1007
+	.half	.L25-.L1008
 	.byte	3,2,1,5,13,9
 	.half	.L26-.L25
 	.byte	3,126,1,5,21,9
@@ -20617,55 +20622,55 @@ gnss_parse_error_count:	.type	object
 	.byte	3,7,1,5,26,9
 	.half	.L430-.L23
 	.byte	3,1,1,5,16,9
-	.half	.L1008-.L430
+	.half	.L1009-.L430
 	.byte	1,5,47,7,9
-	.half	.L1009-.L1008
-	.byte	1,5,40,9
 	.half	.L1010-.L1009
-	.byte	1,5,68,7,9
+	.byte	1,5,40,9
 	.half	.L1011-.L1010
-	.byte	1,5,58,9
+	.byte	1,5,68,7,9
 	.half	.L1012-.L1011
-	.byte	1,5,61,9
+	.byte	1,5,58,9
 	.half	.L1013-.L1012
-	.byte	1,5,89,7,9
+	.byte	1,5,61,9
 	.half	.L1014-.L1013
-	.byte	1,5,79,9
+	.byte	1,5,89,7,9
 	.half	.L1015-.L1014
-	.byte	1,5,82,9
+	.byte	1,5,79,9
 	.half	.L1016-.L1015
+	.byte	1,5,82,9
+	.half	.L1017-.L1016
 	.byte	1,5,25,7,9
-	.half	.L28-.L1016
+	.half	.L28-.L1017
 	.byte	3,2,1,5,16,9
 	.half	.L27-.L28
 	.byte	3,4,1,5,9,9
-	.half	.L1017-.L27
+	.half	.L1018-.L27
 	.byte	1,5,25,7,9
-	.half	.L1018-.L1017
-	.byte	3,2,1,5,23,9
 	.half	.L1019-.L1018
-	.byte	1,5,17,9
+	.byte	3,2,1,5,23,9
 	.half	.L1020-.L1019
-	.byte	3,1,1,5,25,9
+	.byte	1,5,17,9
 	.half	.L1021-.L1020
-	.byte	1,9
+	.byte	3,1,1,5,25,9
 	.half	.L1022-.L1021
-	.byte	3,1,1,5,13,9
+	.byte	1,9
 	.half	.L1023-.L1022
-	.byte	1,5,21,7,9
+	.byte	3,1,1,5,13,9
 	.half	.L1024-.L1023
-	.byte	3,2,1,5,29,9
+	.byte	1,5,21,7,9
 	.half	.L1025-.L1024
-	.byte	1,5,21,9
+	.byte	3,2,1,5,29,9
 	.half	.L1026-.L1025
-	.byte	3,1,1,5,28,9
+	.byte	1,5,21,9
 	.half	.L1027-.L1026
+	.byte	3,1,1,5,28,9
+	.half	.L1028-.L1027
 	.byte	1,5,1,9
-	.half	.L22-.L1027
+	.half	.L22-.L1028
 	.byte	3,4,1,7,9
 	.half	.L192-.L22
 	.byte	0,1,1
-.L983:
+.L984:
 	.sdecl	'.debug_ranges',debug,cluster('utc_to_btc')
 	.sect	'.debug_ranges'
 .L191:
@@ -20739,14 +20744,14 @@ gnss_parse_error_count:	.type	object
 	.sdecl	'.debug_line',debug,cluster('gps_gnrmc_parse')
 	.sect	'.debug_line'
 .L195:
-	.word	.L1029-.L1028
-.L1028:
+	.word	.L1030-.L1029
+.L1029:
 	.half	3
-	.word	.L1031-.L1030
-.L1030:
+	.word	.L1032-.L1031
+.L1031:
 	.byte	2,1,-4,9,10,0,1,1,1,1,0,0,0,1,0
 	.byte	'../libraries/zf_device/zf_device_gnss.c',0,0,0,0,0
-.L1031:
+.L1032:
 	.byte	5,14,7,0,5,2
 	.word	.L112
 	.byte	3,251,1,1,5,24,9
@@ -20754,257 +20759,257 @@ gnss_parse_error_count:	.type	object
 	.byte	3,11,1,5,37,9
 	.half	.L434-.L433
 	.byte	3,2,1,5,40,9
-	.half	.L1032-.L434
+	.half	.L1033-.L434
 	.byte	1,5,16,9
-	.half	.L431-.L1032
+	.half	.L431-.L1033
 	.byte	1,5,8,9
 	.half	.L435-.L431
 	.byte	3,2,1,5,24,9
-	.half	.L1033-.L435
+	.half	.L1034-.L435
 	.byte	1,5,28,9
-	.half	.L1034-.L1033
+	.half	.L1035-.L1034
 	.byte	1,5,22,7,9
-	.half	.L34-.L1034
+	.half	.L34-.L1035
 	.byte	3,2,1,5,23,9
-	.half	.L1035-.L34
+	.half	.L1036-.L34
 	.byte	3,1,1,5,21,9
-	.half	.L1036-.L1035
-	.byte	1,5,60,9
 	.half	.L1037-.L1036
-	.byte	3,1,1,5,63,9
-	.half	.L1038-.L1037
-	.byte	1,5,39,9
-	.half	.L436-.L1038
-	.byte	1,5,34,9
-	.half	.L1039-.L436
 	.byte	1,5,60,9
-	.half	.L1040-.L1039
+	.half	.L1038-.L1037
 	.byte	3,1,1,5,63,9
-	.half	.L1041-.L1040
+	.half	.L1039-.L1038
 	.byte	1,5,39,9
-	.half	.L439-.L1041
+	.half	.L436-.L1039
 	.byte	1,5,34,9
-	.half	.L1042-.L439
+	.half	.L1040-.L436
+	.byte	1,5,60,9
+	.half	.L1041-.L1040
+	.byte	3,1,1,5,63,9
+	.half	.L1042-.L1041
+	.byte	1,5,39,9
+	.half	.L439-.L1042
+	.byte	1,5,34,9
+	.half	.L1043-.L439
 	.byte	1,5,78,9
-	.half	.L1043-.L1042
-	.byte	3,2,1,5,81,9
 	.half	.L1044-.L1043
+	.byte	3,2,1,5,81,9
+	.half	.L1045-.L1044
 	.byte	1,5,57,9
-	.half	.L441-.L1044
+	.half	.L441-.L1045
 	.byte	1,5,33,9
 	.half	.L442-.L441
 	.byte	1,5,78,9
 	.half	.L444-.L442
 	.byte	3,1,1,5,81,9
-	.half	.L1045-.L444
+	.half	.L1046-.L444
 	.byte	1,5,57,9
-	.half	.L443-.L1045
+	.half	.L443-.L1046
 	.byte	1,5,36,9
 	.half	.L446-.L443
 	.byte	3,2,1,5,52,9
-	.half	.L1046-.L446
+	.half	.L1047-.L446
 	.byte	1,5,50,9
-	.half	.L1047-.L1046
-	.byte	1,5,34,9
 	.half	.L1048-.L1047
-	.byte	1,5,51,9
+	.byte	1,5,34,9
 	.half	.L1049-.L1048
-	.byte	3,1,1,5,69,9
+	.byte	1,5,51,9
 	.half	.L1050-.L1049
-	.byte	1,5,45,9
+	.byte	3,1,1,5,69,9
 	.half	.L1051-.L1050
+	.byte	1,5,45,9
+	.half	.L1052-.L1051
 	.byte	1,5,36,9
-	.half	.L448-.L1051
+	.half	.L448-.L1052
 	.byte	3,1,1,5,34,9
-	.half	.L1052-.L448
+	.half	.L1053-.L448
 	.byte	1,5,56,9
-	.half	.L1053-.L1052
-	.byte	3,1,1,5,50,9
 	.half	.L1054-.L1053
-	.byte	1,5,75,9
+	.byte	3,1,1,5,50,9
 	.half	.L1055-.L1054
-	.byte	1,5,73,9
+	.byte	1,5,75,9
 	.half	.L1056-.L1055
+	.byte	1,5,73,9
+	.half	.L1057-.L1056
 	.byte	1,5,36,9
-	.half	.L449-.L1056
+	.half	.L449-.L1057
 	.byte	3,1,1,5,34,9
 	.half	.L450-.L449
 	.byte	1,5,36,9
-	.half	.L1057-.L450
+	.half	.L1058-.L450
 	.byte	3,2,1,5,53,9
-	.half	.L1058-.L1057
-	.byte	1,5,51,9
 	.half	.L1059-.L1058
-	.byte	1,5,34,9
+	.byte	1,5,51,9
 	.half	.L1060-.L1059
-	.byte	1,5,52,9
+	.byte	1,5,34,9
 	.half	.L1061-.L1060
-	.byte	3,1,1,5,71,9
+	.byte	1,5,52,9
 	.half	.L1062-.L1061
-	.byte	1,5,46,9
+	.byte	3,1,1,5,71,9
 	.half	.L1063-.L1062
+	.byte	1,5,46,9
+	.half	.L1064-.L1063
 	.byte	1,5,36,9
-	.half	.L451-.L1063
+	.half	.L451-.L1064
 	.byte	3,1,1,5,34,9
-	.half	.L1064-.L451
+	.half	.L1065-.L451
 	.byte	1,5,56,9
-	.half	.L1065-.L1064
-	.byte	3,1,1,5,50,9
 	.half	.L1066-.L1065
-	.byte	1,5,76,9
+	.byte	3,1,1,5,50,9
 	.half	.L1067-.L1066
-	.byte	1,5,74,9
+	.byte	1,5,76,9
 	.half	.L1068-.L1067
+	.byte	1,5,74,9
+	.half	.L1069-.L1068
 	.byte	1,5,36,9
-	.half	.L452-.L1068
+	.half	.L452-.L1069
 	.byte	3,1,1,5,34,9
 	.half	.L453-.L452
 	.byte	1,5,32,9
-	.half	.L1069-.L453
+	.half	.L1070-.L453
 	.byte	3,2,1,5,68,9
-	.half	.L1070-.L1069
-	.byte	1,5,66,9
 	.half	.L1071-.L1070
-	.byte	1,5,50,9
+	.byte	1,5,66,9
 	.half	.L1072-.L1071
-	.byte	1,5,26,9
+	.byte	1,5,50,9
 	.half	.L1073-.L1072
-	.byte	1,5,32,9
-	.half	.L1074-.L1073
-	.byte	3,1,1,5,69,9
-	.half	.L1075-.L1074
-	.byte	1,5,67,9
-	.half	.L1076-.L1075
-	.byte	1,5,51,9
-	.half	.L1077-.L1076
 	.byte	1,5,26,9
+	.half	.L1074-.L1073
+	.byte	1,5,32,9
+	.half	.L1075-.L1074
+	.byte	3,1,1,5,69,9
+	.half	.L1076-.L1075
+	.byte	1,5,67,9
+	.half	.L1077-.L1076
+	.byte	1,5,51,9
 	.half	.L1078-.L1077
-	.byte	1,5,69,9
+	.byte	1,5,26,9
 	.half	.L1079-.L1078
-	.byte	3,2,1,5,72,9
+	.byte	1,5,69,9
 	.half	.L1080-.L1079
+	.byte	3,2,1,5,72,9
+	.half	.L1081-.L1080
 	.byte	1,5,48,9
-	.half	.L447-.L1080
+	.half	.L447-.L1081
 	.byte	1,5,40,9
 	.half	.L455-.L447
 	.byte	3,1,1,5,38,9
-	.half	.L1081-.L455
+	.half	.L1082-.L455
 	.byte	1,5,26,9
-	.half	.L1082-.L1081
-	.byte	1,5,70,9
 	.half	.L1083-.L1082
-	.byte	3,1,1,5,73,9
+	.byte	1,5,70,9
 	.half	.L1084-.L1083
+	.byte	3,1,1,5,73,9
+	.half	.L1085-.L1084
 	.byte	1,5,49,9
-	.half	.L456-.L1084
+	.half	.L456-.L1085
 	.byte	1,5,26,9
-	.half	.L1085-.L456
+	.half	.L1086-.L456
 	.byte	1,5,25,9
-	.half	.L1086-.L1085
+	.half	.L1087-.L1086
 	.byte	3,103,1,5,23,9
-	.half	.L35-.L1086
+	.half	.L35-.L1087
 	.byte	3,29,1,5,21,9
-	.half	.L1087-.L35
+	.half	.L1088-.L35
 	.byte	1,5,30,9
-	.half	.L36-.L1087
+	.half	.L36-.L1088
 	.byte	3,4,1,5,34,9
-	.half	.L1088-.L36
+	.half	.L1089-.L36
 	.byte	1,5,43,9
-	.half	.L1089-.L1088
-	.byte	1,5,52,9
 	.half	.L1090-.L1089
-	.byte	1,5,56,9
-	.half	.L1091-.L1090
-	.byte	1,5,46,9
-	.half	.L1092-.L1091
-	.byte	1,5,24,9
-	.half	.L1093-.L1092
-	.byte	1,5,30,9
-	.half	.L1094-.L1093
-	.byte	3,1,1,5,34,9
-	.half	.L1095-.L1094
-	.byte	1,5,43,9
-	.half	.L1096-.L1095
 	.byte	1,5,52,9
-	.half	.L1097-.L1096
-	.byte	1,5,57,9
-	.half	.L1098-.L1097
+	.half	.L1091-.L1090
+	.byte	1,5,56,9
+	.half	.L1092-.L1091
 	.byte	1,5,46,9
+	.half	.L1093-.L1092
+	.byte	1,5,24,9
+	.half	.L1094-.L1093
+	.byte	1,5,30,9
+	.half	.L1095-.L1094
+	.byte	3,1,1,5,34,9
+	.half	.L1096-.L1095
+	.byte	1,5,43,9
+	.half	.L1097-.L1096
+	.byte	1,5,52,9
+	.half	.L1098-.L1097
+	.byte	1,5,57,9
 	.half	.L1099-.L1098
-	.byte	1,5,24,9
+	.byte	1,5,46,9
 	.half	.L1100-.L1099
-	.byte	1,5,30,9
+	.byte	1,5,24,9
 	.half	.L1101-.L1100
-	.byte	3,1,1,5,35,9
+	.byte	1,5,30,9
 	.half	.L1102-.L1101
-	.byte	1,5,44,9
-	.half	.L1103-.L1102
-	.byte	1,5,53,9
-	.half	.L1104-.L1103
-	.byte	1,5,58,9
-	.half	.L1105-.L1104
-	.byte	1,5,47,9
-	.half	.L1106-.L1105
-	.byte	1,5,24,9
-	.half	.L1107-.L1106
-	.byte	1,5,32,9
-	.half	.L1108-.L1107
 	.byte	3,1,1,5,35,9
+	.half	.L1103-.L1102
+	.byte	1,5,44,9
+	.half	.L1104-.L1103
+	.byte	1,5,53,9
+	.half	.L1105-.L1104
+	.byte	1,5,58,9
+	.half	.L1106-.L1105
+	.byte	1,5,47,9
+	.half	.L1107-.L1106
+	.byte	1,5,24,9
+	.half	.L1108-.L1107
+	.byte	1,5,32,9
 	.half	.L1109-.L1108
+	.byte	3,1,1,5,35,9
+	.half	.L1110-.L1109
 	.byte	1,5,30,9
-	.half	.L459-.L1109
+	.half	.L459-.L1110
 	.byte	3,1,1,5,41,9
-	.half	.L1110-.L459
+	.half	.L1111-.L459
 	.byte	1,5,50,9
-	.half	.L1111-.L1110
-	.byte	1,5,59,9
 	.half	.L1112-.L1111
-	.byte	1,5,70,9
+	.byte	1,5,59,9
 	.half	.L1113-.L1112
-	.byte	1,5,53,9
+	.byte	1,5,70,9
 	.half	.L1114-.L1113
-	.byte	1,5,24,9
+	.byte	1,5,53,9
 	.half	.L1115-.L1114
-	.byte	1,5,30,9
+	.byte	1,5,24,9
 	.half	.L1116-.L1115
-	.byte	3,1,1,5,41,9
-	.half	.L1117-.L1116
-	.byte	1,5,50,9
-	.half	.L1118-.L1117
-	.byte	1,5,59,9
-	.half	.L1119-.L1118
-	.byte	1,5,70,9
-	.half	.L1120-.L1119
-	.byte	1,5,53,9
-	.half	.L1121-.L1120
-	.byte	1,5,24,9
-	.half	.L1122-.L1121
 	.byte	1,5,30,9
-	.half	.L1123-.L1122
+	.half	.L1117-.L1116
 	.byte	3,1,1,5,41,9
-	.half	.L1124-.L1123
+	.half	.L1118-.L1117
 	.byte	1,5,50,9
-	.half	.L1125-.L1124
+	.half	.L1119-.L1118
 	.byte	1,5,59,9
-	.half	.L1126-.L1125
+	.half	.L1120-.L1119
 	.byte	1,5,70,9
-	.half	.L1127-.L1126
+	.half	.L1121-.L1120
 	.byte	1,5,53,9
-	.half	.L1128-.L1127
-	.byte	1,5,77,9
-	.half	.L1129-.L1128
+	.half	.L1122-.L1121
 	.byte	1,5,24,9
+	.half	.L1123-.L1122
+	.byte	1,5,30,9
+	.half	.L1124-.L1123
+	.byte	3,1,1,5,41,9
+	.half	.L1125-.L1124
+	.byte	1,5,50,9
+	.half	.L1126-.L1125
+	.byte	1,5,59,9
+	.half	.L1127-.L1126
+	.byte	1,5,70,9
+	.half	.L1128-.L1127
+	.byte	1,5,53,9
+	.half	.L1129-.L1128
+	.byte	1,5,77,9
 	.half	.L1130-.L1129
-	.byte	1,5,21,9
+	.byte	1,5,24,9
 	.half	.L1131-.L1130
+	.byte	1,5,21,9
+	.half	.L1132-.L1131
 	.byte	3,2,1,5,5,9
-	.half	.L460-.L1131
+	.half	.L460-.L1132
 	.byte	3,2,1,5,1,9
 	.half	.L37-.L460
 	.byte	3,1,1,7,9
 	.half	.L197-.L37
 	.byte	0,1,1
-.L1029:
+.L1030:
 	.sdecl	'.debug_ranges',debug,cluster('gps_gnrmc_parse')
 	.sect	'.debug_ranges'
 .L196:
@@ -21054,14 +21059,14 @@ gnss_parse_error_count:	.type	object
 	.sdecl	'.debug_line',debug,cluster('gps_gngga_parse')
 	.sect	'.debug_line'
 .L200:
-	.word	.L1133-.L1132
-.L1132:
+	.word	.L1134-.L1133
+.L1133:
 	.half	3
-	.word	.L1135-.L1134
-.L1134:
+	.word	.L1136-.L1135
+.L1135:
 	.byte	2,1,-4,9,10,0,1,1,1,1,0,0,0,1,0
 	.byte	'../libraries/zf_device/zf_device_gnss.c',0,0,0,0,0
-.L1135:
+.L1136:
 	.byte	5,14,7,0,5,2
 	.word	.L114
 	.byte	3,194,2,1,5,24,9
@@ -21069,53 +21074,53 @@ gnss_parse_error_count:	.type	object
 	.byte	3,4,1,5,37,9
 	.half	.L467-.L466
 	.byte	3,2,1,5,40,9
-	.half	.L1136-.L467
+	.half	.L1137-.L467
 	.byte	1,5,16,9
-	.half	.L463-.L1136
+	.half	.L463-.L1137
 	.byte	1,5,8,9
 	.half	.L468-.L463
 	.byte	3,2,1,5,5,9
-	.half	.L1137-.L468
+	.half	.L1138-.L468
 	.byte	1,5,79,7,9
-	.half	.L1138-.L1137
-	.byte	3,2,1,5,82,9
 	.half	.L1139-.L1138
+	.byte	3,2,1,5,82,9
+	.half	.L1140-.L1139
 	.byte	1,5,58,9
-	.half	.L469-.L1139
+	.half	.L469-.L1140
 	.byte	1,5,30,9
-	.half	.L1140-.L469
+	.half	.L1141-.L469
 	.byte	1,5,74,9
-	.half	.L1141-.L1140
-	.byte	3,1,1,5,77,9
 	.half	.L1142-.L1141
+	.byte	3,1,1,5,77,9
+	.half	.L1143-.L1142
 	.byte	1,5,53,9
-	.half	.L472-.L1142
+	.half	.L472-.L1143
 	.byte	1,5,128,1,9
-	.half	.L1143-.L472
+	.half	.L1144-.L472
 	.byte	1,5,132,1,9
-	.half	.L1144-.L1143
+	.half	.L1145-.L1144
 	.byte	1,5,107,9
-	.half	.L474-.L1144
+	.half	.L474-.L1145
 	.byte	1,5,53,9
 	.half	.L465-.L474
 	.byte	1,5,84,9
-	.half	.L1145-.L465
+	.half	.L1146-.L465
 	.byte	1,5,107,9
-	.half	.L1146-.L1145
-	.byte	1,5,84,9
 	.half	.L1147-.L1146
-	.byte	1,5,30,9
+	.byte	1,5,84,9
 	.half	.L1148-.L1147
-	.byte	1,5,22,9
+	.byte	1,5,30,9
 	.half	.L1149-.L1148
+	.byte	1,5,22,9
+	.half	.L1150-.L1149
 	.byte	3,1,1,5,5,9
-	.half	.L38-.L1149
+	.half	.L38-.L1150
 	.byte	3,3,1,5,1,9
 	.half	.L39-.L38
 	.byte	3,1,1,7,9
 	.half	.L202-.L39
 	.byte	0,1,1
-.L1133:
+.L1134:
 	.sdecl	'.debug_ranges',debug,cluster('gps_gngga_parse')
 	.sect	'.debug_ranges'
 .L201:
@@ -21165,14 +21170,14 @@ gnss_parse_error_count:	.type	object
 	.sdecl	'.debug_line',debug,cluster('gps_gnths_parse')
 	.sect	'.debug_line'
 .L205:
-	.word	.L1151-.L1150
-.L1150:
+	.word	.L1152-.L1151
+.L1151:
 	.half	3
-	.word	.L1153-.L1152
-.L1152:
+	.word	.L1154-.L1153
+.L1153:
 	.byte	2,1,-4,9,10,0,1,1,1,1,0,0,0,1,0
 	.byte	'../libraries/zf_device/zf_device_gnss.c',0,0,0,0,0
-.L1153:
+.L1154:
 	.byte	5,14,7,0,5,2
 	.word	.L116
 	.byte	3,220,2,1,5,24,9
@@ -21180,41 +21185,41 @@ gnss_parse_error_count:	.type	object
 	.byte	3,4,1,5,37,9
 	.half	.L479-.L478
 	.byte	3,2,1,5,40,9
-	.half	.L1154-.L479
+	.half	.L1155-.L479
 	.byte	1,5,16,9
-	.half	.L476-.L1154
+	.half	.L476-.L1155
 	.byte	1,5,8,9
 	.half	.L480-.L476
 	.byte	3,2,1,5,5,9
-	.half	.L1155-.L480
+	.half	.L1156-.L480
 	.byte	1,5,41,7,9
-	.half	.L1156-.L1155
-	.byte	3,2,1,5,39,9
 	.half	.L1157-.L1156
-	.byte	1,5,77,9
+	.byte	3,2,1,5,39,9
 	.half	.L1158-.L1157
-	.byte	3,1,1,5,80,9
+	.byte	1,5,77,9
 	.half	.L1159-.L1158
+	.byte	3,1,1,5,80,9
+	.half	.L1160-.L1159
 	.byte	1,5,56,9
-	.half	.L481-.L1159
+	.half	.L481-.L1160
 	.byte	1,5,33,9
-	.half	.L1160-.L481
+	.half	.L1161-.L481
 	.byte	1,5,22,9
-	.half	.L1161-.L1160
-	.byte	3,1,1,5,42,9
 	.half	.L1162-.L1161
+	.byte	3,1,1,5,42,9
+	.half	.L1163-.L1162
 	.byte	3,126,1,5,41,9
-	.half	.L40-.L1162
+	.half	.L40-.L1163
 	.byte	3,6,1,5,39,9
-	.half	.L1163-.L40
+	.half	.L1164-.L40
 	.byte	1,5,5,9
-	.half	.L41-.L1163
+	.half	.L41-.L1164
 	.byte	3,3,1,5,1,9
 	.half	.L42-.L41
 	.byte	3,1,1,7,9
 	.half	.L207-.L42
 	.byte	0,1,1
-.L1151:
+.L1152:
 	.sdecl	'.debug_ranges',debug,cluster('gps_gnths_parse')
 	.sect	'.debug_ranges'
 .L206:
@@ -22343,7 +22348,7 @@ gnss_parse_error_count:	.type	object
 	.word	0,0
 	.sdecl	'.debug_frame',debug
 	.sect	'.debug_frame'
-.L1164:
+.L1165:
 	.word	48
 	.word	-1
 	.byte	3,0,2,1,27,12,26,0,8,26,8,27,8,30,8,29,8,28,8,16,8,17,8,24,8,25,8,31,8,32,8,33,8,34,8,35,8,36,8,37,8,38
@@ -22351,16 +22356,16 @@ gnss_parse_error_count:	.type	object
 	.sdecl	'.debug_frame',debug,cluster('gnss_copy_debug_sentence')
 	.sect	'.debug_frame'
 	.word	20
-	.word	.L1164,.L100,.L311-.L100
+	.word	.L1165,.L100,.L311-.L100
 	.byte	8,19,8,22,8,23,0,0
 	.sdecl	'.debug_frame',debug,cluster('get_parameter_index')
 	.sect	'.debug_frame'
 	.word	12
-	.word	.L1164,.L102,.L318-.L102
+	.word	.L1165,.L102,.L318-.L102
 	.sdecl	'.debug_frame',debug,cluster('get_int_number')
 	.sect	'.debug_frame'
 	.word	36
-	.word	.L1164,.L104,.L327-.L104
+	.word	.L1165,.L104,.L327-.L104
 	.byte	4
 	.word	(.L396-.L104)/2
 	.byte	19,16,22,26,3,19,138,16,4
@@ -22369,7 +22374,7 @@ gnss_parse_error_count:	.type	object
 	.sdecl	'.debug_frame',debug,cluster('get_float_number')
 	.sect	'.debug_frame'
 	.word	36
-	.word	.L1164,.L106,.L333-.L106
+	.word	.L1165,.L106,.L333-.L106
 	.byte	4
 	.word	(.L407-.L106)/2
 	.byte	19,16,22,26,3,19,138,16,4
@@ -22378,7 +22383,7 @@ gnss_parse_error_count:	.type	object
 	.sdecl	'.debug_frame',debug,cluster('get_double_number')
 	.sect	'.debug_frame'
 	.word	36
-	.word	.L1164,.L108,.L339-.L108
+	.word	.L1165,.L108,.L339-.L108
 	.byte	4
 	.word	(.L418-.L108)/2
 	.byte	19,16,22,26,3,19,138,16,4
@@ -22387,32 +22392,32 @@ gnss_parse_error_count:	.type	object
 	.sdecl	'.debug_frame',debug,cluster('utc_to_btc')
 	.sect	'.debug_frame'
 	.word	24
-	.word	.L1164,.L110,.L344-.L110
+	.word	.L1165,.L110,.L344-.L110
 	.byte	8,18,8,19,8,21,8,22,8,23,0,0
 	.sdecl	'.debug_frame',debug,cluster('gps_gnrmc_parse')
 	.sect	'.debug_frame'
 	.word	12
-	.word	.L1164,.L112,.L348-.L112
+	.word	.L1165,.L112,.L348-.L112
 	.sdecl	'.debug_frame',debug,cluster('gps_gngga_parse')
 	.sect	'.debug_frame'
 	.word	12
-	.word	.L1164,.L114,.L363-.L114
+	.word	.L1165,.L114,.L363-.L114
 	.sdecl	'.debug_frame',debug,cluster('gps_gnths_parse')
 	.sect	'.debug_frame'
 	.word	12
-	.word	.L1164,.L116,.L369-.L116
+	.word	.L1165,.L116,.L369-.L116
 	.sdecl	'.debug_frame',debug,cluster('get_two_points_distance')
 	.sect	'.debug_frame'
 	.word	12
-	.word	.L1164,.L118,.L239-.L118
+	.word	.L1165,.L118,.L239-.L118
 	.sdecl	'.debug_frame',debug,cluster('get_two_points_azimuth')
 	.sect	'.debug_frame'
 	.word	12
-	.word	.L1164,.L120,.L256-.L120
+	.word	.L1165,.L120,.L256-.L120
 	.sdecl	'.debug_frame',debug,cluster('gnss_data_parse')
 	.sect	'.debug_frame'
 	.word	36
-	.word	.L1164,.L122,.L266-.L122
+	.word	.L1165,.L122,.L266-.L122
 	.byte	4
 	.word	(.L522-.L122)/2
 	.byte	19,8,22,26,3,19,138,8,4
@@ -22421,7 +22426,7 @@ gnss_parse_error_count:	.type	object
 	.sdecl	'.debug_frame',debug,cluster('gnss_uart_callback')
 	.sect	'.debug_frame'
 	.word	36
-	.word	.L1164,.L124,.L274-.L124
+	.word	.L1165,.L124,.L274-.L124
 	.byte	4
 	.word	(.L534-.L124)/2
 	.byte	19,16,22,26,3,19,138,16,4
@@ -22430,11 +22435,11 @@ gnss_parse_error_count:	.type	object
 	.sdecl	'.debug_frame',debug,cluster('gnss_get_debug_info')
 	.sect	'.debug_frame'
 	.word	12
-	.word	.L1164,.L126,.L308-.L126
+	.word	.L1165,.L126,.L308-.L126
 	.sdecl	'.debug_frame',debug,cluster('gnss_init')
 	.sect	'.debug_frame'
 	.word	36
-	.word	.L1164,.L128,.L281-.L128
+	.word	.L1165,.L128,.L281-.L128
 	.byte	4
 	.word	(.L539-.L128)/2
 	.byte	19,152,1,22,26,4,19,138,152,1,4

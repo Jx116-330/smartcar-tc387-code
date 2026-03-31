@@ -597,6 +597,9 @@ void gnss_uart_callback (void)
             // 统一将FIFO清空
             fifo_clear(&gnss_receiver_fifo);
 
+            // 当前帧已全部拷贝到各语句缓冲区，在中断内直接完成解析，
+            // 使主循环拿到的 gnss 结构体始终是最新数据。
+            gnss_data_parse();
             gnss_flag = 1;
         }
     }

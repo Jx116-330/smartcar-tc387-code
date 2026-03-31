@@ -13,11 +13,13 @@ int core0_main(void)
 
     while (TRUE)
     {
-        gnss_data_parse();
-
-        if (path_recorder_get_state() == PATH_STATE_RECORDING)
+        if (gnss_flag)
         {
-            path_recorder_task();
+            gnss_flag = 0;
+            if (path_recorder_get_state() == PATH_STATE_RECORDING)
+            {
+                path_recorder_task();
+            }
         }
 
         menu_task();
