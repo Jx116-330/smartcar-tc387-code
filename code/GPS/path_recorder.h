@@ -37,8 +37,8 @@ typedef struct
 
 typedef struct
 {
-    float latitude;
-    float longitude;
+    double latitude;
+    double longitude;
     uint32 timestamp;
     float speed;
     float direction;
@@ -52,8 +52,8 @@ typedef struct
     uint16 point_count;
     path_state_enum state;
     uint32 last_record_time;
-    float last_latitude;
-    float last_longitude;
+    double last_latitude;
+    double last_longitude;
     float total_distance;
     uint32 total_time;
 } path_data_t;

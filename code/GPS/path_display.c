@@ -346,7 +346,7 @@ static uint8 path_display_get_path_screen_point(uint16 index, screen_point *poin
 
 static void path_display_draw_trajectory(uint16 color)
 {
-    gps_point gps_points[DISPLAY_POINT_MAX];
+    static gps_point gps_points[DISPLAY_POINT_MAX];
     double min_x;
     double max_x;
     double min_y;

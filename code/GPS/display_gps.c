@@ -194,8 +194,8 @@ void xy_to_screen(double *x, double *y, int point_num)
 
 void get_transition(gps_point *gps, int point_num)
 {
-    double x[DISPLAY_POINT_MAX];
-    double y[DISPLAY_POINT_MAX];
+    static double x[DISPLAY_POINT_MAX];
+    static double y[DISPLAY_POINT_MAX];
 
     if (point_num <= 0)
     {

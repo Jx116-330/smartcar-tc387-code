@@ -1,6 +1,6 @@
 	; Module start
 	.compiler_version	"TASKING VX-toolset for AURIX Development Studio (non-commercial): C compiler v1.1r8 Build 22011964"
-	.compiler_invocation	"ctc -f cc40068a --dep-file=code/GPS/path_display.d -c99 --fp-model=3cflnrSTz -D__CPU__=tc38x -D__CPU_TC38X__ --core=tc1.6.2 --fp-model=+float -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\code -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\code\\\\Beep -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\code\\\\GPS -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\code\\\\MyEncoder -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\code\\\\MyKey -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\code\\\\menu -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Configurations -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Infra -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Platform -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Platform\\\\Tricore -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Platform\\\\Tricore\\\\Compilers -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Sfr -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Sfr\\\\TC38A -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Sfr\\\\TC38A\\\\_Reg -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Ssw -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Ssw\\\\TC38A -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Ssw\\\\TC38A\\\\Tricore -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Service -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric\\\\If -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric\\\\If\\\\Ccu6If -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric\\\\StdIf -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric\\\\SysSe -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric\\\\SysSe\\\\Bsp -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric\\\\SysSe\\\\Math -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric\\\\_Utilities -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Asclin -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Asclin\\\\Asc -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Asclin\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Ccu6 -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Ccu6\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Ccu6\\\\Timer -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Cpu -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Cpu\\\\Irq -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Cpu\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Dma -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Dma\\\\Dma -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Dma\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Evadc -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Evadc\\\\Adc -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Evadc\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Flash -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Flash\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Gpt12 -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Gpt12\\\\IncrEnc -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Gpt12\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Gtm -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Gtm\\\\Atom -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Gtm\\\\Atom\\\\Pwm -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Gtm\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Mtu -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Mtu\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Pms -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Pms\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Port -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Port\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Qspi -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Qspi\\\\SpiMaster -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Qspi\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Scu -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Scu\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Src -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Src\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Stm -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Stm\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\_Impl -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\_Lib -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\_Lib\\\\DataHandling -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\_PinMap -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\zf_common -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\zf_components -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\zf_device -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\zf_driver -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\user -g2 -w544 -w557 -t4 --language=+volatile -N0 -O0 -Y0 -Z0 --compact-max-size=200 --misrac-version=2004 -o code/GPS/path_display.src ../code/GPS/path_display.c"
+	.compiler_invocation	"ctc -f cc45932a --dep-file=code/GPS/path_display.d -c99 --fp-model=3cflnrSTz -D__CPU__=tc38x -D__CPU_TC38X__ --core=tc1.6.2 --fp-model=+float -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\code -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\code\\\\Beep -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\code\\\\GPS -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\code\\\\MyEncoder -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\code\\\\MyKey -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\code\\\\menu -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Configurations -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Infra -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Platform -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Platform\\\\Tricore -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Platform\\\\Tricore\\\\Compilers -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Sfr -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Sfr\\\\TC38A -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Sfr\\\\TC38A\\\\_Reg -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Ssw -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Ssw\\\\TC38A -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Ssw\\\\TC38A\\\\Tricore -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Service -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric\\\\If -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric\\\\If\\\\Ccu6If -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric\\\\StdIf -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric\\\\SysSe -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric\\\\SysSe\\\\Bsp -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric\\\\SysSe\\\\Math -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric\\\\_Utilities -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Asclin -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Asclin\\\\Asc -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Asclin\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Ccu6 -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Ccu6\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Ccu6\\\\Timer -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Cpu -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Cpu\\\\Irq -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Cpu\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Dma -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Dma\\\\Dma -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Dma\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Evadc -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Evadc\\\\Adc -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Evadc\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Flash -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Flash\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Gpt12 -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Gpt12\\\\IncrEnc -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Gpt12\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Gtm -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Gtm\\\\Atom -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Gtm\\\\Atom\\\\Pwm -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Gtm\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Mtu -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Mtu\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Pms -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Pms\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Port -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Port\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Qspi -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Qspi\\\\SpiMaster -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Qspi\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Scu -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Scu\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Src -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Src\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Stm -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Stm\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\_Impl -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\_Lib -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\_Lib\\\\DataHandling -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\_PinMap -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\zf_common -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\zf_components -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\zf_device -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\zf_driver -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\user -g2 -w544 -w557 -t4 --language=+volatile -N0 -O0 -Y0 -Z0 --compact-max-size=200 --misrac-version=2004 -o code/GPS/path_display.src ../code/GPS/path_display.c"
 	.compiler_name		"ctc"
 	;source	'../code/GPS/path_display.c'
 
@@ -17,13 +17,13 @@ path_display_clamp_area:	.type	func
 	movh.a	a15,#@his(ips200_width_max)
 	lea	a15,[a15]@los(ips200_width_max)
 	ld.hu	d15,[a15]0
-.L535:
+.L534:
 	jeq	d15,#0,.L2
-.L536:
+.L535:
 	movh.a	a15,#@his(ips200_height_max)
 	lea	a15,[a15]@los(ips200_height_max)
 	ld.hu	d15,[a15]0
-.L537:
+.L536:
 	jne	d15,#0,.L3
 .L2:
 	j	.L4
@@ -31,157 +31,157 @@ path_display_clamp_area:	.type	func
 	movh.a	a15,#@his(display_x)
 	lea	a15,[a15]@los(display_x)
 	ld.hu	d15,[a15]0
-.L538:
+.L537:
 	movh.a	a15,#@his(ips200_width_max)
 	lea	a15,[a15]@los(ips200_width_max)
 	ld.hu	d0,[a15]0
-.L539:
+.L538:
 	jlt.u	d15,d0,.L5
-.L540:
+.L539:
 	movh.a	a15,#@his(display_x)
 	lea	a15,[a15]@los(display_x)
-.L541:
+.L540:
 	movh.a	a2,#@his(ips200_width_max)
 	lea	a2,[a2]@los(ips200_width_max)
 	ld.hu	d15,[a2]0
-.L542:
+.L541:
 	add	d15,#-1
-.L543:
+.L542:
 	st.h	[a15],d15
 .L5:
 	movh.a	a15,#@his(display_y)
 	lea	a15,[a15]@los(display_y)
 	ld.hu	d15,[a15]0
-.L544:
+.L543:
 	movh.a	a15,#@his(ips200_height_max)
 	lea	a15,[a15]@los(ips200_height_max)
 	ld.hu	d0,[a15]0
-.L545:
+.L544:
 	jlt.u	d15,d0,.L6
-.L546:
+.L545:
 	movh.a	a15,#@his(display_y)
 	lea	a15,[a15]@los(display_y)
-.L547:
+.L546:
 	movh.a	a2,#@his(ips200_height_max)
 	lea	a2,[a2]@los(ips200_height_max)
 	ld.hu	d15,[a2]0
-.L548:
+.L547:
 	add	d15,#-1
-.L549:
+.L548:
 	st.h	[a15],d15
 .L6:
 	movh.a	a15,#@his(display_width)
 	lea	a15,[a15]@los(display_width)
 	ld.hu	d15,[a15]0
-.L550:
+.L549:
 	jne	d15,#0,.L7
-.L551:
+.L550:
 	movh.a	a15,#@his(display_width)
 	lea	a15,[a15]@los(display_width)
-.L552:
+.L551:
 	mov	d15,#1
-.L553:
+.L552:
 	st.h	[a15],d15
 .L7:
 	movh.a	a15,#@his(display_height)
 	lea	a15,[a15]@los(display_height)
 	ld.hu	d15,[a15]0
-.L554:
+.L553:
 	jne	d15,#0,.L8
-.L555:
+.L554:
 	movh.a	a15,#@his(display_height)
 	lea	a15,[a15]@los(display_height)
-.L556:
+.L555:
 	mov	d15,#1
-.L557:
+.L556:
 	st.h	[a15],d15
 .L8:
 	movh.a	a15,#@his(display_x)
 	lea	a15,[a15]@los(display_x)
 	ld.hu	d15,[a15]0
-.L558:
+.L557:
 	movh.a	a15,#@his(display_width)
 	lea	a15,[a15]@los(display_width)
 	ld.hu	d0,[a15]0
-.L559:
+.L558:
 	add	d15,d0
-.L560:
+.L559:
 	movh.a	a15,#@his(ips200_width_max)
 	lea	a15,[a15]@los(ips200_width_max)
 	ld.hu	d0,[a15]0
-.L561:
+.L560:
 	jge.u	d0,d15,.L9
-.L562:
+.L561:
 	movh.a	a15,#@his(display_width)
 	lea	a15,[a15]@los(display_width)
-.L563:
+.L562:
 	movh.a	a2,#@his(ips200_width_max)
 	lea	a2,[a2]@los(ips200_width_max)
 	ld.hu	d15,[a2]0
-.L564:
+.L563:
 	movh.a	a2,#@his(display_x)
 	lea	a2,[a2]@los(display_x)
 	ld.hu	d0,[a2]0
-.L565:
+.L564:
 	sub	d15,d0
-.L566:
+.L565:
 	st.h	[a15],d15
 .L9:
 	movh.a	a15,#@his(display_y)
 	lea	a15,[a15]@los(display_y)
 	ld.hu	d15,[a15]0
-.L567:
+.L566:
 	movh.a	a15,#@his(display_height)
 	lea	a15,[a15]@los(display_height)
 	ld.hu	d0,[a15]0
-.L568:
+.L567:
 	add	d15,d0
-.L569:
+.L568:
 	movh.a	a15,#@his(ips200_height_max)
 	lea	a15,[a15]@los(ips200_height_max)
 	ld.hu	d0,[a15]0
-.L570:
+.L569:
 	jge.u	d0,d15,.L10
-.L571:
+.L570:
 	movh.a	a15,#@his(display_height)
 	lea	a15,[a15]@los(display_height)
-.L572:
+.L571:
 	movh.a	a2,#@his(ips200_height_max)
 	lea	a2,[a2]@los(ips200_height_max)
 	ld.hu	d15,[a2]0
-.L573:
+.L572:
 	movh.a	a2,#@his(display_y)
 	lea	a2,[a2]@los(display_y)
 	ld.hu	d0,[a2]0
-.L574:
+.L573:
 	sub	d15,d0
-.L575:
+.L574:
 	st.h	[a15],d15
 .L10:
 	movh.a	a15,#@his(display_width)
 	lea	a15,[a15]@los(display_width)
 	ld.hu	d15,[a15]0
-.L576:
+.L575:
 	jne	d15,#0,.L11
-.L577:
+.L576:
 	movh.a	a15,#@his(display_width)
 	lea	a15,[a15]@los(display_width)
-.L578:
+.L577:
 	mov	d15,#1
-.L579:
+.L578:
 	st.h	[a15],d15
 .L11:
 	movh.a	a15,#@his(display_height)
 	lea	a15,[a15]@los(display_height)
 	ld.hu	d15,[a15]0
-.L580:
+.L579:
 	jne	d15,#0,.L12
-.L581:
+.L580:
 	movh.a	a15,#@his(display_height)
 	lea	a15,[a15]@los(display_height)
-.L582:
+.L581:
 	mov	d15,#1
-.L583:
+.L582:
 	st.h	[a15],d15
 .L12:
 .L4:
@@ -201,22 +201,22 @@ __path_display_clamp_area_function_end:
 .L141:
 path_display_fill_rect:	.type	func
 	sub.a	a10,#8
-.L418:
+.L417:
 	mov	e8,d6,d4
 	mov	d10,d7
-.L420:
+.L419:
 	ld.hu	d11,[a10]8
-.L421:
+.L420:
 	movh.a	a15,#@his(ips200_width_max)
 	lea	a15,[a15]@los(ips200_width_max)
 	ld.hu	d15,[a15]0
-.L588:
+.L587:
 	jeq	d15,#0,.L13
-.L589:
+.L588:
 	movh.a	a15,#@his(ips200_height_max)
 	lea	a15,[a15]@los(ips200_height_max)
 	ld.hu	d15,[a15]0
-.L590:
+.L589:
 	jne	d15,#0,.L14
 .L13:
 	j	.L15
@@ -224,81 +224,81 @@ path_display_fill_rect:	.type	func
 	jge.u	d9,d8,.L16
 .L314:
 	mov	d15,d8
-.L422:
+.L421:
 	mov	d8,d9
-.L419:
+.L418:
 	mov	d9,d15
 .L16:
 	jge.u	d10,d5,.L17
 .L316:
 	mov	d15,d5
-.L423:
+.L422:
 	mov	d5,d10
-.L591:
+.L590:
 	mov	d10,d15
 .L17:
 	movh.a	a15,#@his(ips200_width_max)
 	lea	a15,[a15]@los(ips200_width_max)
 	ld.hu	d15,[a15]0
-.L424:
+.L423:
 	jlt.u	d8,d15,.L18
-.L425:
+.L424:
 	movh.a	a15,#@his(ips200_width_max)
 	lea	a15,[a15]@los(ips200_width_max)
 	ld.hu	d8,[a15]0
-.L426:
+.L425:
 	add	d8,#-1
 .L18:
 	movh.a	a15,#@his(ips200_width_max)
 	lea	a15,[a15]@los(ips200_width_max)
 	ld.hu	d15,[a15]0
-.L427:
+.L426:
 	jlt.u	d9,d15,.L19
-.L428:
+.L427:
 	movh.a	a15,#@his(ips200_width_max)
 	lea	a15,[a15]@los(ips200_width_max)
 	ld.hu	d9,[a15]0
-.L429:
+.L428:
 	add	d9,#-1
 .L19:
 	movh.a	a15,#@his(ips200_height_max)
 	lea	a15,[a15]@los(ips200_height_max)
 	ld.hu	d15,[a15]0
-.L592:
+.L591:
 	jlt.u	d5,d15,.L20
-.L593:
+.L592:
 	movh.a	a15,#@his(ips200_height_max)
 	lea	a15,[a15]@los(ips200_height_max)
 	ld.hu	d5,[a15]0
-.L594:
+.L593:
 	add	d5,#-1
 .L20:
 	movh.a	a15,#@his(ips200_height_max)
 	lea	a15,[a15]@los(ips200_height_max)
 	ld.hu	d15,[a15]0
-.L595:
+.L594:
 	jlt.u	d10,d15,.L21
-.L596:
+.L595:
 	movh.a	a15,#@his(ips200_height_max)
 	lea	a15,[a15]@los(ips200_height_max)
 	ld.hu	d10,[a15]0
-.L597:
+.L596:
 	add	d10,#-1
 .L21:
 	mov	d15,d5
-.L430:
+.L429:
 	j	.L22
 .L23:
 	st.h	[a10],d11
-.L432:
-	mov	e4,d15,d8
-.L433:
-	mov	e6,d15,d9
-.L434:
-	call	ips200_draw_line
-.L598:
-	add	d15,#1
 .L431:
+	mov	e4,d15,d8
+.L432:
+	mov	e6,d15,d9
+.L433:
+	call	ips200_draw_line
+.L597:
+	add	d15,#1
+.L430:
 	extr.u	d15,d15,#0,#16
 .L22:
 	jge.u	d10,d15,.L23
@@ -319,22 +319,22 @@ __path_display_fill_rect_function_end:
 .L143:
 path_display_draw_border:	.type	func
 	sub.a	a10,#8
-.L435:
+.L434:
 	movh.a	a15,#@his(display_initialized)
 	lea	a15,[a15]@los(display_initialized)
 	ld.bu	d15,[a15]
 	jeq	d15,#0,.L24
-.L603:
+.L602:
 	movh.a	a15,#@his(display_width)
 	lea	a15,[a15]@los(display_width)
 	ld.hu	d15,[a15]0
-.L604:
+.L603:
 	jlt.u	d15,#2,.L25
-.L605:
+.L604:
 	movh.a	a15,#@his(display_height)
 	lea	a15,[a15]@los(display_height)
 	ld.hu	d15,[a15]0
-.L606:
+.L605:
 	jge.u	d15,#2,.L26
 .L25:
 .L24:
@@ -343,87 +343,87 @@ path_display_draw_border:	.type	func
 	movh.a	a15,#@his(display_x)
 	lea	a15,[a15]@los(display_x)
 	ld.hu	d15,[a15]0
-.L607:
+.L606:
 	movh.a	a15,#@his(display_width)
 	lea	a15,[a15]@los(display_width)
 	ld.hu	d0,[a15]0
-.L608:
+.L607:
 	add	d15,d0
-.L609:
+.L608:
 	add	d15,#-1
 	extr.u	d8,d15,#0,#16
-.L436:
+.L435:
 	movh.a	a15,#@his(display_y)
 	lea	a15,[a15]@los(display_y)
 	ld.hu	d15,[a15]0
-.L610:
+.L609:
 	movh.a	a15,#@his(display_height)
 	lea	a15,[a15]@los(display_height)
 	ld.hu	d0,[a15]0
-.L611:
+.L610:
 	add	d15,d0
-.L612:
+.L611:
 	add	d15,#-1
 	extr.u	d15,d15,#0,#16
-.L437:
+.L436:
 	mov.u	d0,#65535
 	st.h	[a10],d0
-.L613:
+.L612:
 	movh.a	a15,#@his(display_x)
 	lea	a15,[a15]@los(display_x)
 	ld.hu	d4,[a15]0
-.L614:
+.L613:
 	movh.a	a15,#@his(display_y)
 	lea	a15,[a15]@los(display_y)
 	ld.hu	d5,[a15]0
-.L615:
+.L614:
 	movh.a	a15,#@his(display_y)
 	lea	a15,[a15]@los(display_y)
 	ld.hu	d7,[a15]0
 	mov	d6,d8
-.L438:
+.L437:
 	call	ips200_draw_line
-.L439:
+.L438:
 	mov.u	d0,#65535
 	st.h	[a10],d0
-.L616:
+.L615:
 	movh.a	a15,#@his(display_x)
 	lea	a15,[a15]@los(display_x)
 	ld.hu	d4,[a15]0
-.L617:
+.L616:
 	mov	d5,d15
-.L440:
+.L439:
 	mov	e6,d15,d8
 	call	ips200_draw_line
-.L441:
+.L440:
 	mov.u	d0,#65535
 	st.h	[a10],d0
-.L618:
+.L617:
 	movh.a	a15,#@his(display_x)
 	lea	a15,[a15]@los(display_x)
 	ld.hu	d4,[a15]0
-.L619:
+.L618:
 	movh.a	a15,#@his(display_y)
 	lea	a15,[a15]@los(display_y)
 	ld.hu	d5,[a15]0
-.L620:
+.L619:
 	movh.a	a15,#@his(display_x)
 	lea	a15,[a15]@los(display_x)
 	ld.hu	d6,[a15]0
-.L621:
+.L620:
 	mov	d7,d15
-.L442:
+.L441:
 	call	ips200_draw_line
-.L443:
+.L442:
 	mov.u	d0,#65535
 	st.h	[a10],d0
-.L622:
+.L621:
 	movh.a	a15,#@his(display_y)
 	lea	a15,[a15]@los(display_y)
 	ld.hu	d5,[a15]0
-.L623:
+.L622:
 	mov	d4,d8
-.L444:
+.L443:
 	mov	e6,d15,d8
 	call	ips200_draw_line
 .L27:
@@ -444,138 +444,138 @@ __path_display_draw_border_function_end:
 path_display_collect_points:	.type	func
 	movh.a	a15,#@his(path_data)
 	lea	a15,[a15]@los(path_data)
-.L628:
+.L627:
 	ld.hu	d0,[a15]7200
-.L445:
+.L444:
 	jne	d0,#0,.L28
-.L629:
+.L628:
 	mov	d2,#0
-.L630:
+.L629:
 	j	.L29
 .L28:
 	mov	d4,d0
-.L447:
+.L446:
 	mov	d1,#300
-.L631:
+.L630:
 	jge.u	d1,d0,.L30
-.L632:
+.L631:
 	mov	d4,#300
 .L30:
 	jne	d4,d0,.L31
-.L633:
+.L632:
 	mov	d1,#0
-.L448:
+.L447:
 	j	.L32
 .L33:
 	mul	d15,d1,#8
 	addsc.a	a15,a4,d15,#0
-.L634:
+.L633:
 	mul	d15,d1,#24
-.L635:
+.L634:
 	movh.a	a2,#@his(path_data)
 	lea	a2,[a2]@los(path_data)
-.L636:
+.L635:
 	addsc.a	a2,a2,d15,#0
-.L637:
+.L636:
 	ld.w	d2,[a2]
-.L638:
+.L637:
 	st.w	[a15],d2
-.L639:
+.L638:
 	mul	d15,d1,#8
 	addsc.a	a2,a4,d15,#0
-.L640:
+.L639:
 	mul	d15,d1,#24
-.L641:
+.L640:
 	movh.a	a15,#@his(path_data)
 	lea	a15,[a15]@los(path_data)
-.L642:
+.L641:
 	addsc.a	a15,a15,d15,#0
-.L643:
+.L642:
 	ld.w	d15,[a15]4
-.L644:
+.L643:
 	st.w	[a2]4,d15
-.L645:
+.L644:
 	add	d1,#1
-.L449:
+.L448:
 	extr.u	d1,d1,#0,#16
 .L32:
 	jlt.u	d1,d0,.L33
-.L646:
+.L645:
 	j	.L34
 .L31:
 	jge.u	d4,#2,.L35
+.L646:
+	movh.a	a15,#@his(path_data)
+	lea	a15,[a15]@los(path_data)
 .L647:
-	movh.a	a15,#@his(path_data)
-	lea	a15,[a15]@los(path_data)
-.L648:
 	ld.w	d15,[a15]
-.L649:
+.L648:
 	st.w	[a4],d15
-.L650:
+.L649:
 	movh.a	a15,#@his(path_data)
 	lea	a15,[a15]@los(path_data)
-.L651:
+.L650:
 	ld.w	d15,[a15]4
-.L652:
+.L651:
 	st.w	[a4]4,d15
-.L653:
+.L652:
 	mov	d4,#1
-.L654:
+.L653:
 	j	.L36
 .L35:
 	add	d0,#-1
-.L446:
+.L445:
 	add	d5,d4,#-1
-.L450:
+.L449:
 	mov	d1,#0
-.L451:
+.L450:
 	j	.L37
 .L38:
 	mov	d2,#2
-.L655:
+.L654:
 	div.u	e2,d5,d2
-.L656:
+.L655:
 	madd	d2,d2,d1,d0
-.L657:
+.L656:
 	div.u	e6,d2,d5
-.L453:
+.L452:
 	mul	d15,d1,#8
 	addsc.a	a15,a4,d15,#0
-.L658:
+.L657:
 	mul	d15,d6,#24
-.L659:
+.L658:
 	movh.a	a2,#@his(path_data)
 	lea	a2,[a2]@los(path_data)
-.L660:
+.L659:
 	addsc.a	a2,a2,d15,#0
-.L661:
+.L660:
 	ld.w	d2,[a2]
-.L662:
+.L661:
 	st.w	[a15],d2
-.L663:
+.L662:
 	mul	d15,d1,#8
 	addsc.a	a2,a4,d15,#0
-.L664:
+.L663:
 	mul	d15,d6,#24
-.L665:
+.L664:
 	movh.a	a15,#@his(path_data)
 	lea	a15,[a15]@los(path_data)
-.L666:
+.L665:
 	addsc.a	a15,a15,d15,#0
-.L667:
+.L666:
 	ld.w	d15,[a15]4
-.L668:
+.L667:
 	st.w	[a2]4,d15
 .L330:
 	add	d1,#1
-.L452:
+.L451:
 	extr.u	d1,d1,#0,#16
 .L37:
 	jlt.u	d1,d4,.L38
 .L36:
 .L34:
 	mov	d2,d4
-.L454:
+.L453:
 	j	.L39
 .L39:
 .L29:
@@ -595,198 +595,198 @@ __path_display_collect_points_function_end:
 .L147:
 path_display_collect_bounds:	.type	func
 	sub.a	a10,#8
-.L455:
+.L454:
 	mov.aa	a12,a4
-.L456:
+.L455:
 	mov.aa	a13,a5
-.L457:
+.L456:
 	mov.aa	a14,a6
-.L458:
+.L457:
 	st.a	[a10],a7
-.L459:
+.L458:
 	mov.a	a15,#0
 	jeq.a	a15,a12,.L40
+.L672:
+	mov.a	a15,#0
 .L673:
-	mov.a	a15,#0
-.L674:
 	jeq.a	a15,a13,.L41
+.L674:
+	mov.a	a15,#0
 .L675:
-	mov.a	a15,#0
-.L676:
 	jeq.a	a15,a14,.L42
-.L677:
+.L676:
 	mov.a	a15,#0
-.L678:
+.L677:
 	jeq.a	a15,a7,.L43
-.L679:
+.L678:
 	movh.a	a15,#@his(path_data)
 	lea	a15,[a15]@los(path_data)
-.L680:
+.L679:
 	ld.hu	d15,[a15]7200
-.L681:
+.L680:
 	jne	d15,#0,.L44
 .L43:
 .L42:
 .L41:
 .L40:
 	mov	d2,#0
-.L682:
+.L681:
 	j	.L45
 .L44:
 	movh.a	a15,#@his(path_data)
 	lea	a15,[a15]@los(path_data)
-.L683:
+.L682:
 	ld.w	d15,[a15]
-.L684:
+.L683:
 	mov	d0,#4059
 	addih	d0,d0,#16457
-.L685:
+.L684:
 	mul.f	d15,d15,d0
-.L686:
+.L685:
 	movh	d0,#17204
-.L687:
+.L686:
 	div.f	d8,d15,d0
-.L460:
+.L459:
 	movh.a	a15,#@his(path_data)
 	lea	a15,[a15]@los(path_data)
-.L688:
+.L687:
 	ld.w	d15,[a15]4
-.L689:
+.L688:
 	mov	d0,#4059
 	addih	d0,d0,#16457
-.L690:
+.L689:
 	mul.f	d15,d15,d0
-.L691:
+.L690:
 	movh	d0,#17204
-.L692:
+.L691:
 	div.f	d9,d15,d0
-.L461:
+.L460:
 	mov	d10,#0
-.L462:
+.L461:
 	j	.L46
 .L47:
 	mul	d15,d10,#24
-.L693:
+.L692:
 	movh.a	a15,#@his(path_data)
 	lea	a15,[a15]@los(path_data)
-.L694:
+.L693:
 	addsc.a	a15,a15,d15,#0
-.L695:
+.L694:
 	ld.w	d0,[a15]
-.L696:
+.L695:
 	mov	d1,#4059
 	addih	d1,d1,#16457
-.L697:
+.L696:
 	mul.f	d0,d0,d1
-.L698:
+.L697:
 	movh	d1,#17204
-.L699:
+.L698:
 	div.f	d11,d0,d1
-.L464:
+.L463:
 	mul	d15,d10,#24
-.L700:
+.L699:
 	movh.a	a15,#@his(path_data)
 	lea	a15,[a15]@los(path_data)
-.L701:
+.L700:
 	addsc.a	a15,a15,d15,#0
-.L702:
+.L701:
 	ld.w	d15,[a15]4
-.L703:
+.L702:
 	mov	d0,#4059
 	addih	d0,d0,#16457
-.L704:
+.L703:
 	mul.f	d15,d15,d0
-.L705:
+.L704:
 	movh	d0,#17204
-.L706:
+.L705:
 	div.f	d15,d15,d0
-.L465:
+.L464:
 	sub.f	d15,d15,d9
-.L466:
+.L465:
 	mov	d0,#28016
 	addih	d0,d0,#19138
-.L707:
+.L706:
 	mul.f	d15,d15,d0
-.L708:
+.L707:
 	mov	d4,d8
-.L467:
+.L466:
 	call	cos
-.L468:
+.L467:
 	mul.f	d0,d15,d2
-.L469:
+.L468:
 	sub.f	d15,d11,d8
-.L709:
+.L708:
 	mov	d1,#28016
 	addih	d1,d1,#19138
-.L710:
+.L709:
 	mul.f	d1,d15,d1
-.L470:
+.L469:
 	jne	d10,#0,.L48
-.L711:
+.L710:
 	st.w	[a12],d0
-.L712:
+.L711:
 	st.w	[a13],d0
-.L713:
+.L712:
 	st.w	[a14],d1
-.L714:
+.L713:
 	ld.a	a15,[a10]
-.L471:
+.L470:
 	st.w	[a15],d1
-.L715:
+.L714:
 	j	.L49
 .L48:
 	ld.w	d15,[a12]
-.L716:
+.L715:
 	cmp.f	d15,d0,d15
 	extr.u	d15,d15,#0,#1
-.L717:
+.L716:
 	jeq	d15,#0,.L50
-.L718:
+.L717:
 	st.w	[a12],d0
 .L50:
 	ld.w	d15,[a13]
-.L719:
+.L718:
 	cmp.f	d15,d0,d15
 	extr.u	d15,d15,#2,#1
-.L720:
+.L719:
 	jeq	d15,#0,.L51
-.L721:
+.L720:
 	st.w	[a13],d0
 .L51:
 	ld.w	d15,[a14]
-.L722:
+.L721:
 	cmp.f	d15,d1,d15
 	extr.u	d15,d15,#0,#1
-.L723:
+.L722:
 	jeq	d15,#0,.L52
-.L724:
+.L723:
 	st.w	[a14],d1
 .L52:
 	ld.a	a15,[a10]
-.L472:
+.L471:
 	ld.w	d15,[a15]
-.L725:
+.L724:
 	cmp.f	d15,d1,d15
 	extr.u	d15,d15,#2,#1
-.L726:
+.L725:
 	jeq	d15,#0,.L53
-.L727:
+.L726:
 	st.w	[a15],d1
 .L53:
 .L49:
 	add	d10,#1
-.L463:
+.L462:
 	extr.u	d10,d10,#0,#16
 .L46:
 	movh.a	a15,#@his(path_data)
 	lea	a15,[a15]@los(path_data)
-.L728:
+.L727:
 	ld.hu	d15,[a15]7200
-.L729:
+.L728:
 	jlt.u	d10,d15,.L47
-.L730:
+.L729:
 	mov	d2,#1
-.L731:
+.L730:
 	j	.L54
 .L54:
 .L45:
@@ -809,121 +809,121 @@ path_display_bounds_changed:	.type	func
 	lea	a15,[a15]@los(map_bounds_valid)
 	ld.bu	d15,[a15]
 	jne	d15,#0,.L55
-.L736:
+.L735:
 	mov	d2,#1
-.L737:
+.L736:
 	j	.L56
 .L55:
 	movh.a	a15,#@his(map_min_x)
 	lea	a15,[a15]@los(map_min_x)
 	ld.w	d15,[a15]
-.L738:
+.L737:
 	sub.f	d0,d4,d15
-.L473:
+.L472:
 	mov	d15,#0
-.L739:
+.L738:
 	cmp.f	d15,d0,d15
 	extr.u	d15,d15,#0,#1
-.L740:
+.L739:
 	jeq	d15,#0,.L57
-.L741:
+.L740:
 	insn.t	d0,d0:31,d0:31
 .L57:
 	mov	d15,#28767
 	addih	d15,d15,#12425
-.L742:
+.L741:
 	cmp.f	d15,d0,d15
 	extr.u	d15,d15,#2,#1
-.L743:
+.L742:
 	jeq	d15,#0,.L58
-.L744:
+.L743:
 	mov	d2,#1
-.L745:
+.L744:
 	j	.L59
 .L58:
 	movh.a	a15,#@his(map_max_x)
 	lea	a15,[a15]@los(map_max_x)
 	ld.w	d15,[a15]
-.L746:
+.L745:
 	sub.f	d0,d5,d15
-.L747:
+.L746:
 	mov	d15,#0
-.L748:
+.L747:
 	cmp.f	d15,d0,d15
 	extr.u	d15,d15,#0,#1
-.L749:
+.L748:
 	jeq	d15,#0,.L60
-.L750:
+.L749:
 	insn.t	d0,d0:31,d0:31
 .L60:
 	mov	d15,#28767
 	addih	d15,d15,#12425
-.L751:
+.L750:
 	cmp.f	d15,d0,d15
 	extr.u	d15,d15,#2,#1
-.L752:
+.L751:
 	jeq	d15,#0,.L61
-.L753:
+.L752:
 	mov	d2,#1
-.L754:
+.L753:
 	j	.L62
 .L61:
 	movh.a	a15,#@his(map_min_y)
 	lea	a15,[a15]@los(map_min_y)
 	ld.w	d15,[a15]
-.L755:
+.L754:
 	sub.f	d0,d6,d15
-.L756:
+.L755:
 	mov	d15,#0
-.L757:
+.L756:
 	cmp.f	d15,d0,d15
 	extr.u	d15,d15,#0,#1
-.L758:
+.L757:
 	jeq	d15,#0,.L63
-.L759:
+.L758:
 	insn.t	d0,d0:31,d0:31
 .L63:
 	mov	d15,#28767
 	addih	d15,d15,#12425
-.L760:
+.L759:
 	cmp.f	d15,d0,d15
 	extr.u	d15,d15,#2,#1
-.L761:
+.L760:
 	jeq	d15,#0,.L64
-.L762:
+.L761:
 	mov	d2,#1
-.L763:
+.L762:
 	j	.L65
 .L64:
 	movh.a	a15,#@his(map_max_y)
 	lea	a15,[a15]@los(map_max_y)
 	ld.w	d15,[a15]
-.L764:
+.L763:
 	sub.f	d0,d7,d15
-.L765:
+.L764:
 	mov	d15,#0
-.L766:
+.L765:
 	cmp.f	d15,d0,d15
 	extr.u	d15,d15,#0,#1
-.L767:
+.L766:
 	jeq	d15,#0,.L66
-.L768:
+.L767:
 	insn.t	d0,d0:31,d0:31
 .L66:
 	mov	d15,#28767
 	addih	d15,d15,#12425
-.L769:
+.L768:
 	cmp.f	d15,d0,d15
 	extr.u	d15,d15,#2,#1
-.L770:
+.L769:
 	jeq	d15,#0,.L67
-.L771:
+.L770:
 	mov	d2,#1
-.L772:
+.L771:
 	j	.L68
 .L67:
 	mov	d2,#0
-.L773:
+.L772:
 	j	.L69
 .L69:
 .L68:
@@ -947,43 +947,43 @@ __path_display_bounds_changed_function_end:
 .L151:
 path_display_point_in_area:	.type	func
 	mov.a	a15,#0
-.L778:
+.L777:
 	jne.a	a15,a4,.L70
-.L779:
+.L778:
 	mov	d2,#0
-.L780:
+.L779:
 	j	.L71
 .L70:
 	mov	d2,#0
+.L780:
+	ld.h	d15,[a4]
 .L781:
-	ld.h	d15,[a4]
-.L782:
 	jlt	d15,#0,.L72
-.L783:
+.L782:
 	ld.h	d15,[a4]2
-.L784:
+.L783:
 	jlt	d15,#0,.L73
-.L785:
+.L784:
 	ld.h	d15,[a4]
-.L786:
+.L785:
 	movh.a	a15,#@his(display_width)
 	lea	a15,[a15]@los(display_width)
 	ld.hu	d0,[a15]0
-.L787:
+.L786:
 	extr	d0,d0,#0,#16
-.L788:
+.L787:
 	jge	d15,d0,.L74
-.L789:
+.L788:
 	ld.h	d15,[a4]2
-.L790:
+.L789:
 	movh.a	a15,#@his(display_height)
 	lea	a15,[a15]@los(display_height)
 	ld.hu	d0,[a15]0
-.L791:
+.L790:
 	extr	d0,d0,#0,#16
-.L792:
+.L791:
 	jge	d15,d0,.L75
-.L793:
+.L792:
 	mov	d2,#1
 .L75:
 .L74:
@@ -1008,78 +1008,78 @@ __path_display_point_in_area_function_end:
 .L153:
 path_display_draw_marker:	.type	func
 	sub.a	a10,#8
-.L474:
+.L473:
 	mov.aa	a15,a4
-.L475:
+.L474:
 	mov	d8,d4
-.L476:
+.L475:
 	mov	d9,#0
-.L477:
+.L476:
 	j	.L77
 .L78:
 	movh.a	a2,#@his(.2.ini)
 	lea	a2,[a2]@los(.2.ini)
 	ld.w	d0,[a2]
-.L798:
+.L797:
 	st.w	[a10],d0
-.L799:
+.L798:
 	ld.h	d0,[a15]
-.L800:
+.L799:
 	movh.a	a2,#@his(_999001_x_offsets)
 	lea	a2,[a2]@los(_999001_x_offsets)
-.L801:
+.L800:
 	addsc.a	a2,a2,d9,#0
 	ld.b	d1,[a2]0
-.L802:
+.L801:
 	add	d0,d1
-.L803:
+.L802:
 	st.h	[a10],d0
-.L804:
+.L803:
 	ld.h	d15,[a15]2
-.L805:
+.L804:
 	movh.a	a2,#@his(_999002_y_offsets)
 	lea	a2,[a2]@los(_999002_y_offsets)
-.L806:
+.L805:
 	addsc.a	a2,a2,d9,#0
 	ld.b	d0,[a2]0
-.L807:
+.L806:
 	add	d15,d0
-.L808:
+.L807:
 	st.h	[a10]2,d15
-.L809:
+.L808:
 	lea	a4,[a10]0
 	call	path_display_point_in_area
-.L810:
+.L809:
 	jeq	d2,#0,.L79
-.L811:
+.L810:
 	movh.a	a2,#@his(display_x)
 	lea	a2,[a2]@los(display_x)
 	ld.hu	d15,[a2]0
-.L812:
+.L811:
 	ld.h	d0,[a10]
-.L813:
+.L812:
 	add	d15,d0
-.L814:
+.L813:
 	extr.u	d4,d15,#0,#16
-.L815:
+.L814:
 	movh.a	a2,#@his(display_y)
 	lea	a2,[a2]@los(display_y)
 	ld.hu	d0,[a2]0
-.L816:
+.L815:
 	ld.h	d15,[a10]2
-.L817:
+.L816:
 	add	d0,d15
-.L818:
+.L817:
 	extr.u	d5,d0,#0,#16
-.L819:
+.L818:
 	mov	d6,d8
-.L478:
+.L477:
 	call	ips200_draw_point
 .L79:
 	add	d9,#1
 .L77:
 	jlt.u	d9,#5,.L78
-.L820:
+.L819:
 	ret
 .L356:
 	
@@ -1096,74 +1096,74 @@ __path_display_draw_marker_function_end:
 .L155:
 path_display_draw_segment:	.type	func
 	sub.a	a10,#8
-.L479:
+.L478:
 	mov.aa	a15,a4
-.L481:
+.L480:
 	mov.aa	a12,a5
-.L483:
+.L482:
 	mov	d15,d4
-.L484:
+.L483:
 	mov.a	a2,#0
 	jeq.a	a2,a15,.L80
-.L825:
+.L824:
 	mov.a	a2,#0
-.L826:
+.L825:
 	jne.a	a2,a12,.L81
 .L80:
 	j	.L82
 .L81:
 	mov.aa	a4,a15
 	call	path_display_point_in_area
-.L480:
+.L479:
 	jeq	d2,#0,.L83
-.L827:
+.L826:
 	mov.aa	a4,a12
-.L486:
-	call	path_display_point_in_area
-.L487:
-	jeq	d2,#0,.L84
-.L828:
-	st.h	[a10],d15
-.L829:
-	ld.h	d15,[a15]
 .L485:
+	call	path_display_point_in_area
+.L486:
+	jeq	d2,#0,.L84
+.L827:
+	st.h	[a10],d15
+.L828:
+	ld.h	d15,[a15]
+.L484:
 	movh.a	a2,#@his(display_x)
 	lea	a2,[a2]@los(display_x)
 	ld.hu	d0,[a2]0
-.L830:
+.L829:
 	add	d15,d0
-.L831:
+.L830:
 	extr.u	d4,d15,#0,#16
-.L832:
+.L831:
 	ld.h	d15,[a15]2
-.L833:
+.L832:
 	movh.a	a15,#@his(display_y)
-.L482:
+.L481:
 	lea	a15,[a15]@los(display_y)
 	ld.hu	d0,[a15]0
-.L834:
+.L833:
 	add	d15,d0
-.L835:
+.L834:
 	extr.u	d5,d15,#0,#16
-.L836:
+.L835:
 	ld.h	d15,[a12]
-.L837:
+.L836:
 	movh.a	a15,#@his(display_x)
 	lea	a15,[a15]@los(display_x)
 	ld.hu	d0,[a15]0
-.L838:
+.L837:
 	add	d15,d0
-.L839:
+.L838:
 	extr.u	d6,d15,#0,#16
-.L840:
+.L839:
 	ld.h	d15,[a12]2
-.L841:
+.L840:
 	movh.a	a15,#@his(display_y)
 	lea	a15,[a15]@los(display_y)
 	ld.hu	d0,[a15]0
-.L842:
+.L841:
 	add	d15,d0
-.L843:
+.L842:
 	extr.u	d7,d15,#0,#16
 	call	ips200_draw_line
 .L84:
@@ -1186,25 +1186,25 @@ __path_display_draw_segment_function_end:
 path_display_reset_cache:	.type	func
 	movh.a	a15,#@his(map_bounds_valid)
 	lea	a15,[a15]@los(map_bounds_valid)
-.L848:
+.L847:
 	mov	d15,#0
-.L849:
+.L848:
 	st.b	[a15],d15
-.L850:
+.L849:
 	movh.a	a15,#@his(rendered_point_count)
 	lea	a15,[a15]@los(rendered_point_count)
-.L851:
+.L850:
 	mov	d15,#0
-.L852:
+.L851:
 	st.h	[a15],d15
-.L853:
+.L852:
 	movh.a	a15,#@his(last_current_point_valid)
 	lea	a15,[a15]@los(last_current_point_valid)
-.L854:
+.L853:
 	mov	d15,#0
-.L855:
+.L854:
 	st.b	[a15],d15
-.L856:
+.L855:
 	ret
 .L368:
 	
@@ -1222,31 +1222,31 @@ __path_display_reset_cache_function_end:
 path_display_update_bounds_cache:	.type	func
 	movh.a	a15,#@his(map_min_x)
 	lea	a15,[a15]@los(map_min_x)
-.L861:
+.L860:
 	st.w	[a15],d4
-.L862:
+.L861:
 	movh.a	a15,#@his(map_max_x)
 	lea	a15,[a15]@los(map_max_x)
-.L863:
+.L862:
 	st.w	[a15],d5
-.L864:
+.L863:
 	movh.a	a15,#@his(map_min_y)
 	lea	a15,[a15]@los(map_min_y)
-.L865:
+.L864:
 	st.w	[a15],d6
-.L866:
+.L865:
 	movh.a	a15,#@his(map_max_y)
 	lea	a15,[a15]@los(map_max_y)
-.L867:
+.L866:
 	st.w	[a15],d7
-.L868:
+.L867:
 	movh.a	a15,#@his(map_bounds_valid)
 	lea	a15,[a15]@los(map_bounds_valid)
-.L869:
+.L868:
 	mov	d15,#1
-.L870:
+.L869:
 	st.b	[a15],d15
-.L871:
+.L870:
 	ret
 .L369:
 	
@@ -1263,49 +1263,49 @@ __path_display_update_bounds_cache_function_end:
 .L161:
 path_display_get_path_screen_point:	.type	func
 	sub.a	a10,#8
-.L488:
+.L487:
 	mov.aa	a5,a4
-.L491:
+.L490:
 	mov.a	a15,#0
 	jeq.a	a15,a5,.L85
-.L876:
+.L875:
 	movh.a	a15,#@his(path_data)
 	lea	a15,[a15]@los(path_data)
-.L877:
+.L876:
 	ld.hu	d15,[a15]7200
-.L878:
+.L877:
 	jlt.u	d4,d15,.L86
 .L85:
 	mov	d2,#0
-.L879:
+.L878:
 	j	.L87
 .L86:
 	mul	d15,d4,#24
+.L879:
+	movh.a	a15,#@his(path_data)
+	lea	a15,[a15]@los(path_data)
 .L880:
-	movh.a	a15,#@his(path_data)
-	lea	a15,[a15]@los(path_data)
+	addsc.a	a15,a15,d15,#0
 .L881:
-	addsc.a	a15,a15,d15,#0
-.L882:
 	ld.w	d15,[a15]
-.L883:
+.L882:
 	st.w	[a10],d15
-.L884:
+.L883:
 	mul	d15,d4,#24
-.L885:
+.L884:
 	movh.a	a15,#@his(path_data)
 	lea	a15,[a15]@los(path_data)
-.L886:
+.L885:
 	addsc.a	a15,a15,d15,#0
-.L887:
+.L886:
 	ld.w	d15,[a15]4
-.L888:
+.L887:
 	st.w	[a10]4,d15
-.L889:
+.L888:
 	lea	a4,[a10]0
-.L490:
-	call	gps_point_to_screen
 .L489:
+	call	gps_point_to_screen
+.L488:
 	j	.L88
 .L88:
 .L87:
@@ -1324,108 +1324,110 @@ __path_display_get_path_screen_point_function_end:
 ; Function path_display_draw_trajectory
 .L163:
 path_display_draw_trajectory:	.type	func
-	lea	a10,[a10]-2416
-.L492:
+	sub.a	a10,#16
+.L491:
 	mov	d9,d4
-.L494:
+.L493:
 	movh.a	a15,#@his(display_initialized)
 	lea	a15,[a15]@los(display_initialized)
 	ld.bu	d15,[a15]
 	jeq	d15,#0,.L89
-.L894:
+.L893:
 	movh.a	a15,#@his(path_data)
 	lea	a15,[a15]@los(path_data)
-.L895:
+.L894:
 	ld.hu	d15,[a15]7200
-.L896:
+.L895:
 	jne	d15,#0,.L90
 .L89:
 	j	.L91
 .L90:
-	lea	a4,[a10]0
+	movh.a	a4,#@his(_999003_gps_points)
+	lea	a4,[a4]@los(_999003_gps_points)
 	call	path_display_collect_points
-.L493:
+.L492:
 	mov	d10,d2
-.L496:
+.L495:
 	jne	d10,#0,.L92
-.L897:
+.L896:
 	j	.L93
 .L92:
 	mov	d4,#0
-.L898:
+.L897:
 	mov	d5,#0
-.L899:
+.L898:
 	movh.a	a15,#@his(display_width)
 	lea	a15,[a15]@los(display_width)
 	ld.hu	d0,[a15]0
-.L900:
+.L899:
 	extr	d6,d0,#0,#16
-.L901:
+.L900:
 	movh.a	a15,#@his(display_height)
 	lea	a15,[a15]@los(display_height)
 	ld.hu	d0,[a15]0
-.L902:
+.L901:
 	extr	d7,d0,#0,#16
 	call	gps_set_display_area
-.L495:
-	lea	a4,[a10]2400
+.L494:
+	lea	a4,[a10]0
+.L902:
+	lea	a5,[a10]4
 .L903:
-	lea	a5,[a10]2404
+	lea	a6,[a10]8
 .L904:
-	lea	a6,[a10]2408
-.L905:
-	lea	a7,[a10]2412
+	lea	a7,[a10]12
 	call	path_display_collect_bounds
-.L906:
+.L905:
 	jeq	d2,#0,.L94
+.L906:
+	ld.w	d4,[a10]
 .L907:
-	ld.w	d4,[a10]2400
+	ld.w	d5,[a10]4
 .L908:
-	ld.w	d5,[a10]2404
+	ld.w	d6,[a10]8
 .L909:
-	ld.w	d6,[a10]2408
-.L910:
-	ld.w	d7,[a10]2412
+	ld.w	d7,[a10]12
 	call	gps_set_xy_bounds
 .L94:
-	lea	a4,[a10]0
-.L911:
+	movh.a	a4,#@his(_999003_gps_points)
+	lea	a4,[a4]@los(_999003_gps_points)
+.L910:
 	mov	d4,d10
-.L497:
+.L496:
 	call	user_gps_transition
-.L498:
+.L497:
 	call	gps_clear_xy_bounds
-.L912:
+.L911:
 	jge.u	d10,#2,.L95
-.L913:
+.L912:
 	j	.L96
 .L95:
 	mov	d8,#1
-.L499:
+.L498:
 	j	.L97
 .L98:
 	add	d15,d8,#-1
-.L914:
+.L913:
 	mul	d15,d15,#4
+.L914:
+	movh.a	a15,#@his(screen_point_data)
+	lea	a15,[a15]@los(screen_point_data)
 .L915:
-	movh.a	a15,#@his(screen_point_data)
-	lea	a15,[a15]@los(screen_point_data)
-.L916:
 	addsc.a	a4,a15,d15,#0
-.L917:
+.L916:
 	mul	d15,d8,#4
-.L918:
+.L917:
 	movh.a	a15,#@his(screen_point_data)
 	lea	a15,[a15]@los(screen_point_data)
-.L919:
+.L918:
 	addsc.a	a5,a15,d15,#0
-.L920:
+.L919:
 	mov	d4,d9
-.L501:
-	call	path_display_draw_segment
-.L502:
-	add	d8,#1
 .L500:
+	call	path_display_draw_segment
+.L501:
+	add	d8,#1
+.L499:
 	extr.u	d8,d8,#0,#16
 .L97:
 	jlt.u	d8,d10,.L98
@@ -1448,30 +1450,30 @@ __path_display_draw_trajectory_function_end:
 .L165:
 path_display_draw_new_segments:	.type	func
 	sub.a	a10,#8
-.L503:
+.L502:
 	mov	d8,d4
-.L504:
+.L503:
 	movh.a	a15,#@his(display_initialized)
 	lea	a15,[a15]@los(display_initialized)
 	ld.bu	d15,[a15]
 	jeq	d15,#0,.L99
-.L925:
+.L924:
 	movh.a	a15,#@his(path_data)
 	lea	a15,[a15]@los(path_data)
-.L926:
+.L925:
 	ld.hu	d15,[a15]7200
-.L927:
+.L926:
 	jlt.u	d15,#2,.L100
-.L928:
+.L927:
 	movh.a	a15,#@his(rendered_point_count)
 	lea	a15,[a15]@los(rendered_point_count)
 	ld.hu	d15,[a15]0
-.L929:
+.L928:
 	movh.a	a15,#@his(path_data)
 	lea	a15,[a15]@los(path_data)
-.L930:
+.L929:
 	ld.hu	d0,[a15]7200
-.L931:
+.L930:
 	jlt.u	d15,d0,.L101
 .L100:
 .L99:
@@ -1480,13 +1482,13 @@ path_display_draw_new_segments:	.type	func
 	movh.a	a15,#@his(rendered_point_count)
 	lea	a15,[a15]@los(rendered_point_count)
 	ld.hu	d15,[a15]0
-.L932:
+.L931:
 	jlt.u	d15,#1,.L103
-.L933:
+.L932:
 	movh.a	a15,#@his(rendered_point_count)
 	lea	a15,[a15]@los(rendered_point_count)
 	ld.hu	d15,[a15]0
-.L505:
+.L504:
 	j	.L104
 .L103:
 	mov	d15,#1
@@ -1494,42 +1496,42 @@ path_display_draw_new_segments:	.type	func
 	j	.L105
 .L106:
 	add	d0,d15,#-1
-.L934:
+.L933:
 	extr.u	d4,d0,#0,#16
-.L935:
+.L934:
 	lea	a4,[a10]0
 	call	path_display_get_path_screen_point
-.L936:
+.L935:
 	jeq	d2,#0,.L107
-.L937:
+.L936:
 	lea	a4,[a10]4
 	mov	d4,d15
 	call	path_display_get_path_screen_point
-.L938:
+.L937:
 	jeq	d2,#0,.L108
-.L939:
+.L938:
 	lea	a4,[a10]0
-.L940:
+.L939:
 	lea	a5,[a10]4
-.L941:
+.L940:
 	mov	d4,d8
-.L507:
+.L506:
 	call	path_display_draw_segment
 .L108:
 .L107:
 	add	d15,#1
-.L506:
+.L505:
 	extr.u	d15,d15,#0,#16
 .L105:
 	movh.a	a15,#@his(path_data)
 	lea	a15,[a15]@los(path_data)
-.L942:
+.L941:
 	ld.hu	d0,[a15]7200
-.L943:
+.L942:
 	jlt.u	d15,d0,.L106
 .L102:
 	ret
-.L390:
+.L389:
 	
 __path_display_draw_new_segments_function_end:
 	.size	path_display_draw_new_segments,__path_display_draw_new_segments_function_end-path_display_draw_new_segments
@@ -1544,35 +1546,35 @@ __path_display_draw_new_segments_function_end:
 .L167:
 path_display_clear_current_marker:	.type	func
 	mov	d8,d4
-.L509:
+.L508:
 	movh.a	a15,#@his(last_current_point_valid)
 	lea	a15,[a15]@los(last_current_point_valid)
 	ld.bu	d15,[a15]
 	jeq	d15,#0,.L109
-.L948:
+.L947:
 	movh.a	a4,#@his(last_current_point)
 	lea	a4,[a4]@los(last_current_point)
 	call	path_display_point_in_area
-.L508:
+.L507:
 	jeq	d2,#0,.L110
-.L949:
+.L948:
 	movh.a	a4,#@his(last_current_point)
 	lea	a4,[a4]@los(last_current_point)
-.L950:
+.L949:
 	mov	d4,d8
-.L510:
+.L509:
 	call	path_display_draw_marker
 .L110:
 .L109:
 	movh.a	a15,#@his(last_current_point_valid)
 	lea	a15,[a15]@los(last_current_point_valid)
-.L951:
+.L950:
 	mov	d15,#0
-.L952:
+.L951:
 	st.b	[a15],d15
-.L953:
+.L952:
 	ret
-.L396:
+.L395:
 	
 __path_display_clear_current_marker_function_end:
 	.size	path_display_clear_current_marker,__path_display_clear_current_marker_function_end-path_display_clear_current_marker
@@ -1587,114 +1589,114 @@ __path_display_clear_current_marker_function_end:
 .L169:
 path_display_draw_current_position:	.type	func
 	sub.a	a10,#16
-.L511:
+.L510:
 	call	path_display_clear_current_marker
-.L512:
+.L511:
 	movh.a	a15,#@his(display_initialized)
 	lea	a15,[a15]@los(display_initialized)
 	ld.bu	d15,[a15]
 	jeq	d15,#0,.L111
-.L958:
+.L957:
 	movh.a	a15,#@his(gnss)
 	lea	a15,[a15]@los(gnss)
-.L959:
+.L958:
 	ld.bu	d15,[a15]8
-.L960:
+.L959:
 	jne	d15,#0,.L112
 .L111:
 	j	.L113
 .L112:
 	movh.a	a15,#@his(gnss)
 	lea	a15,[a15]@los(gnss)
-.L961:
+.L960:
 	ld.w	d15,[a15]22
-.L962:
+.L961:
 	st.w	[a10],d15
-.L963:
+.L962:
 	movh.a	a15,#@his(gnss)
 	lea	a15,[a15]@los(gnss)
-.L964:
+.L963:
 	ld.w	d15,[a15]26
-.L965:
+.L964:
 	st.w	[a10]4,d15
-.L966:
+.L965:
 	movh.a	a15,#@his(path_data)
 	lea	a15,[a15]@los(path_data)
-.L967:
+.L966:
 	ld.hu	d15,[a15]7200
-.L968:
+.L967:
 	jlt.u	d15,#1,.L114
-.L969:
+.L968:
 	lea	a4,[a10]0
-.L970:
+.L969:
 	lea	a5,[a10]8
 	call	gps_point_to_screen
-.L513:
+.L512:
 	j	.L115
 .L114:
 	mov	d4,#0
-.L971:
+.L970:
 	mov	d5,#0
-.L972:
+.L971:
 	movh.a	a15,#@his(display_width)
 	lea	a15,[a15]@los(display_width)
 	ld.hu	d15,[a15]0
-.L973:
+.L972:
 	extr	d6,d15,#0,#16
-.L974:
+.L973:
 	movh.a	a15,#@his(display_height)
 	lea	a15,[a15]@los(display_height)
 	ld.hu	d15,[a15]0
-.L975:
+.L974:
 	extr	d7,d15,#0,#16
 	call	gps_set_display_area
-.L976:
+.L975:
 	call	gps_clear_xy_bounds
-.L977:
+.L976:
 	lea	a4,[a10]0
-.L978:
+.L977:
 	mov	d4,#1
 	call	user_gps_transition
-.L979:
+.L978:
 	movh.a	a15,#@his(screen_point_data)
 	lea	a15,[a15]@los(screen_point_data)
-.L980:
+.L979:
 	ld.w	d15,[a15]
-.L981:
+.L980:
 	st.w	[a10]8,d15
-.L982:
+.L981:
 	mov	d2,#1
 .L115:
 	jeq	d2,#0,.L116
-.L983:
+.L982:
 	lea	a4,[a10]8
 	call	path_display_point_in_area
-.L514:
+.L513:
 	jeq	d2,#0,.L117
-.L984:
+.L983:
 	lea	a4,[a10]8
-.L985:
+.L984:
 	mov.u	d4,#63488
 	call	path_display_draw_marker
-.L986:
+.L985:
 	movh.a	a15,#@his(last_current_point)
 	lea	a15,[a15]@los(last_current_point)
-.L987:
+.L986:
 	ld.w	d15,[a10]8
-.L988:
+.L987:
 	st.w	[a15],d15
-.L989:
+.L988:
 	movh.a	a15,#@his(last_current_point_valid)
 	lea	a15,[a15]@los(last_current_point_valid)
-.L990:
+.L989:
 	mov	d15,#1
-.L991:
+.L990:
 	st.b	[a15],d15
 .L117:
 .L116:
 .L113:
 	ret
-.L398:
+.L397:
 	
 __path_display_draw_current_position_function_end:
 	.size	path_display_draw_current_position,__path_display_draw_current_position_function_end-path_display_draw_current_position
@@ -1711,52 +1713,52 @@ __path_display_draw_current_position_function_end:
 path_display_init:	.type	func
 	movh.a	a15,#@his(display_x)
 	lea	a15,[a15]@los(display_x)
-.L996:
+.L995:
 	mov	d15,#10
-.L997:
+.L996:
 	st.h	[a15],d15
-.L998:
+.L997:
 	movh.a	a15,#@his(display_y)
 	lea	a15,[a15]@los(display_y)
-.L999:
+.L998:
 	mov	d15,#10
-.L1000:
+.L999:
 	st.h	[a15],d15
-.L1001:
+.L1000:
 	movh.a	a15,#@his(display_width)
 	lea	a15,[a15]@los(display_width)
-.L1002:
+.L1001:
 	mov	d15,#300
-.L1003:
+.L1002:
 	st.h	[a15],d15
-.L1004:
+.L1003:
 	movh.a	a15,#@his(display_height)
 	lea	a15,[a15]@los(display_height)
-.L1005:
+.L1004:
 	mov	d15,#220
-.L1006:
+.L1005:
 	st.h	[a15],d15
-.L1007:
+.L1006:
 	call	path_display_clamp_area
-.L1008:
+.L1007:
 	movh.a	a15,#@his(display_border_dirty)
 	lea	a15,[a15]@los(display_border_dirty)
-.L1009:
+.L1008:
 	mov	d15,#1
-.L1010:
+.L1009:
 	st.b	[a15],d15
-.L1011:
+.L1010:
 	call	path_display_reset_cache
-.L1012:
+.L1011:
 	movh.a	a15,#@his(display_initialized)
 	lea	a15,[a15]@los(display_initialized)
-.L1013:
+.L1012:
 	mov	d15,#1
-.L1014:
+.L1013:
 	st.b	[a15],d15
-.L1015:
+.L1014:
 	ret
-.L403:
+.L402:
 	
 __path_display_init_function_end:
 	.size	path_display_init,__path_display_init_function_end-path_display_init
@@ -1775,65 +1777,65 @@ path_display_set_area:	.type	func
 	lea	a15,[a15]@los(display_x)
 	ld.hu	d15,[a15]0
 	jne	d15,d4,.L118
-.L1020:
+.L1019:
 	movh.a	a15,#@his(display_y)
 	lea	a15,[a15]@los(display_y)
 	ld.hu	d15,[a15]0
-.L1021:
+.L1020:
 	jne	d15,d5,.L119
-.L1022:
+.L1021:
 	movh.a	a15,#@his(display_width)
 	lea	a15,[a15]@los(display_width)
 	ld.hu	d15,[a15]0
-.L1023:
+.L1022:
 	jne	d15,d6,.L120
-.L1024:
+.L1023:
 	movh.a	a15,#@his(display_height)
 	lea	a15,[a15]@los(display_height)
 	ld.hu	d15,[a15]0
-.L1025:
+.L1024:
 	jeq	d15,d7,.L121
 .L120:
 .L119:
 .L118:
 	movh.a	a15,#@his(display_border_dirty)
 	lea	a15,[a15]@los(display_border_dirty)
-.L1026:
+.L1025:
 	mov	d15,#1
-.L1027:
+.L1026:
 	st.b	[a15],d15
 .L121:
 	movh.a	a15,#@his(display_x)
 	lea	a15,[a15]@los(display_x)
-.L1028:
+.L1027:
 	st.h	[a15],d4
-.L1029:
+.L1028:
 	movh.a	a15,#@his(display_y)
 	lea	a15,[a15]@los(display_y)
-.L1030:
+.L1029:
 	st.h	[a15],d5
-.L1031:
+.L1030:
 	movh.a	a15,#@his(display_width)
 	lea	a15,[a15]@los(display_width)
-.L1032:
+.L1031:
 	st.h	[a15],d6
-.L1033:
+.L1032:
 	movh.a	a15,#@his(display_height)
 	lea	a15,[a15]@los(display_height)
-.L1034:
+.L1033:
 	st.h	[a15],d7
-.L1035:
+.L1034:
 	call	path_display_clamp_area
-.L515:
+.L514:
 	movh.a	a15,#@his(display_initialized)
 	lea	a15,[a15]@los(display_initialized)
-.L1036:
+.L1035:
 	mov	d15,#1
-.L1037:
+.L1036:
 	st.b	[a15],d15
-.L1038:
+.L1037:
 	ret
-.L404:
+.L403:
 	
 __path_display_set_area_function_end:
 	.size	path_display_set_area,__path_display_set_area_function_end-path_display_set_area
@@ -1849,60 +1851,60 @@ __path_display_set_area_function_end:
 .L175:
 path_display_draw_map:	.type	func
 	sub.a	a10,#24
-.L516:
+.L515:
 	mov	d8,d4
-.L518:
+.L517:
 	mov	d9,#0
-.L519:
+.L518:
 	mov	d0,#0
-.L1043:
+.L1042:
 	st.w	[a10]4,d0
+.L1043:
+	mov	d15,#0
 .L1044:
-	mov	d15,#0
-.L1045:
 	st.w	[a10]8,d15
+.L1045:
+	mov	d15,#0
 .L1046:
-	mov	d15,#0
-.L1047:
 	st.w	[a10]12,d15
-.L1048:
+.L1047:
 	mov	d15,#0
-.L1049:
+.L1048:
 	st.w	[a10]16,d15
-.L1050:
+.L1049:
 	movh.a	a15,#@his(display_initialized)
 	lea	a15,[a15]@los(display_initialized)
 	ld.bu	d15,[a15]
 	jne	d15,#0,.L122
-.L1051:
+.L1050:
 	j	.L123
 .L122:
 	movh.a	a15,#@his(current_track_color)
 	lea	a15,[a15]@los(current_track_color)
-.L1052:
+.L1051:
 	st.h	[a15],d8
-.L1053:
+.L1052:
 	lea	a4,[a10]4
-.L1054:
+.L1053:
 	lea	a5,[a10]8
-.L1055:
+.L1054:
 	lea	a6,[a10]12
-.L1056:
+.L1055:
 	lea	a7,[a10]16
 	call	path_display_collect_bounds
-.L517:
+.L516:
 	mov	d10,d2
-.L521:
+.L520:
 	movh.a	a15,#@his(rendered_point_count)
 	lea	a15,[a15]@los(rendered_point_count)
 	ld.hu	d0,[a15]0
-.L1057:
+.L1056:
 	jlt.u	d0,#1,.L124
-.L1058:
+.L1057:
 	movh.a	a15,#@his(current_track_color)
 	lea	a15,[a15]@los(current_track_color)
 	ld.hu	d11,[a15]0
-.L522:
+.L521:
 	j	.L125
 .L124:
 	mov	d11,#0
@@ -1910,37 +1912,37 @@ path_display_draw_map:	.type	func
 	movh.a	a15,#@his(display_border_dirty)
 	lea	a15,[a15]@los(display_border_dirty)
 	ld.bu	d15,[a15]
-.L1059:
+.L1058:
 	jeq	d15,#0,.L126
-.L1060:
+.L1059:
 	mov	d9,#1
 .L126:
 	movh.a	a15,#@his(path_data)
 	lea	a15,[a15]@los(path_data)
-.L1061:
+.L1060:
 	ld.hu	d0,[a15]7200
-.L1062:
+.L1061:
 	movh.a	a15,#@his(rendered_point_count)
 	lea	a15,[a15]@los(rendered_point_count)
 	ld.hu	d1,[a15]0
-.L1063:
+.L1062:
 	jge.u	d0,d1,.L127
-.L1064:
+.L1063:
 	mov	d9,#1
 .L127:
 	jeq	d10,#0,.L128
-.L1065:
+.L1064:
 	ld.w	d4,[a10]4
-.L1066:
+.L1065:
 	ld.w	d5,[a10]8
-.L1067:
+.L1066:
 	ld.w	d6,[a10]12
-.L1068:
+.L1067:
 	ld.w	d7,[a10]16
 	call	path_display_bounds_changed
-.L520:
+.L519:
 	jeq	d2,#0,.L129
-.L1069:
+.L1068:
 	mov	d9,#1
 .L129:
 	j	.L130
@@ -1949,150 +1951,150 @@ path_display_draw_map:	.type	func
 	lea	a15,[a15]@los(map_bounds_valid)
 	ld.bu	d15,[a15]
 	jne	d15,#0,.L131
-.L1070:
+.L1069:
 	movh.a	a15,#@his(rendered_point_count)
 	lea	a15,[a15]@los(rendered_point_count)
 	ld.hu	d15,[a15]0
-.L1071:
+.L1070:
 	jlt.u	d15,#1,.L132
 .L131:
 	mov	d9,#1
 .L132:
 .L130:
 	jeq	d9,#0,.L133
-.L1072:
+.L1071:
 	movh.a	a15,#@his(display_width)
 	lea	a15,[a15]@los(display_width)
 	ld.hu	d15,[a15]0
 	jlt.u	d15,#3,.L134
-.L1073:
+.L1072:
 	movh.a	a15,#@his(display_height)
 	lea	a15,[a15]@los(display_height)
 	ld.hu	d15,[a15]0
-.L1074:
+.L1073:
 	jlt.u	d15,#3,.L135
-.L1075:
+.L1074:
 	mov	d15,#0
 	st.h	[a10],d15
-.L1076:
+.L1075:
 	movh.a	a15,#@his(display_x)
 	lea	a15,[a15]@los(display_x)
 	ld.hu	d15,[a15]0
-.L1077:
+.L1076:
 	add	d15,#1
-.L1078:
+.L1077:
 	extr.u	d4,d15,#0,#16
-.L1079:
+.L1078:
 	movh.a	a15,#@his(display_y)
 	lea	a15,[a15]@los(display_y)
 	ld.hu	d15,[a15]0
-.L1080:
+.L1079:
 	add	d15,#1
-.L1081:
+.L1080:
 	extr.u	d5,d15,#0,#16
-.L1082:
+.L1081:
 	movh.a	a15,#@his(display_x)
 	lea	a15,[a15]@los(display_x)
 	ld.hu	d15,[a15]0
-.L1083:
+.L1082:
 	movh.a	a15,#@his(display_width)
 	lea	a15,[a15]@los(display_width)
 	ld.hu	d0,[a15]0
-.L1084:
+.L1083:
 	add	d15,d0
-.L1085:
+.L1084:
 	add	d15,#-2
-.L1086:
+.L1085:
 	extr.u	d6,d15,#0,#16
-.L1087:
+.L1086:
 	movh.a	a15,#@his(display_y)
 	lea	a15,[a15]@los(display_y)
 	ld.hu	d15,[a15]0
-.L1088:
+.L1087:
 	movh.a	a15,#@his(display_height)
 	lea	a15,[a15]@los(display_height)
 	ld.hu	d0,[a15]0
-.L1089:
+.L1088:
 	add	d15,d0
-.L1090:
+.L1089:
 	add	d15,#-2
-.L1091:
+.L1090:
 	extr.u	d7,d15,#0,#16
 	call	path_display_fill_rect
 .L135:
 .L134:
 	call	path_display_draw_border
-.L1092:
+.L1091:
 	movh.a	a15,#@his(display_border_dirty)
 	lea	a15,[a15]@los(display_border_dirty)
-.L1093:
+.L1092:
 	mov	d15,#0
-.L1094:
+.L1093:
 	st.b	[a15],d15
-.L1095:
+.L1094:
 	call	path_display_reset_cache
-.L1096:
+.L1095:
 	jeq	d10,#0,.L136
-.L1097:
+.L1096:
 	mov	d4,d8
-.L523:
+.L522:
 	call	path_display_draw_trajectory
-.L524:
+.L523:
 	ld.w	d4,[a10]4
-.L1098:
+.L1097:
 	ld.w	d5,[a10]8
-.L1099:
+.L1098:
 	ld.w	d6,[a10]12
-.L1100:
+.L1099:
 	ld.w	d7,[a10]16
 	call	path_display_update_bounds_cache
-.L1101:
+.L1100:
 	movh.a	a15,#@his(rendered_point_count)
 	lea	a15,[a15]@los(rendered_point_count)
-.L1102:
+.L1101:
 	movh.a	a2,#@his(path_data)
 	lea	a2,[a2]@los(path_data)
-.L1103:
+.L1102:
 	ld.hu	d15,[a2]7200
-.L1104:
+.L1103:
 	st.h	[a15],d15
-.L1105:
+.L1104:
 	movh.a	a15,#@his(current_track_color)
 	lea	a15,[a15]@los(current_track_color)
 	ld.hu	d11,[a15]0
 .L136:
 	mov	d4,d11
 	call	path_display_draw_current_position
-.L1106:
+.L1105:
 	j	.L137
 .L133:
 	movh.a	a15,#@his(display_border_dirty)
 	lea	a15,[a15]@los(display_border_dirty)
-.L1107:
+.L1106:
 	mov	d15,#0
-.L1108:
+.L1107:
 	st.b	[a15],d15
-.L1109:
+.L1108:
 	mov	d4,d8
-.L525:
+.L524:
 	call	path_display_draw_new_segments
-.L526:
+.L525:
 	movh.a	a15,#@his(rendered_point_count)
 	lea	a15,[a15]@los(rendered_point_count)
-.L1110:
+.L1109:
 	movh.a	a2,#@his(path_data)
 	lea	a2,[a2]@los(path_data)
-.L1111:
+.L1110:
 	ld.hu	d15,[a2]7200
-.L1112:
+.L1111:
 	st.h	[a15],d15
-.L1113:
+.L1112:
 	mov	d4,d11
 	call	path_display_draw_current_position
 .L137:
 .L123:
 	ret
-.L409:
+.L408:
 	
 __path_display_draw_map_function_end:
 	.size	path_display_draw_map,__path_display_draw_map_function_end-path_display_draw_map
@@ -2204,6 +2206,12 @@ _999002_y_offsets:	.type	object
 .2.ini:	.type	object
 	.size	.2.ini,4
 	.space	4
+	.sdecl	'.bss.path_display._999003_gps_points',data,cluster('_999003_gps_points')
+	.sect	'.bss.path_display._999003_gps_points'
+	.align	4
+_999003_gps_points:	.type	object
+	.size	_999003_gps_points,2400
+	.space	2400
 	.calls	'path_display_fill_rect','ips200_draw_line'
 	.calls	'path_display_draw_border','ips200_draw_line'
 	.calls	'path_display_collect_bounds','cos'
@@ -2254,7 +2262,7 @@ _999002_y_offsets:	.type	object
 	.calls	'path_display_reset_cache','',0
 	.calls	'path_display_update_bounds_cache','',0
 	.calls	'path_display_get_path_screen_point','',8
-	.calls	'path_display_draw_trajectory','',2416
+	.calls	'path_display_draw_trajectory','',16
 	.calls	'path_display_draw_new_segments','',8
 	.calls	'path_display_clear_current_marker','',0
 	.calls	'path_display_draw_current_position','',16
@@ -22678,11 +22686,11 @@ _999002_y_offsets:	.type	object
 	.sdecl	'.debug_line',debug
 	.sect	'.debug_line'
 .L179:
-	.word	.L528-.L527
-.L527:
+	.word	.L527-.L526
+.L526:
 	.half	3
-	.word	.L530-.L529
-.L529:
+	.word	.L529-.L528
+.L528:
 	.byte	2,1,-4,9,10,0,1,1,1,1,0,0,0,1
 	.byte	'E:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Sfr\\\\TC38A\\\\_Reg',0
 	.byte	'E:\\ZNC\\AURIX-Studio-1.10.6\\tools\\Compilers\\Tasking_1.1r8\\ctc\\include\\',0
@@ -22769,8 +22777,8 @@ _999002_y_offsets:	.type	object
 	.byte	'zf_device_wifi_spi.h',0,3,0,0
 	.byte	'seekfree_assistant.h',0,11,0,0
 	.byte	'..\\code\\GPS\\path_recorder.h',0,0,0,0,0
-.L530:
-.L528:
+.L529:
+.L527:
 	.sdecl	'.debug_info',debug,cluster('path_display_clamp_area')
 	.sect	'.debug_info'
 .L180:
@@ -22798,138 +22806,138 @@ _999002_y_offsets:	.type	object
 	.sdecl	'.debug_line',debug,cluster('path_display_clamp_area')
 	.sect	'.debug_line'
 .L182:
-	.word	.L532-.L531
-.L531:
+	.word	.L531-.L530
+.L530:
 	.half	3
-	.word	.L534-.L533
-.L533:
+	.word	.L533-.L532
+.L532:
 	.byte	2,1,-4,9,10,0,1,1,1,1,0,0,0,1,0
 	.byte	'../code/GPS/path_display.c',0,0,0,0,0
-.L534:
+.L533:
 	.byte	5,15,7,0,5,2
 	.word	.L139
 	.byte	3,53,1,5,9,9
-	.half	.L535-.L139
+	.half	.L534-.L139
 	.byte	1,5,41,7,9
-	.half	.L536-.L535
+	.half	.L535-.L534
 	.byte	1,5,38,9
-	.half	.L537-.L536
+	.half	.L536-.L535
 	.byte	1,5,9,7,9
-	.half	.L2-.L537
+	.half	.L2-.L536
 	.byte	3,2,1,9
 	.half	.L3-.L2
 	.byte	3,3,1,5,22,9
-	.half	.L538-.L3
+	.half	.L537-.L3
 	.byte	1,5,5,9
+	.half	.L538-.L537
+	.byte	1,5,9,7,9
 	.half	.L539-.L538
-	.byte	1,5,9,7,9
+	.byte	3,2,1,5,21,9
 	.half	.L540-.L539
-	.byte	3,2,1,5,21,9
-	.half	.L541-.L540
 	.byte	1,5,38,9
+	.half	.L541-.L540
+	.byte	1,5,19,9
 	.half	.L542-.L541
-	.byte	1,5,19,9
-	.half	.L543-.L542
 	.byte	1,5,9,9
-	.half	.L5-.L543
+	.half	.L5-.L542
 	.byte	3,2,1,5,22,9
-	.half	.L544-.L5
+	.half	.L543-.L5
 	.byte	1,5,5,9
+	.half	.L544-.L543
+	.byte	1,5,9,7,9
 	.half	.L545-.L544
-	.byte	1,5,9,7,9
-	.half	.L546-.L545
 	.byte	3,2,1,5,21,9
-	.half	.L547-.L546
+	.half	.L546-.L545
 	.byte	1,5,39,9
-	.half	.L548-.L547
+	.half	.L547-.L546
 	.byte	1,5,19,9
-	.half	.L549-.L548
+	.half	.L548-.L547
 	.byte	1,5,15,9
-	.half	.L6-.L549
+	.half	.L6-.L548
 	.byte	3,3,1,5,5,9
-	.half	.L550-.L6
+	.half	.L549-.L6
 	.byte	1,5,9,7,9
+	.half	.L550-.L549
+	.byte	3,2,1,5,25,9
 	.half	.L551-.L550
-	.byte	3,2,1,5,25,9
+	.byte	1,5,23,9
 	.half	.L552-.L551
-	.byte	1,5,23,9
-	.half	.L553-.L552
 	.byte	1,5,15,9
-	.half	.L7-.L553
+	.half	.L7-.L552
 	.byte	3,2,1,5,5,9
-	.half	.L554-.L7
+	.half	.L553-.L7
 	.byte	1,5,9,7,9
+	.half	.L554-.L553
+	.byte	3,2,1,5,26,9
 	.half	.L555-.L554
-	.byte	3,2,1,5,26,9
+	.byte	1,5,24,9
 	.half	.L556-.L555
-	.byte	1,5,24,9
-	.half	.L557-.L556
 	.byte	1,5,17,9
-	.half	.L8-.L557
+	.half	.L8-.L556
 	.byte	3,3,1,5,37,9
-	.half	.L558-.L8
+	.half	.L557-.L8
 	.byte	1,5,27,9
-	.half	.L559-.L558
+	.half	.L558-.L557
 	.byte	1,5,61,9
+	.half	.L559-.L558
+	.byte	1,5,5,9
 	.half	.L560-.L559
-	.byte	1,5,5,9
+	.byte	1,5,9,7,9
 	.half	.L561-.L560
-	.byte	1,5,9,7,9
+	.byte	3,2,1,5,25,9
 	.half	.L562-.L561
-	.byte	3,2,1,5,25,9
+	.byte	1,5,44,9
 	.half	.L563-.L562
-	.byte	1,5,44,9
-	.half	.L564-.L563
 	.byte	1,5,42,9
+	.half	.L564-.L563
+	.byte	1,5,23,9
 	.half	.L565-.L564
-	.byte	1,5,23,9
-	.half	.L566-.L565
 	.byte	1,5,17,9
-	.half	.L9-.L566
+	.half	.L9-.L565
 	.byte	3,2,1,5,37,9
-	.half	.L567-.L9
+	.half	.L566-.L9
 	.byte	1,5,27,9
-	.half	.L568-.L567
+	.half	.L567-.L566
 	.byte	1,5,62,9
-	.half	.L569-.L568
+	.half	.L568-.L567
 	.byte	1,5,5,9
+	.half	.L569-.L568
+	.byte	1,5,9,7,9
 	.half	.L570-.L569
-	.byte	1,5,9,7,9
+	.byte	3,2,1,5,26,9
 	.half	.L571-.L570
-	.byte	3,2,1,5,26,9
-	.half	.L572-.L571
 	.byte	1,5,46,9
-	.half	.L573-.L572
+	.half	.L572-.L571
 	.byte	1,5,44,9
+	.half	.L573-.L572
+	.byte	1,5,24,9
 	.half	.L574-.L573
-	.byte	1,5,24,9
-	.half	.L575-.L574
 	.byte	1,5,15,9
-	.half	.L10-.L575
+	.half	.L10-.L574
 	.byte	3,3,1,5,5,9
-	.half	.L576-.L10
+	.half	.L575-.L10
 	.byte	1,5,9,7,9
-	.half	.L577-.L576
+	.half	.L576-.L575
 	.byte	3,2,1,5,25,9
-	.half	.L578-.L577
+	.half	.L577-.L576
 	.byte	1,5,23,9
-	.half	.L579-.L578
+	.half	.L578-.L577
 	.byte	1,5,15,9
-	.half	.L11-.L579
+	.half	.L11-.L578
 	.byte	3,2,1,5,5,9
-	.half	.L580-.L11
+	.half	.L579-.L11
 	.byte	1,5,9,7,9
-	.half	.L581-.L580
+	.half	.L580-.L579
 	.byte	3,2,1,5,26,9
-	.half	.L582-.L581
+	.half	.L581-.L580
 	.byte	1,5,24,9
-	.half	.L583-.L582
+	.half	.L582-.L581
 	.byte	1,5,1,9
-	.half	.L4-.L583
+	.half	.L4-.L582
 	.byte	3,2,1,7,9
 	.half	.L184-.L4
 	.byte	0,1,1
-.L532:
+.L531:
 	.sdecl	'.debug_ranges',debug,cluster('path_display_clamp_area')
 	.sect	'.debug_ranges'
 .L183:
@@ -22990,92 +22998,92 @@ _999002_y_offsets:	.type	object
 	.sdecl	'.debug_line',debug,cluster('path_display_fill_rect')
 	.sect	'.debug_line'
 .L187:
-	.word	.L585-.L584
-.L584:
+	.word	.L584-.L583
+.L583:
 	.half	3
-	.word	.L587-.L586
-.L586:
+	.word	.L586-.L585
+.L585:
 	.byte	2,1,-4,9,10,0,1,1,1,1,0,0,0,1,0
 	.byte	'../code/GPS/path_display.c',0,0,0,0,0
-.L587:
+.L586:
 	.byte	5,13,7,0,5,2
 	.word	.L141
 	.byte	3,223,0,1,5,15,9
-	.half	.L421-.L141
+	.half	.L420-.L141
 	.byte	3,4,1,5,9,9
-	.half	.L588-.L421
+	.half	.L587-.L420
 	.byte	1,5,41,7,9
-	.half	.L589-.L588
+	.half	.L588-.L587
 	.byte	1,5,38,9
-	.half	.L590-.L589
+	.half	.L589-.L588
 	.byte	1,5,9,7,9
-	.half	.L13-.L590
+	.half	.L13-.L589
 	.byte	3,2,1,5,5,9
 	.half	.L14-.L13
 	.byte	3,3,1,5,21,7,9
 	.half	.L314-.L14
 	.byte	3,2,1,5,17,9
-	.half	.L422-.L314
+	.half	.L421-.L314
 	.byte	3,1,1,5,15,9
-	.half	.L419-.L422
+	.half	.L418-.L421
 	.byte	3,1,1,5,5,9
-	.half	.L16-.L419
+	.half	.L16-.L418
 	.byte	3,2,1,5,21,7,9
 	.half	.L316-.L16
 	.byte	3,2,1,5,17,9
-	.half	.L423-.L316
+	.half	.L422-.L316
 	.byte	3,1,1,5,15,9
-	.half	.L591-.L423
+	.half	.L590-.L422
 	.byte	3,1,1,5,20,9
-	.half	.L17-.L591
+	.half	.L17-.L590
 	.byte	3,3,1,5,5,9
-	.half	.L424-.L17
+	.half	.L423-.L17
 	.byte	1,5,48,7,9
-	.half	.L425-.L424
+	.half	.L424-.L423
 	.byte	1,5,65,9
-	.half	.L426-.L425
+	.half	.L425-.L424
 	.byte	1,5,18,9
-	.half	.L18-.L426
+	.half	.L18-.L425
 	.byte	3,1,1,5,5,9
-	.half	.L427-.L18
+	.half	.L426-.L18
 	.byte	1,5,44,7,9
-	.half	.L428-.L427
+	.half	.L427-.L426
 	.byte	1,5,61,9
-	.half	.L429-.L428
+	.half	.L428-.L427
 	.byte	1,5,20,9
-	.half	.L19-.L429
+	.half	.L19-.L428
 	.byte	3,1,1,5,5,9
-	.half	.L592-.L19
+	.half	.L591-.L19
 	.byte	1,5,49,7,9
-	.half	.L593-.L592
+	.half	.L592-.L591
 	.byte	1,5,67,9
-	.half	.L594-.L593
+	.half	.L593-.L592
 	.byte	1,5,18,9
-	.half	.L20-.L594
+	.half	.L20-.L593
 	.byte	3,1,1,5,5,9
-	.half	.L595-.L20
+	.half	.L594-.L20
 	.byte	1,5,45,7,9
-	.half	.L596-.L595
+	.half	.L595-.L594
 	.byte	1,5,63,9
-	.half	.L597-.L596
+	.half	.L596-.L595
 	.byte	1,5,12,9
-	.half	.L21-.L597
+	.half	.L21-.L596
 	.byte	3,2,1,5,33,9
-	.half	.L430-.L21
+	.half	.L429-.L21
 	.byte	1,5,48,9
-	.half	.L23-.L430
+	.half	.L23-.L429
 	.byte	3,2,1,5,45,9
-	.half	.L432-.L23
+	.half	.L431-.L23
 	.byte	1,5,36,9
-	.half	.L598-.L432
+	.half	.L597-.L431
 	.byte	3,126,1,5,33,9
-	.half	.L22-.L598
+	.half	.L22-.L597
 	.byte	1,5,1,7,9
 	.half	.L15-.L22
 	.byte	3,4,1,7,9
 	.half	.L189-.L15
 	.byte	0,1,1
-.L585:
+.L584:
 	.sdecl	'.debug_ranges',debug,cluster('path_display_fill_rect')
 	.sect	'.debug_ranges'
 .L188:
@@ -23113,80 +23121,80 @@ _999002_y_offsets:	.type	object
 	.sdecl	'.debug_line',debug,cluster('path_display_draw_border')
 	.sect	'.debug_line'
 .L192:
-	.word	.L600-.L599
-.L599:
+	.word	.L599-.L598
+.L598:
 	.half	3
-	.word	.L602-.L601
-.L601:
+	.word	.L601-.L600
+.L600:
 	.byte	2,1,-4,9,10,0,1,1,1,1,0,0,0,1,0
 	.byte	'../code/GPS/path_display.c',0,0,0,0,0
-.L602:
+.L601:
 	.byte	5,13,7,0,5,2
 	.word	.L143
 	.byte	3,128,1,1,5,10,9
-	.half	.L435-.L143
+	.half	.L434-.L143
 	.byte	3,5,1,5,33,9
-	.half	.L603-.L435
+	.half	.L602-.L434
 	.byte	1,5,47,9
-	.half	.L604-.L603
+	.half	.L603-.L602
 	.byte	1,5,55,7,9
-	.half	.L605-.L604
+	.half	.L604-.L603
 	.byte	1,5,70,9
-	.half	.L606-.L605
+	.half	.L605-.L604
 	.byte	1,5,9,7,9
-	.half	.L24-.L606
+	.half	.L24-.L605
 	.byte	3,2,1,5,13,9
 	.half	.L26-.L24
 	.byte	3,3,1,5,25,9
-	.half	.L607-.L26
+	.half	.L606-.L26
 	.byte	1,5,23,9
-	.half	.L608-.L607
+	.half	.L607-.L606
 	.byte	1,5,39,9
-	.half	.L609-.L608
+	.half	.L608-.L607
 	.byte	1,5,13,9
-	.half	.L436-.L609
+	.half	.L435-.L608
 	.byte	3,1,1,5,25,9
-	.half	.L610-.L436
+	.half	.L609-.L435
 	.byte	1,5,23,9
-	.half	.L611-.L610
+	.half	.L610-.L609
 	.byte	1,5,40,9
-	.half	.L612-.L611
+	.half	.L611-.L610
 	.byte	1,5,62,9
-	.half	.L437-.L612
+	.half	.L436-.L611
 	.byte	3,2,1,5,22,9
-	.half	.L613-.L437
+	.half	.L612-.L436
 	.byte	1,5,33,9
-	.half	.L614-.L613
+	.half	.L613-.L612
 	.byte	1,5,51,9
-	.half	.L615-.L614
+	.half	.L614-.L613
 	.byte	1,5,54,9
-	.half	.L439-.L615
+	.half	.L438-.L614
 	.byte	3,1,1,5,22,9
-	.half	.L616-.L439
+	.half	.L615-.L438
 	.byte	1,5,47,9
-	.half	.L617-.L616
+	.half	.L616-.L615
 	.byte	1,5,62,9
-	.half	.L441-.L617
+	.half	.L440-.L616
 	.byte	3,1,1,5,22,9
-	.half	.L618-.L441
+	.half	.L617-.L440
 	.byte	1,5,33,9
-	.half	.L619-.L618
+	.half	.L618-.L617
 	.byte	1,5,44,9
-	.half	.L620-.L619
+	.half	.L619-.L618
 	.byte	1,5,55,9
-	.half	.L621-.L620
+	.half	.L620-.L619
 	.byte	1,5,54,9
-	.half	.L443-.L621
+	.half	.L442-.L620
 	.byte	3,1,1,5,29,9
-	.half	.L622-.L443
+	.half	.L621-.L442
 	.byte	1,5,47,9
-	.half	.L623-.L622
+	.half	.L622-.L621
 	.byte	1,5,1,9
-	.half	.L27-.L623
+	.half	.L27-.L622
 	.byte	3,1,1,7,9
 	.half	.L194-.L27
 	.byte	0,1,1
-.L600:
+.L599:
 	.sdecl	'.debug_ranges',debug,cluster('path_display_draw_border')
 	.sect	'.debug_ranges'
 .L193:
@@ -23246,128 +23254,128 @@ _999002_y_offsets:	.type	object
 	.sdecl	'.debug_line',debug,cluster('path_display_collect_points')
 	.sect	'.debug_line'
 .L197:
-	.word	.L625-.L624
-.L624:
+	.word	.L624-.L623
+.L623:
 	.half	3
-	.word	.L627-.L626
-.L626:
+	.word	.L626-.L625
+.L625:
 	.byte	2,1,-4,9,10,0,1,1,1,1,0,0,0,1,0
 	.byte	'../code/GPS/path_display.c',0,0,0,0,0
-.L627:
+.L626:
 	.byte	5,19,7,0,5,2
 	.word	.L145
 	.byte	3,153,1,1,5,28,9
-	.half	.L628-.L145
+	.half	.L627-.L145
 	.byte	1,5,5,9
-	.half	.L445-.L628
+	.half	.L444-.L627
 	.byte	3,1,1,5,16,7,9
-	.half	.L629-.L445
+	.half	.L628-.L444
 	.byte	3,2,1,5,9,9
-	.half	.L630-.L629
+	.half	.L629-.L628
 	.byte	1,5,18,9
-	.half	.L28-.L630
+	.half	.L28-.L629
 	.byte	3,3,1,5,24,9
-	.half	.L447-.L28
+	.half	.L446-.L28
 	.byte	3,1,1,5,5,9
-	.half	.L631-.L447
+	.half	.L630-.L446
 	.byte	1,5,22,7,9
-	.half	.L632-.L631
+	.half	.L631-.L630
 	.byte	3,2,1,5,5,9
-	.half	.L30-.L632
+	.half	.L30-.L631
 	.byte	3,3,1,5,16,7,9
-	.half	.L633-.L30
+	.half	.L632-.L30
 	.byte	3,2,1,5,38,9
-	.half	.L448-.L633
+	.half	.L447-.L632
 	.byte	1,5,23,9
-	.half	.L33-.L448
+	.half	.L33-.L447
 	.byte	3,2,1,5,57,9
-	.half	.L634-.L33
+	.half	.L633-.L33
 	.byte	1,5,41,9
+	.half	.L634-.L633
+	.byte	1,5,57,9
 	.half	.L635-.L634
-	.byte	1,5,57,9
+	.byte	1,5,60,9
 	.half	.L636-.L635
-	.byte	1,5,60,9
+	.byte	1,5,31,9
 	.half	.L637-.L636
-	.byte	1,5,31,9
+	.byte	1,5,23,9
 	.half	.L638-.L637
-	.byte	1,5,23,9
+	.byte	3,1,1,5,57,9
 	.half	.L639-.L638
-	.byte	3,1,1,5,57,9
+	.byte	1,5,41,9
 	.half	.L640-.L639
-	.byte	1,5,41,9
+	.byte	1,5,57,9
 	.half	.L641-.L640
-	.byte	1,5,57,9
-	.half	.L642-.L641
 	.byte	1,5,60,9
+	.half	.L642-.L641
+	.byte	1,5,31,9
 	.half	.L643-.L642
-	.byte	1,5,31,9
+	.byte	1,5,41,9
 	.half	.L644-.L643
-	.byte	1,5,41,9
-	.half	.L645-.L644
 	.byte	3,125,1,5,38,9
-	.half	.L32-.L645
+	.half	.L32-.L644
 	.byte	1,7,9
-	.half	.L646-.L32
+	.half	.L645-.L32
 	.byte	1,5,10,9
-	.half	.L31-.L646
+	.half	.L31-.L645
 	.byte	3,6,1,5,37,7,9
-	.half	.L647-.L31
+	.half	.L646-.L31
 	.byte	3,2,1,5,56,9
+	.half	.L647-.L646
+	.byte	1,5,27,9
 	.half	.L648-.L647
-	.byte	1,5,27,9
-	.half	.L649-.L648
 	.byte	1,5,37,9
-	.half	.L650-.L649
+	.half	.L649-.L648
 	.byte	3,1,1,5,56,9
-	.half	.L651-.L650
+	.half	.L650-.L649
 	.byte	1,5,27,9
-	.half	.L652-.L651
+	.half	.L651-.L650
 	.byte	1,5,22,9
-	.half	.L653-.L652
+	.half	.L652-.L651
 	.byte	3,1,1,5,65,9
-	.half	.L654-.L653
+	.half	.L653-.L652
 	.byte	3,126,1,5,50,9
-	.half	.L35-.L654
+	.half	.L35-.L653
 	.byte	3,6,1,5,52,9
-	.half	.L446-.L35
+	.half	.L445-.L35
 	.byte	3,1,1,5,16,9
-	.half	.L450-.L446
+	.half	.L449-.L445
 	.byte	3,2,1,5,38,9
-	.half	.L451-.L450
+	.half	.L450-.L449
 	.byte	1,5,61,9
-	.half	.L38-.L451
+	.half	.L38-.L450
 	.byte	3,2,1,5,59,9
-	.half	.L655-.L38
+	.half	.L654-.L38
 	.byte	1,5,44,9
-	.half	.L656-.L655
+	.half	.L655-.L654
 	.byte	1,5,66,9
-	.half	.L657-.L656
+	.half	.L656-.L655
 	.byte	1,5,23,9
-	.half	.L453-.L657
+	.half	.L452-.L656
 	.byte	3,1,1,5,57,9
-	.half	.L658-.L453
+	.half	.L657-.L452
 	.byte	1,5,41,9
+	.half	.L658-.L657
+	.byte	1,5,57,9
 	.half	.L659-.L658
-	.byte	1,5,57,9
+	.byte	1,5,64,9
 	.half	.L660-.L659
-	.byte	1,5,64,9
+	.byte	1,5,31,9
 	.half	.L661-.L660
-	.byte	1,5,31,9
-	.half	.L662-.L661
 	.byte	1,5,23,9
-	.half	.L663-.L662
+	.half	.L662-.L661
 	.byte	3,1,1,5,57,9
+	.half	.L663-.L662
+	.byte	1,5,41,9
 	.half	.L664-.L663
-	.byte	1,5,41,9
-	.half	.L665-.L664
 	.byte	1,5,57,9
-	.half	.L666-.L665
+	.half	.L665-.L664
 	.byte	1,5,64,9
-	.half	.L667-.L666
+	.half	.L666-.L665
 	.byte	1,5,31,9
-	.half	.L668-.L667
+	.half	.L667-.L666
 	.byte	1,5,41,9
-	.half	.L330-.L668
+	.half	.L330-.L667
 	.byte	3,124,1,5,38,9
 	.half	.L37-.L330
 	.byte	1,5,5,7,9
@@ -23377,7 +23385,7 @@ _999002_y_offsets:	.type	object
 	.byte	3,1,1,7,9
 	.half	.L199-.L29
 	.byte	0,1,1
-.L625:
+.L624:
 	.sdecl	'.debug_ranges',debug,cluster('path_display_collect_points')
 	.sect	'.debug_ranges'
 .L198:
@@ -23447,178 +23455,178 @@ _999002_y_offsets:	.type	object
 	.sdecl	'.debug_line',debug,cluster('path_display_collect_bounds')
 	.sect	'.debug_line'
 .L202:
-	.word	.L670-.L669
-.L669:
+	.word	.L669-.L668
+.L668:
 	.half	3
-	.word	.L672-.L671
-.L671:
+	.word	.L671-.L670
+.L670:
 	.byte	2,1,-4,9,10,0,1,1,1,1,0,0,0,1,0
 	.byte	'../code/GPS/path_display.c',0,0,0,0,0
-.L672:
+.L671:
 	.byte	5,14,7,0,5,2
 	.word	.L147
 	.byte	3,195,1,1,5,9,9
-	.half	.L459-.L147
+	.half	.L458-.L147
 	.byte	3,6,1,5,26,9
-	.half	.L673-.L459
+	.half	.L672-.L458
 	.byte	1,5,31,9
-	.half	.L674-.L673
+	.half	.L673-.L672
 	.byte	1,5,43,7,9
-	.half	.L675-.L674
+	.half	.L674-.L673
 	.byte	1,5,48,9
-	.half	.L676-.L675
+	.half	.L675-.L674
 	.byte	1,5,60,7,9
+	.half	.L676-.L675
+	.byte	1,5,65,9
 	.half	.L677-.L676
-	.byte	1,5,65,9
-	.half	.L678-.L677
 	.byte	1,5,77,7,9
-	.half	.L679-.L678
+	.half	.L678-.L677
 	.byte	1,5,86,9
-	.half	.L680-.L679
+	.half	.L679-.L678
 	.byte	1,5,99,9
-	.half	.L681-.L680
+	.half	.L680-.L679
 	.byte	1,5,16,7,9
-	.half	.L40-.L681
+	.half	.L40-.L680
 	.byte	3,2,1,5,9,9
-	.half	.L682-.L40
+	.half	.L681-.L40
 	.byte	1,5,23,9
-	.half	.L44-.L682
+	.half	.L44-.L681
 	.byte	3,3,1,5,42,9
-	.half	.L683-.L44
+	.half	.L682-.L44
 	.byte	1,5,54,9
-	.half	.L684-.L683
+	.half	.L683-.L682
 	.byte	1,5,52,9
-	.half	.L685-.L684
+	.half	.L684-.L683
 	.byte	1,5,64,9
+	.half	.L685-.L684
+	.byte	1,5,62,9
 	.half	.L686-.L685
-	.byte	1,5,62,9
-	.half	.L687-.L686
 	.byte	1,5,23,9
-	.half	.L460-.L687
+	.half	.L459-.L686
 	.byte	3,1,1,5,42,9
-	.half	.L688-.L460
+	.half	.L687-.L459
 	.byte	1,5,55,9
-	.half	.L689-.L688
+	.half	.L688-.L687
 	.byte	1,5,53,9
-	.half	.L690-.L689
+	.half	.L689-.L688
 	.byte	1,5,65,9
-	.half	.L691-.L690
+	.half	.L690-.L689
 	.byte	1,5,63,9
-	.half	.L692-.L691
+	.half	.L691-.L690
 	.byte	1,5,12,9
-	.half	.L461-.L692
+	.half	.L460-.L691
 	.byte	3,2,1,5,43,9
-	.half	.L462-.L461
+	.half	.L461-.L460
 	.byte	1,5,46,9
-	.half	.L47-.L462
+	.half	.L47-.L461
 	.byte	3,2,1,5,30,9
-	.half	.L693-.L47
+	.half	.L692-.L47
 	.byte	1,5,46,9
+	.half	.L693-.L692
+	.byte	1,5,49,9
 	.half	.L694-.L693
-	.byte	1,5,49,9
-	.half	.L695-.L694
 	.byte	1,5,61,9
-	.half	.L696-.L695
+	.half	.L695-.L694
 	.byte	1,5,59,9
-	.half	.L697-.L696
+	.half	.L696-.L695
 	.byte	1,5,71,9
-	.half	.L698-.L697
+	.half	.L697-.L696
 	.byte	1,5,69,9
-	.half	.L699-.L698
+	.half	.L698-.L697
 	.byte	1,5,46,9
-	.half	.L464-.L699
+	.half	.L463-.L698
 	.byte	3,1,1,5,30,9
-	.half	.L700-.L464
+	.half	.L699-.L463
 	.byte	1,5,46,9
-	.half	.L701-.L700
+	.half	.L700-.L699
 	.byte	1,5,49,9
-	.half	.L702-.L701
+	.half	.L701-.L700
 	.byte	1,5,62,9
-	.half	.L703-.L702
+	.half	.L702-.L701
 	.byte	1,5,60,9
-	.half	.L704-.L703
+	.half	.L703-.L702
 	.byte	1,5,72,9
-	.half	.L705-.L704
+	.half	.L704-.L703
 	.byte	1,5,70,9
-	.half	.L706-.L705
+	.half	.L705-.L704
 	.byte	1,5,40,9
-	.half	.L465-.L706
+	.half	.L464-.L705
 	.byte	3,1,1,5,20,9
-	.half	.L466-.L465
+	.half	.L465-.L464
 	.byte	1,5,33,9
-	.half	.L707-.L466
+	.half	.L706-.L465
 	.byte	1,5,57,9
-	.half	.L708-.L707
+	.half	.L707-.L706
 	.byte	1,5,51,9
-	.half	.L468-.L708
+	.half	.L467-.L707
 	.byte	1,5,40,9
-	.half	.L469-.L468
+	.half	.L468-.L467
 	.byte	3,1,1,5,20,9
-	.half	.L709-.L469
+	.half	.L708-.L468
 	.byte	1,5,33,9
-	.half	.L710-.L709
+	.half	.L709-.L708
 	.byte	1,5,9,9
-	.half	.L470-.L710
+	.half	.L469-.L709
 	.byte	3,2,1,5,20,7,9
-	.half	.L711-.L470
+	.half	.L710-.L469
 	.byte	3,2,1,9
+	.half	.L711-.L710
+	.byte	3,1,1,9
 	.half	.L712-.L711
 	.byte	3,1,1,9
 	.half	.L713-.L712
-	.byte	3,1,1,9
-	.half	.L714-.L713
 	.byte	3,1,1,5,23,9
-	.half	.L715-.L714
+	.half	.L714-.L713
 	.byte	3,125,1,5,21,9
-	.half	.L48-.L715
+	.half	.L48-.L714
 	.byte	3,7,1,5,19,9
-	.half	.L716-.L48
+	.half	.L715-.L48
 	.byte	1,5,13,9
+	.half	.L716-.L715
+	.byte	1,5,36,7,9
 	.half	.L717-.L716
-	.byte	1,5,36,7,9
-	.half	.L718-.L717
 	.byte	1,5,21,9
-	.half	.L50-.L718
+	.half	.L50-.L717
 	.byte	3,1,1,5,19,9
-	.half	.L719-.L50
+	.half	.L718-.L50
 	.byte	1,5,13,9
+	.half	.L719-.L718
+	.byte	1,5,36,7,9
 	.half	.L720-.L719
-	.byte	1,5,36,7,9
-	.half	.L721-.L720
 	.byte	1,5,21,9
-	.half	.L51-.L721
+	.half	.L51-.L720
 	.byte	3,1,1,5,19,9
-	.half	.L722-.L51
+	.half	.L721-.L51
 	.byte	1,5,13,9
+	.half	.L722-.L721
+	.byte	1,5,36,7,9
 	.half	.L723-.L722
-	.byte	1,5,36,7,9
-	.half	.L724-.L723
 	.byte	1,5,21,9
-	.half	.L52-.L724
+	.half	.L52-.L723
 	.byte	3,1,1,5,19,9
-	.half	.L725-.L52
+	.half	.L724-.L52
 	.byte	1,5,13,9
-	.half	.L726-.L725
+	.half	.L725-.L724
 	.byte	1,5,36,7,9
-	.half	.L727-.L726
+	.half	.L726-.L725
 	.byte	1,5,46,9
-	.half	.L49-.L727
+	.half	.L49-.L726
 	.byte	3,109,1,5,22,9
 	.half	.L46-.L49
 	.byte	1,5,31,9
-	.half	.L728-.L46
+	.half	.L727-.L46
 	.byte	1,5,43,9
-	.half	.L729-.L728
+	.half	.L728-.L727
 	.byte	1,5,12,7,9
-	.half	.L730-.L729
+	.half	.L729-.L728
 	.byte	3,23,1,5,5,9
-	.half	.L731-.L730
+	.half	.L730-.L729
 	.byte	1,5,1,9
-	.half	.L45-.L731
+	.half	.L45-.L730
 	.byte	3,1,1,7,9
 	.half	.L204-.L45
 	.byte	0,1,1
-.L670:
+.L669:
 	.sdecl	'.debug_ranges',debug,cluster('path_display_collect_bounds')
 	.sect	'.debug_ranges'
 .L203:
@@ -23668,118 +23676,118 @@ _999002_y_offsets:	.type	object
 	.sdecl	'.debug_line',debug,cluster('path_display_bounds_changed')
 	.sect	'.debug_line'
 .L207:
-	.word	.L733-.L732
-.L732:
+	.word	.L732-.L731
+.L731:
 	.half	3
-	.word	.L735-.L734
-.L734:
+	.word	.L734-.L733
+.L733:
 	.byte	2,1,-4,9,10,0,1,1,1,1,0,0,0,1,0
 	.byte	'../code/GPS/path_display.c',0,0,0,0,0
-.L735:
+.L734:
 	.byte	5,10,7,0,5,2
 	.word	.L149
 	.byte	3,239,1,1,5,16,9
-	.half	.L736-.L149
+	.half	.L735-.L149
 	.byte	3,2,1,5,9,9
-	.half	.L737-.L736
+	.half	.L736-.L735
 	.byte	1,5,21,9
-	.half	.L55-.L737
+	.half	.L55-.L736
 	.byte	3,3,1,5,19,9
-	.half	.L738-.L55
+	.half	.L737-.L55
 	.byte	1,5,17,9
-	.half	.L473-.L738
+	.half	.L472-.L737
 	.byte	3,1,1,5,15,9
-	.half	.L739-.L473
+	.half	.L738-.L472
 	.byte	1,5,5,9
+	.half	.L739-.L738
+	.byte	1,5,30,7,9
 	.half	.L740-.L739
-	.byte	1,5,30,7,9
-	.half	.L741-.L740
 	.byte	1,5,17,9
-	.half	.L57-.L741
+	.half	.L57-.L740
 	.byte	3,1,1,5,15,9
-	.half	.L742-.L57
+	.half	.L741-.L57
 	.byte	1,5,5,9
+	.half	.L742-.L741
+	.byte	1,5,33,7,9
 	.half	.L743-.L742
-	.byte	1,5,33,7,9
+	.byte	1,5,26,9
 	.half	.L744-.L743
-	.byte	1,5,26,9
-	.half	.L745-.L744
 	.byte	1,5,21,9
-	.half	.L58-.L745
+	.half	.L58-.L744
 	.byte	3,2,1,5,19,9
-	.half	.L746-.L58
+	.half	.L745-.L58
 	.byte	1,5,17,9
+	.half	.L746-.L745
+	.byte	3,1,1,5,15,9
 	.half	.L747-.L746
-	.byte	3,1,1,5,15,9
+	.byte	1,5,5,9
 	.half	.L748-.L747
-	.byte	1,5,5,9
+	.byte	1,5,30,7,9
 	.half	.L749-.L748
-	.byte	1,5,30,7,9
-	.half	.L750-.L749
 	.byte	1,5,17,9
-	.half	.L60-.L750
+	.half	.L60-.L749
 	.byte	3,1,1,5,15,9
-	.half	.L751-.L60
+	.half	.L750-.L60
 	.byte	1,5,5,9
+	.half	.L751-.L750
+	.byte	1,5,33,7,9
 	.half	.L752-.L751
-	.byte	1,5,33,7,9
+	.byte	1,5,26,9
 	.half	.L753-.L752
-	.byte	1,5,26,9
-	.half	.L754-.L753
 	.byte	1,5,21,9
-	.half	.L61-.L754
+	.half	.L61-.L753
 	.byte	3,2,1,5,19,9
-	.half	.L755-.L61
+	.half	.L754-.L61
 	.byte	1,5,17,9
+	.half	.L755-.L754
+	.byte	3,1,1,5,15,9
 	.half	.L756-.L755
-	.byte	3,1,1,5,15,9
+	.byte	1,5,5,9
 	.half	.L757-.L756
-	.byte	1,5,5,9
+	.byte	1,5,30,7,9
 	.half	.L758-.L757
-	.byte	1,5,30,7,9
-	.half	.L759-.L758
 	.byte	1,5,17,9
-	.half	.L63-.L759
+	.half	.L63-.L758
 	.byte	3,1,1,5,15,9
-	.half	.L760-.L63
+	.half	.L759-.L63
 	.byte	1,5,5,9
+	.half	.L760-.L759
+	.byte	1,5,33,7,9
 	.half	.L761-.L760
-	.byte	1,5,33,7,9
+	.byte	1,5,26,9
 	.half	.L762-.L761
-	.byte	1,5,26,9
-	.half	.L763-.L762
 	.byte	1,5,21,9
-	.half	.L64-.L763
+	.half	.L64-.L762
 	.byte	3,2,1,5,19,9
-	.half	.L764-.L64
+	.half	.L763-.L64
 	.byte	1,5,17,9
+	.half	.L764-.L763
+	.byte	3,1,1,5,15,9
 	.half	.L765-.L764
-	.byte	3,1,1,5,15,9
+	.byte	1,5,5,9
 	.half	.L766-.L765
-	.byte	1,5,5,9
-	.half	.L767-.L766
 	.byte	1,5,30,7,9
-	.half	.L768-.L767
+	.half	.L767-.L766
 	.byte	1,5,17,9
-	.half	.L66-.L768
+	.half	.L66-.L767
 	.byte	3,1,1,5,15,9
-	.half	.L769-.L66
+	.half	.L768-.L66
 	.byte	1,5,5,9
-	.half	.L770-.L769
+	.half	.L769-.L768
 	.byte	1,5,33,7,9
-	.half	.L771-.L770
+	.half	.L770-.L769
 	.byte	1,5,26,9
-	.half	.L772-.L771
+	.half	.L771-.L770
 	.byte	1,5,12,9
-	.half	.L67-.L772
+	.half	.L67-.L771
 	.byte	3,2,1,5,5,9
-	.half	.L773-.L67
+	.half	.L772-.L67
 	.byte	1,5,1,9
-	.half	.L56-.L773
+	.half	.L56-.L772
 	.byte	3,1,1,7,9
 	.half	.L209-.L56
 	.byte	0,1,1
-.L733:
+.L732:
 	.sdecl	'.debug_ranges',debug,cluster('path_display_bounds_changed')
 	.sect	'.debug_ranges'
 .L208:
@@ -23816,58 +23824,58 @@ _999002_y_offsets:	.type	object
 	.sdecl	'.debug_line',debug,cluster('path_display_point_in_area')
 	.sect	'.debug_line'
 .L212:
-	.word	.L775-.L774
-.L774:
+	.word	.L774-.L773
+.L773:
 	.half	3
-	.word	.L777-.L776
-.L776:
+	.word	.L776-.L775
+.L775:
 	.byte	2,1,-4,9,10,0,1,1,1,1,0,0,0,1,0
 	.byte	'../code/GPS/path_display.c',0,0,0,0,0
-.L777:
+.L776:
 	.byte	5,9,7,0,5,2
 	.word	.L151
 	.byte	3,137,2,1,5,5,9
-	.half	.L778-.L151
+	.half	.L777-.L151
 	.byte	1,5,16,7,9
-	.half	.L779-.L778
+	.half	.L778-.L777
 	.byte	3,2,1,5,9,9
-	.half	.L780-.L779
+	.half	.L779-.L778
 	.byte	1,5,45,9
-	.half	.L70-.L780
+	.half	.L70-.L779
 	.byte	3,5,1,5,18,9
-	.half	.L781-.L70
+	.half	.L780-.L70
 	.byte	3,126,1,5,13,9
+	.half	.L781-.L780
+	.byte	1,5,18,7,9
 	.half	.L782-.L781
-	.byte	1,5,18,7,9
-	.half	.L783-.L782
 	.byte	3,1,1,5,22,9
+	.half	.L783-.L782
+	.byte	1,5,18,7,9
 	.half	.L784-.L783
-	.byte	1,5,18,7,9
+	.byte	3,1,1,5,31,9
 	.half	.L785-.L784
-	.byte	3,1,1,5,31,9
+	.byte	1,5,24,9
 	.half	.L786-.L785
-	.byte	1,5,24,9
+	.byte	1,5,22,9
 	.half	.L787-.L786
-	.byte	1,5,22,9
-	.half	.L788-.L787
 	.byte	1,5,18,7,9
-	.half	.L789-.L788
+	.half	.L788-.L787
 	.byte	3,1,1,5,31,9
-	.half	.L790-.L789
+	.half	.L789-.L788
 	.byte	1,5,24,9
-	.half	.L791-.L790
+	.half	.L790-.L789
 	.byte	1,5,22,9
-	.half	.L792-.L791
+	.half	.L791-.L790
 	.byte	1,5,45,7,9
-	.half	.L793-.L792
+	.half	.L792-.L791
 	.byte	3,127,1,5,5,9
-	.half	.L72-.L793
+	.half	.L72-.L792
 	.byte	3,126,1,5,1,9
 	.half	.L71-.L72
 	.byte	3,4,1,7,9
 	.half	.L214-.L71
 	.byte	0,1,1
-.L775:
+.L774:
 	.sdecl	'.debug_ranges',debug,cluster('path_display_point_in_area')
 	.sect	'.debug_ranges'
 .L213:
@@ -23924,76 +23932,76 @@ _999002_y_offsets:	.type	object
 	.sdecl	'.debug_line',debug,cluster('path_display_draw_marker')
 	.sect	'.debug_line'
 .L217:
-	.word	.L795-.L794
-.L794:
+	.word	.L794-.L793
+.L793:
 	.half	3
-	.word	.L797-.L796
-.L796:
+	.word	.L796-.L795
+.L795:
 	.byte	2,1,-4,9,10,0,1,1,1,1,0,0,0,1,0
 	.byte	'../code/GPS/path_display.c',0,0,0,0,0
-.L797:
+.L796:
 	.byte	5,13,7,0,5,2
 	.word	.L153
 	.byte	3,148,2,1,5,12,9
-	.half	.L476-.L153
+	.half	.L475-.L153
 	.byte	3,6,1,5,24,9
-	.half	.L477-.L476
+	.half	.L476-.L475
 	.byte	1,5,35,9
-	.half	.L78-.L477
+	.half	.L78-.L476
 	.byte	3,2,1,5,33,9
-	.half	.L798-.L78
+	.half	.L797-.L78
 	.byte	1,5,26,9
+	.half	.L798-.L797
+	.byte	3,1,1,5,32,9
 	.half	.L799-.L798
-	.byte	3,1,1,5,32,9
+	.byte	1,5,41,9
 	.half	.L800-.L799
-	.byte	1,5,41,9
+	.byte	1,5,30,9
 	.half	.L801-.L800
-	.byte	1,5,30,9
+	.byte	1,5,13,9
 	.half	.L802-.L801
-	.byte	1,5,13,9
-	.half	.L803-.L802
 	.byte	1,5,26,9
-	.half	.L804-.L803
+	.half	.L803-.L802
 	.byte	3,1,1,5,32,9
+	.half	.L804-.L803
+	.byte	1,5,41,9
 	.half	.L805-.L804
-	.byte	1,5,41,9
-	.half	.L806-.L805
 	.byte	1,5,30,9
-	.half	.L807-.L806
+	.half	.L806-.L805
 	.byte	1,5,13,9
-	.half	.L808-.L807
+	.half	.L807-.L806
 	.byte	1,5,41,9
-	.half	.L809-.L808
+	.half	.L808-.L807
 	.byte	3,3,1,5,9,9
-	.half	.L810-.L809
+	.half	.L809-.L808
 	.byte	1,5,40,7,9
-	.half	.L811-.L810
+	.half	.L810-.L809
 	.byte	3,2,1,5,62,9
+	.half	.L811-.L810
+	.byte	1,5,50,9
 	.half	.L812-.L811
-	.byte	1,5,50,9
+	.byte	1,5,31,9
 	.half	.L813-.L812
-	.byte	1,5,31,9
-	.half	.L814-.L813
 	.byte	1,5,40,9
-	.half	.L815-.L814
+	.half	.L814-.L813
 	.byte	3,1,1,5,62,9
-	.half	.L816-.L815
+	.half	.L815-.L814
 	.byte	1,5,50,9
-	.half	.L817-.L816
+	.half	.L816-.L815
 	.byte	1,5,31,9
-	.half	.L818-.L817
+	.half	.L817-.L816
 	.byte	1,9
-	.half	.L819-.L818
+	.half	.L818-.L817
 	.byte	3,1,1,5,27,9
-	.half	.L79-.L819
+	.half	.L79-.L818
 	.byte	3,117,1,5,24,9
 	.half	.L77-.L79
 	.byte	1,5,1,7,9
-	.half	.L820-.L77
+	.half	.L819-.L77
 	.byte	3,14,1,7,9
-	.half	.L219-.L820
+	.half	.L219-.L819
 	.byte	0,1,1
-.L795:
+.L794:
 	.sdecl	'.debug_ranges',debug,cluster('path_display_draw_marker')
 	.sect	'.debug_ranges'
 .L218:
@@ -24034,72 +24042,72 @@ _999002_y_offsets:	.type	object
 	.sdecl	'.debug_line',debug,cluster('path_display_draw_segment')
 	.sect	'.debug_line'
 .L222:
-	.word	.L822-.L821
-.L821:
+	.word	.L821-.L820
+.L820:
 	.half	3
-	.word	.L824-.L823
-.L823:
+	.word	.L823-.L822
+.L822:
 	.byte	2,1,-4,9,10,0,1,1,1,1,0,0,0,1,0
 	.byte	'../code/GPS/path_display.c',0,0,0,0,0
-.L824:
+.L823:
 	.byte	5,13,7,0,5,2
 	.word	.L155
 	.byte	3,170,2,1,5,9,9
-	.half	.L484-.L155
+	.half	.L483-.L155
 	.byte	3,2,1,5,32,9
-	.half	.L825-.L484
+	.half	.L824-.L483
 	.byte	1,5,37,9
-	.half	.L826-.L825
+	.half	.L825-.L824
 	.byte	1,5,9,7,9
-	.half	.L80-.L826
+	.half	.L80-.L825
 	.byte	3,2,1,5,36,9
 	.half	.L81-.L80
 	.byte	3,3,1,5,9,9
-	.half	.L480-.L81
+	.half	.L479-.L81
 	.byte	1,5,36,7,9
-	.half	.L827-.L480
+	.half	.L826-.L479
 	.byte	3,1,1,5,35,9
-	.half	.L487-.L827
+	.half	.L486-.L826
 	.byte	1,5,26,7,9
-	.half	.L828-.L487
+	.half	.L827-.L486
 	.byte	3,6,1,5,46,9
-	.half	.L829-.L828
+	.half	.L828-.L827
 	.byte	3,124,1,5,52,9
-	.half	.L485-.L829
+	.half	.L484-.L828
 	.byte	1,5,50,9
-	.half	.L830-.L485
+	.half	.L829-.L484
 	.byte	1,5,26,9
-	.half	.L831-.L830
+	.half	.L830-.L829
 	.byte	1,5,46,9
-	.half	.L832-.L831
+	.half	.L831-.L830
 	.byte	3,1,1,5,52,9
-	.half	.L833-.L832
+	.half	.L832-.L831
 	.byte	1,5,50,9
+	.half	.L833-.L832
+	.byte	1,5,26,9
 	.half	.L834-.L833
-	.byte	1,5,26,9
+	.byte	1,5,44,9
 	.half	.L835-.L834
-	.byte	1,5,44,9
+	.byte	3,1,1,5,50,9
 	.half	.L836-.L835
-	.byte	3,1,1,5,50,9
+	.byte	1,5,48,9
 	.half	.L837-.L836
-	.byte	1,5,48,9
+	.byte	1,5,26,9
 	.half	.L838-.L837
-	.byte	1,5,26,9
-	.half	.L839-.L838
 	.byte	1,5,44,9
-	.half	.L840-.L839
+	.half	.L839-.L838
 	.byte	3,1,1,5,50,9
-	.half	.L841-.L840
+	.half	.L840-.L839
 	.byte	1,5,48,9
-	.half	.L842-.L841
+	.half	.L841-.L840
 	.byte	1,5,26,9
-	.half	.L843-.L842
+	.half	.L842-.L841
 	.byte	1,5,1,9
-	.half	.L82-.L843
+	.half	.L82-.L842
 	.byte	3,3,1,7,9
 	.half	.L224-.L82
 	.byte	0,1,1
-.L822:
+.L821:
 	.sdecl	'.debug_ranges',debug,cluster('path_display_draw_segment')
 	.sect	'.debug_ranges'
 .L223:
@@ -24131,38 +24139,38 @@ _999002_y_offsets:	.type	object
 	.sdecl	'.debug_line',debug,cluster('path_display_reset_cache')
 	.sect	'.debug_line'
 .L227:
-	.word	.L845-.L844
-.L844:
+	.word	.L844-.L843
+.L843:
 	.half	3
-	.word	.L847-.L846
-.L846:
+	.word	.L846-.L845
+.L845:
 	.byte	2,1,-4,9,10,0,1,1,1,1,0,0,0,1,0
 	.byte	'../code/GPS/path_display.c',0,0,0,0,0
-.L847:
+.L846:
 	.byte	5,5,7,0,5,2
 	.word	.L157
 	.byte	3,190,2,1,5,24,9
-	.half	.L848-.L157
+	.half	.L847-.L157
 	.byte	1,5,22,9
+	.half	.L848-.L847
+	.byte	1,5,5,9
 	.half	.L849-.L848
-	.byte	1,5,5,9
-	.half	.L850-.L849
 	.byte	3,1,1,5,28,9
-	.half	.L851-.L850
+	.half	.L850-.L849
 	.byte	1,5,26,9
-	.half	.L852-.L851
+	.half	.L851-.L850
 	.byte	1,5,5,9
-	.half	.L853-.L852
+	.half	.L852-.L851
 	.byte	3,1,1,5,32,9
-	.half	.L854-.L853
+	.half	.L853-.L852
 	.byte	1,5,30,9
-	.half	.L855-.L854
+	.half	.L854-.L853
 	.byte	1,5,1,9
-	.half	.L856-.L855
+	.half	.L855-.L854
 	.byte	3,1,1,7,9
-	.half	.L229-.L856
+	.half	.L229-.L855
 	.byte	0,1,1
-.L845:
+.L844:
 	.sdecl	'.debug_ranges',debug,cluster('path_display_reset_cache')
 	.sect	'.debug_ranges'
 .L228:
@@ -24206,42 +24214,42 @@ _999002_y_offsets:	.type	object
 	.sdecl	'.debug_line',debug,cluster('path_display_update_bounds_cache')
 	.sect	'.debug_line'
 .L232:
-	.word	.L858-.L857
-.L857:
+	.word	.L857-.L856
+.L856:
 	.half	3
-	.word	.L860-.L859
-.L859:
+	.word	.L859-.L858
+.L858:
 	.byte	2,1,-4,9,10,0,1,1,1,1,0,0,0,1,0
 	.byte	'../code/GPS/path_display.c',0,0,0,0,0
-.L860:
+.L859:
 	.byte	5,5,7,0,5,2
 	.word	.L159
 	.byte	3,197,2,1,5,15,9
-	.half	.L861-.L159
+	.half	.L860-.L159
 	.byte	1,5,5,9
+	.half	.L861-.L860
+	.byte	3,1,1,5,15,9
 	.half	.L862-.L861
-	.byte	3,1,1,5,15,9
+	.byte	1,5,5,9
 	.half	.L863-.L862
-	.byte	1,5,5,9
+	.byte	3,1,1,5,15,9
 	.half	.L864-.L863
-	.byte	3,1,1,5,15,9
+	.byte	1,5,5,9
 	.half	.L865-.L864
-	.byte	1,5,5,9
-	.half	.L866-.L865
 	.byte	3,1,1,5,15,9
-	.half	.L867-.L866
+	.half	.L866-.L865
 	.byte	1,5,5,9
-	.half	.L868-.L867
+	.half	.L867-.L866
 	.byte	3,1,1,5,24,9
-	.half	.L869-.L868
+	.half	.L868-.L867
 	.byte	1,5,22,9
-	.half	.L870-.L869
+	.half	.L869-.L868
 	.byte	1,5,1,9
-	.half	.L871-.L870
+	.half	.L870-.L869
 	.byte	3,1,1,7,9
-	.half	.L234-.L871
+	.half	.L234-.L870
 	.byte	0,1,1
-.L858:
+.L857:
 	.sdecl	'.debug_ranges',debug,cluster('path_display_update_bounds_cache')
 	.sect	'.debug_ranges'
 .L233:
@@ -24285,60 +24293,60 @@ _999002_y_offsets:	.type	object
 	.sdecl	'.debug_line',debug,cluster('path_display_get_path_screen_point')
 	.sect	'.debug_line'
 .L237:
-	.word	.L873-.L872
-.L872:
+	.word	.L872-.L871
+.L871:
 	.half	3
-	.word	.L875-.L874
-.L874:
+	.word	.L874-.L873
+.L873:
 	.byte	2,1,-4,9,10,0,1,1,1,1,0,0,0,1,0
 	.byte	'../code/GPS/path_display.c',0,0,0,0,0
-.L875:
+.L874:
 	.byte	5,14,7,0,5,2
 	.word	.L161
 	.byte	3,204,2,1,5,9,9
-	.half	.L491-.L161
+	.half	.L490-.L161
 	.byte	3,4,1,5,35,9
-	.half	.L876-.L491
+	.half	.L875-.L490
 	.byte	1,5,44,9
-	.half	.L877-.L876
+	.half	.L876-.L875
 	.byte	1,5,32,9
-	.half	.L878-.L877
+	.half	.L877-.L876
 	.byte	1,5,16,7,9
-	.half	.L85-.L878
+	.half	.L85-.L877
 	.byte	3,2,1,5,9,9
-	.half	.L879-.L85
+	.half	.L878-.L85
 	.byte	1,5,39,9
-	.half	.L86-.L879
+	.half	.L86-.L878
 	.byte	3,3,1,5,23,9
-	.half	.L880-.L86
+	.half	.L879-.L86
 	.byte	1,5,39,9
+	.half	.L880-.L879
+	.byte	1,5,46,9
 	.half	.L881-.L880
-	.byte	1,5,46,9
+	.byte	1,5,13,9
 	.half	.L882-.L881
-	.byte	1,5,13,9
+	.byte	1,5,39,9
 	.half	.L883-.L882
-	.byte	1,5,39,9
-	.half	.L884-.L883
 	.byte	3,1,1,5,23,9
-	.half	.L885-.L884
+	.half	.L884-.L883
 	.byte	1,5,39,9
-	.half	.L886-.L885
+	.half	.L885-.L884
 	.byte	1,5,46,9
-	.half	.L887-.L886
+	.half	.L886-.L885
 	.byte	1,5,13,9
-	.half	.L888-.L887
+	.half	.L887-.L886
 	.byte	1,5,33,9
-	.half	.L889-.L888
+	.half	.L888-.L887
 	.byte	3,1,1,5,38,9
-	.half	.L490-.L889
+	.half	.L489-.L888
 	.byte	1,5,5,9
-	.half	.L489-.L490
+	.half	.L488-.L489
 	.byte	1,5,1,9
-	.half	.L87-.L489
+	.half	.L87-.L488
 	.byte	3,1,1,7,9
 	.half	.L239-.L87
 	.byte	0,1,1
-.L873:
+.L872:
 	.sdecl	'.debug_ranges',debug,cluster('path_display_get_path_screen_point')
 	.sect	'.debug_ranges'
 .L238:
@@ -24346,7 +24354,7 @@ _999002_y_offsets:	.type	object
 	.sdecl	'.debug_info',debug,cluster('path_display_draw_trajectory')
 	.sect	'.debug_info'
 .L240:
-	.word	388
+	.word	390
 	.half	3
 	.word	.L241
 	.byte	4,1
@@ -24365,134 +24373,136 @@ _999002_y_offsets:	.type	object
 	.byte	5
 	.word	.L163,.L380
 	.byte	6
-	.byte	'gps_points',0,1,221,2,15
-	.word	.L382,.L383
-	.byte	6
+	.byte	'gps_points',0,1,221,2,22
+	.word	.L382
+	.byte	5,3
+	.word	_999003_gps_points
+	.byte	7
 	.byte	'min_x',0,1,222,2,12
-	.word	.L339,.L384
-	.byte	6
+	.word	.L339,.L383
+	.byte	7
 	.byte	'max_x',0,1,223,2,12
-	.word	.L339,.L385
-	.byte	6
+	.word	.L339,.L384
+	.byte	7
 	.byte	'min_y',0,1,224,2,12
-	.word	.L339,.L386
-	.byte	6
+	.word	.L339,.L385
+	.byte	7
 	.byte	'max_y',0,1,225,2,12
-	.word	.L339,.L387
-	.byte	6
+	.word	.L339,.L386
+	.byte	7
 	.byte	'count',0,1,226,2,12
-	.word	.L307,.L388
-	.byte	6
+	.word	.L307,.L387
+	.byte	7
 	.byte	'i',0,1,227,2,12
-	.word	.L307,.L389
+	.word	.L307,.L388
 	.byte	0,0,0
 	.sdecl	'.debug_abbrev',debug,cluster('path_display_draw_trajectory')
 	.sect	'.debug_abbrev'
 .L241:
 	.byte	1,17,1,3,8,37,8,27,8,19,15,128,70,12,85,6,16,6,0,0,2,61,0,24,16,0,0,3,46,1,3,8,58,15,59,15,57,15,54,15
 	.byte	39,12,17,1,18,1,64,6,0,0,4,5,0,3,8,58,15,59,15,57,15,73,16,2,6,0,0,5,11,1,17,1,18,1,0,0,6,52,0,3,8,58
-	.byte	15,59,15,57,15,73,16,2,6,0,0,0
+	.byte	15,59,15,57,15,73,16,2,9,0,0,7,52,0,3,8,58,15,59,15,57,15,73,16,2,6,0,0,0
 	.sdecl	'.debug_line',debug,cluster('path_display_draw_trajectory')
 	.sect	'.debug_line'
 .L242:
-	.word	.L891-.L890
-.L890:
+	.word	.L890-.L889
+.L889:
 	.half	3
-	.word	.L893-.L892
-.L892:
+	.word	.L892-.L891
+.L891:
 	.byte	2,1,-4,9,10,0,1,1,1,1,0,0,0,1,0
 	.byte	'../code/GPS/path_display.c',0,0,0,0,0
-.L893:
+.L892:
 	.byte	5,13,7,0,5,2
 	.word	.L163
 	.byte	3,218,2,1,5,10,9
-	.half	.L494-.L163
+	.half	.L493-.L163
 	.byte	3,10,1,5,33,9
-	.half	.L894-.L494
+	.half	.L893-.L493
 	.byte	1,5,42,9
-	.half	.L895-.L894
+	.half	.L894-.L893
 	.byte	1,5,55,9
-	.half	.L896-.L895
+	.half	.L895-.L894
 	.byte	1,5,9,7,9
-	.half	.L89-.L896
+	.half	.L89-.L895
 	.byte	3,2,1,5,41,9
 	.half	.L90-.L89
 	.byte	3,3,1,5,11,9
-	.half	.L493-.L90
+	.half	.L492-.L90
 	.byte	1,5,5,9
-	.half	.L496-.L493
+	.half	.L495-.L492
 	.byte	3,1,1,5,9,7,9
-	.half	.L897-.L496
+	.half	.L896-.L495
 	.byte	3,2,1,5,26,9
-	.half	.L92-.L897
+	.half	.L92-.L896
 	.byte	3,3,1,5,29,9
-	.half	.L898-.L92
+	.half	.L897-.L92
 	.byte	1,5,39,9
-	.half	.L899-.L898
+	.half	.L898-.L897
 	.byte	1,5,32,9
-	.half	.L900-.L899
+	.half	.L899-.L898
 	.byte	1,5,61,9
+	.half	.L900-.L899
+	.byte	1,5,54,9
 	.half	.L901-.L900
-	.byte	1,5,54,9
-	.half	.L902-.L901
 	.byte	1,5,38,9
-	.half	.L495-.L902
+	.half	.L494-.L901
 	.byte	3,1,1,5,46,9
-	.half	.L903-.L495
+	.half	.L902-.L494
 	.byte	1,5,54,9
-	.half	.L904-.L903
+	.half	.L903-.L902
 	.byte	1,5,62,9
-	.half	.L905-.L904
+	.half	.L904-.L903
 	.byte	1,5,5,9
-	.half	.L906-.L905
+	.half	.L905-.L904
 	.byte	1,5,27,7,9
-	.half	.L907-.L906
+	.half	.L906-.L905
 	.byte	3,2,1,5,34,9
-	.half	.L908-.L907
+	.half	.L907-.L906
 	.byte	1,5,41,9
-	.half	.L909-.L908
+	.half	.L908-.L907
 	.byte	1,5,48,9
-	.half	.L910-.L909
+	.half	.L909-.L908
 	.byte	1,5,25,9
-	.half	.L94-.L910
+	.half	.L94-.L909
 	.byte	3,2,1,5,37,9
-	.half	.L911-.L94
+	.half	.L910-.L94
 	.byte	1,5,24,9
-	.half	.L498-.L911
+	.half	.L497-.L910
 	.byte	3,1,1,5,5,9
-	.half	.L912-.L498
+	.half	.L911-.L497
 	.byte	3,2,1,5,9,7,9
-	.half	.L913-.L912
+	.half	.L912-.L911
 	.byte	3,2,1,5,12,9
-	.half	.L95-.L913
+	.half	.L95-.L912
 	.byte	3,3,1,5,27,9
-	.half	.L499-.L95
+	.half	.L498-.L95
 	.byte	1,5,56,9
-	.half	.L98-.L499
+	.half	.L98-.L498
 	.byte	3,2,1,5,53,9
-	.half	.L914-.L98
+	.half	.L913-.L98
 	.byte	1,5,36,9
-	.half	.L915-.L914
+	.half	.L914-.L913
 	.byte	1,5,53,9
+	.half	.L915-.L914
+	.byte	1,5,81,9
 	.half	.L916-.L915
-	.byte	1,5,81,9
-	.half	.L917-.L916
 	.byte	1,5,64,9
-	.half	.L918-.L917
+	.half	.L917-.L916
 	.byte	1,5,81,9
-	.half	.L919-.L918
+	.half	.L918-.L917
 	.byte	1,5,86,9
-	.half	.L920-.L919
+	.half	.L919-.L918
 	.byte	1,5,30,9
-	.half	.L502-.L920
+	.half	.L501-.L919
 	.byte	3,126,1,5,27,9
-	.half	.L97-.L502
+	.half	.L97-.L501
 	.byte	1,5,1,7,9
 	.half	.L91-.L97
 	.byte	3,4,1,7,9
 	.half	.L244-.L91
 	.byte	0,1,1
-.L891:
+.L890:
 	.sdecl	'.debug_ranges',debug,cluster('path_display_draw_trajectory')
 	.sect	'.debug_ranges'
 .L243:
@@ -24512,24 +24522,24 @@ _999002_y_offsets:	.type	object
 	.word	.L176
 	.byte	3
 	.byte	'path_display_draw_new_segments',0,1,131,3,13,1,1
-	.word	.L165,.L390,.L164
+	.word	.L165,.L389,.L164
 	.byte	4
 	.byte	'color',0,1,131,3,51
-	.word	.L307,.L391
+	.word	.L307,.L390
 	.byte	5
-	.word	.L165,.L390
+	.word	.L165,.L389
 	.byte	6
 	.byte	'start_index',0,1,133,3,12
-	.word	.L307,.L392
+	.word	.L307,.L391
 	.byte	6
 	.byte	'i',0,1,134,3,12
-	.word	.L307,.L393
+	.word	.L307,.L392
 	.byte	6
 	.byte	'start_point',0,1,135,3,18
-	.word	.L362,.L394
+	.word	.L362,.L393
 	.byte	6
 	.byte	'end_point',0,1,136,3,18
-	.word	.L362,.L395
+	.word	.L362,.L394
 	.byte	0,0,0
 	.sdecl	'.debug_abbrev',debug,cluster('path_display_draw_new_segments')
 	.sect	'.debug_abbrev'
@@ -24540,78 +24550,78 @@ _999002_y_offsets:	.type	object
 	.sdecl	'.debug_line',debug,cluster('path_display_draw_new_segments')
 	.sect	'.debug_line'
 .L247:
-	.word	.L922-.L921
-.L921:
+	.word	.L921-.L920
+.L920:
 	.half	3
-	.word	.L924-.L923
-.L923:
+	.word	.L923-.L922
+.L922:
 	.byte	2,1,-4,9,10,0,1,1,1,1,0,0,0,1,0
 	.byte	'../code/GPS/path_display.c',0,0,0,0,0
-.L924:
+.L923:
 	.byte	5,13,7,0,5,2
 	.word	.L165
 	.byte	3,130,3,1,5,10,9
-	.half	.L504-.L165
+	.half	.L503-.L165
 	.byte	3,7,1,5,33,9
-	.half	.L925-.L504
+	.half	.L924-.L503
 	.byte	1,5,42,9
-	.half	.L926-.L925
+	.half	.L925-.L924
 	.byte	1,5,55,9
-	.half	.L927-.L926
+	.half	.L926-.L925
 	.byte	1,5,63,7,9
-	.half	.L928-.L927
+	.half	.L927-.L926
 	.byte	1,5,87,9
-	.half	.L929-.L928
+	.half	.L928-.L927
 	.byte	1,5,96,9
-	.half	.L930-.L929
+	.half	.L929-.L928
 	.byte	1,5,84,9
-	.half	.L931-.L930
+	.half	.L930-.L929
 	.byte	1,5,9,7,9
-	.half	.L99-.L931
+	.half	.L99-.L930
 	.byte	3,2,1,5,20,9
 	.half	.L101-.L99
 	.byte	3,3,1,5,19,9
-	.half	.L932-.L101
+	.half	.L931-.L101
 	.byte	1,5,49,7,9
-	.half	.L933-.L932
+	.half	.L932-.L931
 	.byte	1,5,70,9
-	.half	.L505-.L933
+	.half	.L504-.L932
 	.byte	1,5,47,9
-	.half	.L103-.L505
+	.half	.L103-.L504
 	.byte	1,5,52,9
 	.half	.L104-.L103
 	.byte	3,2,1,5,59,9
 	.half	.L106-.L104
 	.byte	3,2,1,5,48,9
-	.half	.L934-.L106
+	.half	.L933-.L106
 	.byte	1,5,67,9
-	.half	.L935-.L934
+	.half	.L934-.L933
 	.byte	1,5,13,9
-	.half	.L936-.L935
+	.half	.L935-.L934
 	.byte	1,5,52,7,9
-	.half	.L937-.L936
+	.half	.L936-.L935
 	.byte	3,1,1,5,47,9
-	.half	.L938-.L937
+	.half	.L937-.L936
 	.byte	1,5,40,7,9
-	.half	.L939-.L938
+	.half	.L938-.L937
 	.byte	3,2,1,5,54,9
-	.half	.L940-.L939
+	.half	.L939-.L938
 	.byte	1,5,65,9
-	.half	.L941-.L940
+	.half	.L940-.L939
 	.byte	1,5,55,9
-	.half	.L107-.L941
+	.half	.L107-.L940
 	.byte	3,123,1,5,31,9
 	.half	.L105-.L107
 	.byte	1,5,40,9
-	.half	.L942-.L105
+	.half	.L941-.L105
 	.byte	1,5,52,9
-	.half	.L943-.L942
+	.half	.L942-.L941
 	.byte	1,5,1,7,9
-	.half	.L102-.L943
+	.half	.L102-.L942
 	.byte	3,8,1,7,9
 	.half	.L249-.L102
 	.byte	0,1,1
-.L922:
+.L921:
 	.sdecl	'.debug_ranges',debug,cluster('path_display_draw_new_segments')
 	.sect	'.debug_ranges'
 .L248:
@@ -24631,12 +24641,12 @@ _999002_y_offsets:	.type	object
 	.word	.L176
 	.byte	3
 	.byte	'path_display_clear_current_marker',0,1,155,3,13,1,1
-	.word	.L167,.L396,.L166
+	.word	.L167,.L395,.L166
 	.byte	4
 	.byte	'restore_color',0,1,155,3,54
-	.word	.L307,.L397
+	.word	.L307,.L396
 	.byte	5
-	.word	.L167,.L396
+	.word	.L167,.L395
 	.byte	0,0
 	.sdecl	'.debug_abbrev',debug,cluster('path_display_clear_current_marker')
 	.sect	'.debug_abbrev'
@@ -24646,38 +24656,38 @@ _999002_y_offsets:	.type	object
 	.sdecl	'.debug_line',debug,cluster('path_display_clear_current_marker')
 	.sect	'.debug_line'
 .L252:
-	.word	.L945-.L944
-.L944:
+	.word	.L944-.L943
+.L943:
 	.half	3
-	.word	.L947-.L946
-.L946:
+	.word	.L946-.L945
+.L945:
 	.byte	2,1,-4,9,10,0,1,1,1,1,0,0,0,1,0
 	.byte	'../code/GPS/path_display.c',0,0,0,0,0
-.L947:
+.L946:
 	.byte	5,13,7,0,5,2
 	.word	.L167
 	.byte	3,154,3,1,5,9,9
-	.half	.L509-.L167
+	.half	.L508-.L167
 	.byte	3,2,1,5,65,9
-	.half	.L948-.L509
+	.half	.L947-.L508
 	.byte	1,5,63,9
-	.half	.L508-.L948
+	.half	.L507-.L947
 	.byte	1,5,35,7,9
-	.half	.L949-.L508
+	.half	.L948-.L507
 	.byte	3,2,1,5,55,9
-	.half	.L950-.L949
+	.half	.L949-.L948
 	.byte	1,5,5,9
-	.half	.L109-.L950
+	.half	.L109-.L949
 	.byte	3,3,1,5,32,9
-	.half	.L951-.L109
+	.half	.L950-.L109
 	.byte	1,5,30,9
-	.half	.L952-.L951
+	.half	.L951-.L950
 	.byte	1,5,1,9
-	.half	.L953-.L952
+	.half	.L952-.L951
 	.byte	3,1,1,7,9
-	.half	.L254-.L953
+	.half	.L254-.L952
 	.byte	0,1,1
-.L945:
+.L944:
 	.sdecl	'.debug_ranges',debug,cluster('path_display_clear_current_marker')
 	.sect	'.debug_ranges'
 .L253:
@@ -24697,21 +24707,21 @@ _999002_y_offsets:	.type	object
 	.word	.L176
 	.byte	3
 	.byte	'path_display_draw_current_position',0,1,165,3,13,1,1
-	.word	.L169,.L398,.L168
+	.word	.L169,.L397,.L168
 	.byte	4
 	.byte	'restore_color',0,1,165,3,55
-	.word	.L307,.L399
+	.word	.L307,.L398
 	.byte	5
-	.word	.L169,.L398
+	.word	.L169,.L397
 	.byte	6
 	.byte	'current_gps',0,1,167,3,15
-	.word	.L378,.L400
+	.word	.L378,.L399
 	.byte	6
 	.byte	'current_point',0,1,168,3,18
-	.word	.L362,.L401
+	.word	.L362,.L400
 	.byte	6
 	.byte	'point_ready',0,1,169,3,11
-	.word	.L332,.L402
+	.word	.L332,.L401
 	.byte	0,0,0
 	.sdecl	'.debug_abbrev',debug,cluster('path_display_draw_current_position')
 	.sect	'.debug_abbrev'
@@ -24722,106 +24732,106 @@ _999002_y_offsets:	.type	object
 	.sdecl	'.debug_line',debug,cluster('path_display_draw_current_position')
 	.sect	'.debug_line'
 .L257:
-	.word	.L955-.L954
-.L954:
+	.word	.L954-.L953
+.L953:
 	.half	3
-	.word	.L957-.L956
-.L956:
+	.word	.L956-.L955
+.L955:
 	.byte	2,1,-4,9,10,0,1,1,1,1,0,0,0,1,0
 	.byte	'../code/GPS/path_display.c',0,0,0,0,0
-.L957:
+.L956:
 	.byte	5,13,7,0,5,2
 	.word	.L169
 	.byte	3,164,3,1,5,39,9
-	.half	.L511-.L169
+	.half	.L510-.L169
 	.byte	3,6,1,5,10,9
-	.half	.L512-.L511
+	.half	.L511-.L510
 	.byte	3,2,1,5,34,9
-	.half	.L958-.L512
+	.half	.L957-.L511
 	.byte	1,5,38,9
-	.half	.L959-.L958
+	.half	.L958-.L957
 	.byte	1,5,34,9
-	.half	.L960-.L959
+	.half	.L959-.L958
 	.byte	1,5,9,7,9
-	.half	.L111-.L960
+	.half	.L111-.L959
 	.byte	3,2,1,5,31,9
 	.half	.L112-.L111
 	.byte	3,3,1,5,35,9
-	.half	.L961-.L112
+	.half	.L960-.L112
 	.byte	1,5,21,9
-	.half	.L962-.L961
+	.half	.L961-.L960
 	.byte	1,5,31,9
-	.half	.L963-.L962
+	.half	.L962-.L961
 	.byte	3,1,1,5,35,9
+	.half	.L963-.L962
+	.byte	1,5,21,9
 	.half	.L964-.L963
-	.byte	1,5,21,9
+	.byte	1,5,9,9
 	.half	.L965-.L964
-	.byte	1,5,9,9
-	.half	.L966-.L965
 	.byte	3,2,1,5,18,9
-	.half	.L967-.L966
+	.half	.L966-.L965
 	.byte	1,5,5,9
-	.half	.L968-.L967
+	.half	.L967-.L966
 	.byte	1,5,44,7,9
-	.half	.L969-.L968
+	.half	.L968-.L967
 	.byte	3,2,1,5,58,9
-	.half	.L970-.L969
+	.half	.L969-.L968
 	.byte	1,5,72,9
-	.half	.L513-.L970
+	.half	.L512-.L969
 	.byte	1,5,30,9
-	.half	.L114-.L513
+	.half	.L114-.L512
 	.byte	3,4,1,5,33,9
-	.half	.L971-.L114
+	.half	.L970-.L114
 	.byte	1,5,43,9
-	.half	.L972-.L971
+	.half	.L971-.L970
 	.byte	1,5,36,9
-	.half	.L973-.L972
+	.half	.L972-.L971
 	.byte	1,5,65,9
-	.half	.L974-.L973
+	.half	.L973-.L972
 	.byte	1,5,58,9
+	.half	.L974-.L973
+	.byte	1,5,28,9
 	.half	.L975-.L974
-	.byte	1,5,28,9
+	.byte	3,1,1,5,30,9
 	.half	.L976-.L975
-	.byte	3,1,1,5,30,9
-	.half	.L977-.L976
 	.byte	3,1,1,5,43,9
-	.half	.L978-.L977
+	.half	.L977-.L976
 	.byte	1,5,25,9
-	.half	.L979-.L978
+	.half	.L978-.L977
 	.byte	3,1,1,5,42,9
-	.half	.L980-.L979
+	.half	.L979-.L978
 	.byte	1,5,23,9
-	.half	.L981-.L980
+	.half	.L980-.L979
 	.byte	1,5,21,9
-	.half	.L982-.L981
+	.half	.L981-.L980
 	.byte	3,1,1,5,9,9
-	.half	.L115-.L982
+	.half	.L115-.L981
 	.byte	3,3,1,5,52,7,9
-	.half	.L983-.L115
+	.half	.L982-.L115
 	.byte	1,5,50,9
-	.half	.L514-.L983
+	.half	.L513-.L982
 	.byte	1,5,35,7,9
-	.half	.L984-.L514
+	.half	.L983-.L513
 	.byte	3,2,1,5,50,9
+	.half	.L984-.L983
+	.byte	1,5,9,9
 	.half	.L985-.L984
-	.byte	1,5,9,9
-	.half	.L986-.L985
 	.byte	3,1,1,5,30,9
-	.half	.L987-.L986
+	.half	.L986-.L985
 	.byte	1,5,28,9
-	.half	.L988-.L987
+	.half	.L987-.L986
 	.byte	1,5,9,9
-	.half	.L989-.L988
+	.half	.L988-.L987
 	.byte	3,1,1,5,36,9
-	.half	.L990-.L989
+	.half	.L989-.L988
 	.byte	1,5,34,9
-	.half	.L991-.L990
+	.half	.L990-.L989
 	.byte	1,5,1,9
-	.half	.L113-.L991
+	.half	.L113-.L990
 	.byte	3,2,1,7,9
 	.half	.L259-.L113
 	.byte	0,1,1
-.L955:
+.L954:
 	.sdecl	'.debug_ranges',debug,cluster('path_display_draw_current_position')
 	.sect	'.debug_ranges'
 .L258:
@@ -24841,9 +24851,9 @@ _999002_y_offsets:	.type	object
 	.word	.L176
 	.byte	3
 	.byte	'path_display_init',0,1,202,3,6,1,1,1
-	.word	.L171,.L403,.L170
+	.word	.L171,.L402,.L170
 	.byte	4
-	.word	.L171,.L403
+	.word	.L171,.L402
 	.byte	0,0
 	.sdecl	'.debug_abbrev',debug,cluster('path_display_init')
 	.sect	'.debug_abbrev'
@@ -24853,60 +24863,60 @@ _999002_y_offsets:	.type	object
 	.sdecl	'.debug_line',debug,cluster('path_display_init')
 	.sect	'.debug_line'
 .L262:
-	.word	.L993-.L992
-.L992:
+	.word	.L992-.L991
+.L991:
 	.half	3
-	.word	.L995-.L994
-.L994:
+	.word	.L994-.L993
+.L993:
 	.byte	2,1,-4,9,10,0,1,1,1,1,0,0,0,1,0
 	.byte	'../code/GPS/path_display.c',0,0,0,0,0
-.L995:
+.L994:
 	.byte	5,5,7,0,5,2
 	.word	.L171
 	.byte	3,203,3,1,5,17,9
-	.half	.L996-.L171
+	.half	.L995-.L171
 	.byte	1,5,15,9
+	.half	.L996-.L995
+	.byte	1,5,5,9
 	.half	.L997-.L996
-	.byte	1,5,5,9
-	.half	.L998-.L997
 	.byte	3,1,1,5,17,9
-	.half	.L999-.L998
+	.half	.L998-.L997
 	.byte	1,5,15,9
+	.half	.L999-.L998
+	.byte	1,5,5,9
 	.half	.L1000-.L999
-	.byte	1,5,5,9
-	.half	.L1001-.L1000
 	.byte	3,1,1,5,21,9
-	.half	.L1002-.L1001
+	.half	.L1001-.L1000
 	.byte	1,5,19,9
-	.half	.L1003-.L1002
+	.half	.L1002-.L1001
 	.byte	1,5,5,9
-	.half	.L1004-.L1003
+	.half	.L1003-.L1002
 	.byte	3,1,1,5,22,9
-	.half	.L1005-.L1004
+	.half	.L1004-.L1003
 	.byte	1,5,20,9
-	.half	.L1006-.L1005
+	.half	.L1005-.L1004
 	.byte	1,5,28,9
+	.half	.L1006-.L1005
+	.byte	3,1,1,5,5,9
 	.half	.L1007-.L1006
-	.byte	3,1,1,5,5,9
-	.half	.L1008-.L1007
 	.byte	3,1,1,5,28,9
-	.half	.L1009-.L1008
+	.half	.L1008-.L1007
 	.byte	1,5,26,9
-	.half	.L1010-.L1009
+	.half	.L1009-.L1008
 	.byte	1,5,29,9
-	.half	.L1011-.L1010
+	.half	.L1010-.L1009
 	.byte	3,1,1,5,5,9
-	.half	.L1012-.L1011
+	.half	.L1011-.L1010
 	.byte	3,1,1,5,27,9
-	.half	.L1013-.L1012
+	.half	.L1012-.L1011
 	.byte	1,5,25,9
-	.half	.L1014-.L1013
+	.half	.L1013-.L1012
 	.byte	1,5,1,9
-	.half	.L1015-.L1014
+	.half	.L1014-.L1013
 	.byte	3,1,1,7,9
-	.half	.L264-.L1015
+	.half	.L264-.L1014
 	.byte	0,1,1
-.L993:
+.L992:
 	.sdecl	'.debug_ranges',debug,cluster('path_display_init')
 	.sect	'.debug_ranges'
 .L263:
@@ -24926,21 +24936,21 @@ _999002_y_offsets:	.type	object
 	.word	.L176
 	.byte	3
 	.byte	'path_display_set_area',0,1,214,3,6,1,1,1
-	.word	.L173,.L404,.L172
+	.word	.L173,.L403,.L172
 	.byte	4
 	.byte	'x',0,1,214,3,35
-	.word	.L307,.L405
+	.word	.L307,.L404
 	.byte	4
 	.byte	'y',0,1,214,3,45
-	.word	.L307,.L406
+	.word	.L307,.L405
 	.byte	4
 	.byte	'width',0,1,214,3,55
-	.word	.L307,.L407
+	.word	.L307,.L406
 	.byte	4
 	.byte	'height',0,1,214,3,69
-	.word	.L307,.L408
+	.word	.L307,.L407
 	.byte	5
-	.word	.L173,.L404
+	.word	.L173,.L403
 	.byte	0,0
 	.sdecl	'.debug_abbrev',debug,cluster('path_display_set_area')
 	.sect	'.debug_abbrev'
@@ -24950,64 +24960,64 @@ _999002_y_offsets:	.type	object
 	.sdecl	'.debug_line',debug,cluster('path_display_set_area')
 	.sect	'.debug_line'
 .L267:
-	.word	.L1017-.L1016
-.L1016:
+	.word	.L1016-.L1015
+.L1015:
 	.half	3
-	.word	.L1019-.L1018
-.L1018:
+	.word	.L1018-.L1017
+.L1017:
 	.byte	2,1,-4,9,10,0,1,1,1,1,0,0,0,1,0
 	.byte	'../code/GPS/path_display.c',0,0,0,0,0
-.L1019:
+.L1018:
 	.byte	5,9,7,0,5,2
 	.word	.L173
 	.byte	3,215,3,1,5,27,9
-	.half	.L1020-.L173
+	.half	.L1019-.L173
 	.byte	1,5,37,9
-	.half	.L1021-.L1020
+	.half	.L1020-.L1019
 	.byte	1,5,45,7,9
-	.half	.L1022-.L1021
+	.half	.L1021-.L1020
 	.byte	1,5,59,9
-	.half	.L1023-.L1022
+	.half	.L1022-.L1021
 	.byte	1,5,71,7,9
-	.half	.L1024-.L1023
+	.half	.L1023-.L1022
 	.byte	1,5,86,9
-	.half	.L1025-.L1024
+	.half	.L1024-.L1023
 	.byte	1,5,9,7,9
-	.half	.L118-.L1025
+	.half	.L118-.L1024
 	.byte	3,2,1,5,32,9
-	.half	.L1026-.L118
+	.half	.L1025-.L118
 	.byte	1,5,30,9
-	.half	.L1027-.L1026
+	.half	.L1026-.L1025
 	.byte	1,5,5,9
-	.half	.L121-.L1027
+	.half	.L121-.L1026
 	.byte	3,3,1,5,15,9
-	.half	.L1028-.L121
+	.half	.L1027-.L121
 	.byte	1,5,5,9
-	.half	.L1029-.L1028
+	.half	.L1028-.L1027
 	.byte	3,1,1,5,15,9
+	.half	.L1029-.L1028
+	.byte	1,5,5,9
 	.half	.L1030-.L1029
-	.byte	1,5,5,9
-	.half	.L1031-.L1030
 	.byte	3,1,1,5,19,9
-	.half	.L1032-.L1031
+	.half	.L1031-.L1030
 	.byte	1,5,5,9
-	.half	.L1033-.L1032
+	.half	.L1032-.L1031
 	.byte	3,1,1,5,20,9
-	.half	.L1034-.L1033
+	.half	.L1033-.L1032
 	.byte	1,5,28,9
-	.half	.L1035-.L1034
+	.half	.L1034-.L1033
 	.byte	3,1,1,5,5,9
-	.half	.L515-.L1035
+	.half	.L514-.L1034
 	.byte	3,1,1,5,27,9
-	.half	.L1036-.L515
+	.half	.L1035-.L514
 	.byte	1,5,25,9
-	.half	.L1037-.L1036
+	.half	.L1036-.L1035
 	.byte	1,5,1,9
-	.half	.L1038-.L1037
+	.half	.L1037-.L1036
 	.byte	3,1,1,7,9
-	.half	.L269-.L1038
+	.half	.L269-.L1037
 	.byte	0,1,1
-.L1017:
+.L1016:
 	.sdecl	'.debug_ranges',debug,cluster('path_display_set_area')
 	.sect	'.debug_ranges'
 .L268:
@@ -25027,33 +25037,33 @@ _999002_y_offsets:	.type	object
 	.word	.L176
 	.byte	3
 	.byte	'path_display_draw_map',0,1,229,3,6,1,1,1
-	.word	.L175,.L409,.L174
+	.word	.L175,.L408,.L174
 	.byte	4
 	.byte	'color',0,1,229,3,35
-	.word	.L307,.L410
+	.word	.L307,.L409
 	.byte	5
-	.word	.L175,.L409
+	.word	.L175,.L408
 	.byte	6
 	.byte	'need_full_redraw',0,1,231,3,11
-	.word	.L332,.L411
+	.word	.L332,.L410
 	.byte	6
 	.byte	'has_bounds',0,1,232,3,11
-	.word	.L332,.L412
+	.word	.L332,.L411
 	.byte	6
 	.byte	'min_x',0,1,233,3,12
-	.word	.L339,.L413
+	.word	.L339,.L412
 	.byte	6
 	.byte	'max_x',0,1,234,3,12
-	.word	.L339,.L414
+	.word	.L339,.L413
 	.byte	6
 	.byte	'min_y',0,1,235,3,12
-	.word	.L339,.L415
+	.word	.L339,.L414
 	.byte	6
 	.byte	'max_y',0,1,236,3,12
-	.word	.L339,.L416
+	.word	.L339,.L415
 	.byte	6
 	.byte	'marker_restore_color',0,1,237,3,12
-	.word	.L307,.L417
+	.word	.L307,.L416
 	.byte	0,0,0
 	.sdecl	'.debug_abbrev',debug,cluster('path_display_draw_map')
 	.sect	'.debug_abbrev'
@@ -25064,204 +25074,204 @@ _999002_y_offsets:	.type	object
 	.sdecl	'.debug_line',debug,cluster('path_display_draw_map')
 	.sect	'.debug_line'
 .L272:
-	.word	.L1040-.L1039
-.L1039:
+	.word	.L1039-.L1038
+.L1038:
 	.half	3
-	.word	.L1042-.L1041
-.L1041:
+	.word	.L1041-.L1040
+.L1040:
 	.byte	2,1,-4,9,10,0,1,1,1,1,0,0,0,1,0
 	.byte	'../code/GPS/path_display.c',0,0,0,0,0
-.L1042:
+.L1041:
 	.byte	5,6,7,0,5,2
 	.word	.L175
 	.byte	3,228,3,1,5,28,9
-	.half	.L518-.L175
+	.half	.L517-.L175
 	.byte	3,2,1,5,20,9
-	.half	.L519-.L518
+	.half	.L518-.L517
 	.byte	3,2,1,5,18,9
-	.half	.L1043-.L519
+	.half	.L1042-.L518
 	.byte	1,5,20,9
+	.half	.L1043-.L1042
+	.byte	3,1,1,5,18,9
 	.half	.L1044-.L1043
-	.byte	3,1,1,5,18,9
+	.byte	1,5,20,9
 	.half	.L1045-.L1044
-	.byte	1,5,20,9
+	.byte	3,1,1,5,18,9
 	.half	.L1046-.L1045
-	.byte	3,1,1,5,18,9
-	.half	.L1047-.L1046
 	.byte	1,5,20,9
-	.half	.L1048-.L1047
+	.half	.L1047-.L1046
 	.byte	3,1,1,5,18,9
-	.half	.L1049-.L1048
+	.half	.L1048-.L1047
 	.byte	1,5,10,9
-	.half	.L1050-.L1049
+	.half	.L1049-.L1048
 	.byte	3,3,1,5,9,9
-	.half	.L1051-.L1050
+	.half	.L1050-.L1049
 	.byte	3,2,1,5,5,9
-	.half	.L122-.L1051
+	.half	.L122-.L1050
 	.byte	3,3,1,5,25,9
-	.half	.L1052-.L122
+	.half	.L1051-.L122
 	.byte	1,5,47,9
-	.half	.L1053-.L1052
+	.half	.L1052-.L1051
 	.byte	3,1,1,5,55,9
-	.half	.L1054-.L1053
+	.half	.L1053-.L1052
 	.byte	1,5,63,9
-	.half	.L1055-.L1054
+	.half	.L1054-.L1053
 	.byte	1,5,71,9
-	.half	.L1056-.L1055
+	.half	.L1055-.L1054
 	.byte	1,5,16,9
-	.half	.L517-.L1056
+	.half	.L516-.L1055
 	.byte	1,5,29,9
-	.half	.L521-.L517
+	.half	.L520-.L516
 	.byte	3,1,1,5,28,9
-	.half	.L1057-.L521
+	.half	.L1056-.L520
 	.byte	1,5,58,7,9
-	.half	.L1058-.L1057
+	.half	.L1057-.L1056
 	.byte	1,5,78,9
-	.half	.L522-.L1058
+	.half	.L521-.L1057
 	.byte	1,5,56,9
-	.half	.L124-.L522
+	.half	.L124-.L521
 	.byte	1,5,9,9
 	.half	.L125-.L124
 	.byte	3,2,1,5,5,9
-	.half	.L1059-.L125
+	.half	.L1058-.L125
 	.byte	1,5,26,7,9
-	.half	.L1060-.L1059
+	.half	.L1059-.L1058
 	.byte	3,2,1,5,9,9
-	.half	.L126-.L1060
+	.half	.L126-.L1059
 	.byte	3,2,1,5,18,9
-	.half	.L1061-.L126
+	.half	.L1060-.L126
 	.byte	1,5,33,9
-	.half	.L1062-.L1061
+	.half	.L1061-.L1060
 	.byte	1,5,5,9
-	.half	.L1063-.L1062
+	.half	.L1062-.L1061
 	.byte	1,5,26,7,9
-	.half	.L1064-.L1063
+	.half	.L1063-.L1062
 	.byte	3,2,1,5,5,9
-	.half	.L127-.L1064
+	.half	.L127-.L1063
 	.byte	3,2,1,5,41,7,9
-	.half	.L1065-.L127
+	.half	.L1064-.L127
 	.byte	3,2,1,5,48,9
-	.half	.L1066-.L1065
+	.half	.L1065-.L1064
 	.byte	1,5,55,9
-	.half	.L1067-.L1066
+	.half	.L1066-.L1065
 	.byte	1,5,62,9
-	.half	.L1068-.L1067
+	.half	.L1067-.L1066
 	.byte	1,5,9,9
-	.half	.L520-.L1068
+	.half	.L519-.L1067
 	.byte	1,5,30,7,9
-	.half	.L1069-.L520
+	.half	.L1068-.L519
 	.byte	3,2,1,5,9,9
-	.half	.L129-.L1069
+	.half	.L129-.L1068
 	.byte	3,126,1,5,14,9
 	.half	.L128-.L129
 	.byte	3,5,1,5,34,9
-	.half	.L1070-.L128
+	.half	.L1069-.L128
 	.byte	1,5,55,9
-	.half	.L1071-.L1070
+	.half	.L1070-.L1069
 	.byte	1,5,26,7,9
-	.half	.L131-.L1071
+	.half	.L131-.L1070
 	.byte	3,2,1,5,5,9
 	.half	.L130-.L131
 	.byte	3,3,1,5,13,7,9
-	.half	.L1072-.L130
+	.half	.L1071-.L130
 	.byte	3,2,1,5,35,9
-	.half	.L1073-.L1072
+	.half	.L1072-.L1071
 	.byte	1,5,50,9
-	.half	.L1074-.L1073
+	.half	.L1073-.L1072
 	.byte	1,5,36,7,9
-	.half	.L1075-.L1074
+	.half	.L1074-.L1073
 	.byte	3,6,1,5,45,9
-	.half	.L1076-.L1075
+	.half	.L1075-.L1074
 	.byte	3,124,1,5,55,9
+	.half	.L1076-.L1075
+	.byte	1,5,36,9
 	.half	.L1077-.L1076
-	.byte	1,5,36,9
+	.byte	1,5,45,9
 	.half	.L1078-.L1077
-	.byte	1,5,45,9
-	.half	.L1079-.L1078
 	.byte	3,1,1,5,55,9
+	.half	.L1079-.L1078
+	.byte	1,5,36,9
 	.half	.L1080-.L1079
-	.byte	1,5,36,9
+	.byte	1,5,45,9
 	.half	.L1081-.L1080
-	.byte	1,5,45,9
+	.byte	3,1,1,5,57,9
 	.half	.L1082-.L1081
-	.byte	3,1,1,5,57,9
+	.byte	1,5,55,9
 	.half	.L1083-.L1082
-	.byte	1,5,55,9
-	.half	.L1084-.L1083
 	.byte	1,5,71,9
+	.half	.L1084-.L1083
+	.byte	1,5,36,9
 	.half	.L1085-.L1084
-	.byte	1,5,36,9
+	.byte	1,5,45,9
 	.half	.L1086-.L1085
-	.byte	1,5,45,9
-	.half	.L1087-.L1086
 	.byte	3,1,1,5,57,9
-	.half	.L1088-.L1087
+	.half	.L1087-.L1086
 	.byte	1,5,55,9
-	.half	.L1089-.L1088
+	.half	.L1088-.L1087
 	.byte	1,5,72,9
+	.half	.L1089-.L1088
+	.byte	1,5,36,9
 	.half	.L1090-.L1089
-	.byte	1,5,36,9
-	.half	.L1091-.L1090
 	.byte	1,5,33,9
-	.half	.L134-.L1091
+	.half	.L134-.L1090
 	.byte	3,4,1,5,9,9
-	.half	.L1092-.L134
+	.half	.L1091-.L134
 	.byte	3,1,1,5,32,9
-	.half	.L1093-.L1092
+	.half	.L1092-.L1091
 	.byte	1,5,30,9
-	.half	.L1094-.L1093
+	.half	.L1093-.L1092
 	.byte	1,5,33,9
-	.half	.L1095-.L1094
+	.half	.L1094-.L1093
 	.byte	3,1,1,5,9,9
-	.half	.L1096-.L1095
+	.half	.L1095-.L1094
 	.byte	3,2,1,5,42,7,9
-	.half	.L1097-.L1096
+	.half	.L1096-.L1095
 	.byte	3,2,1,5,46,9
-	.half	.L524-.L1097
+	.half	.L523-.L1096
 	.byte	3,1,1,5,53,9
-	.half	.L1098-.L524
+	.half	.L1097-.L523
 	.byte	1,5,60,9
-	.half	.L1099-.L1098
+	.half	.L1098-.L1097
 	.byte	1,5,67,9
-	.half	.L1100-.L1099
+	.half	.L1099-.L1098
 	.byte	1,5,13,9
-	.half	.L1101-.L1100
+	.half	.L1100-.L1099
 	.byte	3,1,1,5,36,9
-	.half	.L1102-.L1101
+	.half	.L1101-.L1100
 	.byte	1,5,45,9
-	.half	.L1103-.L1102
+	.half	.L1102-.L1101
 	.byte	1,5,34,9
+	.half	.L1103-.L1102
+	.byte	1,5,36,9
 	.half	.L1104-.L1103
-	.byte	1,5,36,9
-	.half	.L1105-.L1104
 	.byte	3,1,1,5,44,9
-	.half	.L136-.L1105
+	.half	.L136-.L1104
 	.byte	3,3,1,5,9,9
-	.half	.L1106-.L136
+	.half	.L1105-.L136
 	.byte	3,1,1,5,5,9
-	.half	.L133-.L1106
+	.half	.L133-.L1105
 	.byte	3,3,1,5,28,9
-	.half	.L1107-.L133
+	.half	.L1106-.L133
 	.byte	1,5,26,9
-	.half	.L1108-.L1107
+	.half	.L1107-.L1106
 	.byte	1,5,36,9
-	.half	.L1109-.L1108
+	.half	.L1108-.L1107
 	.byte	3,1,1,5,5,9
-	.half	.L526-.L1109
+	.half	.L525-.L1108
 	.byte	3,1,1,5,28,9
-	.half	.L1110-.L526
+	.half	.L1109-.L525
 	.byte	1,5,37,9
-	.half	.L1111-.L1110
+	.half	.L1110-.L1109
 	.byte	1,5,26,9
-	.half	.L1112-.L1111
+	.half	.L1111-.L1110
 	.byte	1,5,40,9
-	.half	.L1113-.L1112
+	.half	.L1112-.L1111
 	.byte	3,1,1,5,1,9
-	.half	.L123-.L1113
+	.half	.L123-.L1112
 	.byte	3,1,1,7,9
 	.half	.L274-.L123
 	.byte	0,1,1
-.L1040:
+.L1039:
 	.sdecl	'.debug_ranges',debug,cluster('path_display_draw_map')
 	.sect	'.debug_ranges'
 .L273:
@@ -25584,7 +25594,7 @@ _999002_y_offsets:	.type	object
 	.sdecl	'.debug_loc',debug,cluster('path_display_bounds_changed')
 	.sect	'.debug_loc'
 .L352:
-	.word	-1,.L149,.L473-.L149,.L56-.L149
+	.word	-1,.L149,.L472-.L149,.L56-.L149
 	.half	5
 	.byte	144,32,157,32,0
 	.word	0,0
@@ -25623,25 +25633,25 @@ _999002_y_offsets:	.type	object
 	.sdecl	'.debug_loc',debug,cluster('path_display_clear_current_marker')
 	.sect	'.debug_loc'
 .L166:
-	.word	-1,.L167,0,.L396-.L167
+	.word	-1,.L167,0,.L395-.L167
 	.half	2
 	.byte	138,0
 	.word	0,0
-.L397:
-	.word	-1,.L167,0,.L508-.L167
+.L396:
+	.word	-1,.L167,0,.L507-.L167
 	.half	1
 	.byte	84
-	.word	.L509-.L167,.L396-.L167
+	.word	.L508-.L167,.L395-.L167
 	.half	1
 	.byte	88
-	.word	.L510-.L167,.L109-.L167
+	.word	.L509-.L167,.L109-.L167
 	.half	1
 	.byte	84
 	.word	0,0
 	.sdecl	'.debug_loc',debug,cluster('path_display_collect_bounds')
 	.sect	'.debug_loc'
 .L342:
-	.word	-1,.L147,.L462-.L147,.L463-.L147
+	.word	-1,.L147,.L461-.L147,.L462-.L147
 	.half	1
 	.byte	90
 	.word	.L46-.L147,.L45-.L147
@@ -25649,12 +25659,12 @@ _999002_y_offsets:	.type	object
 	.byte	90
 	.word	0,0
 .L343:
-	.word	-1,.L147,.L464-.L147,.L46-.L147
+	.word	-1,.L147,.L463-.L147,.L46-.L147
 	.half	1
 	.byte	91
 	.word	0,0
 .L344:
-	.word	-1,.L147,.L465-.L147,.L466-.L147
+	.word	-1,.L147,.L464-.L147,.L465-.L147
 	.half	1
 	.byte	95
 	.word	0,0
@@ -25662,7 +25672,7 @@ _999002_y_offsets:	.type	object
 	.word	-1,.L147,0,.L47-.L147
 	.half	1
 	.byte	101
-	.word	.L457-.L147,.L333-.L147
+	.word	.L456-.L147,.L333-.L147
 	.half	1
 	.byte	109
 	.word	0,0
@@ -25670,13 +25680,13 @@ _999002_y_offsets:	.type	object
 	.word	-1,.L147,0,.L47-.L147
 	.half	1
 	.byte	103
-	.word	.L459-.L147,.L333-.L147
+	.word	.L458-.L147,.L333-.L147
 	.half	2
 	.byte	145,120
-	.word	.L471-.L147,.L48-.L147
+	.word	.L470-.L147,.L48-.L147
 	.half	1
 	.byte	111
-	.word	.L472-.L147,.L49-.L147
+	.word	.L471-.L147,.L49-.L147
 	.half	1
 	.byte	111
 	.word	0,0
@@ -25684,7 +25694,7 @@ _999002_y_offsets:	.type	object
 	.word	-1,.L147,0,.L47-.L147
 	.half	1
 	.byte	100
-	.word	.L456-.L147,.L333-.L147
+	.word	.L455-.L147,.L333-.L147
 	.half	1
 	.byte	108
 	.word	0,0
@@ -25692,15 +25702,15 @@ _999002_y_offsets:	.type	object
 	.word	-1,.L147,0,.L47-.L147
 	.half	1
 	.byte	102
-	.word	.L458-.L147,.L333-.L147
+	.word	.L457-.L147,.L333-.L147
 	.half	1
 	.byte	110
 	.word	0,0
 .L146:
-	.word	-1,.L147,0,.L455-.L147
+	.word	-1,.L147,0,.L454-.L147
 	.half	2
 	.byte	138,0
-	.word	.L455-.L147,.L333-.L147
+	.word	.L454-.L147,.L333-.L147
 	.half	2
 	.byte	138,8
 	.word	.L333-.L147,.L333-.L147
@@ -25708,25 +25718,25 @@ _999002_y_offsets:	.type	object
 	.byte	138,0
 	.word	0,0
 .L340:
-	.word	-1,.L147,.L460-.L147,.L45-.L147
+	.word	-1,.L147,.L459-.L147,.L45-.L147
 	.half	1
 	.byte	88
-	.word	.L467-.L147,.L468-.L147
+	.word	.L466-.L147,.L467-.L147
 	.half	1
 	.byte	84
 	.word	0,0
 .L341:
-	.word	-1,.L147,.L461-.L147,.L45-.L147
+	.word	-1,.L147,.L460-.L147,.L45-.L147
 	.half	1
 	.byte	89
 	.word	0,0
 .L345:
-	.word	-1,.L147,.L469-.L147,.L46-.L147
+	.word	-1,.L147,.L468-.L147,.L46-.L147
 	.half	5
 	.byte	144,32,157,32,0
 	.word	0,0
 .L346:
-	.word	-1,.L147,.L470-.L147,.L46-.L147
+	.word	-1,.L147,.L469-.L147,.L46-.L147
 	.half	1
 	.byte	81
 	.word	0,0
@@ -25738,13 +25748,13 @@ _999002_y_offsets:	.type	object
 	.byte	100
 	.word	0,0
 .L326:
-	.word	-1,.L145,.L448-.L145,.L449-.L145
+	.word	-1,.L145,.L447-.L145,.L448-.L145
 	.half	1
 	.byte	81
 	.word	.L32-.L145,.L31-.L145
 	.half	1
 	.byte	81
-	.word	.L451-.L145,.L452-.L145
+	.word	.L450-.L145,.L451-.L145
 	.half	1
 	.byte	81
 	.word	.L37-.L145,.L34-.L145
@@ -25752,7 +25762,7 @@ _999002_y_offsets:	.type	object
 	.byte	81
 	.word	0,0
 .L331:
-	.word	-1,.L145,.L453-.L145,.L37-.L145
+	.word	-1,.L145,.L452-.L145,.L37-.L145
 	.half	1
 	.byte	86
 	.word	0,0
@@ -25762,20 +25772,20 @@ _999002_y_offsets:	.type	object
 	.byte	138,0
 	.word	0,0
 .L325:
-	.word	-1,.L145,.L447-.L145,.L29-.L145
+	.word	-1,.L145,.L446-.L145,.L29-.L145
 	.half	1
 	.byte	84
-	.word	.L454-.L145,.L29-.L145
+	.word	.L453-.L145,.L29-.L145
 	.half	1
 	.byte	82
 	.word	0,0
 .L329:
-	.word	-1,.L145,.L450-.L145,.L34-.L145
+	.word	-1,.L145,.L449-.L145,.L34-.L145
 	.half	1
 	.byte	85
 	.word	0,0
 .L324:
-	.word	-1,.L145,.L445-.L145,.L446-.L145
+	.word	-1,.L145,.L444-.L145,.L445-.L145
 	.half	5
 	.byte	144,32,157,32,0
 	.word	0,0
@@ -25787,10 +25797,10 @@ _999002_y_offsets:	.type	object
 	.sdecl	'.debug_loc',debug,cluster('path_display_draw_border')
 	.sect	'.debug_loc'
 .L142:
-	.word	-1,.L143,0,.L435-.L143
+	.word	-1,.L143,0,.L434-.L143
 	.half	2
 	.byte	138,0
-	.word	.L435-.L143,.L318-.L143
+	.word	.L434-.L143,.L318-.L143
 	.half	2
 	.byte	138,8
 	.word	.L318-.L143,.L318-.L143
@@ -25798,131 +25808,131 @@ _999002_y_offsets:	.type	object
 	.byte	138,0
 	.word	0,0
 .L319:
-	.word	-1,.L143,.L436-.L143,.L27-.L143
+	.word	-1,.L143,.L435-.L143,.L27-.L143
 	.half	1
 	.byte	88
-	.word	.L438-.L143,.L439-.L143
+	.word	.L437-.L143,.L438-.L143
 	.half	1
 	.byte	86
-	.word	.L444-.L143,.L27-.L143
+	.word	.L443-.L143,.L27-.L143
 	.half	1
 	.byte	84
 	.word	0,0
 .L320:
-	.word	-1,.L143,.L437-.L143,.L27-.L143
+	.word	-1,.L143,.L436-.L143,.L27-.L143
 	.half	1
 	.byte	95
-	.word	.L440-.L143,.L441-.L143
+	.word	.L439-.L143,.L440-.L143
 	.half	1
 	.byte	85
-	.word	.L442-.L143,.L443-.L143
+	.word	.L441-.L143,.L442-.L143
 	.half	1
 	.byte	87
 	.word	0,0
 	.sdecl	'.debug_loc',debug,cluster('path_display_draw_current_position')
 	.sect	'.debug_loc'
-.L400:
-	.word	-1,.L169,0,.L398-.L169
+.L399:
+	.word	-1,.L169,0,.L397-.L169
 	.half	2
 	.byte	145,112
 	.word	0,0
-.L401:
-	.word	-1,.L169,0,.L398-.L169
+.L400:
+	.word	-1,.L169,0,.L397-.L169
 	.half	2
 	.byte	145,120
 	.word	0,0
 .L168:
-	.word	-1,.L169,0,.L511-.L169
+	.word	-1,.L169,0,.L510-.L169
 	.half	2
 	.byte	138,0
-	.word	.L511-.L169,.L398-.L169
+	.word	.L510-.L169,.L397-.L169
 	.half	2
 	.byte	138,16
-	.word	.L398-.L169,.L398-.L169
+	.word	.L397-.L169,.L397-.L169
 	.half	2
 	.byte	138,0
 	.word	0,0
-.L402:
-	.word	-1,.L169,.L513-.L169,.L114-.L169
+.L401:
+	.word	-1,.L169,.L512-.L169,.L114-.L169
 	.half	1
 	.byte	82
-	.word	.L115-.L169,.L514-.L169
+	.word	.L115-.L169,.L513-.L169
 	.half	1
 	.byte	82
 	.word	0,0
-.L399:
-	.word	-1,.L169,0,.L512-.L169
+.L398:
+	.word	-1,.L169,0,.L511-.L169
 	.half	1
 	.byte	84
 	.word	0,0
 	.sdecl	'.debug_loc',debug,cluster('path_display_draw_map')
 	.sect	'.debug_loc'
-.L410:
-	.word	-1,.L175,0,.L517-.L175
+.L409:
+	.word	-1,.L175,0,.L516-.L175
 	.half	1
 	.byte	84
-	.word	.L518-.L175,.L409-.L175
+	.word	.L517-.L175,.L408-.L175
 	.half	1
 	.byte	88
-	.word	.L523-.L175,.L524-.L175
+	.word	.L522-.L175,.L523-.L175
 	.half	1
 	.byte	84
-	.word	.L525-.L175,.L526-.L175
+	.word	.L524-.L175,.L525-.L175
 	.half	1
 	.byte	84
 	.word	0,0
-.L412:
-	.word	-1,.L175,.L517-.L175,.L520-.L175
+.L411:
+	.word	-1,.L175,.L516-.L175,.L519-.L175
 	.half	1
 	.byte	82
-	.word	.L521-.L175,.L123-.L175
+	.word	.L520-.L175,.L123-.L175
 	.half	1
 	.byte	90
 	.word	.L128-.L175,.L130-.L175
 	.half	1
 	.byte	82
 	.word	0,0
-.L417:
-	.word	-1,.L175,.L522-.L175,.L124-.L175
+.L416:
+	.word	-1,.L175,.L521-.L175,.L124-.L175
 	.half	1
 	.byte	91
 	.word	.L125-.L175,.L123-.L175
 	.half	1
 	.byte	91
 	.word	0,0
-.L414:
-	.word	-1,.L175,0,.L409-.L175
+.L413:
+	.word	-1,.L175,0,.L408-.L175
 	.half	2
 	.byte	145,112
 	.word	0,0
-.L416:
-	.word	-1,.L175,0,.L409-.L175
+.L415:
+	.word	-1,.L175,0,.L408-.L175
 	.half	2
 	.byte	145,120
 	.word	0,0
-.L413:
-	.word	-1,.L175,0,.L409-.L175
+.L412:
+	.word	-1,.L175,0,.L408-.L175
 	.half	2
 	.byte	145,108
 	.word	0,0
-.L415:
-	.word	-1,.L175,0,.L409-.L175
+.L414:
+	.word	-1,.L175,0,.L408-.L175
 	.half	2
 	.byte	145,116
 	.word	0,0
-.L411:
-	.word	-1,.L175,.L519-.L175,.L409-.L175
+.L410:
+	.word	-1,.L175,.L518-.L175,.L408-.L175
 	.half	1
 	.byte	89
 	.word	0,0
 .L174:
-	.word	-1,.L175,0,.L516-.L175
+	.word	-1,.L175,0,.L515-.L175
 	.half	2
 	.byte	138,0
-	.word	.L516-.L175,.L409-.L175
+	.word	.L515-.L175,.L408-.L175
 	.half	2
 	.byte	138,24
-	.word	.L409-.L175,.L409-.L175
+	.word	.L408-.L175,.L408-.L175
 	.half	2
 	.byte	138,0
 	.word	0,0
@@ -25932,10 +25942,10 @@ _999002_y_offsets:	.type	object
 	.word	-1,.L153,0,.L78-.L153
 	.half	1
 	.byte	84
-	.word	.L476-.L153,.L356-.L153
+	.word	.L475-.L153,.L356-.L153
 	.half	1
 	.byte	88
-	.word	.L478-.L153,.L79-.L153
+	.word	.L477-.L153,.L79-.L153
 	.half	1
 	.byte	86
 	.word	0,0
@@ -25945,15 +25955,15 @@ _999002_y_offsets:	.type	object
 	.byte	145,120
 	.word	0,0
 .L361:
-	.word	-1,.L153,.L477-.L153,.L356-.L153
+	.word	-1,.L153,.L476-.L153,.L356-.L153
 	.half	1
 	.byte	89
 	.word	0,0
 .L152:
-	.word	-1,.L153,0,.L474-.L153
+	.word	-1,.L153,0,.L473-.L153
 	.half	2
 	.byte	138,0
-	.word	.L474-.L153,.L356-.L153
+	.word	.L473-.L153,.L356-.L153
 	.half	2
 	.byte	138,8
 	.word	.L356-.L153,.L356-.L153
@@ -25964,83 +25974,83 @@ _999002_y_offsets:	.type	object
 	.word	-1,.L153,0,.L78-.L153
 	.half	1
 	.byte	100
-	.word	.L475-.L153,.L356-.L153
+	.word	.L474-.L153,.L356-.L153
 	.half	1
 	.byte	111
 	.word	0,0
 	.sdecl	'.debug_loc',debug,cluster('path_display_draw_new_segments')
 	.sect	'.debug_loc'
-.L391:
+.L390:
 	.word	-1,.L165,0,.L106-.L165
 	.half	1
 	.byte	84
-	.word	.L504-.L165,.L390-.L165
+	.word	.L503-.L165,.L389-.L165
 	.half	1
 	.byte	88
-	.word	.L507-.L165,.L107-.L165
+	.word	.L506-.L165,.L107-.L165
 	.half	1
 	.byte	84
 	.word	0,0
-.L395:
-	.word	-1,.L165,0,.L390-.L165
+.L394:
+	.word	-1,.L165,0,.L389-.L165
 	.half	2
 	.byte	145,124
 	.word	0,0
-.L393:
+.L392:
 	.word	0,0
 .L164:
-	.word	-1,.L165,0,.L503-.L165
+	.word	-1,.L165,0,.L502-.L165
 	.half	2
 	.byte	138,0
-	.word	.L503-.L165,.L390-.L165
+	.word	.L502-.L165,.L389-.L165
 	.half	2
 	.byte	138,8
-	.word	.L390-.L165,.L390-.L165
+	.word	.L389-.L165,.L389-.L165
 	.half	2
 	.byte	138,0
 	.word	0,0
-.L392:
-	.word	-1,.L165,.L505-.L165,.L103-.L165
+.L391:
+	.word	-1,.L165,.L504-.L165,.L103-.L165
 	.half	1
 	.byte	95
-	.word	.L104-.L165,.L506-.L165
+	.word	.L104-.L165,.L505-.L165
 	.half	1
 	.byte	95
 	.word	.L105-.L165,.L102-.L165
 	.half	1
 	.byte	95
 	.word	0,0
-.L394:
-	.word	-1,.L165,0,.L390-.L165
+.L393:
+	.word	-1,.L165,0,.L389-.L165
 	.half	2
 	.byte	145,120
 	.word	0,0
 	.sdecl	'.debug_loc',debug,cluster('path_display_draw_segment')
 	.sect	'.debug_loc'
 .L367:
-	.word	-1,.L155,0,.L480-.L155
+	.word	-1,.L155,0,.L479-.L155
 	.half	1
 	.byte	84
-	.word	.L484-.L155,.L485-.L155
+	.word	.L483-.L155,.L484-.L155
 	.half	1
 	.byte	95
 	.word	0,0
 .L366:
-	.word	-1,.L155,0,.L480-.L155
+	.word	-1,.L155,0,.L479-.L155
 	.half	1
 	.byte	101
-	.word	.L483-.L155,.L364-.L155
+	.word	.L482-.L155,.L364-.L155
 	.half	1
 	.byte	108
-	.word	.L486-.L155,.L487-.L155
+	.word	.L485-.L155,.L486-.L155
 	.half	1
 	.byte	100
 	.word	0,0
 .L154:
-	.word	-1,.L155,0,.L479-.L155
+	.word	-1,.L155,0,.L478-.L155
 	.half	2
 	.byte	138,0
-	.word	.L479-.L155,.L364-.L155
+	.word	.L478-.L155,.L364-.L155
 	.half	2
 	.byte	138,8
 	.word	.L364-.L155,.L364-.L155
@@ -26048,77 +26058,72 @@ _999002_y_offsets:	.type	object
 	.byte	138,0
 	.word	0,0
 .L365:
-	.word	-1,.L155,0,.L480-.L155
+	.word	-1,.L155,0,.L479-.L155
 	.half	1
 	.byte	100
-	.word	.L481-.L155,.L482-.L155
+	.word	.L480-.L155,.L481-.L155
 	.half	1
 	.byte	111
 	.word	0,0
 	.sdecl	'.debug_loc',debug,cluster('path_display_draw_trajectory')
 	.sect	'.debug_loc'
 .L381:
-	.word	-1,.L163,0,.L493-.L163
+	.word	-1,.L163,0,.L492-.L163
 	.half	1
 	.byte	84
-	.word	.L494-.L163,.L380-.L163
+	.word	.L493-.L163,.L380-.L163
 	.half	1
 	.byte	89
-	.word	.L501-.L163,.L502-.L163
+	.word	.L500-.L163,.L501-.L163
+	.half	1
+	.byte	84
+	.word	0,0
+.L387:
+	.word	-1,.L163,.L492-.L163,.L494-.L163
+	.half	1
+	.byte	82
+	.word	.L495-.L163,.L91-.L163
+	.half	1
+	.byte	90
+	.word	.L496-.L163,.L497-.L163
 	.half	1
 	.byte	84
 	.word	0,0
 .L388:
-	.word	-1,.L163,.L493-.L163,.L495-.L163
-	.half	1
-	.byte	82
-	.word	.L496-.L163,.L91-.L163
-	.half	1
-	.byte	90
-	.word	.L497-.L163,.L498-.L163
-	.half	1
-	.byte	84
-	.word	0,0
-.L383:
-	.word	-1,.L163,0,.L380-.L163
-	.half	3
-	.byte	145,144,109
-	.word	0,0
-.L389:
-	.word	-1,.L163,.L499-.L163,.L500-.L163
+	.word	-1,.L163,.L498-.L163,.L499-.L163
 	.half	1
 	.byte	88
 	.word	.L97-.L163,.L91-.L163
 	.half	1
 	.byte	88
 	.word	0,0
-.L385:
+.L384:
 	.word	-1,.L163,0,.L380-.L163
 	.half	2
 	.byte	145,116
 	.word	0,0
-.L387:
+.L386:
 	.word	-1,.L163,0,.L380-.L163
 	.half	2
 	.byte	145,124
 	.word	0,0
-.L384:
+.L383:
 	.word	-1,.L163,0,.L380-.L163
 	.half	2
 	.byte	145,112
 	.word	0,0
-.L386:
+.L385:
 	.word	-1,.L163,0,.L380-.L163
 	.half	2
 	.byte	145,120
 	.word	0,0
 .L162:
-	.word	-1,.L163,0,.L492-.L163
+	.word	-1,.L163,0,.L491-.L163
 	.half	2
 	.byte	138,0
-	.word	.L492-.L163,.L380-.L163
-	.half	3
-	.byte	138,240,18
+	.word	.L491-.L163,.L380-.L163
+	.half	2
+	.byte	138,16
 	.word	.L380-.L163,.L380-.L163
 	.half	2
 	.byte	138,0
@@ -26129,15 +26134,15 @@ _999002_y_offsets:	.type	object
 	.word	-1,.L141,0,.L306-.L141
 	.half	2
 	.byte	145,0
-	.word	.L421-.L141,.L306-.L141
+	.word	.L420-.L141,.L306-.L141
 	.half	1
 	.byte	91
 	.word	0,0
 .L140:
-	.word	-1,.L141,0,.L418-.L141
+	.word	-1,.L141,0,.L417-.L141
 	.half	2
 	.byte	138,0
-	.word	.L418-.L141,.L306-.L141
+	.word	.L417-.L141,.L306-.L141
 	.half	2
 	.byte	138,8
 	.word	.L306-.L141,.L306-.L141
@@ -26145,12 +26150,12 @@ _999002_y_offsets:	.type	object
 	.byte	138,0
 	.word	0,0
 .L315:
-	.word	-1,.L141,.L422-.L141,.L16-.L141
+	.word	-1,.L141,.L421-.L141,.L16-.L141
 	.half	1
 	.byte	95
 	.word	0,0
 .L317:
-	.word	-1,.L141,.L423-.L141,.L17-.L141
+	.word	-1,.L141,.L422-.L141,.L17-.L141
 	.half	1
 	.byte	95
 	.word	0,0
@@ -26161,41 +26166,41 @@ _999002_y_offsets:	.type	object
 	.word	.L14-.L141,.L314-.L141
 	.half	1
 	.byte	89
-	.word	.L422-.L141,.L419-.L141
+	.word	.L421-.L141,.L418-.L141
 	.half	1
 	.byte	89
-	.word	.L427-.L141,.L428-.L141
+	.word	.L426-.L141,.L427-.L141
 	.half	1
 	.byte	89
-	.word	.L429-.L141,.L19-.L141
+	.word	.L428-.L141,.L19-.L141
 	.half	1
 	.byte	89
-	.word	.L433-.L141,.L434-.L141
+	.word	.L432-.L141,.L433-.L141
 	.half	1
 	.byte	89
 	.word	0,0
 .L308:
-	.word	-1,.L141,0,.L419-.L141
+	.word	-1,.L141,0,.L418-.L141
 	.half	1
 	.byte	84
-	.word	.L14-.L141,.L422-.L141
+	.word	.L14-.L141,.L421-.L141
 	.half	1
 	.byte	88
-	.word	.L419-.L141,.L16-.L141
+	.word	.L418-.L141,.L16-.L141
 	.half	1
 	.byte	88
-	.word	.L424-.L141,.L425-.L141
+	.word	.L423-.L141,.L424-.L141
 	.half	1
 	.byte	88
-	.word	.L426-.L141,.L18-.L141
+	.word	.L425-.L141,.L18-.L141
 	.half	1
 	.byte	88
-	.word	.L432-.L141,.L433-.L141
+	.word	.L431-.L141,.L432-.L141
 	.half	1
 	.byte	88
 	.word	0,0
 .L313:
-	.word	-1,.L141,.L430-.L141,.L431-.L141
+	.word	-1,.L141,.L429-.L141,.L430-.L141
 	.half	1
 	.byte	95
 	.word	.L22-.L141,.L15-.L141
@@ -26206,7 +26211,7 @@ _999002_y_offsets:	.type	object
 	.word	-1,.L141,0,.L17-.L141
 	.half	1
 	.byte	87
-	.word	.L420-.L141,.L306-.L141
+	.word	.L419-.L141,.L306-.L141
 	.half	1
 	.byte	90
 	.word	0,0
@@ -26223,15 +26228,15 @@ _999002_y_offsets:	.type	object
 	.byte	145,120
 	.word	0,0
 .L375:
-	.word	-1,.L161,0,.L489-.L161
+	.word	-1,.L161,0,.L488-.L161
 	.half	1
 	.byte	84
 	.word	0,0
 .L160:
-	.word	-1,.L161,0,.L488-.L161
+	.word	-1,.L161,0,.L487-.L161
 	.half	2
 	.byte	138,0
-	.word	.L488-.L161,.L374-.L161
+	.word	.L487-.L161,.L374-.L161
 	.half	2
 	.byte	138,8
 	.word	.L374-.L161,.L374-.L161
@@ -26239,17 +26244,17 @@ _999002_y_offsets:	.type	object
 	.byte	138,0
 	.word	0,0
 .L377:
-	.word	-1,.L161,0,.L490-.L161
+	.word	-1,.L161,0,.L489-.L161
 	.half	1
 	.byte	100
-	.word	.L491-.L161,.L489-.L161
+	.word	.L490-.L161,.L488-.L161
 	.half	1
 	.byte	101
 	.word	0,0
 	.sdecl	'.debug_loc',debug,cluster('path_display_init')
 	.sect	'.debug_loc'
 .L170:
-	.word	-1,.L171,0,.L403-.L171
+	.word	-1,.L171,0,.L402-.L171
 	.half	2
 	.byte	138,0
 	.word	0,0
@@ -26274,28 +26279,28 @@ _999002_y_offsets:	.type	object
 	.word	0,0
 	.sdecl	'.debug_loc',debug,cluster('path_display_set_area')
 	.sect	'.debug_loc'
-.L408:
-	.word	-1,.L173,0,.L515-.L173
+.L407:
+	.word	-1,.L173,0,.L514-.L173
 	.half	1
 	.byte	87
 	.word	0,0
 .L172:
-	.word	-1,.L173,0,.L404-.L173
+	.word	-1,.L173,0,.L403-.L173
 	.half	2
 	.byte	138,0
 	.word	0,0
-.L407:
-	.word	-1,.L173,0,.L515-.L173
+.L406:
+	.word	-1,.L173,0,.L514-.L173
 	.half	1
 	.byte	86
 	.word	0,0
-.L405:
-	.word	-1,.L173,0,.L515-.L173
+.L404:
+	.word	-1,.L173,0,.L514-.L173
 	.half	1
 	.byte	84
 	.word	0,0
-.L406:
-	.word	-1,.L173,0,.L515-.L173
+.L405:
+	.word	-1,.L173,0,.L514-.L173
 	.half	1
 	.byte	85
 	.word	0,0
@@ -26328,7 +26333,7 @@ _999002_y_offsets:	.type	object
 	.word	0,0
 	.sdecl	'.debug_frame',debug
 	.sect	'.debug_frame'
-.L1114:
+.L1113:
 	.word	48
 	.word	-1
 	.byte	3,0,2,1,27,12,26,0,8,26,8,27,8,30,8,29,8,28,8,16,8,17,8,24,8,25,8,31,8,32,8,33,8,34,8,35,8,36,8,37,8,38
@@ -26336,133 +26341,133 @@ _999002_y_offsets:	.type	object
 	.sdecl	'.debug_frame',debug,cluster('path_display_clamp_area')
 	.sect	'.debug_frame'
 	.word	24
-	.word	.L1114,.L139,.L305-.L139
+	.word	.L1113,.L139,.L305-.L139
 	.byte	8,19,8,20,8,21,8,22,8,23,0,0
 	.sdecl	'.debug_frame',debug,cluster('path_display_fill_rect')
 	.sect	'.debug_frame'
 	.word	36
-	.word	.L1114,.L141,.L306-.L141
+	.word	.L1113,.L141,.L306-.L141
 	.byte	4
-	.word	(.L418-.L141)/2
+	.word	(.L417-.L141)/2
 	.byte	19,8,22,26,3,19,138,8,4
-	.word	(.L306-.L418)/2
+	.word	(.L306-.L417)/2
 	.byte	19,0,8,26,0,0
 	.sdecl	'.debug_frame',debug,cluster('path_display_draw_border')
 	.sect	'.debug_frame'
 	.word	36
-	.word	.L1114,.L143,.L318-.L143
+	.word	.L1113,.L143,.L318-.L143
 	.byte	4
-	.word	(.L435-.L143)/2
+	.word	(.L434-.L143)/2
 	.byte	19,8,22,26,3,19,138,8,4
-	.word	(.L318-.L435)/2
+	.word	(.L318-.L434)/2
 	.byte	19,0,8,26,0,0
 	.sdecl	'.debug_frame',debug,cluster('path_display_collect_points')
 	.sect	'.debug_frame'
 	.word	20
-	.word	.L1114,.L145,.L321-.L145
+	.word	.L1113,.L145,.L321-.L145
 	.byte	8,19,8,21,8,22,8,23
 	.sdecl	'.debug_frame',debug,cluster('path_display_collect_bounds')
 	.sect	'.debug_frame'
 	.word	36
-	.word	.L1114,.L147,.L333-.L147
+	.word	.L1113,.L147,.L333-.L147
 	.byte	4
-	.word	(.L455-.L147)/2
+	.word	(.L454-.L147)/2
 	.byte	19,8,22,26,3,19,138,8,4
-	.word	(.L333-.L455)/2
+	.word	(.L333-.L454)/2
 	.byte	19,0,8,26,0,0
 	.sdecl	'.debug_frame',debug,cluster('path_display_bounds_changed')
 	.sect	'.debug_frame'
 	.word	24
-	.word	.L1114,.L149,.L347-.L149
+	.word	.L1113,.L149,.L347-.L149
 	.byte	8,18,8,19,8,20,8,21,8,22,8,23
 	.sdecl	'.debug_frame',debug,cluster('path_display_point_in_area')
 	.sect	'.debug_frame'
 	.word	24
-	.word	.L1114,.L151,.L353-.L151
+	.word	.L1113,.L151,.L353-.L151
 	.byte	8,18,8,19,8,21,8,22,8,23,0,0
 	.sdecl	'.debug_frame',debug,cluster('path_display_draw_marker')
 	.sect	'.debug_frame'
 	.word	36
-	.word	.L1114,.L153,.L356-.L153
+	.word	.L1113,.L153,.L356-.L153
 	.byte	4
-	.word	(.L474-.L153)/2
+	.word	(.L473-.L153)/2
 	.byte	19,8,22,26,3,19,138,8,4
-	.word	(.L356-.L474)/2
+	.word	(.L356-.L473)/2
 	.byte	19,0,8,26,0,0
 	.sdecl	'.debug_frame',debug,cluster('path_display_draw_segment')
 	.sect	'.debug_frame'
 	.word	36
-	.word	.L1114,.L155,.L364-.L155
+	.word	.L1113,.L155,.L364-.L155
 	.byte	4
-	.word	(.L479-.L155)/2
+	.word	(.L478-.L155)/2
 	.byte	19,8,22,26,3,19,138,8,4
-	.word	(.L364-.L479)/2
+	.word	(.L364-.L478)/2
 	.byte	19,0,8,26,0,0
 	.sdecl	'.debug_frame',debug,cluster('path_display_reset_cache')
 	.sect	'.debug_frame'
 	.word	24
-	.word	.L1114,.L157,.L368-.L157
+	.word	.L1113,.L157,.L368-.L157
 	.byte	8,18,8,19,8,20,8,21,8,22,8,23
 	.sdecl	'.debug_frame',debug,cluster('path_display_update_bounds_cache')
 	.sect	'.debug_frame'
 	.word	24
-	.word	.L1114,.L159,.L369-.L159
+	.word	.L1113,.L159,.L369-.L159
 	.byte	8,18,8,19,8,20,8,21,8,22,8,23
 	.sdecl	'.debug_frame',debug,cluster('path_display_get_path_screen_point')
 	.sect	'.debug_frame'
 	.word	36
-	.word	.L1114,.L161,.L374-.L161
+	.word	.L1113,.L161,.L374-.L161
 	.byte	4
-	.word	(.L488-.L161)/2
+	.word	(.L487-.L161)/2
 	.byte	19,8,22,26,3,19,138,8,4
-	.word	(.L374-.L488)/2
+	.word	(.L374-.L487)/2
 	.byte	19,0,8,26,0,0
 	.sdecl	'.debug_frame',debug,cluster('path_display_draw_trajectory')
 	.sect	'.debug_frame'
 	.word	36
-	.word	.L1114,.L163,.L380-.L163
+	.word	.L1113,.L163,.L380-.L163
 	.byte	4
-	.word	(.L492-.L163)/2
-	.byte	19,240,18,22,26,4,19,138,240,18,4
-	.word	(.L380-.L492)/2
-	.byte	19,0,8,26
+	.word	(.L491-.L163)/2
+	.byte	19,16,22,26,3,19,138,16,4
+	.word	(.L380-.L491)/2
+	.byte	19,0,8,26,0,0
 	.sdecl	'.debug_frame',debug,cluster('path_display_draw_new_segments')
 	.sect	'.debug_frame'
 	.word	36
-	.word	.L1114,.L165,.L390-.L165
+	.word	.L1113,.L165,.L389-.L165
 	.byte	4
-	.word	(.L503-.L165)/2
+	.word	(.L502-.L165)/2
 	.byte	19,8,22,26,3,19,138,8,4
-	.word	(.L390-.L503)/2
+	.word	(.L389-.L502)/2
 	.byte	19,0,8,26,0,0
 	.sdecl	'.debug_frame',debug,cluster('path_display_clear_current_marker')
 	.sect	'.debug_frame'
 	.word	12
-	.word	.L1114,.L167,.L396-.L167
+	.word	.L1113,.L167,.L395-.L167
 	.sdecl	'.debug_frame',debug,cluster('path_display_draw_current_position')
 	.sect	'.debug_frame'
 	.word	36
-	.word	.L1114,.L169,.L398-.L169
+	.word	.L1113,.L169,.L397-.L169
 	.byte	4
-	.word	(.L511-.L169)/2
+	.word	(.L510-.L169)/2
 	.byte	19,16,22,26,3,19,138,16,4
-	.word	(.L398-.L511)/2
+	.word	(.L397-.L510)/2
 	.byte	19,0,8,26,0,0
 	.sdecl	'.debug_frame',debug,cluster('path_display_init')
 	.sect	'.debug_frame'
 	.word	12
-	.word	.L1114,.L171,.L403-.L171
+	.word	.L1113,.L171,.L402-.L171
 	.sdecl	'.debug_frame',debug,cluster('path_display_set_area')
 	.sect	'.debug_frame'
 	.word	12
-	.word	.L1114,.L173,.L404-.L173
+	.word	.L1113,.L173,.L403-.L173
 	.sdecl	'.debug_frame',debug,cluster('path_display_draw_map')
 	.sect	'.debug_frame'
 	.word	36
-	.word	.L1114,.L175,.L409-.L175
+	.word	.L1113,.L175,.L408-.L175
 	.byte	4
-	.word	(.L516-.L175)/2
+	.word	(.L515-.L175)/2
 	.byte	19,24,22,26,3,19,138,24,4
-	.word	(.L409-.L516)/2
+	.word	(.L408-.L515)/2
 	.byte	19,0,8,26,0,0
 	; Module end

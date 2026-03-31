@@ -19,9 +19,8 @@ path_data_t path_data;
 static path_record_config_t path_record_config;
 
 static uint8 is_valid_gps_fix(void);
-static void update_path_statistics(path_point_t* new_point);
-static uint8 path_recorder_should_record(double lat, double lon, uint32 current_time);
-static uint8 path_recorder_add_point(path_point_t* point);
+static void update_path_statistics(path_point_t* new_point, float segment_distance);
+static uint8 path_recorder_add_point(path_point_t* point, float segment_distance);
 static float path_recorder_calculate_distance(double lat1, double lon1, double lat2, double lon2);
 
 static float path_recorder_clamp_float(float value, float min_value, float max_value)
@@ -88,8 +87,8 @@ uint8 path_recorder_start(void)
 
     path_data.state = PATH_STATE_RECORDING;
     path_data.last_record_time = get_current_time_ms();
-    path_data.last_latitude = (float)gnss.latitude;
-    path_data.last_longitude = (float)gnss.longitude;
+    path_data.last_latitude  = gnss.latitude;
+    path_data.last_longitude = gnss.longitude;
     return 1;
 }
 
@@ -118,25 +117,7 @@ void path_recorder_clear(void)
     path_data.state = PATH_STATE_IDLE;
 }
 
-static uint8 path_recorder_should_record(double lat, double lon, uint32 current_time)
-{
-    float distance;
-
-    if (path_data.point_count == 0)
-    {
-        return 1;
-    }
-
-    if (current_time - path_data.last_record_time < path_record_config.min_record_interval_ms)
-    {
-        return 0;
-    }
-
-    distance = path_recorder_calculate_distance(path_data.last_latitude, path_data.last_longitude, lat, lon);
-    return (distance >= path_record_config.min_record_distance);
-}
-
-static uint8 path_recorder_add_point(path_point_t* point)
+static uint8 path_recorder_add_point(path_point_t* point, float segment_distance)
 {
     if (path_data.point_count >= MAX_PATH_POINTS || point == NULL)
     {
@@ -145,7 +126,7 @@ static uint8 path_recorder_add_point(path_point_t* point)
 
     path_data.points[path_data.point_count] = *point;
     path_data.point_count++;
-    update_path_statistics(point);
+    update_path_statistics(point, segment_distance);
     path_data.last_latitude = point->latitude;
     path_data.last_longitude = point->longitude;
     path_data.last_record_time = point->timestamp;
@@ -154,6 +135,10 @@ static uint8 path_recorder_add_point(path_point_t* point)
 
 void path_recorder_task(void)
 {
+    float distance = 0.0f;
+    uint32 current_time;
+    path_point_t point;
+
     if (path_data.state != PATH_STATE_RECORDING)
     {
         return;
@@ -164,19 +149,31 @@ void path_recorder_task(void)
         return;
     }
 
-    uint32 current_time = get_current_time_ms();
-    if (path_recorder_should_record(gnss.latitude, gnss.longitude, current_time))
+    current_time = get_current_time_ms();
+
+    if (path_data.point_count > 0)
     {
-        path_point_t point;
-        point.latitude = (float)gnss.latitude;
-        point.longitude = (float)gnss.longitude;
-        point.timestamp = current_time;
-        point.speed = gnss.speed;
-        point.direction = gnss.direction;
-        point.satellite_count = gnss.satellite_used;
-        point.fix_quality = gnss.state;
-        path_recorder_add_point(&point);
+        if (current_time - path_data.last_record_time < path_record_config.min_record_interval_ms)
+        {
+            return;
+        }
+        distance = path_recorder_calculate_distance(
+            path_data.last_latitude, path_data.last_longitude,
+            gnss.latitude, gnss.longitude);
+        if (distance < path_record_config.min_record_distance)
+        {
+            return;
+        }
     }
+
+    point.latitude       = gnss.latitude;
+    point.longitude      = gnss.longitude;
+    point.timestamp      = current_time;
+    point.speed          = gnss.speed;
+    point.direction      = gnss.direction;
+    point.satellite_count = gnss.satellite_used;
+    point.fix_quality    = gnss.state;
+    path_recorder_add_point(&point, distance);
 }
 
 const path_record_config_t *path_recorder_get_config(void)
@@ -208,20 +205,20 @@ static float path_recorder_calculate_distance(double lat1, double lon1, double l
 {
     double dlat = (lat2 - lat1) * USER_PI / 180.0;
     double dlon = (lon2 - lon1) * USER_PI / 180.0;
-    double a = sin(dlat / 2) * sin(dlat / 2) +
+    double sin_dlat = sin(dlat / 2.0);
+    double sin_dlon = sin(dlon / 2.0);
+    double a = sin_dlat * sin_dlat +
                cos(lat1 * USER_PI / 180.0) * cos(lat2 * USER_PI / 180.0) *
-               sin(dlon / 2) * sin(dlon / 2);
+               sin_dlon * sin_dlon;
     double c = 2 * atan2(sqrt(a), sqrt(1 - a));
     return (float)(EARTH_RADIUS * c);
 }
 
-static void update_path_statistics(path_point_t* new_point)
+static void update_path_statistics(path_point_t* new_point, float segment_distance)
 {
     if (path_data.point_count > 1)
     {
-        path_point_t* prev = &path_data.points[path_data.point_count - 2];
-        path_data.total_distance += path_recorder_calculate_distance(
-            prev->latitude, prev->longitude, new_point->latitude, new_point->longitude);
+        path_data.total_distance += segment_distance;
         path_data.total_time = new_point->timestamp - path_data.points[0].timestamp;
     }
 }

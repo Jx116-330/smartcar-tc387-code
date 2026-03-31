@@ -1,6 +1,6 @@
 	; Module start
 	.compiler_version	"TASKING VX-toolset for AURIX Development Studio (non-commercial): C compiler v1.1r8 Build 22011964"
-	.compiler_invocation	"ctc -f cc22416a --dep-file=code/GPS/path_recorder.d -c99 --fp-model=3cflnrSTz -D__CPU__=tc38x -D__CPU_TC38X__ --core=tc1.6.2 --fp-model=+float -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\code -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\code\\\\Beep -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\code\\\\GPS -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\code\\\\MyEncoder -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\code\\\\MyKey -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\code\\\\menu -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Configurations -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Infra -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Platform -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Platform\\\\Tricore -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Platform\\\\Tricore\\\\Compilers -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Sfr -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Sfr\\\\TC38A -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Sfr\\\\TC38A\\\\_Reg -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Ssw -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Ssw\\\\TC38A -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Ssw\\\\TC38A\\\\Tricore -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Service -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric\\\\If -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric\\\\If\\\\Ccu6If -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric\\\\StdIf -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric\\\\SysSe -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric\\\\SysSe\\\\Bsp -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric\\\\SysSe\\\\Math -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric\\\\_Utilities -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Asclin -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Asclin\\\\Asc -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Asclin\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Ccu6 -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Ccu6\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Ccu6\\\\Timer -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Cpu -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Cpu\\\\Irq -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Cpu\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Dma -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Dma\\\\Dma -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Dma\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Evadc -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Evadc\\\\Adc -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Evadc\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Flash -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Flash\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Gpt12 -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Gpt12\\\\IncrEnc -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Gpt12\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Gtm -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Gtm\\\\Atom -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Gtm\\\\Atom\\\\Pwm -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Gtm\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Mtu -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Mtu\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Pms -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Pms\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Port -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Port\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Qspi -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Qspi\\\\SpiMaster -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Qspi\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Scu -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Scu\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Src -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Src\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Stm -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Stm\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\_Impl -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\_Lib -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\_Lib\\\\DataHandling -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\_PinMap -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\zf_common -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\zf_components -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\zf_device -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\zf_driver -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\user -g2 -w544 -w557 -t4 --language=+volatile -N0 -O0 -Y0 -Z0 --compact-max-size=200 --misrac-version=2004 -o code/GPS/path_recorder.src ../code/GPS/path_recorder.c"
+	.compiler_invocation	"ctc -f cc52996a --dep-file=code/GPS/path_recorder.d -c99 --fp-model=3cflnrSTz -D__CPU__=tc38x -D__CPU_TC38X__ --core=tc1.6.2 --fp-model=+float -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\code -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\code\\\\Beep -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\code\\\\GPS -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\code\\\\MyEncoder -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\code\\\\MyKey -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\code\\\\menu -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Configurations -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Infra -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Platform -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Platform\\\\Tricore -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Platform\\\\Tricore\\\\Compilers -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Sfr -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Sfr\\\\TC38A -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Sfr\\\\TC38A\\\\_Reg -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Ssw -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Ssw\\\\TC38A -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Ssw\\\\TC38A\\\\Tricore -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Service -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric\\\\If -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric\\\\If\\\\Ccu6If -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric\\\\StdIf -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric\\\\SysSe -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric\\\\SysSe\\\\Bsp -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric\\\\SysSe\\\\Math -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Service\\\\CpuGeneric\\\\_Utilities -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Asclin -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Asclin\\\\Asc -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Asclin\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Ccu6 -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Ccu6\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Ccu6\\\\Timer -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Cpu -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Cpu\\\\Irq -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Cpu\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Dma -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Dma\\\\Dma -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Dma\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Evadc -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Evadc\\\\Adc -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Evadc\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Flash -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Flash\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Gpt12 -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Gpt12\\\\IncrEnc -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Gpt12\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Gtm -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Gtm\\\\Atom -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Gtm\\\\Atom\\\\Pwm -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Gtm\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Mtu -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Mtu\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Pms -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Pms\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Port -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Port\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Qspi -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Qspi\\\\SpiMaster -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Qspi\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Scu -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Scu\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Src -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Src\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Stm -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\Stm\\\\Std -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\_Impl -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\_Lib -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\_Lib\\\\DataHandling -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\iLLD\\\\TC38A\\\\Tricore\\\\_PinMap -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\zf_common -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\zf_components -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\zf_device -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\zf_driver -IE:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\user -g2 -w544 -w557 -t4 --language=+volatile -N0 -O0 -Y0 -Z0 --compact-max-size=200 --misrac-version=2004 -o code/GPS/path_recorder.src ../code/GPS/path_recorder.c"
 	.compiler_name		"ctc"
 	;source	'../code/GPS/path_recorder.c'
 
@@ -12,38 +12,38 @@ $TC162
 	.align	2
 	
 ; Function path_recorder_clamp_float
-.L53:
+.L52:
 path_recorder_clamp_float:	.type	func
 	cmp.f	d15,d4,d5
 	extr.u	d15,d15,#0,#1
-.L644:
+.L610:
 	jeq	d15,#0,.L2
-.L645:
+.L611:
 	mov	d2,d5
-.L280:
+.L269:
 	j	.L3
 .L2:
 	cmp.f	d15,d4,d6
 	extr.u	d15,d15,#2,#1
-.L646:
+.L612:
 	jeq	d15,#0,.L4
-.L647:
+.L613:
 	mov	d2,d6
-.L281:
+.L270:
 	j	.L5
 .L4:
 	mov	d2,d4
-.L282:
+.L271:
 	j	.L6
 .L6:
 .L5:
 .L3:
 	ret
-.L270:
+.L259:
 	
 __path_recorder_clamp_float_function_end:
 	.size	path_recorder_clamp_float,__path_recorder_clamp_float_function_end-path_recorder_clamp_float
-.L204:
+.L196:
 	; End of function
 	
 	.sdecl	'.text.path_recorder.path_recorder_clamp_u32',code,cluster('path_recorder_clamp_u32')
@@ -51,32 +51,32 @@ __path_recorder_clamp_float_function_end:
 	.align	2
 	
 ; Function path_recorder_clamp_u32
-.L55:
+.L54:
 path_recorder_clamp_u32:	.type	func
 	jge.u	d4,d5,.L7
-.L652:
+.L618:
 	mov	d2,d5
-.L283:
+.L272:
 	j	.L8
 .L7:
 	jge.u	d6,d4,.L9
-.L653:
+.L619:
 	mov	d2,d6
-.L284:
+.L273:
 	j	.L10
 .L9:
 	mov	d2,d4
-.L285:
+.L274:
 	j	.L11
 .L11:
 .L10:
 .L8:
 	ret
-.L274:
+.L263:
 	
 __path_recorder_clamp_u32_function_end:
 	.size	path_recorder_clamp_u32,__path_recorder_clamp_u32_function_end-path_recorder_clamp_u32
-.L209:
+.L201:
 	; End of function
 	
 	.sdecl	'.text.path_recorder.is_valid_gps_fix',code,cluster('is_valid_gps_fix')
@@ -84,62 +84,62 @@ __path_recorder_clamp_u32_function_end:
 	.align	2
 	
 ; Function is_valid_gps_fix
-.L57:
+.L56:
 is_valid_gps_fix:	.type	func
 	mov	d2,#0
+.L518:
+	movh.a	a15,#@his(gnss)
+	lea	a15,[a15]@los(gnss)
 .L519:
-	movh.a	a15,#@his(gnss)
-	lea	a15,[a15]@los(gnss)
+	ld.bu	d15,[a15]8
 .L520:
-	ld.bu	d15,[a15]8
-.L521:
 	jne	d15,#1,.L12
+.L521:
+	movh.a	a15,#@his(gnss)
+	lea	a15,[a15]@los(gnss)
 .L522:
-	movh.a	a15,#@his(gnss)
-	lea	a15,[a15]@los(gnss)
-.L523:
 	ld.bu	d0,[a15]46
-.L524:
+.L523:
 	movh.a	a15,#@his(path_record_config)
 	lea	a15,[a15]@los(path_record_config)
-.L525:
+.L524:
 	ld.bu	d15,[a15]8
-.L526:
+.L525:
 	jlt.u	d0,d15,.L13
-.L527:
+.L526:
 	movh.a	a15,#@his(gnss)
 	lea	a15,[a15]@los(gnss)
-.L528:
+.L527:
 	ld.w	d15,[a15]32
-.L529:
+.L528:
 	movh.a	a15,#@his(path_record_config)
 	lea	a15,[a15]@los(path_record_config)
-.L530:
+.L529:
 	ld.w	d0,[a15]10
-.L531:
+.L530:
 	cmp.f	d15,d15,d0
 	and	d15,#3
 	ne	d15,d15,#0
 	jeq	d15,#0,.L14
-.L532:
+.L531:
 	movh.a	a15,#@his(gnss)
 	lea	a15,[a15]@los(gnss)
-.L533:
+.L532:
 	ld.w	d15,[a15]22
-.L534:
+.L533:
 	extr.u	d15,d15,#23,#8
 	ne	d15,d15,#0
 	jeq	d15,#0,.L15
-.L535:
+.L534:
 	movh.a	a15,#@his(gnss)
 	lea	a15,[a15]@los(gnss)
-.L536:
+.L535:
 	ld.w	d15,[a15]26
-.L537:
+.L536:
 	extr.u	d15,d15,#23,#8
 	ne	d15,d15,#0
 	jeq	d15,#0,.L16
-.L538:
+.L537:
 	mov	d2,#1
 .L16:
 .L15:
@@ -149,11 +149,11 @@ is_valid_gps_fix:	.type	func
 	j	.L17
 .L17:
 	ret
-.L248:
+.L240:
 	
 __is_valid_gps_fix_function_end:
 	.size	is_valid_gps_fix,__is_valid_gps_fix_function_end-is_valid_gps_fix
-.L179:
+.L176:
 	; End of function
 	
 	.sdecl	'.text.path_recorder.path_recorder_init',code,cluster('path_recorder_init')
@@ -162,31 +162,31 @@ __is_valid_gps_fix_function_end:
 	
 	.global	path_recorder_init
 ; Function path_recorder_init
-.L59:
+.L58:
 path_recorder_init:	.type	func
 	movh.a	a4,#@his(path_data)
 	lea	a4,[a4]@los(path_data)
-.L334:
+.L317:
 	mov	d4,#0
-.L335:
+.L318:
 	mov	d5,#7224
 	call	memset
-.L336:
+.L319:
 	movh.a	a15,#@his(path_data)
 	lea	a15,[a15]@los(path_data)
-.L337:
+.L320:
 	mov	d15,#0
-.L338:
+.L321:
 	st.b	[a15]7202,d15
-.L339:
+.L322:
 	call	path_recorder_reset_config
-.L340:
+.L323:
 	ret
-.L214:
+.L206:
 	
 __path_recorder_init_function_end:
 	.size	path_recorder_init,__path_recorder_init_function_end-path_recorder_init
-.L104:
+.L101:
 	; End of function
 	
 	.sdecl	'.text.path_recorder.path_recorder_reset_config',code,cluster('path_recorder_reset_config')
@@ -195,43 +195,43 @@ __path_recorder_init_function_end:
 	
 	.global	path_recorder_reset_config
 ; Function path_recorder_reset_config
-.L61:
+.L60:
 path_recorder_reset_config:	.type	func
 	movh.a	a15,#@his(path_record_config)
 	lea	a15,[a15]@los(path_record_config)
-.L345:
+.L328:
 	mov.u	d15,#52429
 	addih	d15,d15,#15948
-.L346:
+.L329:
 	st.w	[a15],d15
-.L347:
+.L330:
 	movh.a	a15,#@his(path_record_config)
 	lea	a15,[a15]@los(path_record_config)
-.L348:
+.L331:
 	mov	d15,#50
-.L349:
+.L332:
 	st.w	[a15]4,d15
-.L350:
+.L333:
 	movh.a	a15,#@his(path_record_config)
 	lea	a15,[a15]@los(path_record_config)
-.L351:
+.L334:
 	mov	d15,#4
-.L352:
+.L335:
 	st.b	[a15]8,d15
-.L353:
+.L336:
 	movh.a	a15,#@his(path_record_config)
 	lea	a15,[a15]@los(path_record_config)
-.L354:
+.L337:
 	movh	d15,#16968
-.L355:
+.L338:
 	st.w	[a15]10,d15
-.L356:
+.L339:
 	ret
-.L215:
+.L207:
 	
 __path_recorder_reset_config_function_end:
 	.size	path_recorder_reset_config,__path_recorder_reset_config_function_end-path_recorder_reset_config
-.L109:
+.L106:
 	; End of function
 	
 	.sdecl	'.text.path_recorder.path_recorder_start',code,cluster('path_recorder_start')
@@ -240,76 +240,76 @@ __path_recorder_reset_config_function_end:
 	
 	.global	path_recorder_start
 ; Function path_recorder_start
-.L63:
+.L62:
 path_recorder_start:	.type	func
 	call	is_valid_gps_fix
-.L361:
+.L344:
 	jne	d2,#0,.L18
-.L362:
+.L345:
 	mov	d2,#0
-.L363:
+.L346:
 	j	.L19
 .L18:
 	movh.a	a15,#@his(path_data)
 	lea	a15,[a15]@los(path_data)
-.L364:
+.L347:
 	ld.bu	d15,[a15]7202
-.L365:
+.L348:
 	jne	d15,#1,.L20
-.L366:
+.L349:
 	mov	d2,#1
-.L367:
+.L350:
 	j	.L21
 .L20:
 	movh.a	a15,#@his(path_data)
 	lea	a15,[a15]@los(path_data)
-.L368:
+.L351:
 	mov	d15,#1
-.L369:
+.L352:
 	st.b	[a15]7202,d15
-.L370:
+.L353:
 	movh.a	a15,#@his(path_data)
 	lea	a15,[a15]@los(path_data)
-.L371:
+.L354:
 	call	system_getval
 	mov	d15,#3125
 	sh	d15,#5
 	div.u	e0,d2,d15
-.L372:
+.L355:
 	st.w	[a15]7204,d0
-.L373:
+.L356:
 	movh.a	a15,#@his(path_data)
 	lea	a15,[a15]@los(path_data)
-.L374:
+.L357:
 	movh.a	a2,#@his(gnss)
 	lea	a2,[a2]@los(gnss)
-.L375:
+.L358:
 	ld.w	d15,[a2]22
-.L376:
+.L359:
 	st.w	[a15]7208,d15
-.L377:
+.L360:
 	movh.a	a15,#@his(path_data)
 	lea	a15,[a15]@los(path_data)
-.L378:
+.L361:
 	movh.a	a2,#@his(gnss)
 	lea	a2,[a2]@los(gnss)
-.L379:
+.L362:
 	ld.w	d15,[a2]26
-.L380:
+.L363:
 	st.w	[a15]7212,d15
-.L381:
+.L364:
 	mov	d2,#1
-.L382:
+.L365:
 	j	.L22
 .L22:
 .L21:
 .L19:
 	ret
-.L217:
+.L209:
 	
 __path_recorder_start_function_end:
 	.size	path_recorder_start,__path_recorder_start_function_end-path_recorder_start
-.L114:
+.L111:
 	; End of function
 	
 	.sdecl	'.text.path_recorder.path_recorder_start_new',code,cluster('path_recorder_start_new')
@@ -318,29 +318,29 @@ __path_recorder_start_function_end:
 	
 	.global	path_recorder_start_new
 ; Function path_recorder_start_new
-.L65:
+.L64:
 path_recorder_start_new:	.type	func
 	call	is_valid_gps_fix
-.L387:
+.L370:
 	jne	d2,#0,.L23
-.L388:
+.L371:
 	mov	d2,#0
-.L389:
+.L372:
 	j	.L24
 .L23:
 	call	path_recorder_clear
-.L390:
+.L373:
 	call	path_recorder_start
-.L391:
+.L374:
 	j	.L25
 .L25:
 .L24:
 	ret
-.L218:
+.L210:
 	
 __path_recorder_start_new_function_end:
 	.size	path_recorder_start_new,__path_recorder_start_new_function_end-path_recorder_start_new
-.L119:
+.L116:
 	; End of function
 	
 	.sdecl	'.text.path_recorder.path_recorder_stop',code,cluster('path_recorder_stop')
@@ -349,28 +349,28 @@ __path_recorder_start_new_function_end:
 	
 	.global	path_recorder_stop
 ; Function path_recorder_stop
-.L67:
+.L66:
 path_recorder_stop:	.type	func
 	movh.a	a15,#@his(path_data)
 	lea	a15,[a15]@los(path_data)
-.L396:
+.L379:
 	ld.bu	d15,[a15]7202
-.L397:
+.L380:
 	jne	d15,#1,.L26
-.L398:
+.L381:
 	movh.a	a15,#@his(path_data)
 	lea	a15,[a15]@los(path_data)
-.L399:
+.L382:
 	mov	d15,#2
-.L400:
+.L383:
 	st.b	[a15]7202,d15
 .L26:
 	ret
-.L219:
+.L211:
 	
 __path_recorder_stop_function_end:
 	.size	path_recorder_stop,__path_recorder_stop_function_end-path_recorder_stop
-.L124:
+.L121:
 	; End of function
 	
 	.sdecl	'.text.path_recorder.path_recorder_clear',code,cluster('path_recorder_clear')
@@ -379,104 +379,29 @@ __path_recorder_stop_function_end:
 	
 	.global	path_recorder_clear
 ; Function path_recorder_clear
-.L69:
+.L68:
 path_recorder_clear:	.type	func
 	movh.a	a4,#@his(path_data)
 	lea	a4,[a4]@los(path_data)
-.L405:
+.L388:
 	mov	d4,#0
-.L406:
+.L389:
 	mov	d5,#7224
 	call	memset
-.L407:
+.L390:
 	movh.a	a15,#@his(path_data)
 	lea	a15,[a15]@los(path_data)
-.L408:
+.L391:
 	mov	d15,#0
-.L409:
+.L392:
 	st.b	[a15]7202,d15
-.L410:
+.L393:
 	ret
-.L220:
+.L212:
 	
 __path_recorder_clear_function_end:
 	.size	path_recorder_clear,__path_recorder_clear_function_end-path_recorder_clear
-.L129:
-	; End of function
-	
-	.sdecl	'.text.path_recorder.path_recorder_should_record',code,cluster('path_recorder_should_record')
-	.sect	'.text.path_recorder.path_recorder_should_record'
-	.align	2
-	
-; Function path_recorder_should_record
-.L71:
-path_recorder_should_record:	.type	func
-	mov	d0,d4
-.L289:
-	mov	d7,d5
-.L291:
-	movh.a	a15,#@his(path_data)
-	lea	a15,[a15]@los(path_data)
-.L565:
-	ld.hu	d15,[a15]7200
-.L566:
-	jne	d15,#0,.L27
-.L567:
-	mov	d2,#1
-.L568:
-	j	.L28
-.L27:
-	movh.a	a15,#@his(path_data)
-	lea	a15,[a15]@los(path_data)
-.L569:
-	ld.w	d15,[a15]7204
-.L570:
-	sub	d6,d15
-.L286:
-	movh.a	a15,#@his(path_record_config)
-	lea	a15,[a15]@los(path_record_config)
-.L571:
-	ld.w	d15,[a15]4
-.L572:
-	jge.u	d6,d15,.L29
-.L573:
-	mov	d2,#0
-.L574:
-	j	.L30
-.L29:
-	movh.a	a15,#@his(path_data)
-	lea	a15,[a15]@los(path_data)
-.L575:
-	ld.w	d4,[a15]7208
-.L287:
-	movh.a	a15,#@his(path_data)
-	lea	a15,[a15]@los(path_data)
-.L576:
-	ld.w	d5,[a15]7212
-.L288:
-	mov	d6,d0
-.L292:
-	call	path_recorder_calculate_distance
-.L290:
-	movh.a	a15,#@his(path_record_config)
-	lea	a15,[a15]@los(path_record_config)
-.L577:
-	ld.w	d15,[a15]
-.L578:
-	cmp.f	d15,d2,d15
-	and	d15,#6
-	ne	d2,d15,#0
-.L293:
-	j	.L31
-.L31:
-.L30:
-.L28:
-	ret
-.L254:
-	
-__path_recorder_should_record_function_end:
-	.size	path_recorder_should_record,__path_recorder_should_record_function_end-path_recorder_should_record
-.L189:
+.L126:
 	; End of function
 	
 	.sdecl	'.text.path_recorder.path_recorder_add_point',code,cluster('path_recorder_add_point')
@@ -484,92 +409,92 @@ __path_recorder_should_record_function_end:
 	.align	2
 	
 ; Function path_recorder_add_point
-.L73:
+.L70:
 path_recorder_add_point:	.type	func
 	mov.aa	a15,a4
-.L295:
+.L277:
 	movh.a	a2,#@his(path_data)
 	lea	a2,[a2]@los(path_data)
-.L583:
+.L557:
 	ld.hu	d15,[a2]7200
-.L584:
+.L558:
 	mov	d0,#300
-.L585:
-	jge.u	d15,d0,.L32
-.L586:
-	jnz.a	a15,.L33
-.L32:
+.L559:
+	jge.u	d15,d0,.L27
+.L560:
+	jnz.a	a15,.L28
+.L27:
 	mov	d2,#0
-.L587:
-	j	.L34
-.L33:
+.L561:
+	j	.L29
+.L28:
 	movh.a	a2,#@his(path_data)
 	lea	a2,[a2]@los(path_data)
-.L588:
+.L562:
 	ld.hu	d15,[a2]7200
-.L589:
+.L563:
 	mul	d15,d15,#24
-.L590:
+.L564:
 	movh.a	a2,#@his(path_data)
 	lea	a2,[a2]@los(path_data)
-.L591:
+.L565:
 	addsc.a	a2,a2,d15,#0
-.L592:
+.L566:
 	lea	a4,[a15]0
-.L294:
+.L275:
 	lea	a2,[a2]0
 	mov.a	a5,#5
-.L35:
+.L30:
 	ld.w	d15,[a4+]
 	st.w	[a2+],d15
-	loop	a5,.L35
-.L593:
+	loop	a5,.L30
+.L567:
 	movh.a	a2,#@his(path_data)
 	lea	a2,[a2]@los(path_data)
 	movh.a	a4,#@his(path_data)
 	lea	a4,[a4]@los(path_data)
-.L594:
+.L568:
 	ld.hu	d15,[a4]7200
-.L595:
+.L569:
 	add	d15,#1
 	st.h	[a2]7200,d15
-.L596:
+.L570:
 	mov.aa	a4,a15
-.L296:
+.L278:
 	call	update_path_statistics
-.L297:
+.L276:
 	movh.a	a2,#@his(path_data)
 	lea	a2,[a2]@los(path_data)
-.L597:
+.L571:
 	ld.w	d15,[a15]
-.L598:
+.L572:
 	st.w	[a2]7208,d15
-.L599:
+.L573:
 	movh.a	a2,#@his(path_data)
 	lea	a2,[a2]@los(path_data)
-.L600:
+.L574:
 	ld.w	d15,[a15]4
-.L601:
+.L575:
 	st.w	[a2]7212,d15
-.L602:
+.L576:
 	movh.a	a2,#@his(path_data)
 	lea	a2,[a2]@los(path_data)
-.L603:
+.L577:
 	ld.w	d15,[a15]8
-.L604:
+.L578:
 	st.w	[a2]7204,d15
-.L605:
+.L579:
 	mov	d2,#1
-.L606:
-	j	.L36
-.L36:
-.L34:
+.L580:
+	j	.L31
+.L31:
+.L29:
 	ret
-.L259:
+.L245:
 	
 __path_recorder_add_point_function_end:
 	.size	path_recorder_add_point,__path_recorder_add_point_function_end-path_recorder_add_point
-.L194:
+.L186:
 	; End of function
 	
 	.sdecl	'.text.path_recorder.path_recorder_task',code,cluster('path_recorder_task')
@@ -578,103 +503,150 @@ __path_recorder_add_point_function_end:
 	
 	.global	path_recorder_task
 ; Function path_recorder_task
-.L75:
+.L72:
 path_recorder_task:	.type	func
 	sub.a	a10,#24
-.L298:
+.L279:
+	mov	d10,#0
+.L280:
 	movh.a	a15,#@his(path_data)
 	lea	a15,[a15]@los(path_data)
-.L415:
+.L398:
 	ld.bu	d15,[a15]7202
-.L416:
-	jeq	d15,#1,.L37
-.L417:
-	j	.L38
-.L37:
+.L399:
+	jeq	d15,#1,.L32
+.L400:
+	j	.L33
+.L32:
 	call	is_valid_gps_fix
-.L418:
-	jne	d2,#0,.L39
-.L419:
-	j	.L40
-.L39:
+.L401:
+	jne	d2,#0,.L34
+.L402:
+	j	.L35
+.L34:
 	call	system_getval
 	mov	d15,#3125
 	sh	d15,#5
 	div.u	e8,d2,d15
-.L299:
+.L282:
+	movh.a	a15,#@his(path_data)
+	lea	a15,[a15]@los(path_data)
+.L403:
+	ld.hu	d15,[a15]7200
+.L404:
+	jlt.u	d15,#1,.L36
+.L405:
+	movh.a	a15,#@his(path_data)
+	lea	a15,[a15]@los(path_data)
+.L406:
+	ld.w	d15,[a15]7204
+.L407:
+	sub	d0,d8,d15
+.L408:
+	movh.a	a15,#@his(path_record_config)
+	lea	a15,[a15]@los(path_record_config)
+.L409:
+	ld.w	d15,[a15]4
+.L410:
+	jge.u	d0,d15,.L37
+.L411:
+	j	.L38
+.L37:
+	movh.a	a15,#@his(path_data)
+	lea	a15,[a15]@los(path_data)
+.L412:
+	ld.w	d4,[a15]7208
+.L413:
+	movh.a	a15,#@his(path_data)
+	lea	a15,[a15]@los(path_data)
+.L414:
+	ld.w	d5,[a15]7212
+.L415:
 	movh.a	a15,#@his(gnss)
 	lea	a15,[a15]@los(gnss)
+.L416:
+	ld.w	d6,[a15]22
+.L417:
+	movh.a	a15,#@his(gnss)
+	lea	a15,[a15]@los(gnss)
+.L418:
+	ld.w	d7,[a15]26
+	call	path_recorder_calculate_distance
+.L281:
+	mov	d10,d2
+.L283:
+	movh.a	a15,#@his(path_record_config)
+	lea	a15,[a15]@los(path_record_config)
+.L419:
+	ld.w	d15,[a15]
 .L420:
-	ld.w	d4,[a15]22
+	cmp.f	d15,d10,d15
+	extr.u	d15,d15,#0,#1
 .L421:
-	movh.a	a15,#@his(gnss)
-	lea	a15,[a15]@los(gnss)
+	jeq	d15,#0,.L39
 .L422:
-	ld.w	d5,[a15]26
+	j	.L40
+.L39:
+.L36:
+	movh.a	a15,#@his(gnss)
+	lea	a15,[a15]@los(gnss)
 .L423:
-	mov	d6,d8
-.L300:
-	call	path_recorder_should_record
-.L301:
-	mov	d15,d2
-.L424:
-	jeq	d15,#0,.L41
-.L224:
-	movh.a	a15,#@his(gnss)
-	lea	a15,[a15]@los(gnss)
-.L425:
 	ld.w	d15,[a15]22
-.L426:
+.L424:
 	st.w	[a10],d15
-.L427:
+.L425:
 	movh.a	a15,#@his(gnss)
 	lea	a15,[a15]@los(gnss)
-.L428:
+.L426:
 	ld.w	d15,[a15]26
-.L429:
+.L427:
 	st.w	[a10]4,d15
-.L430:
+.L428:
 	st.w	[a10]8,d8
-.L431:
+.L429:
 	movh.a	a15,#@his(gnss)
 	lea	a15,[a15]@los(gnss)
-.L432:
+.L430:
 	ld.w	d15,[a15]32
-.L433:
+.L431:
 	st.w	[a10]12,d15
-.L434:
+.L432:
 	movh.a	a15,#@his(gnss)
 	lea	a15,[a15]@los(gnss)
-.L435:
+.L433:
 	ld.w	d15,[a15]36
-.L436:
+.L434:
 	st.w	[a10]16,d15
-.L437:
+.L435:
 	movh.a	a15,#@his(gnss)
 	lea	a15,[a15]@los(gnss)
-.L438:
+.L436:
 	ld.bu	d15,[a15]46
-.L439:
+.L437:
 	st.b	[a10]20,d15
-.L440:
+.L438:
 	movh.a	a15,#@his(gnss)
 	lea	a15,[a15]@los(gnss)
-.L441:
+.L439:
 	ld.bu	d15,[a15]8
-.L442:
+.L440:
 	st.b	[a10]21,d15
-.L443:
+.L441:
 	lea	a4,[a10]0
+.L442:
+	mov	d4,d10
+.L284:
 	call	path_recorder_add_point
-.L41:
 .L40:
 .L38:
+.L35:
+.L33:
 	ret
-.L221:
+.L213:
 	
 __path_recorder_task_function_end:
 	.size	path_recorder_task,__path_recorder_task_function_end-path_recorder_task
-.L134:
+.L131:
 	; End of function
 	
 	.sdecl	'.text.path_recorder.path_recorder_get_config',code,cluster('path_recorder_get_config')
@@ -683,19 +655,19 @@ __path_recorder_task_function_end:
 	
 	.global	path_recorder_get_config
 ; Function path_recorder_get_config
-.L77:
+.L74:
 path_recorder_get_config:	.type	func
 	movh.a	a2,#@his(path_record_config)
 	lea	a2,[a2]@los(path_record_config)
-.L448:
-	j	.L42
-.L42:
+.L447:
+	j	.L41
+.L41:
 	ret
-.L228:
+.L221:
 	
 __path_recorder_get_config_function_end:
 	.size	path_recorder_get_config,__path_recorder_get_config_function_end-path_recorder_get_config
-.L139:
+.L136:
 	; End of function
 	
 	.sdecl	'.text.path_recorder.path_recorder_set_min_distance',code,cluster('path_recorder_set_min_distance')
@@ -704,25 +676,25 @@ __path_recorder_get_config_function_end:
 	
 	.global	path_recorder_set_min_distance
 ; Function path_recorder_set_min_distance
-.L79:
+.L76:
 path_recorder_set_min_distance:	.type	func
 	movh.a	a15,#@his(path_record_config)
 	lea	a15,[a15]@los(path_record_config)
-.L453:
+.L452:
 	mov.u	d5,#52429
 	addih	d5,d5,#15692
-.L454:
+.L453:
 	movh	d6,#16544
 	call	path_recorder_clamp_float
-.L302:
+.L285:
 	st.w	[a15],d2
-.L455:
+.L454:
 	ret
-.L229:
+.L222:
 	
 __path_recorder_set_min_distance_function_end:
 	.size	path_recorder_set_min_distance,__path_recorder_set_min_distance_function_end-path_recorder_set_min_distance
-.L144:
+.L141:
 	; End of function
 	
 	.sdecl	'.text.path_recorder.path_recorder_set_min_interval_ms',code,cluster('path_recorder_set_min_interval_ms')
@@ -731,24 +703,24 @@ __path_recorder_set_min_distance_function_end:
 	
 	.global	path_recorder_set_min_interval_ms
 ; Function path_recorder_set_min_interval_ms
-.L81:
+.L78:
 path_recorder_set_min_interval_ms:	.type	func
 	movh.a	a15,#@his(path_record_config)
 	lea	a15,[a15]@los(path_record_config)
-.L460:
+.L459:
 	mov	d5,#10
-.L461:
+.L460:
 	mov	d6,#1000
 	call	path_recorder_clamp_u32
-.L303:
+.L286:
 	st.w	[a15]4,d2
-.L462:
+.L461:
 	ret
-.L232:
+.L224:
 	
 __path_recorder_set_min_interval_ms_function_end:
 	.size	path_recorder_set_min_interval_ms,__path_recorder_set_min_interval_ms_function_end-path_recorder_set_min_interval_ms
-.L149:
+.L146:
 	; End of function
 	
 	.sdecl	'.text.path_recorder.path_recorder_set_min_satellites',code,cluster('path_recorder_set_min_satellites')
@@ -757,24 +729,24 @@ __path_recorder_set_min_interval_ms_function_end:
 	
 	.global	path_recorder_set_min_satellites
 ; Function path_recorder_set_min_satellites
-.L83:
+.L80:
 path_recorder_set_min_satellites:	.type	func
 	movh.a	a15,#@his(path_record_config)
 	lea	a15,[a15]@los(path_record_config)
-.L467:
+.L466:
 	mov	d5,#3
-.L468:
+.L467:
 	mov	d6,#12
 	call	path_recorder_clamp_u32
-.L304:
+.L287:
 	st.b	[a15]8,d2
-.L469:
+.L468:
 	ret
-.L234:
+.L226:
 	
 __path_recorder_set_min_satellites_function_end:
 	.size	path_recorder_set_min_satellites,__path_recorder_set_min_satellites_function_end-path_recorder_set_min_satellites
-.L154:
+.L151:
 	; End of function
 	
 	.sdecl	'.text.path_recorder.path_recorder_set_max_speed_kph',code,cluster('path_recorder_set_max_speed_kph')
@@ -783,24 +755,24 @@ __path_recorder_set_min_satellites_function_end:
 	
 	.global	path_recorder_set_max_speed_kph
 ; Function path_recorder_set_max_speed_kph
-.L85:
+.L82:
 path_recorder_set_max_speed_kph:	.type	func
 	movh.a	a15,#@his(path_record_config)
 	lea	a15,[a15]@los(path_record_config)
-.L474:
+.L473:
 	movh	d5,#16544
-.L475:
+.L474:
 	movh	d6,#17136
 	call	path_recorder_clamp_float
-.L305:
+.L288:
 	st.w	[a15]10,d2
-.L476:
+.L475:
 	ret
-.L236:
+.L228:
 	
 __path_recorder_set_max_speed_kph_function_end:
 	.size	path_recorder_set_max_speed_kph,__path_recorder_set_max_speed_kph_function_end-path_recorder_set_max_speed_kph
-.L159:
+.L156:
 	; End of function
 	
 	.sdecl	'.text.path_recorder.path_recorder_calculate_distance',code,cluster('path_recorder_calculate_distance')
@@ -808,116 +780,108 @@ __path_recorder_set_max_speed_kph_function_end:
 	.align	2
 	
 ; Function path_recorder_calculate_distance
-.L87:
+.L84:
 path_recorder_calculate_distance:	.type	func
 	mov	e8,d6,d4
-.L308:
+.L291:
 	sub.f	d15,d9,d8
-.L309:
+.L292:
 	mov	d0,#4059
 	addih	d0,d0,#16457
-.L611:
+.L585:
 	mul.f	d15,d15,d0
-.L612:
+.L586:
 	movh	d0,#17204
-.L613:
-	div.f	d10,d15,d0
-.L310:
-	sub.f	d15,d7,d5
-.L614:
-	mov	d0,#4059
-	addih	d0,d0,#16457
-.L615:
-	mul.f	d15,d15,d0
-.L616:
-	movh	d0,#17204
-.L617:
-	div.f	d11,d15,d0
-.L311:
-	movh	d15,#16384
-.L618:
-	div.f	d4,d10,d15
-.L306:
+.L587:
+	div.f	d15,d15,d0
+.L293:
+	sub.f	d0,d7,d5
+.L588:
+	mov	d1,#4059
+	addih	d1,d1,#16457
+.L589:
+	mul.f	d0,d0,d1
+.L590:
+	movh	d1,#17204
+.L591:
+	div.f	d10,d0,d1
+.L295:
+	movh	d0,#16384
+.L592:
+	div.f	d4,d15,d0
+.L289:
 	call	sin
-.L307:
-	mov	d12,d2
-.L619:
+.L290:
+	mov	d11,d2
+.L298:
+	movh	d15,#16384
+.L294:
+	div.f	d4,d10,d15
+	call	sin
+.L297:
+	mov	d10,d2
+.L296:
 	mov	d15,#4059
 	addih	d15,d15,#16457
-.L312:
+.L300:
 	mul.f	d15,d8,d15
-.L313:
+.L301:
 	movh	d0,#17204
-.L620:
+.L593:
 	div.f	d4,d15,d0
 	call	cos
-.L621:
+.L299:
 	mov	d15,d2
-.L622:
+.L594:
 	mov	d0,#4059
 	addih	d0,d0,#16457
-.L314:
+.L302:
 	mul.f	d0,d9,d0
-.L315:
+.L303:
 	movh	d1,#17204
-.L623:
+.L595:
 	div.f	d4,d0,d1
 	call	cos
-.L624:
+.L596:
 	mul.f	d15,d15,d2
-.L625:
-	movh	d0,#16384
-.L626:
-	div.f	d4,d11,d0
-	call	sin
-.L627:
-	mul.f	d15,d15,d2
-.L628:
-	movh	d0,#16384
-.L629:
-	div.f	d4,d11,d0
-	call	sin
-.L630:
-	mul.f	d15,d15,d2
-.L631:
-	movh	d0,#16384
-.L632:
-	div.f	d4,d10,d0
-	call	sin
-.L633:
-	madd.f	d15,d15,d12,d2
-.L316:
+.L597:
+	mul.f	d15,d15,d10
+.L598:
+	mul.f	d15,d15,d10
+.L599:
+	madd.f	d15,d15,d11,d11
+.L304:
 	mov	d4,d15
-.L318:
+.L306:
 	call	sqrt
-.L319:
+.L307:
 	mov	d8,d2
-.L634:
+.L600:
 	movh	d0,#16256
-.L635:
+.L601:
 	sub.f	d4,d0,d15
 	call	sqrt
-.L636:
+.L602:
 	mov	e4,d2,d8
 	call	atan2
-.L637:
+.L603:
 	movh	d15,#16384
-.L317:
+.L305:
 	mul.f	d15,d2,d15
-.L320:
+.L308:
 	mov	d0,#28016
 	addih	d0,d0,#19138
-.L638:
+.L604:
 	mul.f	d2,d15,d0
-.L639:
-	j	.L43
-.L43:
+.L605:
+	j	.L42
+.L42:
 	ret
-.L261:
+.L248:
 	
 __path_recorder_calculate_distance_function_end:
 	.size	path_recorder_calculate_distance,__path_recorder_calculate_distance_function_end-path_recorder_calculate_distance
-.L199:
+.L191:
 	; End of function
 	
 	.sdecl	'.text.path_recorder.update_path_statistics',code,cluster('update_path_statistics')
@@ -925,72 +889,45 @@ __path_recorder_calculate_distance_function_end:
 	.align	2
 	
 ; Function update_path_statistics
-.L89:
+.L86:
 update_path_statistics:	.type	func
-	mov.aa	a15,a4
-.L322:
-	movh.a	a2,#@his(path_data)
-	lea	a2,[a2]@los(path_data)
+	movh.a	a15,#@his(path_data)
+	lea	a15,[a15]@los(path_data)
+.L542:
+	ld.hu	d15,[a15]7200
 .L543:
-	ld.hu	d15,[a2]7200
+	jlt.u	d15,#2,.L43
 .L544:
-	jlt.u	d15,#2,.L44
-.L252:
+	movh.a	a15,#@his(path_data)
+	lea	a15,[a15]@los(path_data)
 	movh.a	a2,#@his(path_data)
 	lea	a2,[a2]@los(path_data)
 .L545:
-	ld.hu	d15,[a2]7200
+	ld.w	d15,[a2]7216
 .L546:
-	add	d15,#-2
+	add.f	d15,d15,d4
+	st.w	[a15]7216,d15
 .L547:
-	mul	d15,d15,#24
+	movh.a	a2,#@his(path_data)
+	lea	a2,[a2]@los(path_data)
 .L548:
-	movh.a	a2,#@his(path_data)
-	lea	a2,[a2]@los(path_data)
+	ld.w	d15,[a4]8
 .L549:
-	addsc.a	a2,a2,d15,#0
-.L324:
-	movh.a	a12,#@his(path_data)
-	lea	a12,[a12]@los(path_data)
-	movh.a	a4,#@his(path_data)
-.L321:
-	lea	a4,[a4]@los(path_data)
-.L550:
-	ld.w	d15,[a4]7216
-.L551:
-	ld.w	d4,[a2]
-.L552:
-	ld.w	d5,[a2]4
-.L553:
-	ld.w	d6,[a15]
-.L554:
-	ld.w	d7,[a15]4
-	call	path_recorder_calculate_distance
-.L325:
-	add.f	d15,d15,d2
-	st.w	[a12]7216,d15
-.L555:
-	movh.a	a2,#@his(path_data)
-	lea	a2,[a2]@los(path_data)
-.L556:
-	ld.w	d15,[a15]8
-.L557:
 	movh.a	a15,#@his(path_data)
-.L323:
 	lea	a15,[a15]@los(path_data)
-.L558:
+.L550:
 	ld.w	d0,[a15]8
-.L559:
+.L551:
 	sub	d15,d0
-.L560:
+.L552:
 	st.w	[a2]7220,d15
-.L44:
+.L43:
 	ret
-.L249:
+.L241:
 	
 __update_path_statistics_function_end:
 	.size	update_path_statistics,__update_path_statistics_function_end-update_path_statistics
-.L184:
+.L181:
 	; End of function
 	
 	.sdecl	'.text.path_recorder.path_recorder_get_stats',code,cluster('path_recorder_get_stats')
@@ -999,73 +936,73 @@ __update_path_statistics_function_end:
 	
 	.global	path_recorder_get_stats
 ; Function path_recorder_get_stats
-.L91:
+.L88:
 path_recorder_get_stats:	.type	func
-	jz.a	a4,.L45
+	jz.a	a4,.L44
+.L480:
+	movh.a	a15,#@his(path_data)
+	lea	a15,[a15]@los(path_data)
 .L481:
-	movh.a	a15,#@his(path_data)
-	lea	a15,[a15]@los(path_data)
+	ld.w	d15,[a15]7216
 .L482:
-	ld.w	d15,[a15]7216
-.L483:
 	st.w	[a4],d15
-.L45:
-	jz.a	a5,.L46
+.L44:
+	jz.a	a5,.L45
+.L483:
+	movh.a	a15,#@his(path_data)
+	lea	a15,[a15]@los(path_data)
 .L484:
-	movh.a	a15,#@his(path_data)
-	lea	a15,[a15]@los(path_data)
+	ld.w	d15,[a15]7220
 .L485:
-	ld.w	d15,[a15]7220
-.L486:
 	st.w	[a5],d15
-.L46:
-	jz.a	a6,.L47
+.L45:
+	jz.a	a6,.L46
+.L486:
+	movh.a	a15,#@his(path_data)
+	lea	a15,[a15]@los(path_data)
 .L487:
-	movh.a	a15,#@his(path_data)
-	lea	a15,[a15]@los(path_data)
-.L488:
 	ld.w	d15,[a15]7220
+.L488:
+	jlt.u	d15,#1,.L47
 .L489:
-	jlt.u	d15,#1,.L48
+	movh.a	a15,#@his(path_data)
+	lea	a15,[a15]@los(path_data)
 .L490:
-	movh.a	a15,#@his(path_data)
-	lea	a15,[a15]@los(path_data)
-.L491:
 	ld.w	d15,[a15]7216
-.L492:
+.L491:
 	movh.a	a15,#@his(path_data)
 	lea	a15,[a15]@los(path_data)
-.L493:
+.L492:
 	ld.w	d0,[a15]7220
-.L494:
+.L493:
 	utof	d0,d0
-.L495:
+.L494:
 	movh	d1,#17530
-.L496:
+.L495:
 	div.f	d0,d0,d1
-.L497:
+.L496:
 	div.f	d15,d15,d0
-.L498:
+.L497:
 	mov	d0,#26214
 	addih	d0,d0,#16486
-.L499:
+.L498:
 	mul.f	d15,d15,d0
+.L499:
+	st.w	[a6],d15
 .L500:
-	st.w	[a6],d15
-.L501:
-	j	.L49
-.L48:
-	mov	d15,#0
-.L502:
-	st.w	[a6],d15
-.L49:
+	j	.L48
 .L47:
+	mov	d15,#0
+.L501:
+	st.w	[a6],d15
+.L48:
+.L46:
 	ret
-.L238:
+.L230:
 	
 __path_recorder_get_stats_function_end:
 	.size	path_recorder_get_stats,__path_recorder_get_stats_function_end-path_recorder_get_stats
-.L164:
+.L161:
 	; End of function
 	
 	.sdecl	'.text.path_recorder.path_recorder_get_state',code,cluster('path_recorder_get_state')
@@ -1074,21 +1011,21 @@ __path_recorder_get_stats_function_end:
 	
 	.global	path_recorder_get_state
 ; Function path_recorder_get_state
-.L93:
+.L90:
 path_recorder_get_state:	.type	func
 	movh.a	a15,#@his(path_data)
 	lea	a15,[a15]@los(path_data)
-.L507:
+.L506:
 	ld.bu	d2,[a15]7202
-.L508:
-	j	.L50
-.L50:
+.L507:
+	j	.L49
+.L49:
 	ret
-.L245:
+.L237:
 	
 __path_recorder_get_state_function_end:
 	.size	path_recorder_get_state,__path_recorder_get_state_function_end-path_recorder_get_state
-.L169:
+.L166:
 	; End of function
 	
 	.sdecl	'.text.path_recorder.path_recorder_get_point_count',code,cluster('path_recorder_get_point_count')
@@ -1097,21 +1034,21 @@ __path_recorder_get_state_function_end:
 	
 	.global	path_recorder_get_point_count
 ; Function path_recorder_get_point_count
-.L95:
+.L92:
 path_recorder_get_point_count:	.type	func
 	movh.a	a15,#@his(path_data)
 	lea	a15,[a15]@los(path_data)
-.L513:
+.L512:
 	ld.hu	d2,[a15]7200
-.L514:
-	j	.L51
-.L51:
+.L513:
+	j	.L50
+.L50:
 	ret
-.L247:
+.L239:
 	
 __path_recorder_get_point_count_function_end:
 	.size	path_recorder_get_point_count,__path_recorder_get_point_count_function_end-path_recorder_get_point_count
-.L174:
+.L171:
 	; End of function
 	
 	.sdecl	'.bss.path_recorder.path_data',data,cluster('path_data')
@@ -1135,11 +1072,10 @@ path_record_config:	.type	object
 	.calls	'path_recorder_start_new','path_recorder_clear'
 	.calls	'path_recorder_start_new','path_recorder_start'
 	.calls	'path_recorder_clear','memset'
-	.calls	'path_recorder_should_record','path_recorder_calculate_distance'
 	.calls	'path_recorder_add_point','update_path_statistics'
 	.calls	'path_recorder_task','is_valid_gps_fix'
 	.calls	'path_recorder_task','system_getval'
-	.calls	'path_recorder_task','path_recorder_should_record'
+	.calls	'path_recorder_task','path_recorder_calculate_distance'
 	.calls	'path_recorder_task','path_recorder_add_point'
 	.calls	'path_recorder_set_min_distance','path_recorder_clamp_float'
 	.calls	'path_recorder_set_min_interval_ms','path_recorder_clamp_u32'
@@ -1149,7 +1085,6 @@ path_record_config:	.type	object
 	.calls	'path_recorder_calculate_distance','cos'
 	.calls	'path_recorder_calculate_distance','sqrt'
 	.calls	'path_recorder_calculate_distance','atan2'
-	.calls	'update_path_statistics','path_recorder_calculate_distance'
 	.calls	'path_recorder_clamp_float','',0
 	.calls	'path_recorder_clamp_u32','',0
 	.calls	'is_valid_gps_fix','',0
@@ -1159,7 +1094,6 @@ path_record_config:	.type	object
 	.calls	'path_recorder_start_new','',0
 	.calls	'path_recorder_stop','',0
 	.calls	'path_recorder_clear','',0
-	.calls	'path_recorder_should_record','',0
 	.calls	'path_recorder_add_point','',0
 	.calls	'path_recorder_task','',24
 	.calls	'path_recorder_get_config','',0
@@ -1181,17 +1115,17 @@ path_record_config:	.type	object
 	.calls	'path_recorder_get_point_count','',0
 	.sdecl	'.debug_info',debug
 	.sect	'.debug_info'
-.L97:
+.L94:
 	.word	153574
 	.half	3
-	.word	.L98
+	.word	.L95
 	.byte	4
-.L96:
+.L93:
 	.byte	1
 	.byte	'../code/GPS/path_recorder.c',0
 	.byte	'TASKING VX-toolset for AURIX Development Studio (non-commercial): C compiler',0
 	.byte	'E:\\ads\\Seekfree_TC387_Opensource_Library\\Debug\\',0,12,1
-	.word	.L99
+	.word	.L96
 	.byte	2,1,1,3
 	.word	171
 	.byte	4
@@ -1200,7 +1134,7 @@ path_record_config:	.type	object
 	.word	174
 	.byte	6,0,7
 	.byte	'__fract',0,4,128,1
-.L230:
+.L214:
 	.byte	7
 	.byte	'float',0,4,4,8
 	.byte	'Ifx__float_to_fract',0,3,1,152,2,18
@@ -1252,10 +1186,10 @@ path_record_config:	.type	object
 	.byte	'B',0
 	.word	474
 	.byte	4,2,35,0,0
-.L216:
+.L208:
 	.byte	7
 	.byte	'unsigned char',0,1,8
-.L246:
+.L238:
 	.byte	7
 	.byte	'unsigned short int',0,2,7,10
 	.byte	'_Ifx_SCU_WDTCPU_CON1_Bits',0,4,229,9,16,4,11
@@ -2782,7 +2716,7 @@ path_record_config:	.type	object
 	.byte	'enabled',0,8,133,8,50
 	.word	610
 	.byte	6,0
-.L222:
+.L216:
 	.byte	7
 	.byte	'unsigned long int',0,4,7,8
 	.byte	'IfxCpu_getPerformanceCounter',0,3,8,254,6,19
@@ -6558,7 +6492,7 @@ path_record_config:	.type	object
 	.byte	'system_getval',0,22,43,9
 	.word	10348
 	.byte	1,1,1,1
-.L225:
+.L218:
 	.byte	20,23,38,9,24,13
 	.byte	'latitude',0
 	.word	231
@@ -6581,7 +6515,7 @@ path_record_config:	.type	object
 	.byte	'fix_quality',0
 	.word	610
 	.byte	1,2,35,21,0
-.L279:
+.L268:
 	.byte	20,23,30,9,16,13
 	.byte	'min_record_distance',0
 	.word	231
@@ -6596,21 +6530,21 @@ path_record_config:	.type	object
 	.word	231
 	.byte	4,2,35,10,0,29
 	.word	33523
-.L227:
+.L220:
 	.byte	3
 	.word	33644
-.L239:
+.L231:
 	.byte	3
 	.word	231
-.L241:
+.L233:
 	.byte	3
 	.word	10348
-.L244:
+.L236:
 	.byte	17,23,23,9,1,18
 	.byte	'PATH_STATE_IDLE',0,0,18
 	.byte	'PATH_STATE_RECORDING',0,1,18
 	.byte	'PATH_STATE_COMPLETED',0,2,0
-.L250:
+.L242:
 	.byte	3
 	.word	33381
 	.byte	30
@@ -21465,7 +21399,7 @@ path_record_config:	.type	object
 	.byte	15,160,56
 	.word	33381
 	.byte	16,171,2,0
-.L278:
+.L267:
 	.byte	20,23,49,9,184,56,13
 	.byte	'points',0
 	.word	153362
@@ -21496,7 +21430,7 @@ path_record_config:	.type	object
 	.byte	0
 	.sdecl	'.debug_abbrev',debug
 	.sect	'.debug_abbrev'
-.L98:
+.L95:
 	.byte	1,17,1,3,8,37,8,27,8,19,15,128,70,12,16,6,0,0,2,21,0,54,15,39,12,0,0,3,15,0,73,19,0,0,4,46,1,3,8,32,13
 	.byte	58,15,59,15,57,15,54,15,39,12,0,0,5,5,0,3,8,58,15,59,15,57,15,73,19,0,0,6,11,0,0,0,7,36,0,3,8,11,15,62
 	.byte	15,0,0,8,46,1,3,8,32,13,58,15,59,15,57,15,73,19,54,15,39,12,0,0,9,59,0,3,8,0,0,10,19,1,3,8,58,15,59,15
@@ -21510,12 +21444,12 @@ path_record_config:	.type	object
 	.byte	15,73,19,63,12,60,12,0,0,0
 	.sdecl	'.debug_line',debug
 	.sect	'.debug_line'
-.L99:
-	.word	.L327-.L326
-.L326:
+.L96:
+	.word	.L310-.L309
+.L309:
 	.half	3
-	.word	.L329-.L328
-.L328:
+	.word	.L312-.L311
+.L311:
 	.byte	2,1,-4,9,10,0,1,1,1,1,0,0,0,1
 	.byte	'E:\\\\ads\\\\Seekfree_TC387_Opensource_Library\\\\libraries\\\\infineon_libraries\\\\Infra\\\\Sfr\\\\TC38A\\\\_Reg',0
 	.byte	'E:\\ZNC\\AURIX-Studio-1.10.6\\tools\\Compilers\\Tasking_1.1r8\\ctc\\include\\',0
@@ -21602,2131 +21536,2033 @@ path_record_config:	.type	object
 	.byte	'zf_device_wifi_uart.h',0,10,0,0
 	.byte	'zf_device_wifi_spi.h',0,10,0,0
 	.byte	'seekfree_assistant.h',0,11,0,0,0
-.L329:
-.L327:
+.L312:
+.L310:
 	.sdecl	'.debug_info',debug,cluster('path_recorder_init')
 	.sect	'.debug_info'
-.L100:
+.L97:
 	.word	225
 	.half	3
-	.word	.L101
+	.word	.L98
 	.byte	4,1
 	.byte	'../code/GPS/path_recorder.c',0
 	.byte	'TASKING VX-toolset for AURIX Development Studio (non-commercial): C compiler',0
 	.byte	'E:\\ads\\Seekfree_TC387_Opensource_Library\\Debug\\',0,12,1
-	.word	.L103,.L102
+	.word	.L100,.L99
 	.byte	2
-	.word	.L96
+	.word	.L93
 	.byte	3
-	.byte	'path_recorder_init',0,1,62,6,1,1,1
-	.word	.L59,.L214,.L58
+	.byte	'path_recorder_init',0,1,61,6,1,1,1
+	.word	.L58,.L206,.L57
 	.byte	4
-	.word	.L59,.L214
+	.word	.L58,.L206
 	.byte	0,0
 	.sdecl	'.debug_abbrev',debug,cluster('path_recorder_init')
 	.sect	'.debug_abbrev'
-.L101:
+.L98:
 	.byte	1,17,1,3,8,37,8,27,8,19,15,128,70,12,85,6,16,6,0,0,2,61,0,24,16,0,0,3,46,1,3,8,58,15,59,15,57,15,54,15
 	.byte	39,12,63,12,17,1,18,1,64,6,0,0,4,11,0,17,1,18,1,0,0,0
 	.sdecl	'.debug_line',debug,cluster('path_recorder_init')
 	.sect	'.debug_line'
-.L102:
-	.word	.L331-.L330
-.L330:
+.L99:
+	.word	.L314-.L313
+.L313:
 	.half	3
-	.word	.L333-.L332
-.L332:
+	.word	.L316-.L315
+.L315:
 	.byte	2,1,-4,9,10,0,1,1,1,1,0,0,0,1,0
 	.byte	'../code/GPS/path_recorder.c',0,0,0,0,0
-.L333:
+.L316:
 	.byte	5,13,7,0,5,2
-	.word	.L59
-	.byte	3,63,1,5,24,9
-	.half	.L334-.L59
+	.word	.L58
+	.byte	3,62,1,5,24,9
+	.half	.L317-.L58
 	.byte	1,5,27,9
-	.half	.L335-.L334
+	.half	.L318-.L317
 	.byte	1,5,5,9
-	.half	.L336-.L335
+	.half	.L319-.L318
 	.byte	3,1,1,5,23,9
-	.half	.L337-.L336
+	.half	.L320-.L319
 	.byte	1,5,21,9
-	.half	.L338-.L337
+	.half	.L321-.L320
 	.byte	1,5,31,9
-	.half	.L339-.L338
+	.half	.L322-.L321
 	.byte	3,1,1,5,1,9
-	.half	.L340-.L339
+	.half	.L323-.L322
 	.byte	3,1,1,7,9
-	.half	.L104-.L340
+	.half	.L101-.L323
 	.byte	0,1,1
-.L331:
+.L314:
 	.sdecl	'.debug_ranges',debug,cluster('path_recorder_init')
 	.sect	'.debug_ranges'
-.L103:
-	.word	-1,.L59,0,.L104-.L59,0,0
+.L100:
+	.word	-1,.L58,0,.L101-.L58,0,0
 	.sdecl	'.debug_info',debug,cluster('path_recorder_reset_config')
 	.sect	'.debug_info'
-.L105:
+.L102:
 	.word	233
 	.half	3
-	.word	.L106
+	.word	.L103
 	.byte	4,1
 	.byte	'../code/GPS/path_recorder.c',0
 	.byte	'TASKING VX-toolset for AURIX Development Studio (non-commercial): C compiler',0
 	.byte	'E:\\ads\\Seekfree_TC387_Opensource_Library\\Debug\\',0,12,1
-	.word	.L108,.L107
+	.word	.L105,.L104
 	.byte	2
-	.word	.L96
+	.word	.L93
 	.byte	3
-	.byte	'path_recorder_reset_config',0,1,69,6,1,1,1
-	.word	.L61,.L215,.L60
+	.byte	'path_recorder_reset_config',0,1,68,6,1,1,1
+	.word	.L60,.L207,.L59
 	.byte	4
-	.word	.L61,.L215
+	.word	.L60,.L207
 	.byte	0,0
 	.sdecl	'.debug_abbrev',debug,cluster('path_recorder_reset_config')
 	.sect	'.debug_abbrev'
-.L106:
+.L103:
 	.byte	1,17,1,3,8,37,8,27,8,19,15,128,70,12,85,6,16,6,0,0,2,61,0,24,16,0,0,3,46,1,3,8,58,15,59,15,57,15,54,15
 	.byte	39,12,63,12,17,1,18,1,64,6,0,0,4,11,0,17,1,18,1,0,0,0
 	.sdecl	'.debug_line',debug,cluster('path_recorder_reset_config')
 	.sect	'.debug_line'
-.L107:
-	.word	.L342-.L341
-.L341:
+.L104:
+	.word	.L325-.L324
+.L324:
 	.half	3
-	.word	.L344-.L343
-.L343:
+	.word	.L327-.L326
+.L326:
 	.byte	2,1,-4,9,10,0,1,1,1,1,0,0,0,1,0
 	.byte	'../code/GPS/path_recorder.c',0,0,0,0,0
-.L344:
+.L327:
 	.byte	5,5,7,0,5,2
-	.word	.L61
-	.byte	3,198,0,1,5,46,9
-	.half	.L345-.L61
+	.word	.L60
+	.byte	3,197,0,1,5,46,9
+	.half	.L328-.L60
 	.byte	1,5,44,9
-	.half	.L346-.L345
+	.half	.L329-.L328
 	.byte	1,5,5,9
-	.half	.L347-.L346
+	.half	.L330-.L329
 	.byte	3,1,1,5,49,9
-	.half	.L348-.L347
+	.half	.L331-.L330
 	.byte	1,5,47,9
-	.half	.L349-.L348
+	.half	.L332-.L331
 	.byte	1,5,5,9
-	.half	.L350-.L349
+	.half	.L333-.L332
 	.byte	3,1,1,5,41,9
-	.half	.L351-.L350
+	.half	.L334-.L333
 	.byte	1,5,39,9
-	.half	.L352-.L351
+	.half	.L335-.L334
 	.byte	1,5,5,9
-	.half	.L353-.L352
+	.half	.L336-.L335
 	.byte	3,1,1,5,47,9
-	.half	.L354-.L353
+	.half	.L337-.L336
 	.byte	1,5,45,9
-	.half	.L355-.L354
+	.half	.L338-.L337
 	.byte	1,5,1,9
-	.half	.L356-.L355
+	.half	.L339-.L338
 	.byte	3,1,1,7,9
-	.half	.L109-.L356
+	.half	.L106-.L339
 	.byte	0,1,1
-.L342:
+.L325:
 	.sdecl	'.debug_ranges',debug,cluster('path_recorder_reset_config')
 	.sect	'.debug_ranges'
-.L108:
-	.word	-1,.L61,0,.L109-.L61,0,0
+.L105:
+	.word	-1,.L60,0,.L106-.L60,0,0
 	.sdecl	'.debug_info',debug,cluster('path_recorder_start')
 	.sect	'.debug_info'
-.L110:
+.L107:
 	.word	230
 	.half	3
-	.word	.L111
+	.word	.L108
 	.byte	4,1
 	.byte	'../code/GPS/path_recorder.c',0
 	.byte	'TASKING VX-toolset for AURIX Development Studio (non-commercial): C compiler',0
 	.byte	'E:\\ads\\Seekfree_TC387_Opensource_Library\\Debug\\',0,12,1
-	.word	.L113,.L112
+	.word	.L110,.L109
 	.byte	2
-	.word	.L96
+	.word	.L93
 	.byte	3
-	.byte	'path_recorder_start',0,1,77,7
-	.word	.L216
+	.byte	'path_recorder_start',0,1,76,7
+	.word	.L208
 	.byte	1,1,1
-	.word	.L63,.L217,.L62
+	.word	.L62,.L209,.L61
 	.byte	4
-	.word	.L63,.L217
+	.word	.L62,.L209
 	.byte	0,0
 	.sdecl	'.debug_abbrev',debug,cluster('path_recorder_start')
 	.sect	'.debug_abbrev'
-.L111:
+.L108:
 	.byte	1,17,1,3,8,37,8,27,8,19,15,128,70,12,85,6,16,6,0,0,2,61,0,24,16,0,0,3,46,1,3,8,58,15,59,15,57,15,73,16
 	.byte	54,15,39,12,63,12,17,1,18,1,64,6,0,0,4,11,0,17,1,18,1,0,0,0
 	.sdecl	'.debug_line',debug,cluster('path_recorder_start')
 	.sect	'.debug_line'
-.L112:
-	.word	.L358-.L357
-.L357:
+.L109:
+	.word	.L341-.L340
+.L340:
 	.half	3
-	.word	.L360-.L359
-.L359:
+	.word	.L343-.L342
+.L342:
 	.byte	2,1,-4,9,10,0,1,1,1,1,0,0,0,1,0
 	.byte	'../code/GPS/path_recorder.c',0,0,0,0,0
-.L360:
+.L343:
 	.byte	5,26,7,0,5,2
-	.word	.L63
-	.byte	3,206,0,1,5,10,9
-	.half	.L361-.L63
+	.word	.L62
+	.byte	3,205,0,1,5,10,9
+	.half	.L344-.L62
 	.byte	1,5,16,7,9
-	.half	.L362-.L361
+	.half	.L345-.L344
 	.byte	3,2,1,5,9,9
-	.half	.L363-.L362
+	.half	.L346-.L345
 	.byte	1,9
-	.half	.L18-.L363
+	.half	.L18-.L346
 	.byte	3,3,1,5,18,9
-	.half	.L364-.L18
+	.half	.L347-.L18
 	.byte	1,5,5,9
-	.half	.L365-.L364
+	.half	.L348-.L347
 	.byte	1,5,16,7,9
-	.half	.L366-.L365
+	.half	.L349-.L348
 	.byte	3,2,1,5,9,9
-	.half	.L367-.L366
+	.half	.L350-.L349
 	.byte	1,5,5,9
-	.half	.L20-.L367
+	.half	.L20-.L350
 	.byte	3,3,1,5,23,9
-	.half	.L368-.L20
+	.half	.L351-.L20
 	.byte	1,5,21,9
-	.half	.L369-.L368
+	.half	.L352-.L351
 	.byte	1,5,5,9
-	.half	.L370-.L369
+	.half	.L353-.L352
 	.byte	3,1,1,5,34,9
-	.half	.L371-.L370
+	.half	.L354-.L353
 	.byte	1,5,32,9
-	.half	.L372-.L371
+	.half	.L355-.L354
 	.byte	1,5,5,9
-	.half	.L373-.L372
-	.byte	3,1,1,5,38,9
-	.half	.L374-.L373
-	.byte	1,5,42,9
-	.half	.L375-.L374
-	.byte	1,5,29,9
-	.half	.L376-.L375
-	.byte	1,5,5,9
-	.half	.L377-.L376
-	.byte	3,1,1,5,39,9
-	.half	.L378-.L377
-	.byte	1,5,43,9
-	.half	.L379-.L378
+	.half	.L356-.L355
+	.byte	3,1,1,5,32,9
+	.half	.L357-.L356
+	.byte	1,5,36,9
+	.half	.L358-.L357
 	.byte	1,5,30,9
-	.half	.L380-.L379
+	.half	.L359-.L358
+	.byte	1,5,5,9
+	.half	.L360-.L359
+	.byte	3,1,1,5,32,9
+	.half	.L361-.L360
+	.byte	1,5,36,9
+	.half	.L362-.L361
+	.byte	1,5,30,9
+	.half	.L363-.L362
 	.byte	1,5,12,9
-	.half	.L381-.L380
+	.half	.L364-.L363
 	.byte	3,1,1,5,5,9
-	.half	.L382-.L381
+	.half	.L365-.L364
 	.byte	1,5,1,9
-	.half	.L19-.L382
+	.half	.L19-.L365
 	.byte	3,1,1,7,9
-	.half	.L114-.L19
+	.half	.L111-.L19
 	.byte	0,1,1
-.L358:
+.L341:
 	.sdecl	'.debug_ranges',debug,cluster('path_recorder_start')
 	.sect	'.debug_ranges'
-.L113:
-	.word	-1,.L63,0,.L114-.L63,0,0
+.L110:
+	.word	-1,.L62,0,.L111-.L62,0,0
 	.sdecl	'.debug_info',debug,cluster('path_recorder_start_new')
 	.sect	'.debug_info'
-.L115:
+.L112:
 	.word	234
 	.half	3
-	.word	.L116
+	.word	.L113
 	.byte	4,1
 	.byte	'../code/GPS/path_recorder.c',0
 	.byte	'TASKING VX-toolset for AURIX Development Studio (non-commercial): C compiler',0
 	.byte	'E:\\ads\\Seekfree_TC387_Opensource_Library\\Debug\\',0,12,1
-	.word	.L118,.L117
+	.word	.L115,.L114
 	.byte	2
-	.word	.L96
+	.word	.L93
 	.byte	3
-	.byte	'path_recorder_start_new',0,1,96,7
-	.word	.L216
+	.byte	'path_recorder_start_new',0,1,95,7
+	.word	.L208
 	.byte	1,1,1
-	.word	.L65,.L218,.L64
+	.word	.L64,.L210,.L63
 	.byte	4
-	.word	.L65,.L218
+	.word	.L64,.L210
 	.byte	0,0
 	.sdecl	'.debug_abbrev',debug,cluster('path_recorder_start_new')
 	.sect	'.debug_abbrev'
-.L116:
+.L113:
 	.byte	1,17,1,3,8,37,8,27,8,19,15,128,70,12,85,6,16,6,0,0,2,61,0,24,16,0,0,3,46,1,3,8,58,15,59,15,57,15,73,16
 	.byte	54,15,39,12,63,12,17,1,18,1,64,6,0,0,4,11,0,17,1,18,1,0,0,0
 	.sdecl	'.debug_line',debug,cluster('path_recorder_start_new')
 	.sect	'.debug_line'
-.L117:
-	.word	.L384-.L383
-.L383:
+.L114:
+	.word	.L367-.L366
+.L366:
 	.half	3
-	.word	.L386-.L385
-.L385:
+	.word	.L369-.L368
+.L368:
 	.byte	2,1,-4,9,10,0,1,1,1,1,0,0,0,1,0
 	.byte	'../code/GPS/path_recorder.c',0,0,0,0,0
-.L386:
+.L369:
 	.byte	5,26,7,0,5,2
-	.word	.L65
-	.byte	3,225,0,1,5,10,9
-	.half	.L387-.L65
+	.word	.L64
+	.byte	3,224,0,1,5,10,9
+	.half	.L370-.L64
 	.byte	1,5,16,7,9
-	.half	.L388-.L387
+	.half	.L371-.L370
 	.byte	3,2,1,5,9,9
-	.half	.L389-.L388
+	.half	.L372-.L371
 	.byte	1,5,24,9
-	.half	.L23-.L389
+	.half	.L23-.L372
 	.byte	3,3,1,5,31,9
-	.half	.L390-.L23
+	.half	.L373-.L23
 	.byte	3,1,1,5,5,9
-	.half	.L391-.L390
+	.half	.L374-.L373
 	.byte	1,5,1,9
-	.half	.L24-.L391
+	.half	.L24-.L374
 	.byte	3,1,1,7,9
-	.half	.L119-.L24
+	.half	.L116-.L24
 	.byte	0,1,1
-.L384:
+.L367:
 	.sdecl	'.debug_ranges',debug,cluster('path_recorder_start_new')
 	.sect	'.debug_ranges'
-.L118:
-	.word	-1,.L65,0,.L119-.L65,0,0
+.L115:
+	.word	-1,.L64,0,.L116-.L64,0,0
 	.sdecl	'.debug_info',debug,cluster('path_recorder_stop')
 	.sect	'.debug_info'
-.L120:
+.L117:
 	.word	225
 	.half	3
-	.word	.L121
+	.word	.L118
 	.byte	4,1
 	.byte	'../code/GPS/path_recorder.c',0
 	.byte	'TASKING VX-toolset for AURIX Development Studio (non-commercial): C compiler',0
 	.byte	'E:\\ads\\Seekfree_TC387_Opensource_Library\\Debug\\',0,12,1
-	.word	.L123,.L122
+	.word	.L120,.L119
 	.byte	2
-	.word	.L96
+	.word	.L93
 	.byte	3
-	.byte	'path_recorder_stop',0,1,107,6,1,1,1
-	.word	.L67,.L219,.L66
+	.byte	'path_recorder_stop',0,1,106,6,1,1,1
+	.word	.L66,.L211,.L65
 	.byte	4
-	.word	.L67,.L219
+	.word	.L66,.L211
 	.byte	0,0
 	.sdecl	'.debug_abbrev',debug,cluster('path_recorder_stop')
 	.sect	'.debug_abbrev'
-.L121:
+.L118:
 	.byte	1,17,1,3,8,37,8,27,8,19,15,128,70,12,85,6,16,6,0,0,2,61,0,24,16,0,0,3,46,1,3,8,58,15,59,15,57,15,54,15
 	.byte	39,12,63,12,17,1,18,1,64,6,0,0,4,11,0,17,1,18,1,0,0,0
 	.sdecl	'.debug_line',debug,cluster('path_recorder_stop')
 	.sect	'.debug_line'
-.L122:
-	.word	.L393-.L392
-.L392:
+.L119:
+	.word	.L376-.L375
+.L375:
 	.half	3
-	.word	.L395-.L394
-.L394:
+	.word	.L378-.L377
+.L377:
 	.byte	2,1,-4,9,10,0,1,1,1,1,0,0,0,1,0
 	.byte	'../code/GPS/path_recorder.c',0,0,0,0,0
-.L395:
+.L378:
 	.byte	5,9,7,0,5,2
-	.word	.L67
-	.byte	3,236,0,1,5,18,9
-	.half	.L396-.L67
+	.word	.L66
+	.byte	3,235,0,1,5,18,9
+	.half	.L379-.L66
 	.byte	1,5,5,9
-	.half	.L397-.L396
+	.half	.L380-.L379
 	.byte	1,5,9,7,9
-	.half	.L398-.L397
+	.half	.L381-.L380
 	.byte	3,2,1,5,27,9
-	.half	.L399-.L398
+	.half	.L382-.L381
 	.byte	1,5,25,9
-	.half	.L400-.L399
+	.half	.L383-.L382
 	.byte	1,5,1,9
-	.half	.L26-.L400
+	.half	.L26-.L383
 	.byte	3,2,1,7,9
-	.half	.L124-.L26
+	.half	.L121-.L26
 	.byte	0,1,1
-.L393:
+.L376:
 	.sdecl	'.debug_ranges',debug,cluster('path_recorder_stop')
 	.sect	'.debug_ranges'
-.L123:
-	.word	-1,.L67,0,.L124-.L67,0,0
+.L120:
+	.word	-1,.L66,0,.L121-.L66,0,0
 	.sdecl	'.debug_info',debug,cluster('path_recorder_clear')
 	.sect	'.debug_info'
-.L125:
+.L122:
 	.word	226
 	.half	3
-	.word	.L126
+	.word	.L123
 	.byte	4,1
 	.byte	'../code/GPS/path_recorder.c',0
 	.byte	'TASKING VX-toolset for AURIX Development Studio (non-commercial): C compiler',0
 	.byte	'E:\\ads\\Seekfree_TC387_Opensource_Library\\Debug\\',0,12,1
-	.word	.L128,.L127
+	.word	.L125,.L124
 	.byte	2
-	.word	.L96
+	.word	.L93
 	.byte	3
-	.byte	'path_recorder_clear',0,1,115,6,1,1,1
-	.word	.L69,.L220,.L68
+	.byte	'path_recorder_clear',0,1,114,6,1,1,1
+	.word	.L68,.L212,.L67
 	.byte	4
-	.word	.L69,.L220
+	.word	.L68,.L212
 	.byte	0,0
 	.sdecl	'.debug_abbrev',debug,cluster('path_recorder_clear')
 	.sect	'.debug_abbrev'
-.L126:
+.L123:
 	.byte	1,17,1,3,8,37,8,27,8,19,15,128,70,12,85,6,16,6,0,0,2,61,0,24,16,0,0,3,46,1,3,8,58,15,59,15,57,15,54,15
 	.byte	39,12,63,12,17,1,18,1,64,6,0,0,4,11,0,17,1,18,1,0,0,0
 	.sdecl	'.debug_line',debug,cluster('path_recorder_clear')
 	.sect	'.debug_line'
-.L127:
-	.word	.L402-.L401
-.L401:
+.L124:
+	.word	.L385-.L384
+.L384:
 	.half	3
-	.word	.L404-.L403
-.L403:
+	.word	.L387-.L386
+.L386:
 	.byte	2,1,-4,9,10,0,1,1,1,1,0,0,0,1,0
 	.byte	'../code/GPS/path_recorder.c',0,0,0,0,0
-.L404:
+.L387:
 	.byte	5,13,7,0,5,2
-	.word	.L69
-	.byte	3,244,0,1,5,24,9
-	.half	.L405-.L69
+	.word	.L68
+	.byte	3,243,0,1,5,24,9
+	.half	.L388-.L68
 	.byte	1,5,27,9
-	.half	.L406-.L405
+	.half	.L389-.L388
 	.byte	1,5,5,9
-	.half	.L407-.L406
+	.half	.L390-.L389
 	.byte	3,1,1,5,23,9
-	.half	.L408-.L407
+	.half	.L391-.L390
 	.byte	1,5,21,9
-	.half	.L409-.L408
+	.half	.L392-.L391
 	.byte	1,5,1,9
-	.half	.L410-.L409
+	.half	.L393-.L392
 	.byte	3,1,1,7,9
-	.half	.L129-.L410
+	.half	.L126-.L393
 	.byte	0,1,1
-.L402:
+.L385:
 	.sdecl	'.debug_ranges',debug,cluster('path_recorder_clear')
 	.sect	'.debug_ranges'
-.L128:
-	.word	-1,.L69,0,.L129-.L69,0,0
+.L125:
+	.word	-1,.L68,0,.L126-.L68,0,0
 	.sdecl	'.debug_info',debug,cluster('path_recorder_task')
 	.sect	'.debug_info'
-.L130:
-	.word	292
+.L127:
+	.word	294
 	.half	3
-	.word	.L131
+	.word	.L128
 	.byte	4,1
 	.byte	'../code/GPS/path_recorder.c',0
 	.byte	'TASKING VX-toolset for AURIX Development Studio (non-commercial): C compiler',0
 	.byte	'E:\\ads\\Seekfree_TC387_Opensource_Library\\Debug\\',0,12,1
-	.word	.L133,.L132
+	.word	.L130,.L129
 	.byte	2
-	.word	.L96
+	.word	.L93
 	.byte	3
-	.byte	'path_recorder_task',0,1,155,1,6,1,1,1
-	.word	.L75,.L221,.L74
+	.byte	'path_recorder_task',0,1,136,1,6,1,1,1
+	.word	.L72,.L213,.L71
 	.byte	4
-	.word	.L75,.L221
-	.byte	4
-	.word	.L39,.L221
+	.word	.L72,.L213
 	.byte	5
-	.byte	'current_time',0,1,167,1,12
-	.word	.L222,.L223
-	.byte	4
-	.word	.L224,.L38
+	.byte	'distance',0,1,138,1,11
+	.word	.L214,.L215
 	.byte	5
-	.byte	'point',0,1,170,1,22
-	.word	.L225,.L226
-	.byte	0,0,0,0,0
+	.byte	'current_time',0,1,139,1,12
+	.word	.L216,.L217
+	.byte	5
+	.byte	'point',0,1,140,1,18
+	.word	.L218,.L219
+	.byte	0,0,0
 	.sdecl	'.debug_abbrev',debug,cluster('path_recorder_task')
 	.sect	'.debug_abbrev'
-.L131:
+.L128:
 	.byte	1,17,1,3,8,37,8,27,8,19,15,128,70,12,85,6,16,6,0,0,2,61,0,24,16,0,0,3,46,1,3,8,58,15,59,15,57,15,54,15
 	.byte	39,12,63,12,17,1,18,1,64,6,0,0,4,11,1,17,1,18,1,0,0,5,52,0,3,8,58,15,59,15,57,15,73,16,2,6,0,0,0
 	.sdecl	'.debug_line',debug,cluster('path_recorder_task')
 	.sect	'.debug_line'
-.L132:
-	.word	.L412-.L411
-.L411:
+.L129:
+	.word	.L395-.L394
+.L394:
 	.half	3
-	.word	.L414-.L413
-.L413:
+	.word	.L397-.L396
+.L396:
 	.byte	2,1,-4,9,10,0,1,1,1,1,0,0,0,1,0
 	.byte	'../code/GPS/path_recorder.c',0,0,0,0,0
-.L414:
+.L397:
 	.byte	5,6,7,0,5,2
-	.word	.L75
-	.byte	3,154,1,1,5,9,9
-	.half	.L298-.L75
-	.byte	3,2,1,5,18,9
-	.half	.L415-.L298
+	.word	.L72
+	.byte	3,135,1,1,5,20,9
+	.half	.L279-.L72
+	.byte	3,2,1,5,9,9
+	.half	.L280-.L279
+	.byte	3,4,1,5,18,9
+	.half	.L398-.L280
 	.byte	1,5,5,9
-	.half	.L416-.L415
+	.half	.L399-.L398
 	.byte	1,5,9,7,9
-	.half	.L417-.L416
+	.half	.L400-.L399
 	.byte	3,2,1,5,26,9
-	.half	.L37-.L417
+	.half	.L32-.L400
 	.byte	3,3,1,5,10,9
-	.half	.L418-.L37
+	.half	.L401-.L32
 	.byte	1,5,9,7,9
-	.half	.L419-.L418
-	.byte	3,2,1,5,27,9
-	.half	.L39-.L419
-	.byte	3,3,1,5,37,9
-	.half	.L299-.L39
-	.byte	3,1,1,5,41,9
-	.half	.L420-.L299
-	.byte	1,5,52,9
-	.half	.L421-.L420
-	.byte	1,5,56,9
-	.half	.L422-.L421
-	.byte	1,5,68,9
-	.half	.L423-.L422
+	.half	.L402-.L401
+	.byte	3,2,1,5,20,9
+	.half	.L34-.L402
+	.byte	3,3,1,5,9,9
+	.half	.L282-.L34
+	.byte	3,2,1,5,18,9
+	.half	.L403-.L282
 	.byte	1,5,5,9
-	.half	.L424-.L423
-	.byte	1,5,33,7,9
-	.half	.L224-.L424
-	.byte	3,3,1,5,37,9
-	.half	.L425-.L224
+	.half	.L404-.L403
+	.byte	1,5,28,7,9
+	.half	.L405-.L404
+	.byte	3,2,1,5,37,9
+	.half	.L406-.L405
+	.byte	1,5,26,9
+	.half	.L407-.L406
+	.byte	1,5,57,9
+	.half	.L408-.L407
+	.byte	1,5,75,9
+	.half	.L409-.L408
+	.byte	1,5,9,9
+	.half	.L410-.L409
+	.byte	1,5,13,7,9
+	.half	.L411-.L410
+	.byte	3,2,1,9
+	.half	.L37-.L411
+	.byte	3,3,1,5,22,9
+	.half	.L412-.L37
+	.byte	1,5,38,9
+	.half	.L413-.L412
+	.byte	1,5,47,9
+	.half	.L414-.L413
+	.byte	1,5,13,9
+	.half	.L415-.L414
+	.byte	3,1,1,5,17,9
+	.half	.L416-.L415
+	.byte	1,5,28,9
+	.half	.L417-.L416
+	.byte	1,5,32,9
+	.half	.L418-.L417
 	.byte	1,5,24,9
+	.half	.L283-.L418
+	.byte	3,1,1,5,42,9
+	.half	.L419-.L283
+	.byte	1,5,22,9
+	.half	.L420-.L419
+	.byte	1,5,9,9
+	.half	.L421-.L420
+	.byte	1,5,13,7,9
+	.half	.L422-.L421
+	.byte	3,2,1,5,28,9
+	.half	.L36-.L422
+	.byte	3,4,1,5,32,9
+	.half	.L423-.L36
+	.byte	1,5,26,9
+	.half	.L424-.L423
+	.byte	1,5,28,9
+	.half	.L425-.L424
+	.byte	3,1,1,5,32,9
 	.half	.L426-.L425
-	.byte	1,5,34,9
+	.byte	1,5,26,9
 	.half	.L427-.L426
-	.byte	3,1,1,5,38,9
-	.half	.L428-.L427
-	.byte	1,5,25,9
-	.half	.L429-.L428
 	.byte	1,9
+	.half	.L428-.L427
+	.byte	3,1,1,5,28,9
+	.half	.L429-.L428
+	.byte	3,1,1,5,32,9
 	.half	.L430-.L429
-	.byte	3,1,1,5,23,9
+	.byte	1,5,26,9
 	.half	.L431-.L430
-	.byte	3,1,1,5,27,9
+	.byte	1,5,28,9
 	.half	.L432-.L431
-	.byte	1,5,21,9
+	.byte	3,1,1,5,32,9
 	.half	.L433-.L432
-	.byte	1,5,27,9
+	.byte	1,5,26,9
 	.half	.L434-.L433
-	.byte	3,1,1,5,31,9
-	.half	.L435-.L434
-	.byte	1,5,25,9
-	.half	.L436-.L435
-	.byte	1,5,33,9
-	.half	.L437-.L436
-	.byte	3,1,1,5,37,9
-	.half	.L438-.L437
-	.byte	1,5,31,9
-	.half	.L439-.L438
 	.byte	1,5,29,9
-	.half	.L440-.L439
+	.half	.L435-.L434
 	.byte	3,1,1,5,33,9
-	.half	.L441-.L440
+	.half	.L436-.L435
 	.byte	1,5,27,9
+	.half	.L437-.L436
+	.byte	1,5,28,9
+	.half	.L438-.L437
+	.byte	3,1,1,5,32,9
+	.half	.L439-.L438
+	.byte	1,5,26,9
+	.half	.L440-.L439
+	.byte	1,5,30,9
+	.half	.L441-.L440
+	.byte	3,1,1,5,37,9
 	.half	.L442-.L441
-	.byte	1,5,34,9
-	.half	.L443-.L442
-	.byte	3,1,1,5,1,9
-	.half	.L38-.L443
-	.byte	3,2,1,7,9
-	.half	.L134-.L38
+	.byte	1,5,1,9
+	.half	.L33-.L442
+	.byte	3,1,1,7,9
+	.half	.L131-.L33
 	.byte	0,1,1
-.L412:
+.L395:
 	.sdecl	'.debug_ranges',debug,cluster('path_recorder_task')
 	.sect	'.debug_ranges'
-.L133:
-	.word	-1,.L75,0,.L134-.L75,0,0
+.L130:
+	.word	-1,.L72,0,.L131-.L72,0,0
 	.sdecl	'.debug_info',debug,cluster('path_recorder_get_config')
 	.sect	'.debug_info'
-.L135:
+.L132:
 	.word	236
 	.half	3
-	.word	.L136
+	.word	.L133
 	.byte	4,1
 	.byte	'../code/GPS/path_recorder.c',0
 	.byte	'TASKING VX-toolset for AURIX Development Studio (non-commercial): C compiler',0
 	.byte	'E:\\ads\\Seekfree_TC387_Opensource_Library\\Debug\\',0,12,1
-	.word	.L138,.L137
+	.word	.L135,.L134
 	.byte	2
-	.word	.L96
+	.word	.L93
 	.byte	3
-	.byte	'path_recorder_get_config',0,1,182,1,29
-	.word	.L227
+	.byte	'path_recorder_get_config',0,1,179,1,29
+	.word	.L220
 	.byte	1,1,1
-	.word	.L77,.L228,.L76
+	.word	.L74,.L221,.L73
 	.byte	4
-	.word	.L77,.L228
+	.word	.L74,.L221
 	.byte	0,0
 	.sdecl	'.debug_abbrev',debug,cluster('path_recorder_get_config')
 	.sect	'.debug_abbrev'
-.L136:
+.L133:
 	.byte	1,17,1,3,8,37,8,27,8,19,15,128,70,12,85,6,16,6,0,0,2,61,0,24,16,0,0,3,46,1,3,8,58,15,59,15,57,15,73,16
 	.byte	54,15,39,12,63,12,17,1,18,1,64,6,0,0,4,11,0,17,1,18,1,0,0,0
 	.sdecl	'.debug_line',debug,cluster('path_recorder_get_config')
 	.sect	'.debug_line'
-.L137:
-	.word	.L445-.L444
-.L444:
+.L134:
+	.word	.L444-.L443
+.L443:
 	.half	3
-	.word	.L447-.L446
-.L446:
+	.word	.L446-.L445
+.L445:
 	.byte	2,1,-4,9,10,0,1,1,1,1,0,0,0,1,0
 	.byte	'../code/GPS/path_recorder.c',0,0,0,0,0
-.L447:
+.L446:
 	.byte	5,13,7,0,5,2
-	.word	.L77
-	.byte	3,183,1,1,5,5,9
-	.half	.L448-.L77
+	.word	.L74
+	.byte	3,180,1,1,5,5,9
+	.half	.L447-.L74
 	.byte	1,5,1,9
-	.half	.L42-.L448
+	.half	.L41-.L447
 	.byte	3,1,1,7,9
-	.half	.L139-.L42
+	.half	.L136-.L41
 	.byte	0,1,1
-.L445:
+.L444:
 	.sdecl	'.debug_ranges',debug,cluster('path_recorder_get_config')
 	.sect	'.debug_ranges'
-.L138:
-	.word	-1,.L77,0,.L139-.L77,0,0
+.L135:
+	.word	-1,.L74,0,.L136-.L74,0,0
 	.sdecl	'.debug_info',debug,cluster('path_recorder_set_min_distance')
 	.sect	'.debug_info'
-.L140:
+.L137:
 	.word	257
 	.half	3
-	.word	.L141
+	.word	.L138
 	.byte	4,1
 	.byte	'../code/GPS/path_recorder.c',0
 	.byte	'TASKING VX-toolset for AURIX Development Studio (non-commercial): C compiler',0
 	.byte	'E:\\ads\\Seekfree_TC387_Opensource_Library\\Debug\\',0,12,1
-	.word	.L143,.L142
+	.word	.L140,.L139
 	.byte	2
-	.word	.L96
+	.word	.L93
 	.byte	3
-	.byte	'path_recorder_set_min_distance',0,1,187,1,6,1,1,1
-	.word	.L79,.L229,.L78
+	.byte	'path_recorder_set_min_distance',0,1,184,1,6,1,1,1
+	.word	.L76,.L222,.L75
 	.byte	4
-	.byte	'value',0,1,187,1,43
-	.word	.L230,.L231
+	.byte	'value',0,1,184,1,43
+	.word	.L214,.L223
 	.byte	5
-	.word	.L79,.L229
+	.word	.L76,.L222
 	.byte	0,0
 	.sdecl	'.debug_abbrev',debug,cluster('path_recorder_set_min_distance')
 	.sect	'.debug_abbrev'
-.L141:
+.L138:
 	.byte	1,17,1,3,8,37,8,27,8,19,15,128,70,12,85,6,16,6,0,0,2,61,0,24,16,0,0,3,46,1,3,8,58,15,59,15,57,15,54,15
 	.byte	39,12,63,12,17,1,18,1,64,6,0,0,4,5,0,3,8,58,15,59,15,57,15,73,16,2,6,0,0,5,11,0,17,1,18,1,0,0,0
 	.sdecl	'.debug_line',debug,cluster('path_recorder_set_min_distance')
 	.sect	'.debug_line'
-.L142:
-	.word	.L450-.L449
-.L449:
+.L139:
+	.word	.L449-.L448
+.L448:
 	.half	3
-	.word	.L452-.L451
-.L451:
+	.word	.L451-.L450
+.L450:
 	.byte	2,1,-4,9,10,0,1,1,1,1,0,0,0,1,0
 	.byte	'../code/GPS/path_recorder.c',0,0,0,0,0
-.L452:
+.L451:
 	.byte	5,5,7,0,5,2
-	.word	.L79
-	.byte	3,188,1,1,5,79,9
-	.half	.L453-.L79
+	.word	.L76
+	.byte	3,185,1,1,5,79,9
+	.half	.L452-.L76
 	.byte	1,5,86,9
-	.half	.L454-.L453
+	.half	.L453-.L452
 	.byte	1,5,44,9
-	.half	.L302-.L454
+	.half	.L285-.L453
 	.byte	1,5,1,9
-	.half	.L455-.L302
+	.half	.L454-.L285
 	.byte	3,1,1,7,9
-	.half	.L144-.L455
+	.half	.L141-.L454
 	.byte	0,1,1
-.L450:
+.L449:
 	.sdecl	'.debug_ranges',debug,cluster('path_recorder_set_min_distance')
 	.sect	'.debug_ranges'
-.L143:
-	.word	-1,.L79,0,.L144-.L79,0,0
+.L140:
+	.word	-1,.L76,0,.L141-.L76,0,0
 	.sdecl	'.debug_info',debug,cluster('path_recorder_set_min_interval_ms')
 	.sect	'.debug_info'
-.L145:
+.L142:
 	.word	260
 	.half	3
-	.word	.L146
+	.word	.L143
 	.byte	4,1
 	.byte	'../code/GPS/path_recorder.c',0
 	.byte	'TASKING VX-toolset for AURIX Development Studio (non-commercial): C compiler',0
 	.byte	'E:\\ads\\Seekfree_TC387_Opensource_Library\\Debug\\',0,12,1
-	.word	.L148,.L147
+	.word	.L145,.L144
 	.byte	2
-	.word	.L96
+	.word	.L93
 	.byte	3
-	.byte	'path_recorder_set_min_interval_ms',0,1,192,1,6,1,1,1
-	.word	.L81,.L232,.L80
+	.byte	'path_recorder_set_min_interval_ms',0,1,189,1,6,1,1,1
+	.word	.L78,.L224,.L77
 	.byte	4
-	.byte	'value',0,1,192,1,47
-	.word	.L222,.L233
+	.byte	'value',0,1,189,1,47
+	.word	.L216,.L225
 	.byte	5
-	.word	.L81,.L232
+	.word	.L78,.L224
 	.byte	0,0
 	.sdecl	'.debug_abbrev',debug,cluster('path_recorder_set_min_interval_ms')
 	.sect	'.debug_abbrev'
-.L146:
+.L143:
 	.byte	1,17,1,3,8,37,8,27,8,19,15,128,70,12,85,6,16,6,0,0,2,61,0,24,16,0,0,3,46,1,3,8,58,15,59,15,57,15,54,15
 	.byte	39,12,63,12,17,1,18,1,64,6,0,0,4,5,0,3,8,58,15,59,15,57,15,73,16,2,6,0,0,5,11,0,17,1,18,1,0,0,0
 	.sdecl	'.debug_line',debug,cluster('path_recorder_set_min_interval_ms')
 	.sect	'.debug_line'
-.L147:
-	.word	.L457-.L456
-.L456:
+.L144:
+	.word	.L456-.L455
+.L455:
 	.half	3
-	.word	.L459-.L458
-.L458:
+	.word	.L458-.L457
+.L457:
 	.byte	2,1,-4,9,10,0,1,1,1,1,0,0,0,1,0
 	.byte	'../code/GPS/path_recorder.c',0,0,0,0,0
-.L459:
+.L458:
 	.byte	5,5,7,0,5,2
-	.word	.L81
-	.byte	3,193,1,1,5,80,9
-	.half	.L460-.L81
+	.word	.L78
+	.byte	3,190,1,1,5,80,9
+	.half	.L459-.L78
 	.byte	1,5,85,9
-	.half	.L461-.L460
+	.half	.L460-.L459
 	.byte	1,5,47,9
-	.half	.L303-.L461
+	.half	.L286-.L460
 	.byte	1,5,1,9
-	.half	.L462-.L303
+	.half	.L461-.L286
 	.byte	3,1,1,7,9
-	.half	.L149-.L462
+	.half	.L146-.L461
 	.byte	0,1,1
-.L457:
+.L456:
 	.sdecl	'.debug_ranges',debug,cluster('path_recorder_set_min_interval_ms')
 	.sect	'.debug_ranges'
-.L148:
-	.word	-1,.L81,0,.L149-.L81,0,0
+.L145:
+	.word	-1,.L78,0,.L146-.L78,0,0
 	.sdecl	'.debug_info',debug,cluster('path_recorder_set_min_satellites')
 	.sect	'.debug_info'
-.L150:
+.L147:
 	.word	259
 	.half	3
-	.word	.L151
+	.word	.L148
 	.byte	4,1
 	.byte	'../code/GPS/path_recorder.c',0
 	.byte	'TASKING VX-toolset for AURIX Development Studio (non-commercial): C compiler',0
 	.byte	'E:\\ads\\Seekfree_TC387_Opensource_Library\\Debug\\',0,12,1
-	.word	.L153,.L152
+	.word	.L150,.L149
 	.byte	2
-	.word	.L96
+	.word	.L93
 	.byte	3
-	.byte	'path_recorder_set_min_satellites',0,1,197,1,6,1,1,1
-	.word	.L83,.L234,.L82
+	.byte	'path_recorder_set_min_satellites',0,1,194,1,6,1,1,1
+	.word	.L80,.L226,.L79
 	.byte	4
-	.byte	'value',0,1,197,1,45
-	.word	.L216,.L235
+	.byte	'value',0,1,194,1,45
+	.word	.L208,.L227
 	.byte	5
-	.word	.L83,.L234
+	.word	.L80,.L226
 	.byte	0,0
 	.sdecl	'.debug_abbrev',debug,cluster('path_recorder_set_min_satellites')
 	.sect	'.debug_abbrev'
-.L151:
+.L148:
 	.byte	1,17,1,3,8,37,8,27,8,19,15,128,70,12,85,6,16,6,0,0,2,61,0,24,16,0,0,3,46,1,3,8,58,15,59,15,57,15,54,15
 	.byte	39,12,63,12,17,1,18,1,64,6,0,0,4,5,0,3,8,58,15,59,15,57,15,73,16,2,6,0,0,5,11,0,17,1,18,1,0,0,0
 	.sdecl	'.debug_line',debug,cluster('path_recorder_set_min_satellites')
 	.sect	'.debug_line'
-.L152:
-	.word	.L464-.L463
-.L463:
+.L149:
+	.word	.L463-.L462
+.L462:
 	.half	3
-	.word	.L466-.L465
-.L465:
+	.word	.L465-.L464
+.L464:
 	.byte	2,1,-4,9,10,0,1,1,1,1,0,0,0,1,0
 	.byte	'../code/GPS/path_recorder.c',0,0,0,0,0
-.L466:
+.L465:
 	.byte	5,5,7,0,5,2
-	.word	.L83
-	.byte	3,198,1,1,5,79,9
-	.half	.L467-.L83
+	.word	.L80
+	.byte	3,195,1,1,5,79,9
+	.half	.L466-.L80
 	.byte	1,5,83,9
-	.half	.L468-.L467
+	.half	.L467-.L466
 	.byte	1,5,39,9
-	.half	.L304-.L468
+	.half	.L287-.L467
 	.byte	1,5,1,9
-	.half	.L469-.L304
+	.half	.L468-.L287
 	.byte	3,1,1,7,9
-	.half	.L154-.L469
+	.half	.L151-.L468
 	.byte	0,1,1
-.L464:
+.L463:
 	.sdecl	'.debug_ranges',debug,cluster('path_recorder_set_min_satellites')
 	.sect	'.debug_ranges'
-.L153:
-	.word	-1,.L83,0,.L154-.L83,0,0
+.L150:
+	.word	-1,.L80,0,.L151-.L80,0,0
 	.sdecl	'.debug_info',debug,cluster('path_recorder_set_max_speed_kph')
 	.sect	'.debug_info'
-.L155:
+.L152:
 	.word	258
 	.half	3
-	.word	.L156
+	.word	.L153
 	.byte	4,1
 	.byte	'../code/GPS/path_recorder.c',0
 	.byte	'TASKING VX-toolset for AURIX Development Studio (non-commercial): C compiler',0
 	.byte	'E:\\ads\\Seekfree_TC387_Opensource_Library\\Debug\\',0,12,1
-	.word	.L158,.L157
+	.word	.L155,.L154
 	.byte	2
-	.word	.L96
+	.word	.L93
 	.byte	3
-	.byte	'path_recorder_set_max_speed_kph',0,1,202,1,6,1,1,1
-	.word	.L85,.L236,.L84
+	.byte	'path_recorder_set_max_speed_kph',0,1,199,1,6,1,1,1
+	.word	.L82,.L228,.L81
 	.byte	4
-	.byte	'value',0,1,202,1,44
-	.word	.L230,.L237
+	.byte	'value',0,1,199,1,44
+	.word	.L214,.L229
 	.byte	5
-	.word	.L85,.L236
+	.word	.L82,.L228
 	.byte	0,0
 	.sdecl	'.debug_abbrev',debug,cluster('path_recorder_set_max_speed_kph')
 	.sect	'.debug_abbrev'
-.L156:
+.L153:
 	.byte	1,17,1,3,8,37,8,27,8,19,15,128,70,12,85,6,16,6,0,0,2,61,0,24,16,0,0,3,46,1,3,8,58,15,59,15,57,15,54,15
 	.byte	39,12,63,12,17,1,18,1,64,6,0,0,4,5,0,3,8,58,15,59,15,57,15,73,16,2,6,0,0,5,11,0,17,1,18,1,0,0,0
 	.sdecl	'.debug_line',debug,cluster('path_recorder_set_max_speed_kph')
 	.sect	'.debug_line'
-.L157:
-	.word	.L471-.L470
-.L470:
+.L154:
+	.word	.L470-.L469
+.L469:
 	.half	3
-	.word	.L473-.L472
-.L472:
+	.word	.L472-.L471
+.L471:
 	.byte	2,1,-4,9,10,0,1,1,1,1,0,0,0,1,0
 	.byte	'../code/GPS/path_recorder.c',0,0,0,0,0
-.L473:
+.L472:
 	.byte	5,5,7,0,5,2
-	.word	.L85
-	.byte	3,203,1,1,5,80,9
-	.half	.L474-.L85
+	.word	.L82
+	.byte	3,200,1,1,5,80,9
+	.half	.L473-.L82
 	.byte	1,5,86,9
-	.half	.L475-.L474
+	.half	.L474-.L473
 	.byte	1,5,45,9
-	.half	.L305-.L475
+	.half	.L288-.L474
 	.byte	1,5,1,9
-	.half	.L476-.L305
+	.half	.L475-.L288
 	.byte	3,1,1,7,9
-	.half	.L159-.L476
+	.half	.L156-.L475
 	.byte	0,1,1
-.L471:
+.L470:
 	.sdecl	'.debug_ranges',debug,cluster('path_recorder_set_max_speed_kph')
 	.sect	'.debug_ranges'
-.L158:
-	.word	-1,.L85,0,.L159-.L85,0,0
+.L155:
+	.word	-1,.L82,0,.L156-.L82,0,0
 	.sdecl	'.debug_info',debug,cluster('path_recorder_get_stats')
 	.sect	'.debug_info'
-.L160:
+.L157:
 	.word	294
 	.half	3
-	.word	.L161
+	.word	.L158
 	.byte	4,1
 	.byte	'../code/GPS/path_recorder.c',0
 	.byte	'TASKING VX-toolset for AURIX Development Studio (non-commercial): C compiler',0
 	.byte	'E:\\ads\\Seekfree_TC387_Opensource_Library\\Debug\\',0,12,1
-	.word	.L163,.L162
+	.word	.L160,.L159
 	.byte	2
-	.word	.L96
+	.word	.L93
 	.byte	3
-	.byte	'path_recorder_get_stats',0,1,229,1,6,1,1,1
-	.word	.L91,.L238,.L90
+	.byte	'path_recorder_get_stats',0,1,226,1,6,1,1,1
+	.word	.L88,.L230,.L87
 	.byte	4
-	.byte	'distance',0,1,229,1,37
-	.word	.L239,.L240
+	.byte	'distance',0,1,226,1,37
+	.word	.L231,.L232
 	.byte	4
-	.byte	'time',0,1,229,1,55
-	.word	.L241,.L242
+	.byte	'time',0,1,226,1,55
+	.word	.L233,.L234
 	.byte	4
-	.byte	'avg_speed',0,1,229,1,68
-	.word	.L239,.L243
+	.byte	'avg_speed',0,1,226,1,68
+	.word	.L231,.L235
 	.byte	5
-	.word	.L91,.L238
+	.word	.L88,.L230
 	.byte	0,0
 	.sdecl	'.debug_abbrev',debug,cluster('path_recorder_get_stats')
 	.sect	'.debug_abbrev'
-.L161:
+.L158:
 	.byte	1,17,1,3,8,37,8,27,8,19,15,128,70,12,85,6,16,6,0,0,2,61,0,24,16,0,0,3,46,1,3,8,58,15,59,15,57,15,54,15
 	.byte	39,12,63,12,17,1,18,1,64,6,0,0,4,5,0,3,8,58,15,59,15,57,15,73,16,2,6,0,0,5,11,0,17,1,18,1,0,0,0
 	.sdecl	'.debug_line',debug,cluster('path_recorder_get_stats')
 	.sect	'.debug_line'
-.L162:
-	.word	.L478-.L477
-.L477:
+.L159:
+	.word	.L477-.L476
+.L476:
 	.half	3
-	.word	.L480-.L479
-.L479:
+	.word	.L479-.L478
+.L478:
 	.byte	2,1,-4,9,10,0,1,1,1,1,0,0,0,1,0
 	.byte	'../code/GPS/path_recorder.c',0,0,0,0,0
-.L480:
+.L479:
 	.byte	5,5,7,0,5,2
-	.word	.L91
-	.byte	3,230,1,1,5,31,7,9
-	.half	.L481-.L91
+	.word	.L88
+	.byte	3,227,1,1,5,31,7,9
+	.half	.L480-.L88
 	.byte	1,5,40,9
-	.half	.L482-.L481
+	.half	.L481-.L480
 	.byte	1,5,29,9
-	.half	.L483-.L482
+	.half	.L482-.L481
 	.byte	1,5,5,9
-	.half	.L45-.L483
+	.half	.L44-.L482
 	.byte	3,1,1,5,23,7,9
-	.half	.L484-.L45
+	.half	.L483-.L44
 	.byte	1,5,32,9
-	.half	.L485-.L484
+	.half	.L484-.L483
 	.byte	1,5,21,9
-	.half	.L486-.L485
+	.half	.L485-.L484
 	.byte	1,5,5,9
-	.half	.L46-.L486
+	.half	.L45-.L485
 	.byte	3,1,1,5,13,7,9
-	.half	.L487-.L46
+	.half	.L486-.L45
 	.byte	3,2,1,5,22,9
-	.half	.L488-.L487
+	.half	.L487-.L486
 	.byte	1,5,9,9
-	.half	.L489-.L488
+	.half	.L488-.L487
 	.byte	1,5,27,7,9
-	.half	.L490-.L489
+	.half	.L489-.L488
 	.byte	3,1,1,5,36,9
-	.half	.L491-.L490
+	.half	.L490-.L489
 	.byte	1,5,62,9
-	.half	.L492-.L491
+	.half	.L491-.L490
 	.byte	1,5,71,9
-	.half	.L493-.L492
+	.half	.L492-.L491
 	.byte	1,5,55,9
-	.half	.L494-.L493
+	.half	.L493-.L492
 	.byte	1,5,85,9
-	.half	.L495-.L494
+	.half	.L494-.L493
 	.byte	1,5,83,9
-	.half	.L496-.L495
+	.half	.L495-.L494
 	.byte	1,5,52,9
-	.half	.L497-.L496
+	.half	.L496-.L495
 	.byte	1,5,97,9
-	.half	.L498-.L497
+	.half	.L497-.L496
 	.byte	1,5,95,9
-	.half	.L499-.L498
+	.half	.L498-.L497
 	.byte	1,5,24,9
-	.half	.L500-.L499
+	.half	.L499-.L498
 	.byte	1,5,101,9
-	.half	.L501-.L500
+	.half	.L500-.L499
 	.byte	1,5,26,9
-	.half	.L48-.L501
+	.half	.L47-.L500
 	.byte	3,2,1,5,24,9
-	.half	.L502-.L48
+	.half	.L501-.L47
 	.byte	1,5,1,9
-	.half	.L47-.L502
+	.half	.L46-.L501
 	.byte	3,2,1,7,9
-	.half	.L164-.L47
+	.half	.L161-.L46
 	.byte	0,1,1
-.L478:
+.L477:
 	.sdecl	'.debug_ranges',debug,cluster('path_recorder_get_stats')
 	.sect	'.debug_ranges'
-.L163:
-	.word	-1,.L91,0,.L164-.L91,0,0
+.L160:
+	.word	-1,.L88,0,.L161-.L88,0,0
 	.sdecl	'.debug_info',debug,cluster('path_recorder_get_state')
 	.sect	'.debug_info'
-.L165:
+.L162:
 	.word	235
 	.half	3
-	.word	.L166
+	.word	.L163
 	.byte	4,1
 	.byte	'../code/GPS/path_recorder.c',0
 	.byte	'TASKING VX-toolset for AURIX Development Studio (non-commercial): C compiler',0
 	.byte	'E:\\ads\\Seekfree_TC387_Opensource_Library\\Debug\\',0,12,1
-	.word	.L168,.L167
+	.word	.L165,.L164
 	.byte	2
-	.word	.L96
+	.word	.L93
 	.byte	3
-	.byte	'path_recorder_get_state',0,1,242,1,17
-	.word	.L244
+	.byte	'path_recorder_get_state',0,1,239,1,17
+	.word	.L236
 	.byte	1,1,1
-	.word	.L93,.L245,.L92
+	.word	.L90,.L237,.L89
 	.byte	4
-	.word	.L93,.L245
+	.word	.L90,.L237
 	.byte	0,0
 	.sdecl	'.debug_abbrev',debug,cluster('path_recorder_get_state')
 	.sect	'.debug_abbrev'
-.L166:
+.L163:
 	.byte	1,17,1,3,8,37,8,27,8,19,15,128,70,12,85,6,16,6,0,0,2,61,0,24,16,0,0,3,46,1,3,8,58,15,59,15,57,15,73,16
 	.byte	54,15,39,12,63,12,17,1,18,1,64,6,0,0,4,11,0,17,1,18,1,0,0,0
 	.sdecl	'.debug_line',debug,cluster('path_recorder_get_state')
 	.sect	'.debug_line'
-.L167:
-	.word	.L504-.L503
-.L503:
+.L164:
+	.word	.L503-.L502
+.L502:
 	.half	3
-	.word	.L506-.L505
-.L505:
+	.word	.L505-.L504
+.L504:
 	.byte	2,1,-4,9,10,0,1,1,1,1,0,0,0,1,0
 	.byte	'../code/GPS/path_recorder.c',0,0,0,0,0
-.L506:
+.L505:
 	.byte	5,12,7,0,5,2
-	.word	.L93
-	.byte	3,243,1,1,5,21,9
-	.half	.L507-.L93
+	.word	.L90
+	.byte	3,240,1,1,5,21,9
+	.half	.L506-.L90
 	.byte	1,5,5,9
-	.half	.L508-.L507
+	.half	.L507-.L506
 	.byte	1,5,1,9
-	.half	.L50-.L508
+	.half	.L49-.L507
 	.byte	3,1,1,7,9
-	.half	.L169-.L50
+	.half	.L166-.L49
 	.byte	0,1,1
-.L504:
+.L503:
 	.sdecl	'.debug_ranges',debug,cluster('path_recorder_get_state')
 	.sect	'.debug_ranges'
-.L168:
-	.word	-1,.L93,0,.L169-.L93,0,0
+.L165:
+	.word	-1,.L90,0,.L166-.L90,0,0
 	.sdecl	'.debug_info',debug,cluster('path_recorder_get_point_count')
 	.sect	'.debug_info'
-.L170:
+.L167:
 	.word	241
 	.half	3
-	.word	.L171
+	.word	.L168
 	.byte	4,1
 	.byte	'../code/GPS/path_recorder.c',0
 	.byte	'TASKING VX-toolset for AURIX Development Studio (non-commercial): C compiler',0
 	.byte	'E:\\ads\\Seekfree_TC387_Opensource_Library\\Debug\\',0,12,1
-	.word	.L173,.L172
+	.word	.L170,.L169
 	.byte	2
-	.word	.L96
+	.word	.L93
 	.byte	3
-	.byte	'path_recorder_get_point_count',0,1,247,1,8
-	.word	.L246
+	.byte	'path_recorder_get_point_count',0,1,244,1,8
+	.word	.L238
 	.byte	1,1,1
-	.word	.L95,.L247,.L94
+	.word	.L92,.L239,.L91
 	.byte	4
-	.word	.L95,.L247
+	.word	.L92,.L239
 	.byte	0,0
 	.sdecl	'.debug_abbrev',debug,cluster('path_recorder_get_point_count')
 	.sect	'.debug_abbrev'
-.L171:
+.L168:
 	.byte	1,17,1,3,8,37,8,27,8,19,15,128,70,12,85,6,16,6,0,0,2,61,0,24,16,0,0,3,46,1,3,8,58,15,59,15,57,15,73,16
 	.byte	54,15,39,12,63,12,17,1,18,1,64,6,0,0,4,11,0,17,1,18,1,0,0,0
 	.sdecl	'.debug_line',debug,cluster('path_recorder_get_point_count')
 	.sect	'.debug_line'
-.L172:
-	.word	.L510-.L509
-.L509:
+.L169:
+	.word	.L509-.L508
+.L508:
 	.half	3
-	.word	.L512-.L511
-.L511:
+	.word	.L511-.L510
+.L510:
 	.byte	2,1,-4,9,10,0,1,1,1,1,0,0,0,1,0
 	.byte	'../code/GPS/path_recorder.c',0,0,0,0,0
-.L512:
+.L511:
 	.byte	5,12,7,0,5,2
-	.word	.L95
-	.byte	3,248,1,1,5,21,9
-	.half	.L513-.L95
+	.word	.L92
+	.byte	3,245,1,1,5,21,9
+	.half	.L512-.L92
 	.byte	1,5,5,9
-	.half	.L514-.L513
+	.half	.L513-.L512
 	.byte	1,5,1,9
-	.half	.L51-.L514
+	.half	.L50-.L513
 	.byte	3,1,1,7,9
-	.half	.L174-.L51
+	.half	.L171-.L50
 	.byte	0,1,1
-.L510:
+.L509:
 	.sdecl	'.debug_ranges',debug,cluster('path_recorder_get_point_count')
 	.sect	'.debug_ranges'
-.L173:
-	.word	-1,.L95,0,.L174-.L95,0,0
+.L170:
+	.word	-1,.L92,0,.L171-.L92,0,0
 	.sdecl	'.debug_info',debug,cluster('is_valid_gps_fix')
 	.sect	'.debug_info'
-.L175:
+.L172:
 	.word	226
 	.half	3
-	.word	.L176
+	.word	.L173
 	.byte	4,1
 	.byte	'../code/GPS/path_recorder.c',0
 	.byte	'TASKING VX-toolset for AURIX Development Studio (non-commercial): C compiler',0
 	.byte	'E:\\ads\\Seekfree_TC387_Opensource_Library\\Debug\\',0,12,1
-	.word	.L178,.L177
+	.word	.L175,.L174
 	.byte	2
-	.word	.L96
+	.word	.L93
 	.byte	3
-	.byte	'is_valid_gps_fix',0,1,53,14
-	.word	.L216
+	.byte	'is_valid_gps_fix',0,1,52,14
+	.word	.L208
 	.byte	1,1
-	.word	.L57,.L248,.L56
+	.word	.L56,.L240,.L55
 	.byte	4
-	.word	.L57,.L248
+	.word	.L56,.L240
 	.byte	0,0
 	.sdecl	'.debug_abbrev',debug,cluster('is_valid_gps_fix')
 	.sect	'.debug_abbrev'
-.L176:
+.L173:
 	.byte	1,17,1,3,8,37,8,27,8,19,15,128,70,12,85,6,16,6,0,0,2,61,0,24,16,0,0,3,46,1,3,8,58,15,59,15,57,15,73,16
 	.byte	54,15,39,12,17,1,18,1,64,6,0,0,4,11,0,17,1,18,1,0,0,0
 	.sdecl	'.debug_line',debug,cluster('is_valid_gps_fix')
 	.sect	'.debug_line'
-.L177:
-	.word	.L516-.L515
-.L515:
+.L174:
+	.word	.L515-.L514
+.L514:
 	.half	3
-	.word	.L518-.L517
-.L517:
+	.word	.L517-.L516
+.L516:
 	.byte	2,1,-4,9,10,0,1,1,1,1,0,0,0,1,0
 	.byte	'../code/GPS/path_recorder.c',0,0,0,0,0
-.L518:
+.L517:
 	.byte	5,34,7,0,5,2
-	.word	.L57
-	.byte	3,57,1,5,13,9
-	.half	.L519-.L57
+	.word	.L56
+	.byte	3,56,1,5,13,9
+	.half	.L518-.L56
 	.byte	3,125,1,5,17,9
+	.half	.L519-.L518
+	.byte	1,5,13,9
 	.half	.L520-.L519
-	.byte	1,5,13,9
-	.half	.L521-.L520
 	.byte	1,7,9
+	.half	.L521-.L520
+	.byte	3,1,1,5,17,9
 	.half	.L522-.L521
-	.byte	3,1,1,5,17,9
-	.half	.L523-.L522
 	.byte	1,5,36,9
-	.half	.L524-.L523
+	.half	.L523-.L522
 	.byte	1,5,54,9
-	.half	.L525-.L524
+	.half	.L524-.L523
 	.byte	1,5,33,9
-	.half	.L526-.L525
+	.half	.L525-.L524
 	.byte	1,5,13,7,9
+	.half	.L526-.L525
+	.byte	3,1,1,5,17,9
 	.half	.L527-.L526
-	.byte	3,1,1,5,17,9
+	.byte	1,5,27,9
 	.half	.L528-.L527
-	.byte	1,5,27,9
-	.half	.L529-.L528
 	.byte	1,5,45,9
-	.half	.L530-.L529
+	.half	.L529-.L528
 	.byte	1,5,24,9
+	.half	.L530-.L529
+	.byte	1,5,13,9
 	.half	.L531-.L530
-	.byte	1,5,13,9
+	.byte	3,1,1,5,17,9
 	.half	.L532-.L531
-	.byte	3,1,1,5,17,9
-	.half	.L533-.L532
 	.byte	1,5,27,9
-	.half	.L534-.L533
+	.half	.L533-.L532
 	.byte	1,5,13,9
-	.half	.L535-.L534
+	.half	.L534-.L533
 	.byte	3,1,1,5,17,9
-	.half	.L536-.L535
+	.half	.L535-.L534
 	.byte	1,5,28,9
-	.half	.L537-.L536
+	.half	.L536-.L535
 	.byte	1,5,34,9
-	.half	.L538-.L537
+	.half	.L537-.L536
 	.byte	3,127,1,5,5,9
-	.half	.L12-.L538
+	.half	.L12-.L537
 	.byte	3,125,1,5,1,9
 	.half	.L17-.L12
 	.byte	3,5,1,7,9
-	.half	.L179-.L17
+	.half	.L176-.L17
 	.byte	0,1,1
-.L516:
+.L515:
 	.sdecl	'.debug_ranges',debug,cluster('is_valid_gps_fix')
 	.sect	'.debug_ranges'
-.L178:
-	.word	-1,.L57,0,.L179-.L57,0,0
+.L175:
+	.word	-1,.L56,0,.L176-.L56,0,0
 	.sdecl	'.debug_info',debug,cluster('update_path_statistics')
 	.sect	'.debug_info'
-.L180:
-	.word	281
+.L177:
+	.word	282
 	.half	3
-	.word	.L181
+	.word	.L178
 	.byte	4,1
 	.byte	'../code/GPS/path_recorder.c',0
 	.byte	'TASKING VX-toolset for AURIX Development Studio (non-commercial): C compiler',0
 	.byte	'E:\\ads\\Seekfree_TC387_Opensource_Library\\Debug\\',0,12,1
-	.word	.L183,.L182
+	.word	.L180,.L179
 	.byte	2
-	.word	.L96
+	.word	.L93
 	.byte	3
-	.byte	'update_path_statistics',0,1,218,1,13,1,1
-	.word	.L89,.L249,.L88
+	.byte	'update_path_statistics',0,1,217,1,13,1,1
+	.word	.L86,.L241,.L85
 	.byte	4
-	.byte	'new_point',0,1,218,1,50
-	.word	.L250,.L251
+	.byte	'new_point',0,1,217,1,50
+	.word	.L242,.L243
+	.byte	4
+	.byte	'segment_distance',0,1,217,1,67
+	.word	.L214,.L244
 	.byte	5
-	.word	.L89,.L249
-	.byte	5
-	.word	.L252,.L44
-	.byte	6
-	.byte	'prev',0,1,222,1,23
-	.word	.L250,.L253
-	.byte	0,0,0,0
+	.word	.L86,.L241
+	.byte	0,0
 	.sdecl	'.debug_abbrev',debug,cluster('update_path_statistics')
 	.sect	'.debug_abbrev'
-.L181:
+.L178:
 	.byte	1,17,1,3,8,37,8,27,8,19,15,128,70,12,85,6,16,6,0,0,2,61,0,24,16,0,0,3,46,1,3,8,58,15,59,15,57,15,54,15
-	.byte	39,12,17,1,18,1,64,6,0,0,4,5,0,3,8,58,15,59,15,57,15,73,16,2,6,0,0,5,11,1,17,1,18,1,0,0,6,52,0,3,8,58
-	.byte	15,59,15,57,15,73,16,2,6,0,0,0
+	.byte	39,12,17,1,18,1,64,6,0,0,4,5,0,3,8,58,15,59,15,57,15,73,16,2,6,0,0,5,11,0,17,1,18,1,0,0,0
 	.sdecl	'.debug_line',debug,cluster('update_path_statistics')
 	.sect	'.debug_line'
-.L182:
-	.word	.L540-.L539
-.L539:
+.L179:
+	.word	.L539-.L538
+.L538:
 	.half	3
-	.word	.L542-.L541
-.L541:
+	.word	.L541-.L540
+.L540:
 	.byte	2,1,-4,9,10,0,1,1,1,1,0,0,0,1,0
 	.byte	'../code/GPS/path_recorder.c',0,0,0,0,0
-.L542:
-	.byte	5,13,7,0,5,2
-	.word	.L89
-	.byte	3,217,1,1,5,9,9
-	.half	.L322-.L89
-	.byte	3,2,1,5,18,9
-	.half	.L543-.L322
+.L541:
+	.byte	5,9,7,0,5,2
+	.word	.L86
+	.byte	3,218,1,1,5,18,9
+	.half	.L542-.L86
 	.byte	1,5,5,9
+	.half	.L543-.L542
+	.byte	1,5,9,7,9
 	.half	.L544-.L543
-	.byte	1,5,48,7,9
-	.half	.L252-.L544
-	.byte	3,2,1,5,57,9
-	.half	.L545-.L252
-	.byte	1,5,70,9
-	.half	.L546-.L545
-	.byte	1,5,47,9
-	.half	.L547-.L546
-	.byte	1,5,31,9
-	.half	.L548-.L547
-	.byte	1,5,47,9
-	.half	.L549-.L548
-	.byte	1,5,9,9
-	.half	.L324-.L549
-	.byte	3,1,1,5,18,9
-	.half	.L550-.L324
-	.byte	1,5,17,9
-	.half	.L551-.L550
-	.byte	3,1,1,5,33,9
-	.half	.L552-.L551
-	.byte	1,5,55,9
-	.half	.L553-.L552
-	.byte	1,5,76,9
-	.half	.L554-.L553
+	.byte	3,2,1,5,18,9
+	.half	.L545-.L544
 	.byte	1,5,34,9
-	.half	.L325-.L554
-	.byte	3,127,1,5,9,9
-	.half	.L555-.L325
-	.byte	3,2,1,5,41,9
-	.half	.L556-.L555
+	.half	.L546-.L545
+	.byte	1,5,9,9
+	.half	.L547-.L546
+	.byte	3,1,1,5,41,9
+	.half	.L548-.L547
 	.byte	1,5,55,9
-	.half	.L557-.L556
+	.half	.L549-.L548
 	.byte	1,5,74,9
-	.half	.L558-.L557
+	.half	.L550-.L549
 	.byte	1,5,53,9
-	.half	.L559-.L558
+	.half	.L551-.L550
 	.byte	1,5,30,9
-	.half	.L560-.L559
+	.half	.L552-.L551
 	.byte	1,5,1,9
-	.half	.L44-.L560
+	.half	.L43-.L552
 	.byte	3,2,1,7,9
-	.half	.L184-.L44
+	.half	.L181-.L43
 	.byte	0,1,1
-.L540:
+.L539:
 	.sdecl	'.debug_ranges',debug,cluster('update_path_statistics')
 	.sect	'.debug_ranges'
-.L183:
-	.word	-1,.L89,0,.L184-.L89,0,0
-	.sdecl	'.debug_info',debug,cluster('path_recorder_should_record')
-	.sect	'.debug_info'
-.L185:
-	.word	316
-	.half	3
-	.word	.L186
-	.byte	4,1
-	.byte	'../code/GPS/path_recorder.c',0
-	.byte	'TASKING VX-toolset for AURIX Development Studio (non-commercial): C compiler',0
-	.byte	'E:\\ads\\Seekfree_TC387_Opensource_Library\\Debug\\',0,12,1
-	.word	.L188,.L187
-	.byte	2
-	.word	.L96
-	.byte	3
-	.byte	'path_recorder_should_record',0,1,121,14
-	.word	.L216
-	.byte	1,1
-	.word	.L71,.L254,.L70
-	.byte	4
-	.byte	'lat',0,1,121,49
-	.word	.L230,.L255
-	.byte	4
-	.byte	'lon',0,1,121,61
-	.word	.L230,.L256
-	.byte	4
-	.byte	'current_time',0,1,121,73
-	.word	.L222,.L257
-	.byte	5
-	.word	.L71,.L254
-	.byte	6
-	.byte	'distance',0,1,123,11
-	.word	.L230,.L258
-	.byte	0,0,0
-	.sdecl	'.debug_abbrev',debug,cluster('path_recorder_should_record')
-	.sect	'.debug_abbrev'
-.L186:
-	.byte	1,17,1,3,8,37,8,27,8,19,15,128,70,12,85,6,16,6,0,0,2,61,0,24,16,0,0,3,46,1,3,8,58,15,59,15,57,15,73,16
-	.byte	54,15,39,12,17,1,18,1,64,6,0,0,4,5,0,3,8,58,15,59,15,57,15,73,16,2,6,0,0,5,11,1,17,1,18,1,0,0,6,52,0,3
-	.byte	8,58,15,59,15,57,15,73,16,2,6,0,0,0
-	.sdecl	'.debug_line',debug,cluster('path_recorder_should_record')
-	.sect	'.debug_line'
-.L187:
-	.word	.L562-.L561
-.L561:
-	.half	3
-	.word	.L564-.L563
-.L563:
-	.byte	2,1,-4,9,10,0,1,1,1,1,0,0,0,1,0
-	.byte	'../code/GPS/path_recorder.c',0,0,0,0,0
-.L564:
-	.byte	5,14,7,0,5,2
-	.word	.L71
-	.byte	3,248,0,1,5,9,9
-	.half	.L291-.L71
-	.byte	3,4,1,5,18,9
-	.half	.L565-.L291
-	.byte	1,5,5,9
-	.half	.L566-.L565
-	.byte	1,5,16,7,9
-	.half	.L567-.L566
-	.byte	3,2,1,5,9,9
-	.half	.L568-.L567
-	.byte	1,5,24,9
-	.half	.L27-.L568
-	.byte	3,3,1,5,33,9
-	.half	.L569-.L27
-	.byte	1,5,22,9
-	.half	.L570-.L569
-	.byte	1,5,53,9
-	.half	.L286-.L570
-	.byte	1,5,71,9
-	.half	.L571-.L286
-	.byte	1,5,5,9
-	.half	.L572-.L571
-	.byte	1,5,16,7,9
-	.half	.L573-.L572
-	.byte	3,2,1,5,9,9
-	.half	.L574-.L573
-	.byte	1,5,49,9
-	.half	.L29-.L574
-	.byte	3,3,1,5,58,9
-	.half	.L575-.L29
-	.byte	1,5,74,9
-	.half	.L287-.L575
-	.byte	1,5,83,9
-	.half	.L576-.L287
-	.byte	1,5,105,9
-	.half	.L288-.L576
-	.byte	1,5,25,9
-	.half	.L290-.L288
-	.byte	3,1,1,5,43,9
-	.half	.L577-.L290
-	.byte	1,5,22,9
-	.half	.L578-.L577
-	.byte	1,5,5,9
-	.half	.L293-.L578
-	.byte	1,5,1,9
-	.half	.L28-.L293
-	.byte	3,1,1,7,9
-	.half	.L189-.L28
-	.byte	0,1,1
-.L562:
-	.sdecl	'.debug_ranges',debug,cluster('path_recorder_should_record')
-	.sect	'.debug_ranges'
-.L188:
-	.word	-1,.L71,0,.L189-.L71,0,0
+.L180:
+	.word	-1,.L86,0,.L181-.L86,0,0
 	.sdecl	'.debug_info',debug,cluster('path_recorder_add_point')
 	.sect	'.debug_info'
-.L190:
-	.word	253
+.L182:
+	.word	280
 	.half	3
-	.word	.L191
+	.word	.L183
 	.byte	4,1
 	.byte	'../code/GPS/path_recorder.c',0
 	.byte	'TASKING VX-toolset for AURIX Development Studio (non-commercial): C compiler',0
 	.byte	'E:\\ads\\Seekfree_TC387_Opensource_Library\\Debug\\',0,12,1
-	.word	.L193,.L192
+	.word	.L185,.L184
 	.byte	2
-	.word	.L96
+	.word	.L93
 	.byte	3
-	.byte	'path_recorder_add_point',0,1,139,1,14
-	.word	.L216
+	.byte	'path_recorder_add_point',0,1,120,14
+	.word	.L208
 	.byte	1,1
-	.word	.L73,.L259,.L72
+	.word	.L70,.L245,.L69
 	.byte	4
-	.byte	'point',0,1,139,1,52
-	.word	.L250,.L260
+	.byte	'point',0,1,120,52
+	.word	.L242,.L246
+	.byte	4
+	.byte	'segment_distance',0,1,120,65
+	.word	.L214,.L247
 	.byte	5
-	.word	.L73,.L259
+	.word	.L70,.L245
 	.byte	0,0
 	.sdecl	'.debug_abbrev',debug,cluster('path_recorder_add_point')
 	.sect	'.debug_abbrev'
-.L191:
+.L183:
 	.byte	1,17,1,3,8,37,8,27,8,19,15,128,70,12,85,6,16,6,0,0,2,61,0,24,16,0,0,3,46,1,3,8,58,15,59,15,57,15,73,16
 	.byte	54,15,39,12,17,1,18,1,64,6,0,0,4,5,0,3,8,58,15,59,15,57,15,73,16,2,6,0,0,5,11,0,17,1,18,1,0,0,0
 	.sdecl	'.debug_line',debug,cluster('path_recorder_add_point')
 	.sect	'.debug_line'
-.L192:
-	.word	.L580-.L579
-.L579:
+.L184:
+	.word	.L554-.L553
+.L553:
 	.half	3
-	.word	.L582-.L581
-.L581:
+	.word	.L556-.L555
+.L555:
 	.byte	2,1,-4,9,10,0,1,1,1,1,0,0,0,1,0
 	.byte	'../code/GPS/path_recorder.c',0,0,0,0,0
-.L582:
+.L556:
 	.byte	5,14,7,0,5,2
-	.word	.L73
-	.byte	3,138,1,1,5,9,9
-	.half	.L295-.L73
+	.word	.L70
+	.byte	3,247,0,1,5,9,9
+	.half	.L277-.L70
 	.byte	3,2,1,5,18,9
-	.half	.L583-.L295
+	.half	.L557-.L277
 	.byte	1,5,34,9
-	.half	.L584-.L583
+	.half	.L558-.L557
 	.byte	1,5,9,9
-	.half	.L585-.L584
+	.half	.L559-.L558
 	.byte	1,5,59,7,9
-	.half	.L586-.L585
+	.half	.L560-.L559
 	.byte	1,5,16,7,9
-	.half	.L32-.L586
+	.half	.L27-.L560
 	.byte	3,2,1,5,9,9
-	.half	.L587-.L32
+	.half	.L561-.L27
 	.byte	1,5,22,9
-	.half	.L33-.L587
+	.half	.L28-.L561
 	.byte	3,3,1,5,31,9
-	.half	.L588-.L33
+	.half	.L562-.L28
 	.byte	1,5,21,9
-	.half	.L589-.L588
+	.half	.L563-.L562
 	.byte	1,5,5,9
-	.half	.L590-.L589
+	.half	.L564-.L563
 	.byte	1,5,21,9
-	.half	.L591-.L590
+	.half	.L565-.L564
 	.byte	1,5,47,9
-	.half	.L592-.L591
+	.half	.L566-.L565
 	.byte	1,5,45,9
-	.half	.L294-.L592
+	.half	.L275-.L566
 	.byte	1,5,5,9
-	.half	.L593-.L294
+	.half	.L567-.L275
 	.byte	3,1,1,5,14,9
-	.half	.L594-.L593
+	.half	.L568-.L567
 	.byte	1,5,26,9
-	.half	.L595-.L594
-	.byte	1,5,28,9
-	.half	.L596-.L595
+	.half	.L569-.L568
+	.byte	1,5,35,9
+	.half	.L570-.L569
 	.byte	3,1,1,5,5,9
-	.half	.L297-.L596
+	.half	.L276-.L570
 	.byte	3,1,1,5,36,9
-	.half	.L597-.L297
+	.half	.L571-.L276
 	.byte	1,5,29,9
-	.half	.L598-.L597
+	.half	.L572-.L571
 	.byte	1,5,5,9
-	.half	.L599-.L598
+	.half	.L573-.L572
 	.byte	3,1,1,5,37,9
-	.half	.L600-.L599
+	.half	.L574-.L573
 	.byte	1,5,30,9
-	.half	.L601-.L600
+	.half	.L575-.L574
 	.byte	1,5,5,9
-	.half	.L602-.L601
+	.half	.L576-.L575
 	.byte	3,1,1,5,39,9
-	.half	.L603-.L602
+	.half	.L577-.L576
 	.byte	1,5,32,9
-	.half	.L604-.L603
+	.half	.L578-.L577
 	.byte	1,5,12,9
-	.half	.L605-.L604
+	.half	.L579-.L578
 	.byte	3,1,1,5,5,9
-	.half	.L606-.L605
+	.half	.L580-.L579
 	.byte	1,5,1,9
-	.half	.L34-.L606
+	.half	.L29-.L580
 	.byte	3,1,1,7,9
-	.half	.L194-.L34
+	.half	.L186-.L29
 	.byte	0,1,1
-.L580:
+.L554:
 	.sdecl	'.debug_ranges',debug,cluster('path_recorder_add_point')
 	.sect	'.debug_ranges'
-.L193:
-	.word	-1,.L73,0,.L194-.L73,0,0
+.L185:
+	.word	-1,.L70,0,.L186-.L70,0,0
 	.sdecl	'.debug_info',debug,cluster('path_recorder_calculate_distance')
 	.sect	'.debug_info'
-.L195:
-	.word	382
+.L187:
+	.word	426
 	.half	3
-	.word	.L196
+	.word	.L188
 	.byte	4,1
 	.byte	'../code/GPS/path_recorder.c',0
 	.byte	'TASKING VX-toolset for AURIX Development Studio (non-commercial): C compiler',0
 	.byte	'E:\\ads\\Seekfree_TC387_Opensource_Library\\Debug\\',0,12,1
-	.word	.L198,.L197
+	.word	.L190,.L189
 	.byte	2
-	.word	.L96
+	.word	.L93
 	.byte	3
-	.byte	'path_recorder_calculate_distance',0,1,207,1,14
-	.word	.L230
+	.byte	'path_recorder_calculate_distance',0,1,204,1,14
+	.word	.L214
 	.byte	1,1
-	.word	.L87,.L261,.L86
+	.word	.L84,.L248,.L83
 	.byte	4
-	.byte	'lat1',0,1,207,1,54
-	.word	.L230,.L262
+	.byte	'lat1',0,1,204,1,54
+	.word	.L214,.L249
 	.byte	4
-	.byte	'lon1',0,1,207,1,67
-	.word	.L230,.L263
+	.byte	'lon1',0,1,204,1,67
+	.word	.L214,.L250
 	.byte	4
-	.byte	'lat2',0,1,207,1,80
-	.word	.L230,.L264
+	.byte	'lat2',0,1,204,1,80
+	.word	.L214,.L251
 	.byte	4
-	.byte	'lon2',0,1,207,1,93
-	.word	.L230,.L265
+	.byte	'lon2',0,1,204,1,93
+	.word	.L214,.L252
 	.byte	5
-	.word	.L87,.L261
+	.word	.L84,.L248
 	.byte	6
-	.byte	'dlat',0,1,209,1,12
-	.word	.L230,.L266
+	.byte	'dlat',0,1,206,1,12
+	.word	.L214,.L253
 	.byte	6
-	.byte	'dlon',0,1,210,1,12
-	.word	.L230,.L267
+	.byte	'dlon',0,1,207,1,12
+	.word	.L214,.L254
 	.byte	6
-	.byte	'a',0,1,211,1,12
-	.word	.L230,.L268
+	.byte	'sin_dlat',0,1,208,1,12
+	.word	.L214,.L255
 	.byte	6
-	.byte	'c',0,1,214,1,12
-	.word	.L230,.L269
+	.byte	'sin_dlon',0,1,209,1,12
+	.word	.L214,.L256
+	.byte	6
+	.byte	'a',0,1,210,1,12
+	.word	.L214,.L257
+	.byte	6
+	.byte	'c',0,1,213,1,12
+	.word	.L214,.L258
 	.byte	0,0,0
 	.sdecl	'.debug_abbrev',debug,cluster('path_recorder_calculate_distance')
 	.sect	'.debug_abbrev'
-.L196:
+.L188:
 	.byte	1,17,1,3,8,37,8,27,8,19,15,128,70,12,85,6,16,6,0,0,2,61,0,24,16,0,0,3,46,1,3,8,58,15,59,15,57,15,73,16
 	.byte	54,15,39,12,17,1,18,1,64,6,0,0,4,5,0,3,8,58,15,59,15,57,15,73,16,2,6,0,0,5,11,1,17,1,18,1,0,0,6,52,0,3
 	.byte	8,58,15,59,15,57,15,73,16,2,6,0,0,0
 	.sdecl	'.debug_line',debug,cluster('path_recorder_calculate_distance')
 	.sect	'.debug_line'
-.L197:
-	.word	.L608-.L607
-.L607:
+.L189:
+	.word	.L582-.L581
+.L581:
 	.half	3
-	.word	.L610-.L609
-.L609:
+	.word	.L584-.L583
+.L583:
 	.byte	2,1,-4,9,10,0,1,1,1,1,0,0,0,1,0
 	.byte	'../code/GPS/path_recorder.c',0,0,0,0,0
-.L610:
+.L584:
 	.byte	5,14,7,0,5,2
-	.word	.L87
-	.byte	3,206,1,1,5,25,9
-	.half	.L308-.L87
+	.word	.L84
+	.byte	3,203,1,1,5,25,9
+	.half	.L291-.L84
 	.byte	3,2,1,5,35,9
-	.half	.L309-.L308
+	.half	.L292-.L291
 	.byte	1,5,33,9
-	.half	.L611-.L309
+	.half	.L585-.L292
 	.byte	1,5,45,9
-	.half	.L612-.L611
+	.half	.L586-.L585
 	.byte	1,5,43,9
-	.half	.L613-.L612
+	.half	.L587-.L586
 	.byte	1,5,25,9
-	.half	.L310-.L613
+	.half	.L293-.L587
 	.byte	3,1,1,5,35,9
-	.half	.L614-.L310
+	.half	.L588-.L293
 	.byte	1,5,33,9
-	.half	.L615-.L614
+	.half	.L589-.L588
 	.byte	1,5,45,9
-	.half	.L616-.L615
+	.half	.L590-.L589
 	.byte	1,5,43,9
-	.half	.L617-.L616
+	.half	.L591-.L590
+	.byte	1,5,34,9
+	.half	.L295-.L591
+	.byte	3,1,1,5,32,9
+	.half	.L592-.L295
+	.byte	1,5,21,9
+	.half	.L290-.L592
+	.byte	1,5,34,9
+	.half	.L298-.L290
+	.byte	3,1,1,5,32,9
+	.half	.L294-.L298
+	.byte	1,5,21,9
+	.half	.L297-.L294
 	.byte	1,5,27,9
-	.half	.L311-.L617
-	.byte	3,1,1,5,25,9
-	.half	.L618-.L311
-	.byte	1,5,30,9
-	.half	.L307-.L618
-	.byte	1,5,27,9
-	.half	.L619-.L307
-	.byte	3,1,1,5,25,9
-	.half	.L312-.L619
+	.half	.L296-.L297
+	.byte	3,2,1,5,25,9
+	.half	.L300-.L296
 	.byte	1,5,37,9
-	.half	.L313-.L312
+	.half	.L301-.L300
 	.byte	1,5,35,9
-	.half	.L620-.L313
+	.half	.L593-.L301
 	.byte	1,5,44,9
-	.half	.L621-.L620
+	.half	.L299-.L593
 	.byte	1,5,57,9
-	.half	.L622-.L621
+	.half	.L594-.L299
 	.byte	1,5,55,9
-	.half	.L314-.L622
+	.half	.L302-.L594
 	.byte	1,5,67,9
-	.half	.L315-.L314
+	.half	.L303-.L302
 	.byte	1,5,65,9
-	.half	.L623-.L315
+	.half	.L595-.L303
 	.byte	1,5,44,9
-	.half	.L624-.L623
-	.byte	1,5,27,9
-	.half	.L625-.L624
-	.byte	3,1,1,5,25,9
-	.half	.L626-.L625
+	.half	.L596-.L595
 	.byte	1,5,74,9
-	.half	.L627-.L626
-	.byte	3,127,1,5,43,9
-	.half	.L628-.L627
-	.byte	3,1,1,5,41,9
-	.half	.L629-.L628
-	.byte	1,5,30,9
-	.half	.L630-.L629
-	.byte	1,5,43,9
-	.half	.L631-.L630
-	.byte	3,126,1,5,41,9
-	.half	.L632-.L631
-	.byte	1,5,46,9
-	.half	.L633-.L632
-	.byte	1,5,31,9
-	.half	.L316-.L633
+	.half	.L597-.L596
+	.byte	1,5,25,9
+	.half	.L598-.L597
+	.byte	3,1,1,5,36,9
+	.half	.L599-.L598
+	.byte	3,126,1,5,31,9
+	.half	.L304-.L599
 	.byte	3,3,1,5,30,9
-	.half	.L319-.L316
+	.half	.L307-.L304
 	.byte	1,5,40,9
-	.half	.L634-.L319
+	.half	.L600-.L307
 	.byte	1,5,42,9
-	.half	.L635-.L634
+	.half	.L601-.L600
 	.byte	1,5,39,9
-	.half	.L636-.L635
+	.half	.L602-.L601
 	.byte	1,5,16,9
-	.half	.L637-.L636
+	.half	.L603-.L602
 	.byte	1,5,18,9
-	.half	.L317-.L637
+	.half	.L305-.L603
 	.byte	1,5,20,9
-	.half	.L320-.L317
+	.half	.L308-.L305
 	.byte	3,1,1,5,33,9
-	.half	.L638-.L320
+	.half	.L604-.L308
 	.byte	1,5,5,9
-	.half	.L639-.L638
+	.half	.L605-.L604
 	.byte	1,5,1,9
-	.half	.L43-.L639
+	.half	.L42-.L605
 	.byte	3,1,1,7,9
-	.half	.L199-.L43
+	.half	.L191-.L42
 	.byte	0,1,1
-.L608:
+.L582:
 	.sdecl	'.debug_ranges',debug,cluster('path_recorder_calculate_distance')
 	.sect	'.debug_ranges'
-.L198:
-	.word	-1,.L87,0,.L199-.L87,0,0
+.L190:
+	.word	-1,.L84,0,.L191-.L84,0,0
 	.sdecl	'.debug_info',debug,cluster('path_recorder_clamp_float')
 	.sect	'.debug_info'
-.L200:
+.L192:
 	.word	297
 	.half	3
-	.word	.L201
+	.word	.L193
 	.byte	4,1
 	.byte	'../code/GPS/path_recorder.c',0
 	.byte	'TASKING VX-toolset for AURIX Development Studio (non-commercial): C compiler',0
 	.byte	'E:\\ads\\Seekfree_TC387_Opensource_Library\\Debug\\',0,12,1
-	.word	.L203,.L202
+	.word	.L195,.L194
 	.byte	2
-	.word	.L96
+	.word	.L93
 	.byte	3
-	.byte	'path_recorder_clamp_float',0,1,27,14
-	.word	.L230
+	.byte	'path_recorder_clamp_float',0,1,26,14
+	.word	.L214
 	.byte	1,1
-	.word	.L53,.L270,.L52
+	.word	.L52,.L259,.L51
 	.byte	4
-	.byte	'value',0,1,27,46
-	.word	.L230,.L271
+	.byte	'value',0,1,26,46
+	.word	.L214,.L260
 	.byte	4
-	.byte	'min_value',0,1,27,59
-	.word	.L230,.L272
+	.byte	'min_value',0,1,26,59
+	.word	.L214,.L261
 	.byte	4
-	.byte	'max_value',0,1,27,76
-	.word	.L230,.L273
+	.byte	'max_value',0,1,26,76
+	.word	.L214,.L262
 	.byte	5
-	.word	.L53,.L270
+	.word	.L52,.L259
 	.byte	0,0
 	.sdecl	'.debug_abbrev',debug,cluster('path_recorder_clamp_float')
 	.sect	'.debug_abbrev'
-.L201:
+.L193:
 	.byte	1,17,1,3,8,37,8,27,8,19,15,128,70,12,85,6,16,6,0,0,2,61,0,24,16,0,0,3,46,1,3,8,58,15,59,15,57,15,73,16
 	.byte	54,15,39,12,17,1,18,1,64,6,0,0,4,5,0,3,8,58,15,59,15,57,15,73,16,2,6,0,0,5,11,0,17,1,18,1,0,0,0
 	.sdecl	'.debug_line',debug,cluster('path_recorder_clamp_float')
 	.sect	'.debug_line'
-.L202:
-	.word	.L641-.L640
-.L640:
+.L194:
+	.word	.L607-.L606
+.L606:
 	.half	3
-	.word	.L643-.L642
-.L642:
+	.word	.L609-.L608
+.L608:
 	.byte	2,1,-4,9,10,0,1,1,1,1,0,0,0,1,0
 	.byte	'../code/GPS/path_recorder.c',0,0,0,0,0
-.L643:
+.L609:
 	.byte	5,15,7,0,5,2
-	.word	.L53
-	.byte	3,28,1,5,5,9
-	.half	.L644-.L53
+	.word	.L52
+	.byte	3,27,1,5,5,9
+	.half	.L610-.L52
 	.byte	1,5,9,7,9
-	.half	.L645-.L644
+	.half	.L611-.L610
 	.byte	3,2,1,5,15,9
-	.half	.L2-.L645
+	.half	.L2-.L611
 	.byte	3,2,1,5,5,9
-	.half	.L646-.L2
+	.half	.L612-.L2
 	.byte	1,5,9,7,9
-	.half	.L647-.L646
+	.half	.L613-.L612
 	.byte	3,2,1,5,5,9
-	.half	.L4-.L647
+	.half	.L4-.L613
 	.byte	3,2,1,5,1,9
 	.half	.L3-.L4
 	.byte	3,1,1,7,9
-	.half	.L204-.L3
+	.half	.L196-.L3
 	.byte	0,1,1
-.L641:
+.L607:
 	.sdecl	'.debug_ranges',debug,cluster('path_recorder_clamp_float')
 	.sect	'.debug_ranges'
-.L203:
-	.word	-1,.L53,0,.L204-.L53,0,0
+.L195:
+	.word	-1,.L52,0,.L196-.L52,0,0
 	.sdecl	'.debug_info',debug,cluster('path_recorder_clamp_u32')
 	.sect	'.debug_info'
-.L205:
+.L197:
 	.word	295
 	.half	3
-	.word	.L206
+	.word	.L198
 	.byte	4,1
 	.byte	'../code/GPS/path_recorder.c',0
 	.byte	'TASKING VX-toolset for AURIX Development Studio (non-commercial): C compiler',0
 	.byte	'E:\\ads\\Seekfree_TC387_Opensource_Library\\Debug\\',0,12,1
-	.word	.L208,.L207
+	.word	.L200,.L199
 	.byte	2
-	.word	.L96
+	.word	.L93
 	.byte	3
-	.byte	'path_recorder_clamp_u32',0,1,40,15
-	.word	.L222
+	.byte	'path_recorder_clamp_u32',0,1,39,15
+	.word	.L216
 	.byte	1,1
-	.word	.L55,.L274,.L54
+	.word	.L54,.L263,.L53
 	.byte	4
-	.byte	'value',0,1,40,46
-	.word	.L222,.L275
+	.byte	'value',0,1,39,46
+	.word	.L216,.L264
 	.byte	4
-	.byte	'min_value',0,1,40,60
-	.word	.L222,.L276
+	.byte	'min_value',0,1,39,60
+	.word	.L216,.L265
 	.byte	4
-	.byte	'max_value',0,1,40,78
-	.word	.L222,.L277
+	.byte	'max_value',0,1,39,78
+	.word	.L216,.L266
 	.byte	5
-	.word	.L55,.L274
+	.word	.L54,.L263
 	.byte	0,0
 	.sdecl	'.debug_abbrev',debug,cluster('path_recorder_clamp_u32')
 	.sect	'.debug_abbrev'
-.L206:
+.L198:
 	.byte	1,17,1,3,8,37,8,27,8,19,15,128,70,12,85,6,16,6,0,0,2,61,0,24,16,0,0,3,46,1,3,8,58,15,59,15,57,15,73,16
 	.byte	54,15,39,12,17,1,18,1,64,6,0,0,4,5,0,3,8,58,15,59,15,57,15,73,16,2,6,0,0,5,11,0,17,1,18,1,0,0,0
 	.sdecl	'.debug_line',debug,cluster('path_recorder_clamp_u32')
 	.sect	'.debug_line'
-.L207:
-	.word	.L649-.L648
-.L648:
+.L199:
+	.word	.L615-.L614
+.L614:
 	.half	3
-	.word	.L651-.L650
-.L650:
+	.word	.L617-.L616
+.L616:
 	.byte	2,1,-4,9,10,0,1,1,1,1,0,0,0,1,0
 	.byte	'../code/GPS/path_recorder.c',0,0,0,0,0
-.L651:
+.L617:
 	.byte	5,5,7,0,5,2
-	.word	.L55
-	.byte	3,41,1,5,9,7,9
-	.half	.L652-.L55
+	.word	.L54
+	.byte	3,40,1,5,9,7,9
+	.half	.L618-.L54
 	.byte	3,2,1,5,5,9
-	.half	.L7-.L652
+	.half	.L7-.L618
 	.byte	3,2,1,5,9,7,9
-	.half	.L653-.L7
+	.half	.L619-.L7
 	.byte	3,2,1,5,5,9
-	.half	.L9-.L653
+	.half	.L9-.L619
 	.byte	3,2,1,5,1,9
 	.half	.L8-.L9
 	.byte	3,1,1,7,9
-	.half	.L209-.L8
+	.half	.L201-.L8
 	.byte	0,1,1
-.L649:
+.L615:
 	.sdecl	'.debug_ranges',debug,cluster('path_recorder_clamp_u32')
 	.sect	'.debug_ranges'
-.L208:
-	.word	-1,.L55,0,.L209-.L55,0,0
+.L200:
+	.word	-1,.L54,0,.L201-.L54,0,0
 	.sdecl	'.debug_info',debug,cluster('path_data')
 	.sect	'.debug_info'
-.L210:
+.L202:
 	.word	194
 	.half	3
-	.word	.L211
+	.word	.L203
 	.byte	4,1
 	.byte	'../code/GPS/path_recorder.c',0
 	.byte	'TASKING VX-toolset for AURIX Development Studio (non-commercial): C compiler',0
 	.byte	'E:\\ads\\Seekfree_TC387_Opensource_Library\\Debug\\',0,12,1,2
-	.word	.L96
+	.word	.L93
 	.byte	3
 	.byte	'path_data',0,24,18,13
-	.word	.L278
+	.word	.L267
 	.byte	1,5,3
 	.word	path_data
 	.byte	0
 	.sdecl	'.debug_abbrev',debug,cluster('path_data')
 	.sect	'.debug_abbrev'
-.L211:
+.L203:
 	.byte	1,17,1,3,8,37,8,27,8,19,15,128,70,12,0,0,2,61,0,24,16,0,0,3,52,0,3,8,58,15,59,15,57,15,73,16,63,12,2,9
 	.byte	0,0,0
 	.sdecl	'.debug_info',debug,cluster('path_record_config')
 	.sect	'.debug_info'
-.L212:
+.L204:
 	.word	202
 	.half	3
-	.word	.L213
+	.word	.L205
 	.byte	4,1
 	.byte	'../code/GPS/path_recorder.c',0
 	.byte	'TASKING VX-toolset for AURIX Development Studio (non-commercial): C compiler',0
 	.byte	'E:\\ads\\Seekfree_TC387_Opensource_Library\\Debug\\',0,12,1,2
-	.word	.L96
+	.word	.L93
 	.byte	3
 	.byte	'path_record_config',0,24,19,29
-	.word	.L279
+	.word	.L268
 	.byte	5,3
 	.word	path_record_config
 	.byte	0
 	.sdecl	'.debug_abbrev',debug,cluster('path_record_config')
 	.sect	'.debug_abbrev'
-.L213:
+.L205:
 	.byte	1,17,1,3,8,37,8,27,8,19,15,128,70,12,0,0,2,61,0,24,16,0,0,3,52,0,3,8,58,15,59,15,57,15,73,16,2,9,0,0,0
 	.sdecl	'.debug_loc',debug,cluster('is_valid_gps_fix')
 	.sect	'.debug_loc'
-.L56:
-	.word	-1,.L57,0,.L248-.L57
+.L55:
+	.word	-1,.L56,0,.L240-.L56
 	.half	2
 	.byte	138,0
 	.word	0,0
 	.sdecl	'.debug_loc',debug,cluster('path_recorder_add_point')
 	.sect	'.debug_loc'
-.L72:
-	.word	-1,.L73,0,.L259-.L73
+.L69:
+	.word	-1,.L70,0,.L245-.L70
+	.half	2
+	.byte	138,0
+	.word	0,0
+.L246:
+	.word	-1,.L70,0,.L275-.L70
+	.half	1
+	.byte	100
+	.word	.L277-.L70,.L245-.L70
+	.half	1
+	.byte	111
+	.word	.L278-.L70,.L276-.L70
+	.half	1
+	.byte	100
+	.word	0,0
+.L247:
+	.word	-1,.L70,0,.L276-.L70
+	.half	1
+	.byte	84
+	.word	0,0
+	.sdecl	'.debug_loc',debug,cluster('path_recorder_calculate_distance')
+	.sect	'.debug_loc'
+.L257:
+	.word	-1,.L84,.L304-.L84,.L305-.L84
+	.half	1
+	.byte	95
+	.word	.L306-.L84,.L307-.L84
+	.half	1
+	.byte	84
+	.word	0,0
+.L258:
+	.word	-1,.L84,.L308-.L84,.L248-.L84
+	.half	1
+	.byte	95
+	.word	0,0
+.L253:
+	.word	-1,.L84,.L293-.L84,.L294-.L84
+	.half	1
+	.byte	95
+	.word	0,0
+.L254:
+	.word	-1,.L84,.L295-.L84,.L296-.L84
+	.half	1
+	.byte	90
+	.word	0,0
+.L249:
+	.word	-1,.L84,0,.L289-.L84
+	.half	1
+	.byte	84
+	.word	.L291-.L84,.L292-.L84
+	.half	1
+	.byte	88
+	.word	.L300-.L84,.L301-.L84
+	.half	1
+	.byte	88
+	.word	0,0
+.L251:
+	.word	-1,.L84,0,.L290-.L84
+	.half	1
+	.byte	86
+	.word	.L291-.L84,.L292-.L84
+	.half	1
+	.byte	89
+	.word	.L302-.L84,.L303-.L84
+	.half	1
+	.byte	89
+	.word	0,0
+.L250:
+	.word	-1,.L84,0,.L290-.L84
+	.half	1
+	.byte	85
+	.word	0,0
+.L252:
+	.word	-1,.L84,0,.L290-.L84
+	.half	1
+	.byte	87
+	.word	0,0
+.L83:
+	.word	-1,.L84,0,.L248-.L84
+	.half	2
+	.byte	138,0
+	.word	0,0
+.L255:
+	.word	-1,.L84,.L290-.L84,.L297-.L84
+	.half	1
+	.byte	82
+	.word	.L298-.L84,.L248-.L84
+	.half	1
+	.byte	91
+	.word	0,0
+.L256:
+	.word	-1,.L84,.L297-.L84,.L299-.L84
+	.half	1
+	.byte	82
+	.word	.L296-.L84,.L248-.L84
+	.half	1
+	.byte	90
+	.word	0,0
+	.sdecl	'.debug_loc',debug,cluster('path_recorder_clamp_float')
+	.sect	'.debug_loc'
+.L262:
+	.word	-1,.L52,0,.L259-.L52
+	.half	1
+	.byte	86
+	.word	.L270-.L52,.L4-.L52
+	.half	1
+	.byte	82
+	.word	0,0
+.L261:
+	.word	-1,.L52,0,.L259-.L52
+	.half	1
+	.byte	85
+	.word	.L269-.L52,.L2-.L52
+	.half	1
+	.byte	82
+	.word	0,0
+.L51:
+	.word	-1,.L52,0,.L259-.L52
 	.half	2
 	.byte	138,0
 	.word	0,0
 .L260:
-	.word	-1,.L73,0,.L294-.L73
-	.half	1
-	.byte	100
-	.word	.L295-.L73,.L259-.L73
-	.half	1
-	.byte	111
-	.word	.L296-.L73,.L297-.L73
-	.half	1
-	.byte	100
-	.word	0,0
-	.sdecl	'.debug_loc',debug,cluster('path_recorder_calculate_distance')
-	.sect	'.debug_loc'
-.L268:
-	.word	-1,.L87,.L316-.L87,.L317-.L87
-	.half	1
-	.byte	95
-	.word	.L318-.L87,.L319-.L87
+	.word	-1,.L52,0,.L259-.L52
 	.half	1
 	.byte	84
-	.word	0,0
-.L269:
-	.word	-1,.L87,.L320-.L87,.L261-.L87
-	.half	1
-	.byte	95
-	.word	0,0
-.L266:
-	.word	-1,.L87,.L310-.L87,.L261-.L87
-	.half	1
-	.byte	90
-	.word	0,0
-.L267:
-	.word	-1,.L87,.L311-.L87,.L261-.L87
-	.half	1
-	.byte	91
-	.word	0,0
-.L262:
-	.word	-1,.L87,0,.L306-.L87
-	.half	1
-	.byte	84
-	.word	.L308-.L87,.L309-.L87
-	.half	1
-	.byte	88
-	.word	.L312-.L87,.L313-.L87
-	.half	1
-	.byte	88
-	.word	0,0
-.L264:
-	.word	-1,.L87,0,.L307-.L87
-	.half	1
-	.byte	86
-	.word	.L308-.L87,.L309-.L87
-	.half	1
-	.byte	89
-	.word	.L314-.L87,.L315-.L87
-	.half	1
-	.byte	89
-	.word	0,0
-.L263:
-	.word	-1,.L87,0,.L307-.L87
-	.half	1
-	.byte	85
-	.word	0,0
-.L265:
-	.word	-1,.L87,0,.L307-.L87
-	.half	1
-	.byte	87
-	.word	0,0
-.L86:
-	.word	-1,.L87,0,.L261-.L87
-	.half	2
-	.byte	138,0
-	.word	0,0
-	.sdecl	'.debug_loc',debug,cluster('path_recorder_clamp_float')
-	.sect	'.debug_loc'
-.L273:
-	.word	-1,.L53,0,.L270-.L53
-	.half	1
-	.byte	86
-	.word	.L281-.L53,.L4-.L53
-	.half	1
-	.byte	82
-	.word	0,0
-.L272:
-	.word	-1,.L53,0,.L270-.L53
-	.half	1
-	.byte	85
-	.word	.L280-.L53,.L2-.L53
-	.half	1
-	.byte	82
-	.word	0,0
-.L52:
-	.word	-1,.L53,0,.L270-.L53
-	.half	2
-	.byte	138,0
-	.word	0,0
-.L271:
-	.word	-1,.L53,0,.L270-.L53
-	.half	1
-	.byte	84
-	.word	.L282-.L53,.L3-.L53
+	.word	.L271-.L52,.L3-.L52
 	.half	1
 	.byte	82
 	.word	0,0
 	.sdecl	'.debug_loc',debug,cluster('path_recorder_clamp_u32')
 	.sect	'.debug_loc'
-.L277:
-	.word	-1,.L55,0,.L274-.L55
+.L266:
+	.word	-1,.L54,0,.L263-.L54
 	.half	1
 	.byte	86
-	.word	.L284-.L55,.L9-.L55
+	.word	.L273-.L54,.L9-.L54
 	.half	1
 	.byte	82
 	.word	0,0
-.L276:
-	.word	-1,.L55,0,.L274-.L55
+.L265:
+	.word	-1,.L54,0,.L263-.L54
 	.half	1
 	.byte	85
-	.word	.L283-.L55,.L7-.L55
+	.word	.L272-.L54,.L7-.L54
 	.half	1
 	.byte	82
 	.word	0,0
-.L54:
-	.word	-1,.L55,0,.L274-.L55
+.L53:
+	.word	-1,.L54,0,.L263-.L54
 	.half	2
 	.byte	138,0
 	.word	0,0
-.L275:
-	.word	-1,.L55,0,.L274-.L55
+.L264:
+	.word	-1,.L54,0,.L263-.L54
 	.half	1
 	.byte	84
-	.word	.L285-.L55,.L8-.L55
+	.word	.L274-.L54,.L8-.L54
 	.half	1
 	.byte	82
 	.word	0,0
 	.sdecl	'.debug_loc',debug,cluster('path_recorder_clear')
 	.sect	'.debug_loc'
-.L68:
-	.word	-1,.L69,0,.L220-.L69
+.L67:
+	.word	-1,.L68,0,.L212-.L68
 	.half	2
 	.byte	138,0
 	.word	0,0
 	.sdecl	'.debug_loc',debug,cluster('path_recorder_get_config')
 	.sect	'.debug_loc'
-.L76:
-	.word	-1,.L77,0,.L228-.L77
+.L73:
+	.word	-1,.L74,0,.L221-.L74
 	.half	2
 	.byte	138,0
 	.word	0,0
 	.sdecl	'.debug_loc',debug,cluster('path_recorder_get_point_count')
 	.sect	'.debug_loc'
-.L94:
-	.word	-1,.L95,0,.L247-.L95
+.L91:
+	.word	-1,.L92,0,.L239-.L92
 	.half	2
 	.byte	138,0
 	.word	0,0
 	.sdecl	'.debug_loc',debug,cluster('path_recorder_get_state')
 	.sect	'.debug_loc'
-.L92:
-	.word	-1,.L93,0,.L245-.L93
+.L89:
+	.word	-1,.L90,0,.L237-.L90
 	.half	2
 	.byte	138,0
 	.word	0,0
 	.sdecl	'.debug_loc',debug,cluster('path_recorder_get_stats')
 	.sect	'.debug_loc'
-.L243:
-	.word	-1,.L91,0,.L238-.L91
+.L235:
+	.word	-1,.L88,0,.L230-.L88
 	.half	1
 	.byte	102
 	.word	0,0
-.L240:
-	.word	-1,.L91,0,.L238-.L91
+.L232:
+	.word	-1,.L88,0,.L230-.L88
 	.half	1
 	.byte	100
 	.word	0,0
-.L90:
-	.word	-1,.L91,0,.L238-.L91
+.L87:
+	.word	-1,.L88,0,.L230-.L88
 	.half	2
 	.byte	138,0
 	.word	0,0
-.L242:
-	.word	-1,.L91,0,.L238-.L91
+.L234:
+	.word	-1,.L88,0,.L230-.L88
 	.half	1
 	.byte	101
 	.word	0,0
 	.sdecl	'.debug_loc',debug,cluster('path_recorder_init')
 	.sect	'.debug_loc'
-.L58:
-	.word	-1,.L59,0,.L214-.L59
+.L57:
+	.word	-1,.L58,0,.L206-.L58
 	.half	2
 	.byte	138,0
 	.word	0,0
 	.sdecl	'.debug_loc',debug,cluster('path_recorder_reset_config')
 	.sect	'.debug_loc'
-.L60:
-	.word	-1,.L61,0,.L215-.L61
+.L59:
+	.word	-1,.L60,0,.L207-.L60
 	.half	2
 	.byte	138,0
 	.word	0,0
 	.sdecl	'.debug_loc',debug,cluster('path_recorder_set_max_speed_kph')
 	.sect	'.debug_loc'
-.L84:
-	.word	-1,.L85,0,.L236-.L85
+.L81:
+	.word	-1,.L82,0,.L228-.L82
 	.half	2
 	.byte	138,0
 	.word	0,0
-.L237:
-	.word	-1,.L85,0,.L305-.L85
+.L229:
+	.word	-1,.L82,0,.L288-.L82
 	.half	1
 	.byte	84
 	.word	0,0
 	.sdecl	'.debug_loc',debug,cluster('path_recorder_set_min_distance')
 	.sect	'.debug_loc'
-.L78:
-	.word	-1,.L79,0,.L229-.L79
+.L75:
+	.word	-1,.L76,0,.L222-.L76
 	.half	2
 	.byte	138,0
 	.word	0,0
-.L231:
-	.word	-1,.L79,0,.L302-.L79
+.L223:
+	.word	-1,.L76,0,.L285-.L76
 	.half	1
 	.byte	84
 	.word	0,0
 	.sdecl	'.debug_loc',debug,cluster('path_recorder_set_min_interval_ms')
 	.sect	'.debug_loc'
-.L80:
-	.word	-1,.L81,0,.L232-.L81
+.L77:
+	.word	-1,.L78,0,.L224-.L78
 	.half	2
 	.byte	138,0
 	.word	0,0
-.L233:
-	.word	-1,.L81,0,.L303-.L81
+.L225:
+	.word	-1,.L78,0,.L286-.L78
 	.half	1
 	.byte	84
 	.word	0,0
 	.sdecl	'.debug_loc',debug,cluster('path_recorder_set_min_satellites')
 	.sect	'.debug_loc'
-.L82:
-	.word	-1,.L83,0,.L234-.L83
+.L79:
+	.word	-1,.L80,0,.L226-.L80
 	.half	2
 	.byte	138,0
 	.word	0,0
-.L235:
-	.word	-1,.L83,0,.L304-.L83
+.L227:
+	.word	-1,.L80,0,.L287-.L80
 	.half	1
 	.byte	84
-	.word	0,0
-	.sdecl	'.debug_loc',debug,cluster('path_recorder_should_record')
-	.sect	'.debug_loc'
-.L257:
-	.word	-1,.L71,0,.L286-.L71
-	.half	1
-	.byte	86
-	.word	0,0
-.L258:
-	.word	-1,.L71,.L290-.L71,.L293-.L71
-	.half	1
-	.byte	82
-	.word	0,0
-.L255:
-	.word	-1,.L71,0,.L287-.L71
-	.half	1
-	.byte	84
-	.word	.L289-.L71,.L290-.L71
-	.half	5
-	.byte	144,32,157,32,0
-	.word	.L292-.L71,.L290-.L71
-	.half	1
-	.byte	86
-	.word	0,0
-.L256:
-	.word	-1,.L71,0,.L288-.L71
-	.half	1
-	.byte	85
-	.word	.L291-.L71,.L290-.L71
-	.half	1
-	.byte	87
-	.word	0,0
-.L70:
-	.word	-1,.L71,0,.L254-.L71
-	.half	2
-	.byte	138,0
 	.word	0,0
 	.sdecl	'.debug_loc',debug,cluster('path_recorder_start')
 	.sect	'.debug_loc'
-.L62:
-	.word	-1,.L63,0,.L217-.L63
+.L61:
+	.word	-1,.L62,0,.L209-.L62
 	.half	2
 	.byte	138,0
 	.word	0,0
 	.sdecl	'.debug_loc',debug,cluster('path_recorder_start_new')
 	.sect	'.debug_loc'
-.L64:
-	.word	-1,.L65,0,.L218-.L65
+.L63:
+	.word	-1,.L64,0,.L210-.L64
 	.half	2
 	.byte	138,0
 	.word	0,0
 	.sdecl	'.debug_loc',debug,cluster('path_recorder_stop')
 	.sect	'.debug_loc'
-.L66:
-	.word	-1,.L67,0,.L219-.L67
+.L65:
+	.word	-1,.L66,0,.L211-.L66
 	.half	2
 	.byte	138,0
 	.word	0,0
 	.sdecl	'.debug_loc',debug,cluster('path_recorder_task')
 	.sect	'.debug_loc'
-.L223:
-	.word	-1,.L75,.L299-.L75,.L38-.L75
+.L217:
+	.word	-1,.L72,.L282-.L72,.L33-.L72
 	.half	1
 	.byte	88
-	.word	.L300-.L75,.L301-.L75
-	.half	1
-	.byte	86
 	.word	0,0
-.L74:
-	.word	-1,.L75,0,.L298-.L75
+.L215:
+	.word	-1,.L72,.L280-.L72,.L281-.L72
+	.half	1
+	.byte	90
+	.word	.L281-.L72,.L36-.L72
+	.half	1
+	.byte	82
+	.word	.L283-.L72,.L213-.L72
+	.half	1
+	.byte	90
+	.word	.L284-.L72,.L33-.L72
+	.half	1
+	.byte	84
+	.word	0,0
+.L71:
+	.word	-1,.L72,0,.L279-.L72
 	.half	2
 	.byte	138,0
-	.word	.L298-.L75,.L221-.L75
+	.word	.L279-.L72,.L213-.L72
 	.half	2
 	.byte	138,24
-	.word	.L221-.L75,.L221-.L75
+	.word	.L213-.L72,.L213-.L72
 	.half	2
 	.byte	138,0
 	.word	0,0
-.L226:
-	.word	-1,.L75,0,.L221-.L75
+.L219:
+	.word	-1,.L72,0,.L213-.L72
 	.half	2
 	.byte	145,104
 	.word	0,0
 	.sdecl	'.debug_loc',debug,cluster('update_path_statistics')
 	.sect	'.debug_loc'
-.L251:
-	.word	-1,.L89,0,.L321-.L89
+.L243:
+	.word	-1,.L86,0,.L241-.L86
 	.half	1
 	.byte	100
-	.word	.L322-.L89,.L323-.L89
-	.half	1
-	.byte	111
 	.word	0,0
-.L253:
-	.word	-1,.L89,.L324-.L89,.L325-.L89
+.L244:
+	.word	-1,.L86,0,.L241-.L86
 	.half	1
-	.byte	98
+	.byte	84
 	.word	0,0
-.L88:
-	.word	-1,.L89,0,.L249-.L89
+.L85:
+	.word	-1,.L86,0,.L241-.L86
 	.half	2
 	.byte	138,0
 	.word	0,0
 	.sdecl	'.debug_frame',debug
 	.sect	'.debug_frame'
-.L654:
+.L620:
 	.word	48
 	.word	-1
 	.byte	3,0,2,1,27,12,26,0,8,26,8,27,8,30,8,29,8,28,8,16,8,17,8,24,8,25,8,31,8,32,8,33,8,34,8,35,8,36,8,37,8,38
@@ -23734,103 +23570,100 @@ path_record_config:	.type	object
 	.sdecl	'.debug_frame',debug,cluster('path_recorder_clamp_float')
 	.sect	'.debug_frame'
 	.word	24
-	.word	.L654,.L53,.L270-.L53
+	.word	.L620,.L52,.L259-.L52
 	.byte	8,18,8,19,8,20,8,21,8,22,8,23
 	.sdecl	'.debug_frame',debug,cluster('path_recorder_clamp_u32')
 	.sect	'.debug_frame'
 	.word	24
-	.word	.L654,.L55,.L274-.L55
+	.word	.L620,.L54,.L263-.L54
 	.byte	8,18,8,19,8,20,8,21,8,22,8,23
 	.sdecl	'.debug_frame',debug,cluster('is_valid_gps_fix')
 	.sect	'.debug_frame'
 	.word	24
-	.word	.L654,.L57,.L248-.L57
+	.word	.L620,.L56,.L240-.L56
 	.byte	8,18,8,19,8,20,8,21,8,22,8,23
 	.sdecl	'.debug_frame',debug,cluster('path_recorder_init')
 	.sect	'.debug_frame'
 	.word	12
-	.word	.L654,.L59,.L214-.L59
+	.word	.L620,.L58,.L206-.L58
 	.sdecl	'.debug_frame',debug,cluster('path_recorder_reset_config')
 	.sect	'.debug_frame'
 	.word	24
-	.word	.L654,.L61,.L215-.L61
+	.word	.L620,.L60,.L207-.L60
 	.byte	8,18,8,19,8,20,8,21,8,22,8,23
 	.sdecl	'.debug_frame',debug,cluster('path_recorder_start')
 	.sect	'.debug_frame'
 	.word	12
-	.word	.L654,.L63,.L217-.L63
+	.word	.L620,.L62,.L209-.L62
 	.sdecl	'.debug_frame',debug,cluster('path_recorder_start_new')
 	.sect	'.debug_frame'
 	.word	12
-	.word	.L654,.L65,.L218-.L65
+	.word	.L620,.L64,.L210-.L64
 	.sdecl	'.debug_frame',debug,cluster('path_recorder_stop')
 	.sect	'.debug_frame'
 	.word	24
-	.word	.L654,.L67,.L219-.L67
+	.word	.L620,.L66,.L211-.L66
 	.byte	8,18,8,19,8,20,8,21,8,22,8,23
 	.sdecl	'.debug_frame',debug,cluster('path_recorder_clear')
 	.sect	'.debug_frame'
 	.word	12
-	.word	.L654,.L69,.L220-.L69
-	.sdecl	'.debug_frame',debug,cluster('path_recorder_should_record')
-	.sect	'.debug_frame'
-	.word	12
-	.word	.L654,.L71,.L254-.L71
+	.word	.L620,.L68,.L212-.L68
 	.sdecl	'.debug_frame',debug,cluster('path_recorder_add_point')
 	.sect	'.debug_frame'
 	.word	12
-	.word	.L654,.L73,.L259-.L73
+	.word	.L620,.L70,.L245-.L70
 	.sdecl	'.debug_frame',debug,cluster('path_recorder_task')
 	.sect	'.debug_frame'
 	.word	36
-	.word	.L654,.L75,.L221-.L75
+	.word	.L620,.L72,.L213-.L72
 	.byte	4
-	.word	(.L298-.L75)/2
+	.word	(.L279-.L72)/2
 	.byte	19,24,22,26,3,19,138,24,4
-	.word	(.L221-.L298)/2
+	.word	(.L213-.L279)/2
 	.byte	19,0,8,26,0,0
 	.sdecl	'.debug_frame',debug,cluster('path_recorder_get_config')
 	.sect	'.debug_frame'
 	.word	24
-	.word	.L654,.L77,.L228-.L77
+	.word	.L620,.L74,.L221-.L74
 	.byte	8,19,8,20,8,21,8,22,8,23,0,0
 	.sdecl	'.debug_frame',debug,cluster('path_recorder_set_min_distance')
 	.sect	'.debug_frame'
 	.word	12
-	.word	.L654,.L79,.L229-.L79
+	.word	.L620,.L76,.L222-.L76
 	.sdecl	'.debug_frame',debug,cluster('path_recorder_set_min_interval_ms')
 	.sect	'.debug_frame'
 	.word	12
-	.word	.L654,.L81,.L232-.L81
+	.word	.L620,.L78,.L224-.L78
 	.sdecl	'.debug_frame',debug,cluster('path_recorder_set_min_satellites')
 	.sect	'.debug_frame'
 	.word	12
-	.word	.L654,.L83,.L234-.L83
+	.word	.L620,.L80,.L226-.L80
 	.sdecl	'.debug_frame',debug,cluster('path_recorder_set_max_speed_kph')
 	.sect	'.debug_frame'
 	.word	12
-	.word	.L654,.L85,.L236-.L85
+	.word	.L620,.L82,.L228-.L82
 	.sdecl	'.debug_frame',debug,cluster('path_recorder_calculate_distance')
 	.sect	'.debug_frame'
 	.word	12
-	.word	.L654,.L87,.L261-.L87
+	.word	.L620,.L84,.L248-.L84
 	.sdecl	'.debug_frame',debug,cluster('update_path_statistics')
 	.sect	'.debug_frame'
-	.word	12
-	.word	.L654,.L89,.L249-.L89
+	.word	20
+	.word	.L620,.L86,.L241-.L86
+	.byte	8,19,8,21,8,22,8,23
 	.sdecl	'.debug_frame',debug,cluster('path_recorder_get_stats')
 	.sect	'.debug_frame'
 	.word	20
-	.word	.L654,.L91,.L238-.L91
+	.word	.L620,.L88,.L230-.L88
 	.byte	8,18,8,19,8,23,0,0
 	.sdecl	'.debug_frame',debug,cluster('path_recorder_get_state')
 	.sect	'.debug_frame'
 	.word	24
-	.word	.L654,.L93,.L245-.L93
+	.word	.L620,.L90,.L237-.L90
 	.byte	8,18,8,19,8,20,8,21,8,22,8,23
 	.sdecl	'.debug_frame',debug,cluster('path_recorder_get_point_count')
 	.sect	'.debug_frame'
 	.word	24
-	.word	.L654,.L95,.L247-.L95
+	.word	.L620,.L92,.L239-.L92
 	.byte	8,18,8,19,8,20,8,21,8,22,8,23
 	; Module end

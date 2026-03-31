@@ -397,7 +397,10 @@ double get_two_points_distance (double latitude1, double longitude1, double lati
     a = rad_latitude1 - rad_latitude2;
     b = rad_longitude1 - rad_longitude2;
 
-    distance = 2 * asin(sqrt(pow(sin(a / 2), 2) + cos(rad_latitude1) * cos(rad_latitude2) * pow(sin(b / 2), 2)));   // google maps 里面实现的算法
+    double sin_a = sin(a / 2.0);
+    double sin_b = sin(b / 2.0);
+
+    distance = 2.0 * asin(sqrt(sin_a * sin_a + cos(rad_latitude1) * cos(rad_latitude2) * sin_b * sin_b));   // google maps 里面实现的算法
     distance = distance * EARTH_RADIUS;  
 
     return distance;  
