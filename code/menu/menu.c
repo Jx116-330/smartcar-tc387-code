@@ -1186,14 +1186,14 @@ static void wifi_do_connect(int index)
 static void wifi_do_test(void)
 {
     int i;
-    uint8 udp_result;
+    uint8 retry;
     const char *src;
     const int test_index = 0; /* 使用第一个预设热点：Jx116 */
 
-    /* 按 E6_10_wifi_spi_udp_demo 官方流程：
-     * 1) 真实热点初始化
-     * 2) 获取 version/mac/ip
-     * 3) 再连接 UDP
+    /* 按 E6_10_wifi_spi_udp_demo 主函数流程：
+     * while(wifi_spi_init(...)) { delay 100ms; }
+     * while(wifi_spi_socket_connect("UDP", ...)) { delay 100ms; }
+     * 菜单场景下避免无穷阻塞，这里每步最多重试 20 次。
      */
     wifi_spi_version[0] = '\0';
     wifi_spi_mac_addr[0] = '\0';
@@ -1201,10 +1201,19 @@ static void wifi_do_test(void)
     wifi_connected = 0U;
     wifi_initialized = 0U;
     wifi_connected_ssid[0] = '\0';
+    wifi_connect_result = 1U;
 
-    wifi_connect_result = wifi_spi_init(
-        (char *)wifi_presets[test_index].ssid,
-        (char *)wifi_presets[test_index].password);
+    for (retry = 0U; retry < 20U; retry++)
+    {
+        wifi_connect_result = wifi_spi_init(
+            (char *)wifi_presets[test_index].ssid,
+            (char *)wifi_presets[test_index].password);
+        if (0U == wifi_connect_result)
+        {
+            break;
+        }
+        system_delay_ms(100);
+    }
 
     wifi_test_ver_ok = (wifi_spi_version[0] != '\0') ? 1U : 0U;
     wifi_test_mac_ok = (wifi_spi_mac_addr[0] != '\0') ? 1U : 0U;
@@ -1213,22 +1222,29 @@ static void wifi_do_test(void)
 
     if (0U == wifi_connect_result)
     {
-        udp_result = wifi_spi_socket_connect("UDP", "192.168.137.1", "8086", "6666");
-        wifi_connect_result = udp_result;
-
-        if (0U == udp_result)
+        for (retry = 0U; retry < 20U; retry++)
         {
-            wifi_connected = 1U;
-            src = wifi_presets[test_index].ssid;
-            i = 0;
-            while (src[i] != '\0' && i < (int)sizeof(wifi_connected_ssid) - 1)
+            wifi_connect_result = wifi_spi_socket_connect("UDP", "192.168.137.1", "8086", "6666");
+            if (0U == wifi_connect_result)
             {
-                wifi_connected_ssid[i] = src[i];
-                i++;
+                break;
             }
-            wifi_connected_ssid[i] = '\0';
-            wifi_test_ip_ok  = (wifi_spi_ip_addr_port[0] != '\0') ? 1U : 0U;
+            system_delay_ms(100);
         }
+    }
+
+    if (0U == wifi_connect_result)
+    {
+        wifi_connected = 1U;
+        src = wifi_presets[test_index].ssid;
+        i = 0;
+        while (src[i] != '\0' && i < (int)sizeof(wifi_connected_ssid) - 1)
+        {
+            wifi_connected_ssid[i] = src[i];
+            i++;
+        }
+        wifi_connected_ssid[i] = '\0';
+        wifi_test_ip_ok = (wifi_spi_ip_addr_port[0] != '\0') ? 1U : 0U;
     }
 }
 
