@@ -15,6 +15,7 @@
 #include "path_display.h"
 #include "MyKey.h"
 #include "MyEncoder.h"
+#include "zf_device_wifi_spi.h"
 
 
 /* 参数结构体：用于保存 PID 和菜单相关配置 */
@@ -129,6 +130,41 @@ static uint8 record_distance_step_index = 1U;
 static uint8 record_interval_step_index = 1U;
 static uint8 record_sat_step_index = 0U;
 
+/* ======================== WiFi 相关定义 ======================== */
+typedef enum {
+    WIFI_VIEW_NONE = 0U,
+    WIFI_VIEW_LIST,
+    WIFI_VIEW_CONNECTING,
+    WIFI_VIEW_STATUS,
+    WIFI_VIEW_TEST,
+} wifi_view_mode_t;
+
+typedef struct {
+    const char *ssid;
+    const char *password;   /* NULL = 无密码 */
+    const char *label;      /* 菜单显示名称 */
+} wifi_preset_t;
+
+static const wifi_preset_t wifi_presets[] = {
+    {"Jx116",  "777888999", "HOT SPOT"},
+    {"JX116_Lab", "12345678",    "JX116 Lab"},
+    {"Phone_AP",  "88888888",    "Phone Hotspot"},
+};
+#define WIFI_PRESET_COUNT  ((int)(sizeof(wifi_presets) / sizeof(wifi_preset_t)))
+
+static wifi_view_mode_t wifi_view_mode = WIFI_VIEW_NONE;
+static uint8 wifi_initialized = 0U;
+static uint8 wifi_connected = 0U;
+static int   wifi_list_selection = 0;
+static int   wifi_list_last_sel = -1;
+static uint8 wifi_list_full_redraw = 1U;
+static uint8 wifi_connect_result = 1U;     /* 0-成功 1-失败 */
+static char  wifi_connected_ssid[32] = "";
+static uint8 wifi_test_ver_ok = 0U;
+static uint8 wifi_test_mac_ok = 0U;
+static uint8 wifi_test_ip_ok = 0U;
+/* ============================================================== */
+
 static void ips200_fill_rect(uint16 x_start, uint16 y_start, uint16 x_end, uint16 y_end, uint16 color);
 static void show_string_fit(uint16 x, uint16 y, const char *s);
 static void show_string_fit_width(uint16 x, uint16 y, uint16 max_width, const char *s);
@@ -150,6 +186,9 @@ static void menu_execute_current_item(void);
 static uint8 menu_handle_gps_view(void);
 static uint8 menu_handle_pid_view(void);
 static uint8 menu_handle_record_param_view(void);
+static uint8 menu_handle_wifi_view(void);
+static void  wifi_enter_view(wifi_view_mode_t mode);
+static void  wifi_exit_view(void);
 static uint8 params_are_valid(const MyParams_t *params);
 static void params_save_to_flash(void);
 static void params_apply_record_config(void);
@@ -1090,6 +1129,383 @@ static void gps_action_raw_debug(void)
     gps_enter_view(GPS_VIEW_RAW_DEBUG);
 }
 
+/* ======================== WiFi 功能实现 ======================== */
+
+/*
+ * wifi_do_connect —— 连接指定预存WiFi
+ * 使用 wifi_spi_init() 完成完整的初始化+连接流程
+ */
+static void wifi_do_connect(int index)
+{
+    int i;
+    const char *src;
+
+    if (index < 0 || index >= WIFI_PRESET_COUNT)
+    {
+        wifi_connect_result = 1U;
+        return;
+    }
+
+    /* wifi_spi_init 内部会执行 SPI 初始化 + 复位 + 获取版本 + 连接 */
+    wifi_connect_result = wifi_spi_init(
+        (char *)wifi_presets[index].ssid,
+        (char *)wifi_presets[index].password);
+
+    if (0U == wifi_connect_result)
+    {
+        wifi_connected = 1U;
+        wifi_initialized = 1U;
+        /* 保存已连接的SSID */
+        i = 0;
+        src = wifi_presets[index].ssid;
+        while (src[i] != '\0' && i < (int)sizeof(wifi_connected_ssid) - 1)
+        {
+            wifi_connected_ssid[i] = src[i];
+            i++;
+        }
+        wifi_connected_ssid[i] = '\0';
+    }
+    else
+    {
+        wifi_connected = 0U;
+        wifi_connected_ssid[0] = '\0';
+    }
+}
+
+/*
+ * wifi_do_test —— 测试WiFi模块是否在线
+ * 通过 wifi_spi_init() 触发底层的 get_version / get_mac 查询
+ * wifi_spi_init 内部流程：SPI初始化 → 硬件复位 → 读版本 → 读MAC → 连WiFi
+ * 即使WiFi连接失败，只要模块在线，版本和MAC就能读到
+ */
+static void wifi_do_test(void)
+{
+    /* 清空旧数据，确保结果可靠 */
+    wifi_spi_version[0] = '\0';
+    wifi_spi_mac_addr[0] = '\0';
+    wifi_spi_ip_addr_port[0] = '\0';
+    wifi_connected = 0U;
+    wifi_initialized = 0U;
+    wifi_connected_ssid[0] = '\0';
+
+    /*
+     * 当前底层驱动不再提供 wifi_spi_probe，
+     * 这里用 wifi_spi_init(NULL, NULL) 只做模块初始化 + 读取版本/MAC，
+     * 不主动连接热点。
+     */
+    wifi_spi_init(NULL, NULL);
+
+    wifi_test_ver_ok = (wifi_spi_version[0] != '\0') ? 1U : 0U;
+    wifi_test_mac_ok = (wifi_spi_mac_addr[0] != '\0') ? 1U : 0U;
+    wifi_test_ip_ok  = (wifi_spi_ip_addr_port[0] != '\0') ? 1U : 0U;
+    wifi_initialized = (wifi_test_ver_ok || wifi_test_mac_ok) ? 1U : 0U;
+}
+
+/* ---------- WiFi 视图管理 ---------- */
+
+static void wifi_enter_view(wifi_view_mode_t mode)
+{
+    wifi_view_mode = mode;
+    wifi_list_full_redraw = 1U;
+    wifi_list_last_sel = -1;
+    ips200_full(RGB565_BLACK);
+    menu_drain_encoder_events();
+    my_key_clear_all_state();
+    menu_needs_update = 0U;
+    menu_footer_needs_update = 0U;
+}
+
+static void wifi_exit_view(void)
+{
+    wifi_view_mode = WIFI_VIEW_NONE;
+    menu_drain_encoder_events();
+    my_key_clear_all_state();
+    menu_request_redraw(1U);
+}
+
+/* ---------- WiFi 绘制函数 ---------- */
+
+/* 绘制单个WiFi列表项（selected=1 高亮，=0 普通） */
+static void wifi_draw_list_item(int index, uint8 selected)
+{
+    char buf[48];
+    uint16 y;
+
+    if (index < 0 || index >= WIFI_PRESET_COUNT) return;
+
+    y = (uint16)(MENU_ITEM_START_Y + (uint16)index * MENU_ITEM_HEIGHT);
+
+    if (selected)
+    {
+        ips200_fill_rect(0, y, ips200_width_max - 1, (uint16)(y + MENU_ITEM_TEXT_HEIGHT - 1), RGB565_WHITE);
+        ips200_set_color(RGB565_BLACK, RGB565_WHITE);
+    }
+    else
+    {
+        ips200_fill_rect(0, y, ips200_width_max - 1, (uint16)(y + MENU_ITEM_TEXT_HEIGHT - 1), RGB565_BLACK);
+        ips200_set_color(RGB565_WHITE, RGB565_BLACK);
+    }
+
+    sprintf(buf, "%d. %s", index + 1, wifi_presets[index].label);
+    show_string_fit(4, y, buf);
+}
+
+/* 全量绘制WiFi列表页（仅在首次进入时调用） */
+static void wifi_draw_list_full(void)
+{
+    int i;
+    uint16 footer_y;
+
+    ips200_set_color(RGB565_YELLOW, RGB565_BLACK);
+    ips200_show_string(0, 2, "WiFi List");
+    ips200_draw_line(0, MENU_TITLE_HEIGHT - 2, ips200_width_max - 1, MENU_TITLE_HEIGHT - 2, RGB565_GRAY);
+
+    for (i = 0; i < WIFI_PRESET_COUNT; i++)
+    {
+        wifi_draw_list_item(i, (uint8)(i == wifi_list_selection));
+    }
+
+    /* 底部提示 */
+    footer_y = (uint16)(ips200_height_max - MENU_FOOTER_HEIGHT);
+    ips200_fill_rect(0, footer_y, ips200_width_max - 1, ips200_height_max - 1, RGB565_BLACK);
+    ips200_set_color(RGB565_GRAY, RGB565_BLACK);
+    ips200_show_string(0, (uint16)(footer_y + 2), "ENC:Sel K1:Connect LONG:BK");
+
+    wifi_list_last_sel = wifi_list_selection;
+    wifi_list_full_redraw = 0U;
+}
+
+static void wifi_draw_connecting_page(void)
+{
+    char buf[48];
+
+    ips200_set_color(RGB565_YELLOW, RGB565_BLACK);
+    ips200_show_string(0, 2, "WiFi Connect");
+    ips200_draw_line(0, MENU_TITLE_HEIGHT - 2, ips200_width_max - 1, MENU_TITLE_HEIGHT - 2, RGB565_GRAY);
+
+    ips200_set_color(RGB565_WHITE, RGB565_BLACK);
+    sprintf(buf, "Connecting to:");
+    ips200_show_string(4, 50, buf);
+
+    ips200_set_color(RGB565_CYAN, RGB565_BLACK);
+    show_string_fit(4, 70, wifi_presets[wifi_list_selection].ssid);
+
+    ips200_set_color(RGB565_YELLOW, RGB565_BLACK);
+    ips200_show_string(4, 100, "Please wait...");
+}
+
+static void wifi_draw_status_page(void)
+{
+    char buf[64];
+    uint16 footer_y;
+
+    ips200_full(RGB565_BLACK);
+    ips200_set_color(RGB565_YELLOW, RGB565_BLACK);
+    ips200_show_string(0, 2, "Connect Result");
+    ips200_draw_line(0, MENU_TITLE_HEIGHT - 2, ips200_width_max - 1, MENU_TITLE_HEIGHT - 2, RGB565_GRAY);
+
+    if (0U == wifi_connect_result)
+    {
+        ips200_set_color(RGB565_GREEN, RGB565_BLACK);
+        ips200_show_string(4, 44, "Connected OK!");
+
+        ips200_set_color(RGB565_WHITE, RGB565_BLACK);
+        sprintf(buf, "SSID: %s", wifi_connected_ssid);
+        show_string_fit(4, 68, buf);
+
+        if (wifi_spi_ip_addr_port[0] != '\0')
+        {
+            sprintf(buf, "IP: %s", wifi_spi_ip_addr_port);
+            show_string_fit(4, 88, buf);
+        }
+
+        if (wifi_spi_mac_addr[0] != '\0')
+        {
+            sprintf(buf, "MAC: %s", wifi_spi_mac_addr);
+            show_string_fit(4, 108, buf);
+        }
+    }
+    else
+    {
+        ips200_set_color(RGB565_RED, RGB565_BLACK);
+        ips200_show_string(4, 44, "Connect FAILED!");
+
+        ips200_set_color(RGB565_GRAY, RGB565_BLACK);
+        sprintf(buf, "SSID: %s", wifi_presets[wifi_list_selection].ssid);
+        show_string_fit(4, 68, buf);
+        ips200_show_string(4, 92, "Check module/password");
+    }
+
+    /* 底部提示 */
+    footer_y = (uint16)(ips200_height_max - MENU_FOOTER_HEIGHT);
+    ips200_set_color(RGB565_GRAY, RGB565_BLACK);
+    ips200_show_string(0, (uint16)(footer_y + 2), "LONG K1: Back");
+}
+
+static void wifi_draw_test_page(void)
+{
+    char buf[64];
+    uint8 all_ok;
+    uint16 footer_y;
+
+    ips200_full(RGB565_BLACK);
+    ips200_set_color(RGB565_YELLOW, RGB565_BLACK);
+    ips200_show_string(0, 2, "Signal Test");
+    ips200_draw_line(0, MENU_TITLE_HEIGHT - 2, ips200_width_max - 1, MENU_TITLE_HEIGHT - 2, RGB565_GRAY);
+
+    /* 固件版本 */
+    ips200_set_color(wifi_test_ver_ok ? RGB565_GREEN : RGB565_RED, RGB565_BLACK);
+    sprintf(buf, "FW:  %s", wifi_test_ver_ok ? wifi_spi_version : "N/A");
+    show_string_fit(4, 44, buf);
+
+    /* MAC 地址 */
+    ips200_set_color(wifi_test_mac_ok ? RGB565_GREEN : RGB565_RED, RGB565_BLACK);
+    sprintf(buf, "MAC: %s", wifi_test_mac_ok ? wifi_spi_mac_addr : "N/A");
+    show_string_fit(4, 64, buf);
+
+    /* IP 地址 */
+    ips200_set_color(wifi_test_ip_ok ? RGB565_GREEN : RGB565_RED, RGB565_BLACK);
+    sprintf(buf, "IP:  %s", wifi_test_ip_ok ? wifi_spi_ip_addr_port : "N/A");
+    show_string_fit(4, 84, buf);
+
+    /* WiFi 连接状态 */
+    ips200_set_color(wifi_connected ? RGB565_GREEN : RGB565_GRAY, RGB565_BLACK);
+    sprintf(buf, "WiFi: %s", wifi_connected ? wifi_connected_ssid : "Not connected");
+    show_string_fit(4, 108, buf);
+
+    /* 综合判定 */
+    all_ok = wifi_test_ver_ok & wifi_test_mac_ok;
+    ips200_set_color(all_ok ? RGB565_GREEN : RGB565_RED, RGB565_BLACK);
+    ips200_show_string(4, 136, all_ok ? "Module: OK" : "Module: ERROR");
+
+    /* 底部提示 */
+    footer_y = (uint16)(ips200_height_max - MENU_FOOTER_HEIGHT);
+    ips200_set_color(RGB565_GRAY, RGB565_BLACK);
+    ips200_show_string(0, (uint16)(footer_y + 2), "LONG K1: Back");
+}
+
+/* ---------- WiFi 视图输入处理 ---------- */
+
+static uint8 menu_handle_wifi_view(void)
+{
+    if (WIFI_VIEW_NONE == wifi_view_mode)
+    {
+        return 0U;
+    }
+
+    /* 所有WiFi视图：长按K1退出 */
+    if (my_key_get_state(MY_KEY_1) == MY_KEY_LONG_PRESS)
+    {
+        my_key_clear_state(MY_KEY_1);
+        wifi_exit_view();
+        return 1U;
+    }
+
+    switch (wifi_view_mode)
+    {
+        case WIFI_VIEW_LIST:
+        {
+            /* 首次进入：全量绘制 */
+            if (wifi_list_full_redraw)
+            {
+                wifi_draw_list_full();
+            }
+
+            /* 编码器切换选中项 */
+            if (If_Switch_Encoder_Change())
+            {
+                wifi_list_selection -= switch_encoder_change_num;
+                while (wifi_list_selection >= WIFI_PRESET_COUNT)
+                    wifi_list_selection -= WIFI_PRESET_COUNT;
+                while (wifi_list_selection < 0)
+                    wifi_list_selection += WIFI_PRESET_COUNT;
+            }
+
+            /* 选中项变化时：只重绘旧项和新项（局部刷新） */
+            if (wifi_list_selection != wifi_list_last_sel)
+            {
+                if (wifi_list_last_sel >= 0)
+                {
+                    wifi_draw_list_item(wifi_list_last_sel, 0U);
+                }
+                wifi_draw_list_item(wifi_list_selection, 1U);
+                wifi_list_last_sel = wifi_list_selection;
+            }
+
+            /* 短按K1：连接选中的WiFi */
+            if (my_key_get_state(MY_KEY_1) == MY_KEY_SHORT_PRESS)
+            {
+                my_key_clear_state(MY_KEY_1);
+
+                /* 先画连接中页面 */
+                wifi_view_mode = WIFI_VIEW_CONNECTING;
+                wifi_draw_connecting_page();
+
+                /* 执行连接（阻塞等待） */
+                wifi_do_connect(wifi_list_selection);
+
+                /* 跳转到结果页面（画一次就够） */
+                wifi_view_mode = WIFI_VIEW_STATUS;
+                wifi_draw_status_page();
+                my_key_clear_all_state();
+                menu_drain_encoder_events();
+                return 1U;
+            }
+
+            break;
+        }
+
+        case WIFI_VIEW_CONNECTING:
+        case WIFI_VIEW_STATUS:
+        case WIFI_VIEW_TEST:
+        {
+            /* 静态页面，已在进入时绘制完毕，仅等待长按K1退出 */
+            break;
+        }
+
+        default:
+            break;
+    }
+
+    return 1U;
+}
+
+/* ---------- WiFi 菜单动作函数 ---------- */
+
+static void wifi_action_list(void)
+{
+    wifi_list_selection = 0;
+    wifi_enter_view(WIFI_VIEW_LIST);
+}
+
+static void wifi_action_test(void)
+{
+    wifi_enter_view(WIFI_VIEW_TEST);
+
+    /* 先显示 "Testing..." */
+    ips200_set_color(RGB565_YELLOW, RGB565_BLACK);
+    ips200_show_string(4, 60, "Testing module...");
+
+    wifi_do_test();
+    wifi_draw_test_page();
+}
+
+/* ---------- WiFi 菜单结构 ---------- */
+
+static MenuItem wifi_items[] = {
+    {"1. WiFi List",   wifi_action_list, NULL},
+    {"2. Signal Test", wifi_action_test, NULL},
+};
+
+static MenuPage wifi_menu = {
+    "WiFi",
+    wifi_items,
+    sizeof(wifi_items) / sizeof(MenuItem),
+    NULL
+};
+
+/* ============================================================== */
+
 static MenuItem gps_record_param_items[] = {
     {gps_record_distance_label, gps_action_record_param_distance, NULL},
     {gps_record_interval_label, gps_action_record_param_interval, NULL},
@@ -1166,6 +1582,7 @@ static MenuItem main_items[] = {
     {"1. GPS", NULL, &gps_menu},
     {"2. Camera", NULL, &camera_menu},
     {"3. PID", NULL, &pid_menu},
+    {"4. WiFi", NULL, &wifi_menu},
 };
 
 static MenuPage main_menu = {
@@ -1644,6 +2061,11 @@ static void menu_execute_current_item(void)
             return;
         }
 
+        if (WIFI_VIEW_NONE != wifi_view_mode)
+        {
+            return;
+        }
+
         menu_request_redraw(1U);
     }
     else if (NULL != item->sub_page)
@@ -1739,6 +2161,11 @@ void menu_task(void)
         return;
     }
 
+    if (menu_handle_wifi_view())
+    {
+        return;
+    }
+
     menu_update_selection_from_encoder();
 
     if (my_key_get_state(MY_KEY_1) == MY_KEY_LONG_PRESS)
@@ -1753,7 +2180,7 @@ void menu_task(void)
         my_key_clear_state(MY_KEY_1);
         menu_execute_current_item();
 
-        if ((PID_VIEW_NONE != pid_display_mode) || (GPS_VIEW_NONE != gps_display_mode))
+        if ((PID_VIEW_NONE != pid_display_mode) || (GPS_VIEW_NONE != gps_display_mode) || (WIFI_VIEW_NONE != wifi_view_mode))
         {
             menu_needs_update = 0U;
             menu_footer_needs_update = 0U;
