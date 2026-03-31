@@ -1387,14 +1387,6 @@ static void wifi_draw_test_page(void)
     ips200_set_color(all_ok ? RGB565_GREEN : RGB565_RED, RGB565_BLACK);
     ips200_show_string(4, 136, all_ok ? "Module: OK" : "Module: ERROR");
 
-    ips200_set_color(RGB565_GRAY, RGB565_BLACK);
-    sprintf(buf, "CMD:%02X RPY:%02X ST:%u", wifi_spi_diag_last_command, wifi_spi_diag_last_reply, wifi_spi_diag_last_step);
-    show_string_fit(4, 156, buf);
-    sprintf(buf, "LEN:%u INT:%u M:%u", (unsigned int)wifi_spi_diag_last_length, (unsigned int)wifi_spi_diag_int_level, (unsigned int)wifi_spi_diag_mode);
-    show_string_fit(4, 176, buf);
-    sprintf(buf, "V:%u MAC:%u WF:%u", (unsigned int)wifi_test_stage_ver, (unsigned int)wifi_test_stage_mac, (unsigned int)wifi_test_stage_wifi);
-    show_string_fit(4, 196, buf);
-
     /* 底部提示 */
     footer_y = (uint16)(ips200_height_max - MENU_FOOTER_HEIGHT);
     ips200_set_color(RGB565_GRAY, RGB565_BLACK);
@@ -2223,6 +2215,17 @@ void menu_task(void)
     }
 
     if (menu_dynamic_draw_cb && menu_dynamic_w && menu_dynamic_h)
+    {
+        if (menu_dynamic_clear_enable)
+        {
+            uint16 x_end = (uint16)(menu_dynamic_x + menu_dynamic_w - 1);
+            uint16 y_end = (uint16)(menu_dynamic_y + menu_dynamic_h - 1);
+            ips200_fill_rect(menu_dynamic_x, menu_dynamic_y, x_end, y_end, RGB565_BLACK);
+        }
+        menu_dynamic_draw_cb(menu_dynamic_x, menu_dynamic_y, menu_dynamic_w, menu_dynamic_h);
+    }
+}
+&& menu_dynamic_w && menu_dynamic_h)
     {
         if (menu_dynamic_clear_enable)
         {
