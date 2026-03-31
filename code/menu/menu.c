@@ -1190,20 +1190,10 @@ static void wifi_do_test(void)
     wifi_connected = 0U;
     wifi_initialized = 0U;
     wifi_connected_ssid[0] = '\0';
-    wifi_test_stage_ver = 0xFFU;
-    wifi_test_stage_mac = 0xFFU;
-    wifi_test_stage_wifi = 0xFFU;
 
-    /*
-     * 当前底层驱动不再提供 wifi_spi_probe，
-     * 这里用 wifi_spi_init(NULL, NULL) 只做模块初始化 + 读取版本/MAC，
-     * 不主动连接热点。
-     */
+    /* 仅做模块初始化 + 读取版本/MAC，不主动连接热点。 */
     wifi_spi_init(NULL, NULL);
 
-    wifi_test_stage_ver = wifi_spi_diag_stage_version;
-    wifi_test_stage_mac = wifi_spi_diag_stage_mac;
-    wifi_test_stage_wifi = wifi_spi_diag_stage_wifi;
     wifi_test_ver_ok = (wifi_spi_version[0] != '\0') ? 1U : 0U;
     wifi_test_mac_ok = (wifi_spi_mac_addr[0] != '\0') ? 1U : 0U;
     wifi_test_ip_ok  = (wifi_spi_ip_addr_port[0] != '\0') ? 1U : 0U;
