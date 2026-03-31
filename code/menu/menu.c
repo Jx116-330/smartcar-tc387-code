@@ -1224,7 +1224,7 @@ static void wifi_do_test(void)
     {
         for (retry = 0U; retry < 20U; retry++)
         {
-            wifi_connect_result = wifi_spi_socket_connect("UDP", "192.168.137.1", "8086", "6666");
+            wifi_connect_result = wifi_spi_socket_connect("UDP", "172.20.10.3", "8086", "6666");
             if (0U == wifi_connect_result)
             {
                 break;
