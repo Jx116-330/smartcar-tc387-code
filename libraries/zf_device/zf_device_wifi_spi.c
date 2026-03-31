@@ -452,7 +452,7 @@ uint8 wifi_spi_init (char *wifi_ssid, char *pass_word)
     uint8 return_state = 0;
     
     fifo_init(&wifi_spi_fifo, FIFO_DATA_8BIT, wifi_spi_buffer, WIFI_SPI_RECVIVE_FIFO_SIZE);
-    spi_init(WIFI_SPI_INDEX, SPI_MODE0, WIFI_SPI_SPEED, WIFI_SPI_SCK_PIN, WIFI_SPI_MOSI_PIN, WIFI_SPI_MISO_PIN, SPI_CS_NULL);
+    spi_init(WIFI_SPI_INDEX, SPI_MODE3, WIFI_SPI_SPEED, WIFI_SPI_SCK_PIN, WIFI_SPI_MOSI_PIN, WIFI_SPI_MISO_PIN, SPI_CS_NULL);
     gpio_init(WIFI_SPI_CS_PIN,  GPO, 1, GPO_PUSH_PULL);
     gpio_init(WIFI_SPI_RST_PIN, GPO, 1, GPO_PUSH_PULL);
     gpio_init(WIFI_SPI_INT_PIN, GPI, 0, GPI_PULL_DOWN);
