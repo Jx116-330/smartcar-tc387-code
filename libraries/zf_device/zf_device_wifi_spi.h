@@ -152,6 +152,12 @@ typedef enum
 extern char wifi_spi_version[12];                               // 固件版本         字符串
 extern char wifi_spi_mac_addr[20];                              // 模块MAC地址      字符串
 extern char wifi_spi_ip_addr_port[25];                          // IP地址与端口号   字符串
+extern uint8  wifi_spi_diag_last_command;                       // 最近发送命令
+extern uint8  wifi_spi_diag_last_reply;                         // 最近回复命令
+extern uint16 wifi_spi_diag_last_length;                        // 最近回复长度
+extern uint8  wifi_spi_diag_last_step;                          // 最近卡住步骤
+extern uint8  wifi_spi_diag_int_level;                          // 当前INT电平
+extern uint8  wifi_spi_diag_mode;                               // 当前SPI模式
 
 uint8   wifi_spi_get_time           (wifi_spi_time_enum time_format, char *buffer, uint8 buffer_size);
 uint8   wifi_spi_wifi_scan          (char *buffer, uint16 buffer_size);

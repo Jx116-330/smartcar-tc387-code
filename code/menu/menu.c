@@ -1378,6 +1378,12 @@ static void wifi_draw_test_page(void)
     ips200_set_color(all_ok ? RGB565_GREEN : RGB565_RED, RGB565_BLACK);
     ips200_show_string(4, 136, all_ok ? "Module: OK" : "Module: ERROR");
 
+    ips200_set_color(RGB565_GRAY, RGB565_BLACK);
+    sprintf(buf, "CMD:%02X RPY:%02X ST:%u", wifi_spi_diag_last_command, wifi_spi_diag_last_reply, wifi_spi_diag_last_step);
+    show_string_fit(4, 156, buf);
+    sprintf(buf, "LEN:%u INT:%u M:%u", (unsigned int)wifi_spi_diag_last_length, (unsigned int)wifi_spi_diag_int_level, (unsigned int)wifi_spi_diag_mode);
+    show_string_fit(4, 176, buf);
+
     /* 底部提示 */
     footer_y = (uint16)(ips200_height_max - MENU_FOOTER_HEIGHT);
     ips200_set_color(RGB565_GRAY, RGB565_BLACK);

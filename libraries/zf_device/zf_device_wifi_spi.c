@@ -81,6 +81,12 @@
 char wifi_spi_version[12];                      // 保存模块固件版本信息
 char wifi_spi_mac_addr[20];                     // 保存模块MAC地址信息
 char wifi_spi_ip_addr_port[25];                 // 保存模块IP地址与端口信息
+uint8  wifi_spi_diag_last_command = 0xFF;
+uint8  wifi_spi_diag_last_reply   = 0xFF;
+uint16 wifi_spi_diag_last_length  = 0;
+uint8  wifi_spi_diag_last_step    = 0;
+uint8  wifi_spi_diag_int_level    = 0;
+uint8  wifi_spi_diag_mode         = 0;
 
 static fifo_struct  wifi_spi_fifo;
 static uint8        wifi_spi_buffer[WIFI_SPI_RECVIVE_FIFO_SIZE];
@@ -106,6 +112,7 @@ static uint8 wifi_spi_wait_idle (uint32 wait_time)
             break;
         }
     }
+    wifi_spi_diag_int_level = gpio_get_level(WIFI_SPI_INT_PIN);
     return (wait_time <= time);
 }
 
@@ -247,23 +254,33 @@ static uint8 wifi_spi_get_parameter (wifi_spi_packets_command_enum command, wifi
     uint8 return_state;
 
     return_state = 1;
+    wifi_spi_diag_last_command = command;
+    wifi_spi_diag_last_reply = 0xFF;
+    wifi_spi_diag_last_length = 0;
+    wifi_spi_diag_last_step = 1;
     do
     {
         // 等待从机准备就绪
         if(wifi_spi_wait_idle(wait_time))
         {
+            wifi_spi_diag_last_step = 2;
             break;
         }
         read_data->head.command = command;
         wifi_spi_write(&(read_data->head.command), WIFI_SPI_RECVIVE_SIZE, NULL, 0);
+        wifi_spi_diag_last_step = 3;
 
         if(wifi_spi_wait_idle(wait_time))
         {
+            wifi_spi_diag_last_step = 4;
             break;
         }
         read_data->head.command = WIFI_SPI_DATA;
         read_data->head.length = 0;
         wifi_spi_transfer_command(read_data, WIFI_SPI_RECVIVE_SIZE);
+        wifi_spi_diag_last_reply = read_data->head.command;
+        wifi_spi_diag_last_length = read_data->head.length;
+        wifi_spi_diag_last_step = 5;
         return_state = 0;
     }while(0);
     return return_state;
@@ -733,6 +750,13 @@ uint8 wifi_spi_init (char *wifi_ssid, char *pass_word)
 {
     uint8 return_state = 0;
     
+    wifi_spi_diag_last_command = 0xFF;
+    wifi_spi_diag_last_reply = 0xFF;
+    wifi_spi_diag_last_length = 0;
+    wifi_spi_diag_last_step = 0;
+    wifi_spi_diag_mode = 0;
+    wifi_spi_diag_int_level = gpio_get_level(WIFI_SPI_INT_PIN);
+
     fifo_init(&wifi_spi_fifo, FIFO_DATA_8BIT, wifi_spi_buffer, WIFI_SPI_RECVIVE_FIFO_SIZE);
     spi_init(WIFI_SPI_INDEX, SPI_MODE0, WIFI_SPI_SPEED, WIFI_SPI_SCK_PIN, WIFI_SPI_MOSI_PIN, WIFI_SPI_MISO_PIN, SPI_CS_NULL);//硬件SPI初始化
     gpio_init(WIFI_SPI_CS_PIN,  GPO, 1, GPO_PUSH_PULL);
