@@ -163,9 +163,6 @@ static char  wifi_connected_ssid[32] = "";
 static uint8 wifi_test_ver_ok = 0U;
 static uint8 wifi_test_mac_ok = 0U;
 static uint8 wifi_test_ip_ok = 0U;
-static uint8 wifi_test_stage_ver = 0xFFU;
-static uint8 wifi_test_stage_mac = 0xFFU;
-static uint8 wifi_test_stage_wifi = 0xFFU;
 /* ============================================================== */
 
 static void ips200_fill_rect(uint16 x_start, uint16 y_start, uint16 x_end, uint16 y_end, uint16 color);
