@@ -163,6 +163,9 @@ static char  wifi_connected_ssid[32] = "";
 static uint8 wifi_test_ver_ok = 0U;
 static uint8 wifi_test_mac_ok = 0U;
 static uint8 wifi_test_ip_ok = 0U;
+static uint8 wifi_test_stage_ver = 0xFFU;
+static uint8 wifi_test_stage_mac = 0xFFU;
+static uint8 wifi_test_stage_wifi = 0xFFU;
 /* ============================================================== */
 
 static void ips200_fill_rect(uint16 x_start, uint16 y_start, uint16 x_end, uint16 y_end, uint16 color);
@@ -1187,6 +1190,9 @@ static void wifi_do_test(void)
     wifi_connected = 0U;
     wifi_initialized = 0U;
     wifi_connected_ssid[0] = '\0';
+    wifi_test_stage_ver = 0xFFU;
+    wifi_test_stage_mac = 0xFFU;
+    wifi_test_stage_wifi = 0xFFU;
 
     /*
      * 当前底层驱动不再提供 wifi_spi_probe，
@@ -1195,6 +1201,9 @@ static void wifi_do_test(void)
      */
     wifi_spi_init(NULL, NULL);
 
+    wifi_test_stage_ver = wifi_spi_diag_stage_version;
+    wifi_test_stage_mac = wifi_spi_diag_stage_mac;
+    wifi_test_stage_wifi = wifi_spi_diag_stage_wifi;
     wifi_test_ver_ok = (wifi_spi_version[0] != '\0') ? 1U : 0U;
     wifi_test_mac_ok = (wifi_spi_mac_addr[0] != '\0') ? 1U : 0U;
     wifi_test_ip_ok  = (wifi_spi_ip_addr_port[0] != '\0') ? 1U : 0U;
@@ -1383,6 +1392,8 @@ static void wifi_draw_test_page(void)
     show_string_fit(4, 156, buf);
     sprintf(buf, "LEN:%u INT:%u M:%u", (unsigned int)wifi_spi_diag_last_length, (unsigned int)wifi_spi_diag_int_level, (unsigned int)wifi_spi_diag_mode);
     show_string_fit(4, 176, buf);
+    sprintf(buf, "V:%u MAC:%u WF:%u", (unsigned int)wifi_test_stage_ver, (unsigned int)wifi_test_stage_mac, (unsigned int)wifi_test_stage_wifi);
+    show_string_fit(4, 196, buf);
 
     /* 底部提示 */
     footer_y = (uint16)(ips200_height_max - MENU_FOOTER_HEIGHT);

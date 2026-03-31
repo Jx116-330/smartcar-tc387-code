@@ -158,6 +158,9 @@ extern uint16 wifi_spi_diag_last_length;                        // 最近回复�
 extern uint8  wifi_spi_diag_last_step;                          // 最近卡住步骤
 extern uint8  wifi_spi_diag_int_level;                          // 当前INT电平
 extern uint8  wifi_spi_diag_mode;                               // 当前SPI模式
+extern uint8  wifi_spi_diag_stage_version;                      // 版本读取阶段结果
+extern uint8  wifi_spi_diag_stage_mac;                          // MAC读取阶段结果
+extern uint8  wifi_spi_diag_stage_wifi;                         // WiFi连接阶段结果
 
 uint8   wifi_spi_get_time           (wifi_spi_time_enum time_format, char *buffer, uint8 buffer_size);
 uint8   wifi_spi_wifi_scan          (char *buffer, uint16 buffer_size);

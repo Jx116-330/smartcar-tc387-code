@@ -87,6 +87,9 @@ uint16 wifi_spi_diag_last_length  = 0;
 uint8  wifi_spi_diag_last_step    = 0;
 uint8  wifi_spi_diag_int_level    = 0;
 uint8  wifi_spi_diag_mode         = 0;
+uint8  wifi_spi_diag_stage_version = 0xFF;
+uint8  wifi_spi_diag_stage_mac     = 0xFF;
+uint8  wifi_spi_diag_stage_wifi    = 0xFF;
 
 static fifo_struct  wifi_spi_fifo;
 static uint8        wifi_spi_buffer[WIFI_SPI_RECVIVE_FIFO_SIZE];
@@ -756,6 +759,9 @@ uint8 wifi_spi_init (char *wifi_ssid, char *pass_word)
     wifi_spi_diag_last_step = 0;
     wifi_spi_diag_mode = 0;
     wifi_spi_diag_int_level = gpio_get_level(WIFI_SPI_INT_PIN);
+    wifi_spi_diag_stage_version = 0xFF;
+    wifi_spi_diag_stage_mac = 0xFF;
+    wifi_spi_diag_stage_wifi = 0xFF;
 
     fifo_init(&wifi_spi_fifo, FIFO_DATA_8BIT, wifi_spi_buffer, WIFI_SPI_RECVIVE_FIFO_SIZE);
     spi_init(WIFI_SPI_INDEX, SPI_MODE0, WIFI_SPI_SPEED, WIFI_SPI_SCK_PIN, WIFI_SPI_MOSI_PIN, WIFI_SPI_MISO_PIN, SPI_CS_NULL);//硬件SPI初始化
@@ -776,13 +782,19 @@ uint8 wifi_spi_init (char *wifi_ssid, char *pass_word)
     {
         // 固件版本信息以字符串形式保存在wifi_spi_version数组中
         return_state = wifi_spi_get_version();
+        wifi_spi_diag_stage_version = return_state;
         if(return_state)
         {
             break;
         }
 
         // MAC地址信息以字符串形式保存在wifi_spi_mac_addr数组中
-        wifi_spi_get_mac_addr();
+        return_state = wifi_spi_get_mac_addr();
+        wifi_spi_diag_stage_mac = return_state;
+        if(return_state)
+        {
+            break;
+        }
 
         if(NULL == wifi_ssid)
         {
@@ -790,6 +802,7 @@ uint8 wifi_spi_init (char *wifi_ssid, char *pass_word)
             break;
         }
         return_state = wifi_spi_wifi_connect(wifi_ssid, pass_word);
+        wifi_spi_diag_stage_wifi = return_state;
         if(return_state)
         {
             break;
