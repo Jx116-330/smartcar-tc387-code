@@ -298,13 +298,22 @@ static uint8 wifi_spi_get_parameter (wifi_spi_packets_command_enum command, wifi
 //-------------------------------------------------------------------------------------------------------------------
 static uint8 wifi_spi_get_version (void)
 {
-    uint8 return_state;
+    uint8 return_state = 1;
     wifi_spi_packets_struct temp_packets;
+    uint16 copy_len;
 
-    return_state = wifi_spi_get_parameter(WIFI_SPI_GET_VERSION, &temp_packets, OTHER_TIME_OUT);
-    if((0 == return_state) && (WIFI_SPI_REPLY_VERSION == temp_packets.head.command))
+    if(0 == wifi_spi_get_parameter(WIFI_SPI_GET_VERSION, &temp_packets, OTHER_TIME_OUT))
     {
-        memcpy(wifi_spi_version, temp_packets.buffer, temp_packets.head.length);
+        if(WIFI_SPI_REPLY_VERSION == temp_packets.head.command)
+        {
+            copy_len = temp_packets.head.length;
+            if((0 < copy_len) && (copy_len < sizeof(wifi_spi_version)))
+            {
+                memcpy(wifi_spi_version, temp_packets.buffer, copy_len);
+                wifi_spi_version[copy_len] = 0;
+                return_state = 0;
+            }
+        }
     }
     return return_state;
 }
@@ -339,13 +348,22 @@ static uint8 wifi_spi_get_mac_addr (void)
 //-------------------------------------------------------------------------------------------------------------------
 static uint8 wifi_spi_get_ip_addr_port (void)
 {
-    uint8 return_state;
+    uint8 return_state = 1;
     wifi_spi_packets_struct temp_packets;
+    uint16 copy_len;
 
-    return_state = wifi_spi_get_parameter(WIFI_SPI_GET_IP_ADDR, &temp_packets, OTHER_TIME_OUT);
-    if((0 == return_state) && (WIFI_SPI_REPLY_IP_ADDR == temp_packets.head.command))
+    if(0 == wifi_spi_get_parameter(WIFI_SPI_GET_IP_ADDR, &temp_packets, OTHER_TIME_OUT))
     {
-        memcpy(wifi_spi_ip_addr_port, temp_packets.buffer, temp_packets.head.length);
+        if(WIFI_SPI_REPLY_IP_ADDR == temp_packets.head.command)
+        {
+            copy_len = temp_packets.head.length;
+            if((0 < copy_len) && (copy_len < sizeof(wifi_spi_ip_addr_port)))
+            {
+                memcpy(wifi_spi_ip_addr_port, temp_packets.buffer, copy_len);
+                wifi_spi_ip_addr_port[copy_len] = 0;
+                return_state = 0;
+            }
+        }
     }
     return return_state;
 }
