@@ -1186,10 +1186,15 @@ static void wifi_do_connect(int index)
 static void wifi_do_test(void)
 {
     int i;
+    uint8 udp_result;
     const char *src;
-    const int test_index = 0; /* 按官方流程，直接使用预设热点做真实连接测试 */
+    const int test_index = 0; /* 使用第一个预设热点：Jx116 */
 
-    /* 清空旧数据，确保结果可靠 */
+    /* 按 E6_10_wifi_spi_udp_demo 官方流程：
+     * 1) 真实热点初始化
+     * 2) 获取 version/mac/ip
+     * 3) 再连接 UDP
+     */
     wifi_spi_version[0] = '\0';
     wifi_spi_mac_addr[0] = '\0';
     wifi_spi_ip_addr_port[0] = '\0';
@@ -1208,15 +1213,22 @@ static void wifi_do_test(void)
 
     if (0U == wifi_connect_result)
     {
-        wifi_connected = 1U;
-        src = wifi_presets[test_index].ssid;
-        i = 0;
-        while (src[i] != '\0' && i < (int)sizeof(wifi_connected_ssid) - 1)
+        udp_result = wifi_spi_socket_connect("UDP", "192.168.137.1", "8086", "6666");
+        wifi_connect_result = udp_result;
+
+        if (0U == udp_result)
         {
-            wifi_connected_ssid[i] = src[i];
-            i++;
+            wifi_connected = 1U;
+            src = wifi_presets[test_index].ssid;
+            i = 0;
+            while (src[i] != '\0' && i < (int)sizeof(wifi_connected_ssid) - 1)
+            {
+                wifi_connected_ssid[i] = src[i];
+                i++;
+            }
+            wifi_connected_ssid[i] = '\0';
+            wifi_test_ip_ok  = (wifi_spi_ip_addr_port[0] != '\0') ? 1U : 0U;
         }
-        wifi_connected_ssid[i] = '\0';
     }
 }
 
