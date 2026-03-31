@@ -210,6 +210,7 @@ static uint8 wifi_spi_get_version (void)
     if((0 == return_state) && (WIFI_SPI_REPLY_VERSION == temp_packets.head.command))
     {
         memcpy(wifi_spi_version, temp_packets.buffer, temp_packets.head.length);
+        wifi_spi_version[temp_packets.head.length] = '\0';
     }
     return_state = (return_state == 0) ? (WIFI_SPI_REPLY_VERSION != temp_packets.head.command) : 1;
 
@@ -225,6 +226,7 @@ static uint8 wifi_spi_get_mac_addr (void)
     if((0 == return_state) && (WIFI_SPI_REPLY_MAC_ADDR == temp_packets.head.command))
     {
         memcpy(wifi_spi_mac_addr, temp_packets.buffer, temp_packets.head.length);
+        wifi_spi_mac_addr[temp_packets.head.length] = '\0';
     }
     return_state = (return_state == 0) ? (WIFI_SPI_REPLY_MAC_ADDR != temp_packets.head.command) : 1;
 
@@ -240,6 +242,7 @@ static uint8 wifi_spi_get_ip_addr_port (void)
     if((0 == return_state) && (WIFI_SPI_REPLY_IP_ADDR == temp_packets.head.command))
     {
         memcpy(wifi_spi_ip_addr_port, temp_packets.buffer, temp_packets.head.length);
+        wifi_spi_ip_addr_port[temp_packets.head.length] = '\0';
     }
     return_state = (return_state == 0) ? (WIFI_SPI_REPLY_IP_ADDR != temp_packets.head.command) : 1;
 
@@ -461,7 +464,7 @@ uint8 wifi_spi_init (char *wifi_ssid, char *pass_word)
     system_delay_ms(10);
     gpio_set_level(WIFI_SPI_RST_PIN, 1);
     
-    system_delay_ms(100);
+    system_delay_ms(500);
     wifi_spi_mutex = WIFI_SPI_IDLE;
 
     do

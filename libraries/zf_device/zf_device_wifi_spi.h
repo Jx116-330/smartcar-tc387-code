@@ -69,7 +69,7 @@
 #if (WIFI_SPI_AUTO_CONNECT > 2)
 #error "WIFI_SPI_AUTO_CONNECT 的值只能为 [0,1,2]"
 #else
-#define WIFI_SPI_TARGET_IP          "192.168.137.1"
+#define WIFI_SPI_TARGET_IP          "172.20.10.3"
 #define WIFI_SPI_TARGET_PORT        "8086"
 #define WIFI_SPI_LOCAL_PORT         "6666"
 #endif
