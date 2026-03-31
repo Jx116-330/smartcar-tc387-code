@@ -2225,14 +2225,3 @@ void menu_task(void)
         menu_dynamic_draw_cb(menu_dynamic_x, menu_dynamic_y, menu_dynamic_w, menu_dynamic_h);
     }
 }
-&& menu_dynamic_w && menu_dynamic_h)
-    {
-        if (menu_dynamic_clear_enable)
-        {
-            uint16 x_end = (uint16)(menu_dynamic_x + menu_dynamic_w - 1);
-            uint16 y_end = (uint16)(menu_dynamic_y + menu_dynamic_h - 1);
-            ips200_fill_rect(menu_dynamic_x, menu_dynamic_y, x_end, y_end, RGB565_BLACK);
-        }
-        menu_dynamic_draw_cb(menu_dynamic_x, menu_dynamic_y, menu_dynamic_w, menu_dynamic_h);
-    }
-}
