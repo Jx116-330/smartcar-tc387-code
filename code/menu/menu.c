@@ -1146,6 +1146,11 @@ static void wifi_do_connect(int index)
         return;
     }
 
+    /* 清空全局缓冲区，防止显示垃圾数据 */
+    wifi_spi_version[0] = '\0';
+    wifi_spi_mac_addr[0] = '\0';
+    wifi_spi_ip_addr_port[0] = '\0';
+
     /* wifi_spi_init 内部会执行 SPI 初始化 + 复位 + 获取版本 + 连接 */
     wifi_connect_result = wifi_spi_init(
         (char *)wifi_presets[index].ssid,
@@ -1180,6 +1185,10 @@ static void wifi_do_connect(int index)
  */
 static void wifi_do_test(void)
 {
+    int i;
+    const char *src;
+    const int test_index = 0; /* 按官方流程，直接使用预设热点做真实连接测试 */
+
     /* 清空旧数据，确保结果可靠 */
     wifi_spi_version[0] = '\0';
     wifi_spi_mac_addr[0] = '\0';
@@ -1188,13 +1197,27 @@ static void wifi_do_test(void)
     wifi_initialized = 0U;
     wifi_connected_ssid[0] = '\0';
 
-    /* 仅做模块初始化 + 读取版本/MAC，不主动连接热点。 */
-    wifi_spi_init(NULL, NULL);
+    wifi_connect_result = wifi_spi_init(
+        (char *)wifi_presets[test_index].ssid,
+        (char *)wifi_presets[test_index].password);
 
     wifi_test_ver_ok = (wifi_spi_version[0] != '\0') ? 1U : 0U;
     wifi_test_mac_ok = (wifi_spi_mac_addr[0] != '\0') ? 1U : 0U;
     wifi_test_ip_ok  = (wifi_spi_ip_addr_port[0] != '\0') ? 1U : 0U;
     wifi_initialized = (wifi_test_ver_ok || wifi_test_mac_ok) ? 1U : 0U;
+
+    if (0U == wifi_connect_result)
+    {
+        wifi_connected = 1U;
+        src = wifi_presets[test_index].ssid;
+        i = 0;
+        while (src[i] != '\0' && i < (int)sizeof(wifi_connected_ssid) - 1)
+        {
+            wifi_connected_ssid[i] = src[i];
+            i++;
+        }
+        wifi_connected_ssid[i] = '\0';
+    }
 }
 
 /* ---------- WiFi 视图管理 ---------- */
@@ -1335,7 +1358,14 @@ static void wifi_draw_status_page(void)
     /* 底部提示 */
     footer_y = (uint16)(ips200_height_max - MENU_FOOTER_HEIGHT);
     ips200_set_color(RGB565_GRAY, RGB565_BLACK);
-    ips200_show_string(0, (uint16)(footer_y + 2), "LONG K1: Back");
+    if (0U == wifi_connect_result)
+    {
+        ips200_show_string(0, (uint16)(footer_y + 2), "LONG K1: Back");
+    }
+    else
+    {
+        ips200_show_string(0, (uint16)(footer_y + 2), "K1:Retry LONG:Back");
+    }
 }
 
 static void wifi_draw_test_page(void)
@@ -1415,6 +1445,7 @@ static uint8 menu_handle_wifi_view(void)
                     wifi_list_selection -= WIFI_PRESET_COUNT;
                 while (wifi_list_selection < 0)
                     wifi_list_selection += WIFI_PRESET_COUNT;
+                menu_drain_encoder_events();
             }
 
             /* 选中项变化时：只重绘旧项和新项（局部刷新） */
@@ -1452,10 +1483,26 @@ static uint8 menu_handle_wifi_view(void)
         }
 
         case WIFI_VIEW_CONNECTING:
-        case WIFI_VIEW_STATUS:
         case WIFI_VIEW_TEST:
         {
             /* 静态页面，已在进入时绘制完毕，仅等待长按K1退出 */
+            break;
+        }
+
+        case WIFI_VIEW_STATUS:
+        {
+            /* 连接失败时，短按K1重试 */
+            if (wifi_connect_result != 0U && my_key_get_state(MY_KEY_1) == MY_KEY_SHORT_PRESS)
+            {
+                my_key_clear_state(MY_KEY_1);
+                wifi_view_mode = WIFI_VIEW_CONNECTING;
+                wifi_draw_connecting_page();
+                wifi_do_connect(wifi_list_selection);
+                wifi_view_mode = WIFI_VIEW_STATUS;
+                wifi_draw_status_page();
+                my_key_clear_all_state();
+                menu_drain_encoder_events();
+            }
             break;
         }
 
