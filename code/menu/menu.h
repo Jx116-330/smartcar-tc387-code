@@ -34,6 +34,7 @@ void menu_init(void);
 void menu_set_dynamic_draw(menu_dynamic_draw_t callback);
 void menu_set_dynamic_area(uint16 x, uint16 y, uint16 w, uint16 h);
 void menu_set_dynamic_clear(uint8 enable);
+void menu_request_full_redraw(void);
 const pid_param_t *menu_get_pid_param(void);
 
 #endif

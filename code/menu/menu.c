@@ -15,6 +15,7 @@
 #include "path_display.h"
 #include "MyKey.h"
 #include "MyEncoder.h"
+#include "wifi_menu.h"
 
 
 /* 参数结构体：用于保存 PID 和菜单相关配置 */
@@ -1166,6 +1167,7 @@ static MenuItem main_items[] = {
     {"1. GPS", NULL, &gps_menu},
     {"2. Camera", NULL, &camera_menu},
     {"3. PID", NULL, &pid_menu},
+    {"4. WiFi", NULL, &wifi_page},
 };
 
 static MenuPage main_menu = {
@@ -1644,6 +1646,12 @@ static void menu_execute_current_item(void)
             return;
         }
 
+        if (wifi_menu_is_active())
+        {
+            wifi_menu_handle_view();
+            return;
+        }
+
         menu_request_redraw(1U);
     }
     else if (NULL != item->sub_page)
@@ -1707,6 +1715,11 @@ const pid_param_t *menu_get_pid_param(void)
     return &menu_pid_param_cache;
 }
 
+void menu_request_full_redraw(void)
+{
+    menu_request_redraw(1U);
+}
+
 /* 菜单周期任务：处理输入、切换页面并刷新当前显示内容 */
 void menu_task(void)
 {
@@ -1739,6 +1752,11 @@ void menu_task(void)
         return;
     }
 
+    if (wifi_menu_handle_view())
+    {
+        return;
+    }
+
     menu_update_selection_from_encoder();
 
     if (my_key_get_state(MY_KEY_1) == MY_KEY_LONG_PRESS)
@@ -1753,7 +1771,7 @@ void menu_task(void)
         my_key_clear_state(MY_KEY_1);
         menu_execute_current_item();
 
-        if ((PID_VIEW_NONE != pid_display_mode) || (GPS_VIEW_NONE != gps_display_mode))
+        if ((PID_VIEW_NONE != pid_display_mode) || (GPS_VIEW_NONE != gps_display_mode) || wifi_menu_is_active())
         {
             menu_needs_update = 0U;
             menu_footer_needs_update = 0U;

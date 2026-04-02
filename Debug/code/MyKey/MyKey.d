@@ -346,6 +346,8 @@ MyKey.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\menu\menu.h"
 "E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\menu\menu.h" :
 MyKey.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\menu\pid_runtime.h"
 "E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\menu\pid_runtime.h" :
+MyKey.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\menu\wifi_menu.h"
+"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\menu\wifi_menu.h" :
 MyKey.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\ips.h"
 "E:\\ads\\Seekfree_TC387_Opensource_Library\\code\ips.h" :
 MyKey.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\GPS\path_recorder.h"

@@ -358,6 +358,8 @@ menu.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\myhead.h"
 "E:\\ads\\Seekfree_TC387_Opensource_Library\\code\myhead.h" :
 menu.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\MyEncoder\MyEncoder.h"
 "E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\MyEncoder\MyEncoder.h" :
+menu.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\menu\wifi_menu.h"
+"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\menu\wifi_menu.h" :
 menu.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\ips.h"
 "E:\\ads\\Seekfree_TC387_Opensource_Library\\code\ips.h" :
 menu.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\GPS\path_recorder.h"

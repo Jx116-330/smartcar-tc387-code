@@ -6,6 +6,7 @@
 #include "Beep.h"
 #include "MyEncoder.h"
 #include "menu.h"
+#include "wifi_menu.h"
 #include "ips.h"
 #include "path_recorder.h"
 #include "path_display.h"
