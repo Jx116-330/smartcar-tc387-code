@@ -16,6 +16,7 @@
 #include "MyKey.h"
 #include "MyEncoder.h"
 #include "wifi_menu.h"
+#include "tuning_soft.h"
 
 
 /* 参数结构体：用于保存 PID 和菜单相关配置 */
@@ -1321,6 +1322,7 @@ static MenuItem main_items[] = {
     {"2. Camera", NULL, &camera_menu},
     {"3. PID", NULL, &pid_menu},
     {"4. WiFi", NULL, &wifi_page},
+    {"5. Tuning", NULL, &tuning_menu},
 };
 
 static MenuPage main_menu = {
@@ -1827,6 +1829,7 @@ void menu_init(void)
     Init_Load_Params();
     menu_sync_gps_record_item();
     menu_sync_gps_record_param_items();
+    tuning_soft_init();
 
     current_page = &main_menu;
     current_page->parent = NULL;
@@ -1908,6 +1911,11 @@ void menu_task(void)
         return;
     }
 
+    if (tuning_soft_handle_view())
+    {
+        return;
+    }
+
     menu_update_selection_from_encoder();
 
     if (my_key_get_state(MY_KEY_1) == MY_KEY_LONG_PRESS)
@@ -1922,7 +1930,7 @@ void menu_task(void)
         my_key_clear_state(MY_KEY_1);
         menu_execute_current_item();
 
-        if ((PID_VIEW_NONE != pid_display_mode) || (GPS_VIEW_NONE != gps_display_mode) || wifi_menu_is_active())
+        if ((PID_VIEW_NONE != pid_display_mode) || (GPS_VIEW_NONE != gps_display_mode) || wifi_menu_is_active() || tuning_soft_is_active())
         {
             menu_needs_update = 0U;
             menu_footer_needs_update = 0U;

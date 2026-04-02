@@ -526,6 +526,11 @@ uint8 wifi_menu_is_active(void)
     return (WIFI_VIEW_NONE != wifi_view_mode) ? 1U : 0U;
 }
 
+uint8 wifi_menu_get_tcp_status(void)
+{
+    return wifi_tcp_connected;
+}
+
 /*
  * 由 menu_task() 和 menu_execute_current_item() 调用。
  * 返回 1：视图已接管本帧，调用方直接 return。

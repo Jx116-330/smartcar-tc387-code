@@ -22,6 +22,7 @@ int core0_main(void)
             }
         }
 
+        tuning_soft_task();
         menu_task();
     }
 }

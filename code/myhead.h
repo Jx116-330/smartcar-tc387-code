@@ -10,6 +10,7 @@
 #include "ips.h"
 #include "path_recorder.h"
 #include "path_display.h"
+#include "tuning_soft.h"
 
 typedef enum
 {

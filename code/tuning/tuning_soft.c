@@ -1,0 +1,333 @@
+#include "tuning_soft.h"
+
+#include "zf_common_headfile.h"
+#include "zf_device_ips200.h"
+#include "zf_device_wifi_spi.h"
+#include "wifi_menu.h"
+#include "path_recorder.h"
+#include "MyKey.h"
+#include "MyEncoder.h"
+
+#define TUNING_DEFAULT_PERIOD_MS 100U
+#define TUNING_MIN_PERIOD_MS 50U
+#define TUNING_MAX_PERIOD_MS 1000U
+#define TUNING_STEP_MS 50U
+#define TUNING_SEND_BUFFER_LEN 192U
+#define TUNING_TITLE_H 30U
+#define TUNING_LINE_H 20U
+#define TUNING_LINE_START 38U
+#define TUNING_PAD_X 8U
+#define TUNING_FOOTER_H 20U
+#define TUNING_DATA_WIDTH ((uint16)(ips200_width_max - TUNING_PAD_X - 4U))
+
+typedef enum
+{
+    TUNING_VIEW_NONE = 0U,
+    TUNING_VIEW_STATUS,
+} tuning_view_mode_t;
+
+static volatile uint8 tuning_enabled = 0U;
+static uint16 tuning_period_ms = TUNING_DEFAULT_PERIOD_MS;
+static uint32 tuning_last_send_ms = 0U;
+static uint32 tuning_total_sent = 0U;
+static uint32 tuning_total_fail = 0U;
+static tuning_view_mode_t tuning_view_mode = TUNING_VIEW_NONE;
+static uint8 tuning_full_redraw = 1U;
+static uint32 tuning_last_view_ms = 0U;
+
+static char tuning_toggle_label[48] = "1. Telemetry [OFF]";
+static char tuning_period_plus_label[48] = "3. Period + [100ms]";
+static char tuning_period_minus_label[48] = "4. Period - [100ms]";
+
+static void tuning_fill_rect(uint16 x0, uint16 y0, uint16 x1, uint16 y1, uint16 color);
+static void tuning_show_padded(uint16 x, uint16 y, const char *s);
+static void tuning_draw_header(const char *title);
+static void tuning_draw_footer(const char *hint);
+static void tuning_draw_status(void);
+static void tuning_update_labels(void);
+static void tuning_set_period(uint16 period_ms);
+static void tuning_enter_view(tuning_view_mode_t mode);
+static void tuning_exit_view(void);
+static void tuning_action_toggle(void);
+static void tuning_action_status(void);
+static void tuning_action_period_plus(void);
+static void tuning_action_period_minus(void);
+static uint8 tuning_send_once(void);
+
+static MenuItem tuning_items[] = {
+    {tuning_toggle_label, tuning_action_toggle, NULL},
+    {"2. Status", tuning_action_status, NULL},
+    {tuning_period_plus_label, tuning_action_period_plus, NULL},
+    {tuning_period_minus_label, tuning_action_period_minus, NULL},
+};
+
+MenuPage tuning_menu = {
+    "Tuning",
+    tuning_items,
+    sizeof(tuning_items) / sizeof(MenuItem),
+    NULL
+};
+
+static void tuning_fill_rect(uint16 x0, uint16 y0, uint16 x1, uint16 y1, uint16 color)
+{
+    uint16 y;
+    for (y = y0; y <= y1; y++)
+    {
+        ips200_draw_line(x0, y, x1, y, color);
+    }
+}
+
+static void tuning_show_padded(uint16 x, uint16 y, const char *s)
+{
+    int max_chars;
+    char buf[64];
+    int i;
+
+    max_chars = (int)(TUNING_DATA_WIDTH / 8U);
+    if (max_chars <= 0 || NULL == s)
+    {
+        return;
+    }
+    if (max_chars > (int)(sizeof(buf) - 1))
+    {
+        max_chars = (int)(sizeof(buf) - 1);
+    }
+
+    for (i = 0; i < max_chars && s[i] != '\0'; i++)
+    {
+        buf[i] = s[i];
+    }
+    while (i < max_chars)
+    {
+        buf[i] = ' ';
+        i++;
+    }
+    buf[i] = '\0';
+    ips200_show_string(x, y, buf);
+}
+
+static void tuning_draw_header(const char *title)
+{
+    tuning_fill_rect(0, 0, (uint16)(ips200_width_max - 1U), (uint16)(TUNING_TITLE_H - 1U), RGB565_BLACK);
+    ips200_set_color(RGB565_CYAN, RGB565_BLACK);
+    ips200_show_string(TUNING_PAD_X, 8U, title);
+    ips200_set_color(RGB565_WHITE, RGB565_BLACK);
+    ips200_draw_line(0, TUNING_TITLE_H, (uint16)(ips200_width_max - 1U), TUNING_TITLE_H, RGB565_GRAY);
+}
+
+static void tuning_draw_footer(const char *hint)
+{
+    uint16 y = (uint16)(ips200_height_max - TUNING_FOOTER_H);
+    tuning_fill_rect(0, y, (uint16)(ips200_width_max - 1U), (uint16)(ips200_height_max - 1U), RGB565_BLACK);
+    ips200_draw_line(0, y, (uint16)(ips200_width_max - 1U), y, RGB565_GRAY);
+    ips200_set_color(RGB565_GRAY, RGB565_BLACK);
+    ips200_show_string(TUNING_PAD_X, (uint16)(y + 2U), hint);
+    ips200_set_color(RGB565_WHITE, RGB565_BLACK);
+}
+
+static void tuning_update_labels(void)
+{
+    snprintf(tuning_toggle_label, sizeof(tuning_toggle_label), "1. Telemetry [%s]", tuning_enabled ? "ON" : "OFF");
+    snprintf(tuning_period_plus_label, sizeof(tuning_period_plus_label), "3. Period + [%ums]", (unsigned int)tuning_period_ms);
+    snprintf(tuning_period_minus_label, sizeof(tuning_period_minus_label), "4. Period - [%ums]", (unsigned int)tuning_period_ms);
+}
+
+static void tuning_set_period(uint16 period_ms)
+{
+    if (period_ms < TUNING_MIN_PERIOD_MS)
+    {
+        period_ms = TUNING_MIN_PERIOD_MS;
+    }
+    else if (period_ms > TUNING_MAX_PERIOD_MS)
+    {
+        period_ms = TUNING_MAX_PERIOD_MS;
+    }
+
+    tuning_period_ms = period_ms;
+    tuning_update_labels();
+}
+
+void tuning_soft_init(void)
+{
+    tuning_enabled = 0U;
+    tuning_period_ms = TUNING_DEFAULT_PERIOD_MS;
+    tuning_last_send_ms = system_getval_ms();
+    tuning_total_sent = 0U;
+    tuning_total_fail = 0U;
+    tuning_view_mode = TUNING_VIEW_NONE;
+    tuning_full_redraw = 1U;
+    tuning_last_view_ms = 0U;
+    tuning_update_labels();
+}
+
+static void tuning_enter_view(tuning_view_mode_t mode)
+{
+    tuning_view_mode = mode;
+    tuning_full_redraw = 1U;
+    my_key_clear_state(MY_KEY_1);
+}
+
+static void tuning_exit_view(void)
+{
+    tuning_view_mode = TUNING_VIEW_NONE;
+    tuning_full_redraw = 1U;
+    my_key_clear_state(MY_KEY_1);
+    menu_request_full_redraw();
+}
+
+static void tuning_action_toggle(void)
+{
+    tuning_enabled = tuning_enabled ? 0U : 1U;
+    tuning_last_send_ms = system_getval_ms();
+    tuning_update_labels();
+    menu_request_full_redraw();
+}
+
+static void tuning_action_status(void)
+{
+    tuning_enter_view(TUNING_VIEW_STATUS);
+    tuning_draw_status();
+}
+
+static void tuning_action_period_plus(void)
+{
+    tuning_set_period((uint16)(tuning_period_ms + TUNING_STEP_MS));
+    menu_request_full_redraw();
+}
+
+static void tuning_action_period_minus(void)
+{
+    uint16 next_period = tuning_period_ms;
+    if (next_period > TUNING_STEP_MS)
+    {
+        next_period = (uint16)(next_period - TUNING_STEP_MS);
+    }
+    tuning_set_period(next_period);
+    menu_request_full_redraw();
+}
+
+static uint8 tuning_send_once(void)
+{
+    char line[TUNING_SEND_BUFFER_LEN];
+    uint32 remain;
+    const pid_param_t *pid_param = menu_get_pid_param();
+
+    if (!wifi_menu_get_tcp_status())
+    {
+        return 0U;
+    }
+
+    snprintf(line,
+             sizeof(line),
+             "TEL,ms=%lu,fix=%d,sat=%d,spd=%.2f,lat=%.6f,lon=%.6f,enc=%d,step=%d,kp=%.3f,ki=%.3f,kd=%.3f\r\n",
+             (unsigned long)system_getval_ms(),
+             gnss.state,
+             gnss.satellite_used,
+             gnss.speed,
+             gnss.latitude,
+             gnss.longitude,
+             switch_encoder_num,
+             switch_encoder_change_num,
+             (NULL != pid_param) ? pid_param->kp : 0.0f,
+             (NULL != pid_param) ? pid_param->ki : 0.0f,
+             (NULL != pid_param) ? pid_param->kd : 0.0f);
+
+    remain = wifi_spi_send_buffer((const uint8 *)line, (uint32)strlen(line));
+    if (0U == remain)
+    {
+        tuning_total_sent++;
+        return 1U;
+    }
+
+    tuning_total_fail++;
+    return 0U;
+}
+
+void tuning_soft_task(void)
+{
+    uint32 now_ms;
+
+    if (!tuning_enabled)
+    {
+        return;
+    }
+
+    now_ms = system_getval_ms();
+    if ((uint32)(now_ms - tuning_last_send_ms) < tuning_period_ms)
+    {
+        return;
+    }
+
+    tuning_last_send_ms = now_ms;
+    (void)tuning_send_once();
+}
+
+static void tuning_draw_status(void)
+{
+    char line[64];
+    uint32 now_ms = system_getval_ms();
+    const pid_param_t *pid_param = menu_get_pid_param();
+
+    if (!tuning_full_redraw && (uint32)(now_ms - tuning_last_view_ms) < 200U)
+    {
+        return;
+    }
+    tuning_last_view_ms = now_ms;
+
+    if (tuning_full_redraw)
+    {
+        tuning_fill_rect(0, 0, (uint16)(ips200_width_max - 1U), (uint16)(ips200_height_max - 1U), RGB565_BLACK);
+        tuning_draw_header("Tuning Status");
+        tuning_draw_footer("LONG K1: Back");
+        tuning_full_redraw = 0U;
+    }
+
+    ips200_set_color(RGB565_WHITE, RGB565_BLACK);
+    snprintf(line, sizeof(line), "Telemetry: %s", tuning_enabled ? "ON" : "OFF");
+    tuning_show_padded(TUNING_PAD_X, TUNING_LINE_START, line);
+
+    snprintf(line, sizeof(line), "Period: %ums TCP:%s", (unsigned int)tuning_period_ms, wifi_menu_get_tcp_status() ? "OK" : "DOWN");
+    tuning_show_padded(TUNING_PAD_X, (uint16)(TUNING_LINE_START + TUNING_LINE_H), line);
+
+    snprintf(line, sizeof(line), "Sent:%lu Fail:%lu", (unsigned long)tuning_total_sent, (unsigned long)tuning_total_fail);
+    tuning_show_padded(TUNING_PAD_X, (uint16)(TUNING_LINE_START + TUNING_LINE_H * 2U), line);
+
+    snprintf(line, sizeof(line), "Fix:%d Sat:%d Spd:%.2f", gnss.state, gnss.satellite_used, gnss.speed);
+    tuning_show_padded(TUNING_PAD_X, (uint16)(TUNING_LINE_START + TUNING_LINE_H * 3U), line);
+
+    snprintf(line, sizeof(line), "Enc:%d Step:%d", switch_encoder_num, switch_encoder_change_num);
+    tuning_show_padded(TUNING_PAD_X, (uint16)(TUNING_LINE_START + TUNING_LINE_H * 4U), line);
+
+    snprintf(line, sizeof(line), "PID: %.3f %.3f %.3f",
+             (NULL != pid_param) ? pid_param->kp : 0.0f,
+             (NULL != pid_param) ? pid_param->ki : 0.0f,
+             (NULL != pid_param) ? pid_param->kd : 0.0f);
+    tuning_show_padded(TUNING_PAD_X, (uint16)(TUNING_LINE_START + TUNING_LINE_H * 5U), line);
+}
+
+uint8 tuning_soft_is_active(void)
+{
+    return (TUNING_VIEW_NONE != tuning_view_mode) ? 1U : 0U;
+}
+
+uint8 tuning_soft_handle_view(void)
+{
+    if (TUNING_VIEW_NONE == tuning_view_mode)
+    {
+        return 0U;
+    }
+
+    if (MY_KEY_LONG_PRESS == my_key_get_state(MY_KEY_1))
+    {
+        my_key_clear_state(MY_KEY_1);
+        tuning_exit_view();
+        return 1U;
+    }
+
+    if (TUNING_VIEW_STATUS == tuning_view_mode)
+    {
+        tuning_draw_status();
+    }
+
+    return 1U;
+}
