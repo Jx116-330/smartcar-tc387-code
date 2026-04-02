@@ -67,6 +67,10 @@ uint8 path_recorder_start_new(void);
 void path_recorder_stop(void);
 void path_recorder_clear(void);
 void path_recorder_task(void);
+/* Save the current in-memory track into the reserved DFlash pages. */
+uint8 path_recorder_save_to_flash(void);
+/* Load the last saved track from DFlash back into RAM. */
+uint8 path_recorder_load_from_flash(void);
 const path_record_config_t *path_recorder_get_config(void);
 void path_recorder_set_min_distance(float value);
 void path_recorder_set_min_interval_ms(uint32 value);
