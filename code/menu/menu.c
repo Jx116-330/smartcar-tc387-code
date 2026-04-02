@@ -60,10 +60,13 @@ typedef enum
 MyParams_t g_params;
 
 /* Flash 参数存储位置定义 */
-#define FLASH_SECTOR    0
-#define FLASH_PAGE      127
-#define MAGIC_NUM       0x5A5A5A5A
-#define SAVE_LEN        ((sizeof(MyParams_t) + 3) / 4)
+#define FLASH_SECTOR                0U
+#define PARAM_FLASH_LAST_PAGE       127U
+#define PARAM_FLASH_PAGE_COUNT      4U
+#define PARAM_FLASH_WORDS_PER_PAGE  ((uint32)EEPROM_PAGE_LENGTH)
+#define PARAM_FLASH_CAPACITY_WORDS  (PARAM_FLASH_PAGE_COUNT * PARAM_FLASH_WORDS_PER_PAGE)
+#define MAGIC_NUM                   0x5A5A5A5AU
+#define SAVE_LEN                    ((uint32)((sizeof(MyParams_t) + 3U) / 4U))
 #define PARAM_PID_P_MIN             0.0f
 #define PARAM_PID_P_MAX             50.0f
 #define PARAM_PID_I_MIN             0.0f
@@ -134,6 +137,7 @@ static void ips200_fill_rect(uint16 x_start, uint16 y_start, uint16 x_end, uint1
 static void show_string_fit(uint16 x, uint16 y, const char *s);
 static void show_string_fit_width(uint16 x, uint16 y, uint16 max_width, const char *s);
 static void show_string_fit_width_pad(uint16 x, uint16 y, uint16 max_width, const char *s);
+static void menu_copy_text(char *dest, uint32 dest_size, const char *source);
 static void menu_set_status_message(const char *text, uint32 duration_ms);
 static void menu_draw_footer(void);
 static void menu_drain_encoder_events(void);
@@ -141,6 +145,7 @@ static void menu_reset_dynamic_region(void);
 static void menu_request_redraw(uint8 full_redraw);
 static void menu_process_status_timeout(uint32 now_ms);
 static void menu_update_selection_from_encoder(void);
+static uint8 menu_is_gps_root_idle(void);
 static void menu_sync_gps_record_item(void);
 static void menu_sync_gps_record_param_items(void);
 static void menu_draw_item(int index, uint8 selected);
@@ -152,14 +157,21 @@ static uint8 menu_handle_gps_view(void);
 static uint8 menu_handle_pid_view(void);
 static uint8 menu_handle_record_param_view(void);
 static uint8 params_are_valid(const MyParams_t *params);
-static void params_save_to_flash(void);
+static uint8 params_flash_has_capacity(void);
+static uint32 params_flash_page_number(uint32 page_index);
+static uint32 params_flash_page_word_count(uint32 page_index);
+static uint8 params_load_from_flash(MyParams_t *params);
+static uint8 params_save_to_flash(void);
 static void params_apply_record_config(void);
 static void params_capture_record_config(void);
 static void gps_clear_status_hint(void);
 static void gps_set_status_hint(const char *text);
 static const char *gps_get_record_state_text(void);
 static void gps_return_to_menu(void);
+static void gps_return_to_menu_with_hint(const char *text);
+static void gps_return_to_menu_with_message(const char *text);
 static void gps_enter_view(gps_view_mode_t mode);
+static void gps_open_view(gps_view_mode_t mode);
 static void gps_exit_view(void);
 static void gps_clear_current_track(void);
 static void gps_draw_page_header(const char *title);
@@ -178,6 +190,8 @@ static void record_param_cycle_step(void);
 static void gps_action_record_param_distance(void);
 static void gps_action_record_param_interval(void);
 static void gps_action_record_param_min_sat(void);
+static void gps_action_save_track_flash(void);
+static void gps_action_load_track_flash(void);
 static void pid_sync_runtime_param(void);
 static void pid_save_if_dirty(void);
 static void pid_reset_preview_state(void);
@@ -263,10 +277,85 @@ static uint8 params_are_valid(const MyParams_t *params)
     return 1;
 }
 
-static void params_save_to_flash(void)
+static uint8 params_flash_has_capacity(void)
 {
+    return (SAVE_LEN <= PARAM_FLASH_CAPACITY_WORDS) ? 1U : 0U;
+}
+
+static uint32 params_flash_page_number(uint32 page_index)
+{
+    return PARAM_FLASH_LAST_PAGE - page_index;
+}
+
+static uint32 params_flash_page_word_count(uint32 page_index)
+{
+    uint32 offset = page_index * PARAM_FLASH_WORDS_PER_PAGE;
+    uint32 remaining = (SAVE_LEN > offset) ? (SAVE_LEN - offset) : 0U;
+
+    if (remaining > PARAM_FLASH_WORDS_PER_PAGE)
+    {
+        remaining = PARAM_FLASH_WORDS_PER_PAGE;
+    }
+
+    return remaining;
+}
+
+static uint8 params_load_from_flash(MyParams_t *params)
+{
+    uint32 page_index;
+    uint32 *buffer = (uint32 *)params;
+
+    if ((NULL == params) || !params_flash_has_capacity())
+    {
+        return 0U;
+    }
+
+    memset(params, 0, sizeof(*params));
+    for (page_index = 0U; page_index < PARAM_FLASH_PAGE_COUNT; page_index++)
+    {
+        uint32 words_this_page = params_flash_page_word_count(page_index);
+
+        if (0U == words_this_page)
+        {
+            break;
+        }
+
+        flash_read_page(FLASH_SECTOR,
+                        params_flash_page_number(page_index),
+                        buffer + (page_index * PARAM_FLASH_WORDS_PER_PAGE),
+                        (uint16)words_this_page);
+    }
+
+    return 1U;
+}
+
+static uint8 params_save_to_flash(void)
+{
+    uint32 page_index;
+    const uint32 *buffer = (const uint32 *)&g_params;
+
+    if (!params_flash_has_capacity())
+    {
+        return 0U;
+    }
+
     g_params.magic_code = MAGIC_NUM;
-    flash_write_page(FLASH_SECTOR, FLASH_PAGE, (const uint32 *)&g_params, SAVE_LEN);
+    for (page_index = 0U; page_index < PARAM_FLASH_PAGE_COUNT; page_index++)
+    {
+        uint32 words_this_page = params_flash_page_word_count(page_index);
+
+        if (0U == words_this_page)
+        {
+            break;
+        }
+
+        flash_write_page(FLASH_SECTOR,
+                         params_flash_page_number(page_index),
+                         buffer + (page_index * PARAM_FLASH_WORDS_PER_PAGE),
+                         (uint16)words_this_page);
+    }
+
+    return 1U;
 }
 
 static void params_apply_record_config(void)
@@ -335,9 +424,7 @@ static void Init_Load_Params(void)
 {
     MyParams_t temp_read;
 
-    flash_read_page(FLASH_SECTOR, FLASH_PAGE, (uint32 *)&temp_read, SAVE_LEN);
-
-    if (params_are_valid(&temp_read))
+    if (params_load_from_flash(&temp_read) && params_are_valid(&temp_read))
     {
         g_params = temp_read;
     }
@@ -354,17 +441,27 @@ static void gps_clear_status_hint(void)
     gps_status_hint[0] = '\0';
 }
 
+static void menu_copy_text(char *dest, uint32 dest_size, const char *source)
+{
+    uint32 index = 0U;
+    const char *text = (NULL != source) ? source : "";
+
+    if ((NULL == dest) || (0U == dest_size))
+    {
+        return;
+    }
+
+    while ((index + 1U) < dest_size && text[index] != '\0')
+    {
+        dest[index] = text[index];
+        index++;
+    }
+    dest[index] = '\0';
+}
+
 static void gps_set_status_hint(const char *text)
 {
-    uint32 i = 0U;
-    const char *source = (NULL != text) ? text : "";
-
-    while (source[i] != '\0' && i < (sizeof(gps_status_hint) - 1U))
-    {
-        gps_status_hint[i] = source[i];
-        i++;
-    }
-    gps_status_hint[i] = '\0';
+    menu_copy_text(gps_status_hint, (uint32)sizeof(gps_status_hint), text);
 }
 
 static const char *gps_get_record_state_text(void)
@@ -385,6 +482,18 @@ static void gps_return_to_menu(void)
 {
     gps_display_mode = GPS_VIEW_NONE;
     menu_request_redraw(1U);
+}
+
+static void gps_return_to_menu_with_hint(const char *text)
+{
+    gps_set_status_hint(text);
+    gps_return_to_menu();
+}
+
+static void gps_return_to_menu_with_message(const char *text)
+{
+    menu_set_status_message(text, MENU_STATUS_SHOW_MS);
+    gps_return_to_menu();
 }
 
 /* 进入 GPS 详情页前清空输入状态，并请求整页刷新 */
@@ -613,10 +722,22 @@ static void record_param_exit_view(void)
 
     record_param_view_mode = RECORD_PARAM_VIEW_NONE;
     params_capture_record_config();
-    params_save_to_flash();
-    menu_set_status_message("Record saved", MENU_STATUS_SHOW_MS);
+    if (params_save_to_flash())
+    {
+        menu_set_status_message("Record saved", MENU_STATUS_SHOW_MS);
+    }
+    else
+    {
+        menu_set_status_message("Param flash full", MENU_STATUS_SHOW_MS);
+    }
     menu_sync_gps_record_param_items();
     menu_request_redraw(1U);
+}
+
+static void gps_open_view(gps_view_mode_t mode)
+{
+    gps_clear_status_hint();
+    gps_enter_view(mode);
 }
 
 static float record_param_get_distance_step(void)
@@ -803,9 +924,15 @@ static void pid_save_if_dirty(void)
         return;
     }
 
-    params_save_to_flash();
-    pid_param_dirty = 0U;
-    menu_set_status_message("PID saved", MENU_STATUS_SHOW_MS);
+    if (params_save_to_flash())
+    {
+        pid_param_dirty = 0U;
+        menu_set_status_message("PID saved", MENU_STATUS_SHOW_MS);
+    }
+    else
+    {
+        menu_set_status_message("Param flash full", MENU_STATUS_SHOW_MS);
+    }
 }
 
 static void pid_reset_preview_state(void)
@@ -1041,8 +1168,7 @@ static void pid_action_reset(void)
 /* 打开 GPS 数据页，显示当前定位与轨迹统计信息 */
 static void gps_action_display_data(void)
 {
-    gps_clear_status_hint();
-    gps_enter_view(GPS_VIEW_DATA);
+    gps_open_view(GPS_VIEW_DATA);
 }
 
 /* 根据当前记录状态启动或停止轨迹记录，并更新状态提示 */
@@ -1053,7 +1179,7 @@ static void gps_action_toggle_record(void)
     if (state == PATH_STATE_RECORDING)
     {
         path_recorder_stop();
-        gps_set_status_hint("Track stopped");
+        gps_return_to_menu_with_hint("Track stopped");
     }
     else
     {
@@ -1061,34 +1187,59 @@ static void gps_action_toggle_record(void)
         {
             if (path_recorder_start_new())
             {
-                gps_set_status_hint("Track recording");
+                gps_return_to_menu_with_hint("Track recording");
             }
             else
             {
-                gps_set_status_hint("Start failed");
+                gps_return_to_menu_with_hint("Start failed");
             }
         }
         else
         {
-            gps_set_status_hint("GPS not ready");
+            gps_return_to_menu_with_hint("GPS not ready");
         }
     }
-
-    gps_return_to_menu();
 }
 
 /* 初始化轨迹显示区域并进入 GPS 地图页面 */
 static void gps_action_map(void)
 {
-    gps_clear_status_hint();
     path_display_init();
-    gps_enter_view(GPS_VIEW_MAP);
+    gps_open_view(GPS_VIEW_MAP);
+}
+
+static void gps_action_save_track_flash(void)
+{
+    if (path_recorder_save_to_flash())
+    {
+        gps_return_to_menu_with_message("Track saved");
+    }
+    else
+    {
+        gps_return_to_menu_with_message("No track to save");
+    }
+}
+
+static void gps_action_load_track_flash(void)
+{
+    if (path_recorder_get_state() == PATH_STATE_RECORDING)
+    {
+        gps_return_to_menu_with_message("Stop record first");
+    }
+    else if (path_recorder_load_from_flash())
+    {
+        path_display_init();
+        gps_return_to_menu_with_message("Track loaded");
+    }
+    else
+    {
+        gps_return_to_menu_with_message("Load failed");
+    }
 }
 
 static void gps_action_raw_debug(void)
 {
-    gps_clear_status_hint();
-    gps_enter_view(GPS_VIEW_RAW_DEBUG);
+    gps_open_view(GPS_VIEW_RAW_DEBUG);
 }
 
 static MenuItem gps_record_param_items[] = {
@@ -1109,7 +1260,9 @@ static MenuItem gps_items[] = {
     {gps_record_menu_label, gps_action_toggle_record, NULL},
     {"3. Track Map", gps_action_map, NULL},
     {"4. Record Params", NULL, &gps_record_param_menu},
-    {"5. GPS RAW/DEBUG", gps_action_raw_debug, NULL},
+    {"5. Save Track Flash", gps_action_save_track_flash, NULL},
+    {"6. Load Track Flash", gps_action_load_track_flash, NULL},
+    {"7. GPS RAW/DEBUG", gps_action_raw_debug, NULL},
 };
 
 static MenuPage gps_menu = {
@@ -1269,8 +1422,6 @@ static void show_string_fit_width_pad(uint16 x, uint16 y, uint16 max_width, cons
 
 static void menu_set_status_message(const char *text, uint32 duration_ms)
 {
-    uint32 i = 0U;
-
     menu_status_message[0] = '\0';
     menu_status_expire_ms = 0U;
 
@@ -1280,12 +1431,7 @@ static void menu_set_status_message(const char *text, uint32 duration_ms)
         return;
     }
 
-    while (text[i] != '\0' && i < (sizeof(menu_status_message) - 1U))
-    {
-        menu_status_message[i] = text[i];
-        i++;
-    }
-    menu_status_message[i] = '\0';
+    menu_copy_text(menu_status_message, (uint32)sizeof(menu_status_message), text);
     menu_status_expire_ms = system_getval_ms() + duration_ms;
     menu_footer_needs_update = 1U;
 }
@@ -1372,6 +1518,13 @@ static void menu_update_selection_from_encoder(void)
     }
 }
 
+static uint8 menu_is_gps_root_idle(void)
+{
+    return ((current_page == &gps_menu) &&
+            (GPS_VIEW_NONE == gps_display_mode) &&
+            !menu_full_redraw) ? 1U : 0U;
+}
+
 static void menu_sync_gps_record_item(void)
 {
     char new_label[48];
@@ -1395,9 +1548,7 @@ static void menu_sync_gps_record_item(void)
     {
         strcpy(gps_record_menu_label, new_label);
 
-        if ((current_page == &gps_menu) &&
-            (GPS_VIEW_NONE == gps_display_mode) &&
-            !menu_full_redraw)
+        if (menu_is_gps_root_idle())
         {
             menu_draw_item(1, (uint8)(current_selection == 1));
         }

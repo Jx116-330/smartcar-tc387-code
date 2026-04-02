@@ -146,7 +146,10 @@ uint8  wifi_spi_udp_send_now        (void);
 uint32 wifi_spi_send_buffer         (const uint8 *buff, uint32 length);
 uint32 wifi_spi_read_buffer         (uint8 *buffer, uint32 length);
 
+typedef uint8 (*wifi_spi_wait_hook_t)(void);
+
 uint8  wifi_spi_init                (char *wifi_ssid, char *pass_word);
+void   wifi_spi_set_wait_hook       (wifi_spi_wait_hook_t hook);
 
 #endif
 

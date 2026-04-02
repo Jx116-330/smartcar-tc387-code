@@ -35,8 +35,10 @@ static uint8 last_current_point_valid = 0U;
 static void path_display_clamp_area(void);
 static void path_display_fill_rect(uint16 x_start, uint16 y_start, uint16 x_end, uint16 y_end, uint16 color);
 static void path_display_draw_border(void);
+static void path_display_set_gps_point(gps_point *point, double latitude, double longitude);
 static uint16 path_display_collect_points(gps_point *gps_points);
 static uint8 path_display_collect_bounds(double *min_x, double *max_x, double *min_y, double *max_y);
+static double path_display_abs(double value);
 static uint8 path_display_bounds_changed(double min_x, double max_x, double min_y, double max_y);
 static uint8 path_display_point_in_area(const screen_point *point);
 static void path_display_draw_marker(const screen_point *point, uint16 color);
@@ -44,10 +46,12 @@ static void path_display_draw_segment(const screen_point *start_point, const scr
 static void path_display_reset_cache(void);
 static void path_display_update_bounds_cache(double min_x, double max_x, double min_y, double max_y);
 static uint8 path_display_get_path_screen_point(uint16 index, screen_point *point);
+static void path_display_clear_inner_area(void);
 static void path_display_draw_trajectory(uint16 color);
 static void path_display_draw_new_segments(uint16 color);
 static void path_display_clear_current_marker(uint16 restore_color);
 static void path_display_draw_current_position(uint16 restore_color);
+static uint8 path_display_should_full_redraw(uint8 has_bounds, double min_x, double max_x, double min_y, double max_y);
 
 static void path_display_clamp_area(void)
 {
@@ -145,6 +149,17 @@ static void path_display_draw_border(void)
     ips200_draw_line(x_end, display_y, x_end, y_end, MAP_BORDER_COLOR);
 }
 
+static void path_display_set_gps_point(gps_point *point, double latitude, double longitude)
+{
+    if (NULL == point)
+    {
+        return;
+    }
+
+    point->lat = latitude;
+    point->lon = longitude;
+}
+
 static uint16 path_display_collect_points(gps_point *gps_points)
 {
     uint16 total_count;
@@ -167,14 +182,16 @@ static uint16 path_display_collect_points(gps_point *gps_points)
     {
         for (i = 0U; i < sample_count; i++)
         {
-            gps_points[i].lat = (double)path_data.points[i].latitude;
-            gps_points[i].lon = (double)path_data.points[i].longitude;
+            path_display_set_gps_point(&gps_points[i],
+                                       (double)path_data.points[i].latitude,
+                                       (double)path_data.points[i].longitude);
         }
     }
     else if (sample_count <= 1U)
     {
-        gps_points[0].lat = (double)path_data.points[0].latitude;
-        gps_points[0].lon = (double)path_data.points[0].longitude;
+        path_display_set_gps_point(&gps_points[0],
+                                   (double)path_data.points[0].latitude,
+                                   (double)path_data.points[0].longitude);
         sample_count = 1U;
     }
     else
@@ -185,8 +202,9 @@ static uint16 path_display_collect_points(gps_point *gps_points)
         for (i = 0U; i < sample_count; i++)
         {
             uint32 index = (i * total_span + (sample_span / 2U)) / sample_span;
-            gps_points[i].lat = (double)path_data.points[index].latitude;
-            gps_points[i].lon = (double)path_data.points[index].longitude;
+            path_display_set_gps_point(&gps_points[i],
+                                       (double)path_data.points[index].latitude,
+                                       (double)path_data.points[index].longitude);
         }
     }
 
@@ -233,30 +251,22 @@ static uint8 path_display_collect_bounds(double *min_x, double *max_x, double *m
     return 1U;
 }
 
+static double path_display_abs(double value)
+{
+    return (value < 0.0) ? -value : value;
+}
+
 static uint8 path_display_bounds_changed(double min_x, double max_x, double min_y, double max_y)
 {
-    double delta;
-
     if (!map_bounds_valid)
     {
         return 1U;
     }
 
-    delta = min_x - map_min_x;
-    if (delta < 0.0) delta = -delta;
-    if (delta > EPSILON) return 1U;
-
-    delta = max_x - map_max_x;
-    if (delta < 0.0) delta = -delta;
-    if (delta > EPSILON) return 1U;
-
-    delta = min_y - map_min_y;
-    if (delta < 0.0) delta = -delta;
-    if (delta > EPSILON) return 1U;
-
-    delta = max_y - map_max_y;
-    if (delta < 0.0) delta = -delta;
-    if (delta > EPSILON) return 1U;
+    if (path_display_abs(min_x - map_min_x) > EPSILON) return 1U;
+    if (path_display_abs(max_x - map_max_x) > EPSILON) return 1U;
+    if (path_display_abs(min_y - map_min_y) > EPSILON) return 1U;
+    if (path_display_abs(max_y - map_max_y) > EPSILON) return 1U;
 
     return 0U;
 }
@@ -339,9 +349,24 @@ static uint8 path_display_get_path_screen_point(uint16 index, screen_point *poin
         return 0U;
     }
 
-    gps.lat = (double)path_data.points[index].latitude;
-    gps.lon = (double)path_data.points[index].longitude;
+    path_display_set_gps_point(&gps,
+                               (double)path_data.points[index].latitude,
+                               (double)path_data.points[index].longitude);
     return gps_point_to_screen(&gps, point);
+}
+
+static void path_display_clear_inner_area(void)
+{
+    if (display_width <= 2U || display_height <= 2U)
+    {
+        return;
+    }
+
+    path_display_fill_rect((uint16)(display_x + 1U),
+                           (uint16)(display_y + 1U),
+                           (uint16)(display_x + display_width - 2U),
+                           (uint16)(display_y + display_height - 2U),
+                           RGB565_BLACK);
 }
 
 static void path_display_draw_trajectory(uint16 color)
@@ -455,6 +480,24 @@ static void path_display_draw_current_position(uint16 restore_color)
     }
 }
 
+static uint8 path_display_should_full_redraw(uint8 has_bounds, double min_x, double max_x, double min_y, double max_y)
+{
+    if (display_border_dirty)
+    {
+        return 1U;
+    }
+    if (path_data.point_count < rendered_point_count)
+    {
+        return 1U;
+    }
+    if (has_bounds)
+    {
+        return path_display_bounds_changed(min_x, max_x, min_y, max_y);
+    }
+
+    return (map_bounds_valid || rendered_point_count > 0U) ? 1U : 0U;
+}
+
 void path_display_init(void)
 {
     display_x = DISPLAY_AREA_X;
@@ -501,37 +544,11 @@ void path_display_draw_map(uint16 color)
     has_bounds = path_display_collect_bounds(&min_x, &max_x, &min_y, &max_y);
     marker_restore_color = (rendered_point_count > 0U) ? current_track_color : RGB565_BLACK;
 
-    if (display_border_dirty)
-    {
-        need_full_redraw = 1U;
-    }
-    if (path_data.point_count < rendered_point_count)
-    {
-        need_full_redraw = 1U;
-    }
-    if (has_bounds)
-    {
-        if (path_display_bounds_changed(min_x, max_x, min_y, max_y))
-        {
-            need_full_redraw = 1U;
-        }
-    }
-    else if (map_bounds_valid || rendered_point_count > 0U)
-    {
-        need_full_redraw = 1U;
-    }
+    need_full_redraw = path_display_should_full_redraw(has_bounds, min_x, max_x, min_y, max_y);
 
     if (need_full_redraw)
     {
-        if (display_width > 2U && display_height > 2U)
-        {
-            path_display_fill_rect((uint16)(display_x + 1U),
-                                   (uint16)(display_y + 1U),
-                                   (uint16)(display_x + display_width - 2U),
-                                   (uint16)(display_y + display_height - 2U),
-                                   RGB565_BLACK);
-        }
-
+        path_display_clear_inner_area();
         path_display_draw_border();
         display_border_dirty = 0U;
         path_display_reset_cache();
