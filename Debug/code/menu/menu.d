@@ -366,3 +366,5 @@ menu.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\GPS\path_recorder.h"
 "E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\GPS\path_recorder.h" :
 menu.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\GPS\path_display.h"
 "E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\GPS\path_display.h" :
+menu.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\tuning\tuning_soft.h"
+"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\tuning\tuning_soft.h" :

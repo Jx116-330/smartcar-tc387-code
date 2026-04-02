@@ -29,6 +29,7 @@ code/GPS \
 code/MyEncoder \
 code/MyKey \
 code/menu \
+code/tuning \
 libraries/infineon_libraries/Configurations \
 libraries/infineon_libraries/Infra/Platform/Tricore/Compilers \
 libraries/infineon_libraries/Infra/Ssw/TC38A/Tricore \
