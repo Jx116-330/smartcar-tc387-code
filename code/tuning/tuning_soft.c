@@ -13,6 +13,8 @@
 #define TUNING_MAX_PERIOD_MS 1000U
 #define TUNING_STEP_MS 50U
 #define TUNING_SEND_BUFFER_LEN 192U
+#define TUNING_RECV_BUFFER_LEN 192U
+#define TUNING_RESP_BUFFER_LEN 128U
 #define TUNING_TITLE_H 30U
 #define TUNING_LINE_H 20U
 #define TUNING_LINE_START 38U
@@ -53,6 +55,11 @@ static void tuning_action_status(void);
 static void tuning_action_period_plus(void);
 static void tuning_action_period_minus(void);
 static uint8 tuning_send_once(void);
+static void tuning_send_response(const char *response);
+static void tuning_reply_error(const char *cmd, const char *reason);
+static void tuning_reply_ack_pid(const char *cmd);
+static void tuning_process_rx_line(char *line);
+static void tuning_receive_task(void);
 
 static MenuItem tuning_items[] = {
     {tuning_toggle_label, tuning_action_toggle, NULL},
@@ -247,6 +254,8 @@ void tuning_soft_task(void)
 {
     uint32 now_ms;
 
+    tuning_receive_task();
+
     if (!tuning_enabled)
     {
         return;
@@ -260,6 +269,216 @@ void tuning_soft_task(void)
 
     tuning_last_send_ms = now_ms;
     (void)tuning_send_once();
+}
+
+static void tuning_send_response(const char *response)
+{
+    if ((NULL == response) || !wifi_menu_get_tcp_status())
+    {
+        return;
+    }
+
+    if (0U != wifi_spi_send_buffer((const uint8 *)response, (uint32)strlen(response)))
+    {
+        tuning_total_fail++;
+    }
+}
+
+static void tuning_reply_error(const char *cmd, const char *reason)
+{
+    char response[TUNING_RESP_BUFFER_LEN];
+
+    snprintf(response,
+             sizeof(response),
+             "ERR,cmd=%s,reason=%s\r\n",
+             (NULL != cmd) ? cmd : "UNKNOWN",
+             (NULL != reason) ? reason : "UNKNOWN");
+    tuning_send_response(response);
+}
+
+static void tuning_reply_ack_pid(const char *cmd)
+{
+    char response[TUNING_RESP_BUFFER_LEN];
+    const pid_param_t *pid_param = menu_get_pid_param();
+
+    snprintf(response,
+             sizeof(response),
+             "ACK,cmd=%s,kp=%.3f,ki=%.3f,kd=%.3f\r\n",
+             (NULL != cmd) ? cmd : "UNKNOWN",
+             (NULL != pid_param) ? pid_param->kp : 0.0f,
+             (NULL != pid_param) ? pid_param->ki : 0.0f,
+             (NULL != pid_param) ? pid_param->kd : 0.0f);
+    tuning_send_response(response);
+}
+
+static void tuning_process_rx_line(char *line)
+{
+    char cmd[16] = {0};
+    pid_param_t param;
+    float value = 0.0f;
+
+    if (NULL == line)
+    {
+        return;
+    }
+
+    while ((*line == ' ') || (*line == '\t'))
+    {
+        line++;
+    }
+
+    if ('\0' == *line)
+    {
+        return;
+    }
+
+    if (0 == strcmp(line, "GET PID"))
+    {
+        tuning_reply_ack_pid("GET_PID");
+        return;
+    }
+
+    if (3 == sscanf(line, "SET PID %f %f %f", &param.kp, &param.ki, &param.kd))
+    {
+        if (NULL != menu_get_pid_param())
+        {
+            param.integral_limit = menu_get_pid_param()->integral_limit;
+            param.output_limit = menu_get_pid_param()->output_limit;
+        }
+
+        if (menu_set_pid_param(&param, 0U))
+        {
+            tuning_reply_ack_pid("SET_PID");
+        }
+        else
+        {
+            tuning_reply_error("SET_PID", "OUT_OF_RANGE");
+        }
+        return;
+    }
+
+    if (2 == sscanf(line, "SET %15s %f", cmd, &value))
+    {
+        const pid_param_t *current = menu_get_pid_param();
+
+        if (NULL == current)
+        {
+            tuning_reply_error(cmd, "PID_UNAVAILABLE");
+            return;
+        }
+
+        param = *current;
+        if (0 == strcmp(cmd, "KP"))
+        {
+            param.kp = value;
+            if (menu_set_pid_param(&param, 0U))
+            {
+                tuning_reply_ack_pid("SET_KP");
+            }
+            else
+            {
+                tuning_reply_error("SET_KP", "OUT_OF_RANGE");
+            }
+            return;
+        }
+        if (0 == strcmp(cmd, "KI"))
+        {
+            param.ki = value;
+            if (menu_set_pid_param(&param, 0U))
+            {
+                tuning_reply_ack_pid("SET_KI");
+            }
+            else
+            {
+                tuning_reply_error("SET_KI", "OUT_OF_RANGE");
+            }
+            return;
+        }
+        if (0 == strcmp(cmd, "KD"))
+        {
+            param.kd = value;
+            if (menu_set_pid_param(&param, 0U))
+            {
+                tuning_reply_ack_pid("SET_KD");
+            }
+            else
+            {
+                tuning_reply_error("SET_KD", "OUT_OF_RANGE");
+            }
+            return;
+        }
+
+        tuning_reply_error(cmd, "UNKNOWN_SET_TARGET");
+        return;
+    }
+
+    if (0 == strcmp(line, "SAVE PID"))
+    {
+        const pid_param_t *current = menu_get_pid_param();
+        if ((NULL != current) && menu_set_pid_param(current, 1U))
+        {
+            tuning_reply_ack_pid("SAVE_PID");
+        }
+        else
+        {
+            tuning_reply_error("SAVE_PID", "FLASH_SAVE_FAILED");
+        }
+        return;
+    }
+
+    tuning_reply_error("UNKNOWN", "UNKNOWN_COMMAND");
+}
+
+static void tuning_receive_task(void)
+{
+    uint8 raw[TUNING_RECV_BUFFER_LEN];
+    uint32 raw_len = 0U;
+    static char line_buf[TUNING_RECV_BUFFER_LEN];
+    static uint32 line_len = 0U;
+    uint32 i;
+
+    if (!wifi_menu_get_tcp_status())
+    {
+        line_len = 0U;
+        return;
+    }
+
+    raw_len = wifi_spi_read_buffer(raw, sizeof(raw));
+    if (0U == raw_len)
+    {
+        return;
+    }
+
+    for (i = 0U; i < raw_len; i++)
+    {
+        char ch = (char)raw[i];
+
+        if ('\r' == ch)
+        {
+            continue;
+        }
+
+        if ('\n' == ch)
+        {
+            line_buf[line_len] = '\0';
+            if (line_len > 0U)
+            {
+                tuning_process_rx_line(line_buf);
+            }
+            line_len = 0U;
+            continue;
+        }
+
+        if (line_len < (sizeof(line_buf) - 1U))
+        {
+            line_buf[line_len++] = ch;
+        }
+        else
+        {
+            line_len = 0U;
+            tuning_reply_error("UNKNOWN", "LINE_TOO_LONG");
+        }
+    }
 }
 
 static void tuning_draw_status(void)

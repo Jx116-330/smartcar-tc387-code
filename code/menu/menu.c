@@ -1869,6 +1869,38 @@ const pid_param_t *menu_get_pid_param(void)
     return &menu_pid_param_cache;
 }
 
+uint8 menu_set_pid_param(const pid_param_t *param, uint8 save_to_flash)
+{
+    if (NULL == param)
+    {
+        return 0U;
+    }
+
+    if ((param->kp < PARAM_PID_P_MIN) || (param->kp > PARAM_PID_P_MAX) ||
+        (param->ki < PARAM_PID_I_MIN) || (param->ki > PARAM_PID_I_MAX) ||
+        (param->kd < PARAM_PID_D_MIN) || (param->kd > PARAM_PID_D_MAX))
+    {
+        return 0U;
+    }
+
+    g_params.pid_p = param->kp;
+    g_params.pid_i = param->ki;
+    g_params.pid_d = param->kd;
+    pid_param_dirty = 1U;
+    pid_sync_runtime_param();
+
+    if (save_to_flash)
+    {
+        if (!params_save_to_flash())
+        {
+            return 0U;
+        }
+        pid_param_dirty = 0U;
+    }
+
+    return 1U;
+}
+
 void menu_request_full_redraw(void)
 {
     menu_request_redraw(1U);
