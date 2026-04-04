@@ -50,13 +50,7 @@ void Beep_Ring(uint16_t Time)
     system_delay_ms(Time);
     Beep_Stop();
 }
-/***********************************************
-* @brief : 定时器开关蜂鸣器函数
-* @param : void
-* @return: void
-* @date  : 2024年11月6日12:24:04
-* @author: JX116
-************************************************/
+
 void Beep_Timer_ShortRing(void)
 {
     g_switch_encoder_ring_flag = 1;
@@ -74,13 +68,7 @@ void Beep_Timer_ShortRing_Stop(void)
     }
 }
 
-/***********************************************
-* @brief : 定时器开关蜂鸣器函数
-* @param : void
-* @return: void
-* @date  : 2024年11月6日12:24:04
-* @author: JX116
-************************************************/
+
 void Key_Timer_ShortRing(void)
 {
     g_key_ring_flag = 1;
