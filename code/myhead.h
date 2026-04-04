@@ -11,8 +11,6 @@
 #include "path_recorder.h"
 #include "path_display.h"
 #include "tuning_soft.h"
-#include "diag_log.h"
-#include "mock_gnss.h"
 
 typedef enum
 {
