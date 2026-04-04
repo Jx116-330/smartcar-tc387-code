@@ -6,32 +6,16 @@
 *********************************************************************************************************************/
 
 #include "menu.h"
+#include "menu_params.h"
 #include "zf_device_ips200.h"
 #include "zf_common_headfile.h"
 #include "zf_driver_gpio.h"
-#include "zf_driver_flash.h"
-#include "path_config.h"
 #include "path_recorder.h"
 #include "path_display.h"
 #include "MyKey.h"
 #include "MyEncoder.h"
 #include "wifi_menu.h"
 #include "tuning_soft.h"
-
-
-/* 参数结构体：用于保存 PID 和菜单相关配置 */
-typedef struct {
-    float pid_p;
-    float pid_i;
-    float pid_d;
-    float record_min_distance;
-    uint32 record_min_interval_ms;
-    float record_max_speed_kph;
-    uint8 record_min_satellites;
-    uint8 threshold_mode;
-    uint8 threshold_val;
-    uint32_t magic_code;
-} MyParams_t;
 
 typedef enum
 {
@@ -60,29 +44,6 @@ typedef enum
 
 MyParams_t g_params;
 
-/* Flash 参数存储位置定义 */
-#define FLASH_SECTOR                0U
-#define PARAM_FLASH_LAST_PAGE       127U
-#define PARAM_FLASH_PAGE_COUNT      4U
-#define PARAM_FLASH_WORDS_PER_PAGE  ((uint32)EEPROM_PAGE_LENGTH)
-#define PARAM_FLASH_CAPACITY_WORDS  (PARAM_FLASH_PAGE_COUNT * PARAM_FLASH_WORDS_PER_PAGE)
-#define MAGIC_NUM                   0x5A5A5A5AU
-#define SAVE_LEN                    ((uint32)((sizeof(MyParams_t) + 3U) / 4U))
-#define PARAM_PID_P_MIN             0.0f
-#define PARAM_PID_P_MAX             50.0f
-#define PARAM_PID_I_MIN             0.0f
-#define PARAM_PID_I_MAX             10.0f
-#define PARAM_PID_D_MIN             0.0f
-#define PARAM_PID_D_MAX             20.0f
-#define PARAM_THRESHOLD_MODE_MAX    3U
-#define PARAM_RECORD_DISTANCE_MIN   0.05f
-#define PARAM_RECORD_DISTANCE_MAX   5.0f
-#define PARAM_RECORD_INTERVAL_MIN   10U
-#define PARAM_RECORD_INTERVAL_MAX   1000U
-#define PARAM_RECORD_SPEED_MIN      5.0f
-#define PARAM_RECORD_SPEED_MAX      120.0f
-#define PARAM_RECORD_SAT_MIN        3U
-#define PARAM_RECORD_SAT_MAX        12U
 #define MENU_STATUS_SHOW_MS         1200U
 #define MENU_TITLE_HEIGHT           30U
 #define MENU_ITEM_START_Y           40U
@@ -157,14 +118,6 @@ static void menu_execute_current_item(void);
 static uint8 menu_handle_gps_view(void);
 static uint8 menu_handle_pid_view(void);
 static uint8 menu_handle_record_param_view(void);
-static uint8 params_are_valid(const MyParams_t *params);
-static uint8 params_flash_has_capacity(void);
-static uint32 params_flash_page_number(uint32 page_index);
-static uint32 params_flash_page_word_count(uint32 page_index);
-static uint8 params_load_from_flash(MyParams_t *params);
-static uint8 params_save_to_flash(void);
-static void params_apply_record_config(void);
-static void params_capture_record_config(void);
 static void gps_clear_status_hint(void);
 static void gps_set_status_hint(const char *text);
 static const char *gps_get_record_state_text(void);
@@ -222,175 +175,12 @@ static uint8 gps_menu_gnss_ready(void)
             (gnss.longitude != 0.0));
 }
 
-/* 检查从 Flash 读取的参数是否有效，避免加载异常数据 */
-static uint8 params_are_valid(const MyParams_t *params)
-{
-    if (NULL == params)
-    {
-        return 0;
-    }
-
-    if (params->magic_code != MAGIC_NUM)
-    {
-        return 0;
-    }
-
-    if (!(params->pid_p >= PARAM_PID_P_MIN && params->pid_p <= PARAM_PID_P_MAX))
-    {
-        return 0;
-    }
-
-    if (!(params->pid_i >= PARAM_PID_I_MIN && params->pid_i <= PARAM_PID_I_MAX))
-    {
-        return 0;
-    }
-
-    if (!(params->pid_d >= PARAM_PID_D_MIN && params->pid_d <= PARAM_PID_D_MAX))
-    {
-        return 0;
-    }
-
-    if (!(params->record_min_distance >= PARAM_RECORD_DISTANCE_MIN && params->record_min_distance <= PARAM_RECORD_DISTANCE_MAX))
-    {
-        return 0;
-    }
-
-    if (!(params->record_min_interval_ms >= PARAM_RECORD_INTERVAL_MIN && params->record_min_interval_ms <= PARAM_RECORD_INTERVAL_MAX))
-    {
-        return 0;
-    }
-
-    if (!(params->record_max_speed_kph >= PARAM_RECORD_SPEED_MIN && params->record_max_speed_kph <= PARAM_RECORD_SPEED_MAX))
-    {
-        return 0;
-    }
-
-    if (!(params->record_min_satellites >= PARAM_RECORD_SAT_MIN && params->record_min_satellites <= PARAM_RECORD_SAT_MAX))
-    {
-        return 0;
-    }
-
-    if (params->threshold_mode > PARAM_THRESHOLD_MODE_MAX)
-    {
-        return 0;
-    }
-
-    return 1;
-}
-
-static uint8 params_flash_has_capacity(void)
-{
-    return (SAVE_LEN <= PARAM_FLASH_CAPACITY_WORDS) ? 1U : 0U;
-}
-
-static uint32 params_flash_page_number(uint32 page_index)
-{
-    return PARAM_FLASH_LAST_PAGE - page_index;
-}
-
-static uint32 params_flash_page_word_count(uint32 page_index)
-{
-    uint32 offset = page_index * PARAM_FLASH_WORDS_PER_PAGE;
-    uint32 remaining = (SAVE_LEN > offset) ? (SAVE_LEN - offset) : 0U;
-
-    if (remaining > PARAM_FLASH_WORDS_PER_PAGE)
-    {
-        remaining = PARAM_FLASH_WORDS_PER_PAGE;
-    }
-
-    return remaining;
-}
-
-static uint8 params_load_from_flash(MyParams_t *params)
-{
-    uint32 page_index;
-    uint32 *buffer = (uint32 *)params;
-
-    if ((NULL == params) || !params_flash_has_capacity())
-    {
-        return 0U;
-    }
-
-    memset(params, 0, sizeof(*params));
-    for (page_index = 0U; page_index < PARAM_FLASH_PAGE_COUNT; page_index++)
-    {
-        uint32 words_this_page = params_flash_page_word_count(page_index);
-
-        if (0U == words_this_page)
-        {
-            break;
-        }
-
-        flash_read_page(FLASH_SECTOR,
-                        params_flash_page_number(page_index),
-                        buffer + (page_index * PARAM_FLASH_WORDS_PER_PAGE),
-                        (uint16)words_this_page);
-    }
-
-    return 1U;
-}
-
-static uint8 params_save_to_flash(void)
-{
-    uint32 page_index;
-    const uint32 *buffer = (const uint32 *)&g_params;
-
-    if (!params_flash_has_capacity())
-    {
-        return 0U;
-    }
-
-    g_params.magic_code = MAGIC_NUM;
-    for (page_index = 0U; page_index < PARAM_FLASH_PAGE_COUNT; page_index++)
-    {
-        uint32 words_this_page = params_flash_page_word_count(page_index);
-
-        if (0U == words_this_page)
-        {
-            break;
-        }
-
-        flash_write_page(FLASH_SECTOR,
-                         params_flash_page_number(page_index),
-                         buffer + (page_index * PARAM_FLASH_WORDS_PER_PAGE),
-                         (uint16)words_this_page);
-    }
-
-    return 1U;
-}
-
-static void params_apply_record_config(void)
-{
-    path_recorder_set_min_distance(g_params.record_min_distance);
-    path_recorder_set_min_interval_ms(g_params.record_min_interval_ms);
-    path_recorder_set_max_speed_kph(g_params.record_max_speed_kph);
-    path_recorder_set_min_satellites(g_params.record_min_satellites);
-}
-
-static void params_capture_record_config(void)
-{
-    const path_record_config_t *config = path_recorder_get_config();
-
-    g_params.record_min_distance = config->min_record_distance;
-    g_params.record_min_interval_ms = config->min_record_interval_ms;
-    g_params.record_max_speed_kph = config->max_record_speed_kph;
-    g_params.record_min_satellites = config->min_satellites;
-}
-/* 恢复默认 PID 与菜单参数，并同步到运行时缓存 */
+/* 持久化参数已拆到 menu_params.c；这里保留运行时同步逻辑。 */
 static void params_set_default(void)
 {
-    g_params.pid_p = 1.2f;
-    g_params.pid_i = 0.01f;
-    g_params.pid_d = 0.5f;
-    g_params.record_min_distance = MIN_RECORD_DISTANCE;
-    g_params.record_min_interval_ms = MIN_RECORD_INTERVAL_MS;
-    g_params.record_max_speed_kph = MAX_RECORD_SPEED_KPH;
-    g_params.record_min_satellites = GPS_MIN_SATELLITES;
-    g_params.threshold_mode = 0;
-    g_params.threshold_val = 128;
-    g_params.magic_code = MAGIC_NUM;
+    menu_params_set_default(&g_params);
     pid_sync_runtime_param();
-    params_apply_record_config();
+    menu_params_apply_record_config(&g_params);
 }
 
 /* 按步进调整参数值，并限制在给定最小值和最大值之间 */
@@ -423,18 +213,14 @@ static void adjust_param(float *ptr, float step, float min, float max, uint8_t i
 /* 上电时从 Flash 加载参数，若无效则回退到默认配置 */
 static void Init_Load_Params(void)
 {
-    MyParams_t temp_read;
-
-    if (params_load_from_flash(&temp_read) && params_are_valid(&temp_read))
-    {
-        g_params = temp_read;
-    }
-    else
+    if (!menu_params_load_or_default(&g_params))
     {
         params_set_default();
+        return;
     }
+
     pid_sync_runtime_param();
-    params_apply_record_config();
+    menu_params_apply_record_config(&g_params);
 }
 
 static void gps_clear_status_hint(void)
@@ -722,8 +508,8 @@ static void record_param_exit_view(void)
     }
 
     record_param_view_mode = RECORD_PARAM_VIEW_NONE;
-    params_capture_record_config();
-    if (params_save_to_flash())
+    menu_params_capture_record_config(&g_params);
+    if (menu_params_save_to_flash(&g_params))
     {
         menu_set_status_message("Record saved", MENU_STATUS_SHOW_MS);
     }
@@ -925,7 +711,7 @@ static void pid_save_if_dirty(void)
         return;
     }
 
-    if (params_save_to_flash())
+    if (menu_params_save_to_flash(&g_params))
     {
         pid_param_dirty = 0U;
         menu_set_status_message("PID saved", MENU_STATUS_SHOW_MS);
@@ -1891,7 +1677,7 @@ uint8 menu_set_pid_param(const pid_param_t *param, uint8 save_to_flash)
 
     if (save_to_flash)
     {
-        if (!params_save_to_flash())
+        if (!menu_params_save_to_flash(&g_params))
         {
             return 0U;
         }
