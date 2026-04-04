@@ -7,6 +7,7 @@
 
 #include "menu.h"
 #include "menu_params.h"
+#include "menu_pid.h"
 #include "zf_device_ips200.h"
 #include "zf_common_headfile.h"
 #include "zf_driver_gpio.h"
@@ -24,15 +25,6 @@ typedef enum
     GPS_VIEW_MAP,
     GPS_VIEW_RAW_DEBUG,
 } gps_view_mode_t;
-
-typedef enum
-{
-    PID_VIEW_NONE = 0U,
-    PID_VIEW_EDIT_KP,
-    PID_VIEW_EDIT_KI,
-    PID_VIEW_EDIT_KD,
-    PID_VIEW_PREVIEW,
-} pid_view_mode_t;
 
 typedef enum
 {
@@ -71,15 +63,6 @@ static MenuPage *current_page = NULL;
 static MenuPage gps_menu;
 static pid_param_t menu_pid_param_cache;
 static pid_controller_t pid_preview_controller;
-static float pid_preview_target = 100.0f;
-static float pid_preview_feedback = 0.0f;
-static float pid_preview_output = 0.0f;
-static const float pid_kp_steps[] = {0.01f, 0.10f, 0.50f, 1.00f};
-static const float pid_ki_steps[] = {0.001f, 0.005f, 0.010f, 0.050f};
-static const float pid_kd_steps[] = {0.01f, 0.05f, 0.10f, 0.20f};
-static uint8 pid_kp_step_index = 1U;
-static uint8 pid_ki_step_index = 2U;
-static uint8 pid_kd_step_index = 1U;
 static char menu_status_message[32] = "";
 static uint32 menu_status_expire_ms = 0U;
 static uint8 menu_footer_needs_update = 1U;
@@ -146,17 +129,6 @@ static void gps_action_record_param_interval(void);
 static void gps_action_record_param_min_sat(void);
 static void gps_action_save_track_flash(void);
 static void gps_action_load_track_flash(void);
-static void pid_sync_runtime_param(void);
-static void pid_save_if_dirty(void);
-static void pid_reset_preview_state(void);
-static void pid_enter_view(pid_view_mode_t mode);
-static void pid_exit_view(void);
-static void pid_apply_encoder_adjustment(void);
-static void pid_draw_active_view(void);
-static void pid_draw_edit_page(const char *title, float value, float step);
-static void pid_draw_preview_page(void);
-static float pid_get_current_step(uint8 mode);
-static void pid_cycle_step(uint8 mode);
 static void pid_action_edit_kp(void);
 static void pid_action_edit_ki(void);
 static void pid_action_edit_kd(void);
@@ -179,7 +151,7 @@ static uint8 gps_menu_gnss_ready(void)
 static void params_set_default(void)
 {
     menu_params_set_default(&g_params);
-    pid_sync_runtime_param();
+    menu_pid_sync_runtime_param(&g_params, &menu_pid_param_cache, &pid_preview_controller);
     menu_params_apply_record_config(&g_params);
 }
 
@@ -219,7 +191,7 @@ static void Init_Load_Params(void)
         return;
     }
 
-    pid_sync_runtime_param();
+    menu_pid_sync_runtime_param(&g_params, &menu_pid_param_cache, &pid_preview_controller);
     menu_params_apply_record_config(&g_params);
 }
 
@@ -694,262 +666,56 @@ static void gps_action_record_param_min_sat(void)
     record_param_enter_view(RECORD_PARAM_VIEW_MIN_SAT);
 }
 
-static void pid_sync_runtime_param(void)
-{
-    menu_pid_param_cache.kp = g_params.pid_p;
-    menu_pid_param_cache.ki = g_params.pid_i;
-    menu_pid_param_cache.kd = g_params.pid_d;
-    menu_pid_param_cache.integral_limit = 500.0f;
-    menu_pid_param_cache.output_limit = 1000.0f;
-    pid_set_param(&pid_preview_controller, &menu_pid_param_cache);
-}
-
-static void pid_save_if_dirty(void)
-{
-    if (!pid_param_dirty)
-    {
-        return;
-    }
-
-    if (menu_params_save_to_flash(&g_params))
-    {
-        pid_param_dirty = 0U;
-        menu_set_status_message("PID saved", MENU_STATUS_SHOW_MS);
-    }
-    else
-    {
-        menu_set_status_message("Param flash full", MENU_STATUS_SHOW_MS);
-    }
-}
-
-static void pid_reset_preview_state(void)
-{
-    pid_reset(&pid_preview_controller);
-    pid_preview_feedback = 0.0f;
-    pid_preview_output = 0.0f;
-}
-
-static void pid_enter_view(pid_view_mode_t mode)
-{
-    pid_display_mode = mode;
-    pid_sync_runtime_param();
-    pid_reset_preview_state();
-    my_key_clear_state(MY_KEY_1);
-    menu_request_redraw(1U);
-}
-
-static void pid_exit_view(void)
-{
-    if ((PID_VIEW_NONE != pid_display_mode) && (pid_display_mode <= PID_VIEW_EDIT_KD) && pid_param_dirty)
-    {
-        pid_save_if_dirty();
-    }
-
-    pid_display_mode = PID_VIEW_NONE;
-    menu_request_redraw(1U);
-}
-
-static void pid_apply_encoder_adjustment(void)
-{
-    float step = pid_get_current_step(pid_display_mode);
-    uint8 updated = 0U;
-
-    if (PID_VIEW_EDIT_KP == pid_display_mode)
-    {
-        adjust_param(&g_params.pid_p, step, PARAM_PID_P_MIN, PARAM_PID_P_MAX, (switch_encoder_change_num < 0) ? 1U : 0U);
-        updated = 1U;
-    }
-    else if (PID_VIEW_EDIT_KI == pid_display_mode)
-    {
-        adjust_param(&g_params.pid_i, step, PARAM_PID_I_MIN, PARAM_PID_I_MAX, (switch_encoder_change_num < 0) ? 1U : 0U);
-        updated = 1U;
-    }
-    else if (PID_VIEW_EDIT_KD == pid_display_mode)
-    {
-        adjust_param(&g_params.pid_d, step, PARAM_PID_D_MIN, PARAM_PID_D_MAX, (switch_encoder_change_num < 0) ? 1U : 0U);
-        updated = 1U;
-    }
-
-    if (updated)
-    {
-        pid_param_dirty = 1U;
-        pid_sync_runtime_param();
-    }
-}
-
-static void pid_draw_active_view(void)
-{
-    if (PID_VIEW_EDIT_KP == pid_display_mode)
-    {
-        pid_draw_edit_page("Edit Kp", g_params.pid_p, pid_get_current_step(PID_VIEW_EDIT_KP));
-    }
-    else if (PID_VIEW_EDIT_KI == pid_display_mode)
-    {
-        pid_draw_edit_page("Edit Ki", g_params.pid_i, pid_get_current_step(PID_VIEW_EDIT_KI));
-    }
-    else if (PID_VIEW_EDIT_KD == pid_display_mode)
-    {
-        pid_draw_edit_page("Edit Kd", g_params.pid_d, pid_get_current_step(PID_VIEW_EDIT_KD));
-    }
-    else if (PID_VIEW_PREVIEW == pid_display_mode)
-    {
-        pid_draw_preview_page();
-    }
-}
-
-static void pid_draw_edit_page(const char *title, float value, float step)
-{
-    char value_line[32];
-    char step_line[32];
-    static pid_view_mode_t last_draw_mode = PID_VIEW_NONE;
-    static float last_draw_value = -1.0f;
-    static float last_draw_step = -1.0f;
-
-    if (!menu_full_redraw &&
-        last_draw_mode == pid_display_mode &&
-        last_draw_value == value &&
-        last_draw_step == step)
-    {
-        return;
-    }
-
-    if (menu_full_redraw)
-    {
-        ips200_full(RGB565_BLACK);
-        ips200_set_color(RGB565_CYAN, RGB565_BLACK);
-        show_string_fit(10, 10, title);
-        ips200_draw_line(0, 30, ips200_width_max - 1, 30, RGB565_GRAY);
-        ips200_set_color(RGB565_GRAY, RGB565_BLACK);
-        show_string_fit_width_pad(10, 40, (uint16)(ips200_width_max - 20U), "ENC: Adjust parameter");
-        show_string_fit_width_pad(10, 56, (uint16)(ips200_width_max - 20U), "K1: Change step   LONG: Exit");
-        show_string_fit_width_pad(18, 82, (uint16)(ips200_width_max - 36U), "Current Value");
-        show_string_fit_width_pad(18, 138, (uint16)(ips200_width_max - 36U), "Step Size");
-        show_string_fit_width_pad(18, 194, (uint16)(ips200_width_max - 36U), "Rotate encoder to tune");
-        show_string_fit_width_pad(18, 210, (uint16)(ips200_width_max - 36U), "Exit auto-saves PID");
-    }
-
-    sprintf(value_line, "%.4f", value);
-    sprintf(step_line, "%.4f", step);
-
-    ips200_set_color(RGB565_YELLOW, RGB565_BLACK);
-    show_string_fit_width_pad(18, 104, (uint16)(ips200_width_max - 36U), value_line);
-
-    ips200_set_color(RGB565_GREEN, RGB565_BLACK);
-    show_string_fit_width_pad(18, 160, (uint16)(ips200_width_max - 36U), step_line);
-
-    last_draw_mode = pid_display_mode;
-    last_draw_value = value;
-    last_draw_step = step;
-    menu_full_redraw = 0;
-}
-
-static void pid_draw_preview_page(void)
-{
-    static uint32 last_refresh_ms = 0;
-    char line0[64];
-    char line1[64];
-    char line2[64];
-    char line3[64];
-    char line4[64];
-    uint32 now_ms = system_getval_ms();
-    float error;
-
-    if (!menu_full_redraw && (now_ms - last_refresh_ms < 120U))
-    {
-        return;
-    }
-
-    last_refresh_ms = now_ms;
-
-    if (menu_full_redraw)
-    {
-        ips200_fill_rect(0, 32, ips200_width_max - 1, ips200_height_max - 1, RGB565_BLACK);
-        gps_draw_page_header("PID Preview");
-        show_string_fit_width(5, (uint16)(ips200_height_max - 20U), (uint16)(ips200_width_max - 10U), "K1 LONG Exit");
-    }
-
-    pid_preview_output = pid_calculate(&pid_preview_controller, pid_preview_target, pid_preview_feedback);
-    pid_preview_feedback += pid_preview_output * 0.02f;
-    pid_preview_feedback *= 0.995f;
-    error = pid_preview_target - pid_preview_feedback;
-
-    sprintf(line0, "Kp:%.3f Ki:%.3f", g_params.pid_p, g_params.pid_i);
-    sprintf(line1, "Kd:%.3f Target:%.1f", g_params.pid_d, pid_preview_target);
-    sprintf(line2, "Feedback:%.2f", pid_preview_feedback);
-    sprintf(line3, "Error:%.2f Output:%.2f", error, pid_preview_output);
-    sprintf(line4, "Adjust gains in PID menu");
-
-    ips200_set_color(RGB565_WHITE, RGB565_BLACK);
-    show_string_fit_width_pad(10, 56, (uint16)(ips200_width_max - 20U), line0);
-    show_string_fit_width_pad(10, 80, (uint16)(ips200_width_max - 20U), line1);
-    show_string_fit_width_pad(10, 104, (uint16)(ips200_width_max - 20U), line2);
-    show_string_fit_width_pad(10, 128, (uint16)(ips200_width_max - 20U), line3);
-    show_string_fit_width_pad(10, 152, (uint16)(ips200_width_max - 20U), line4);
-    menu_full_redraw = 0;
-}
-
-static float pid_get_current_step(uint8 mode)
-{
-    if (1U == mode)
-    {
-        return pid_kp_steps[pid_kp_step_index];
-    }
-    else if (2U == mode)
-    {
-        return pid_ki_steps[pid_ki_step_index];
-    }
-    else
-    {
-        return pid_kd_steps[pid_kd_step_index];
-    }
-}
-
-static void pid_cycle_step(uint8 mode)
-{
-    if (1U == mode)
-    {
-        pid_kp_step_index = (uint8)((pid_kp_step_index + 1U) % (sizeof(pid_kp_steps) / sizeof(pid_kp_steps[0])));
-    }
-    else if (2U == mode)
-    {
-        pid_ki_step_index = (uint8)((pid_ki_step_index + 1U) % (sizeof(pid_ki_steps) / sizeof(pid_ki_steps[0])));
-    }
-    else if (3U == mode)
-    {
-        pid_kd_step_index = (uint8)((pid_kd_step_index + 1U) % (sizeof(pid_kd_steps) / sizeof(pid_kd_steps[0])));
-    }
-}
-
 static void pid_action_edit_kp(void)
 {
-    pid_enter_view(PID_VIEW_EDIT_KP);
+    menu_pid_action_edit_kp(&pid_display_mode,
+                            &g_params,
+                            &menu_pid_param_cache,
+                            &pid_preview_controller,
+                            &menu_full_redraw,
+                            menu_request_redraw);
 }
 
 static void pid_action_edit_ki(void)
 {
-    pid_enter_view(PID_VIEW_EDIT_KI);
+    menu_pid_action_edit_ki(&pid_display_mode,
+                            &g_params,
+                            &menu_pid_param_cache,
+                            &pid_preview_controller,
+                            &menu_full_redraw,
+                            menu_request_redraw);
 }
 
 static void pid_action_edit_kd(void)
 {
-    pid_enter_view(PID_VIEW_EDIT_KD);
+    menu_pid_action_edit_kd(&pid_display_mode,
+                            &g_params,
+                            &menu_pid_param_cache,
+                            &pid_preview_controller,
+                            &menu_full_redraw,
+                            menu_request_redraw);
 }
 
 static void pid_action_preview(void)
 {
-    pid_enter_view(PID_VIEW_PREVIEW);
+    menu_pid_action_preview(&pid_display_mode,
+                            &g_params,
+                            &menu_pid_param_cache,
+                            &pid_preview_controller,
+                            &menu_full_redraw,
+                            menu_request_redraw);
 }
 
 static void pid_action_reset(void)
 {
-    g_params.pid_p = 1.2f;
-    g_params.pid_i = 0.01f;
-    g_params.pid_d = 0.5f;
-    pid_param_dirty = 1U;
-    pid_sync_runtime_param();
-    pid_reset_preview_state();
-    pid_save_if_dirty();
-    menu_full_redraw = 1;
+    menu_pid_action_reset(&g_params,
+                          &pid_display_mode,
+                          &menu_pid_param_cache,
+                          &pid_preview_controller,
+                          &pid_param_dirty,
+                          &menu_full_redraw,
+                          menu_set_status_message,
+                          MENU_STATUS_SHOW_MS);
 }
 
 /* 打开 GPS 数据页，显示当前定位与轨迹统计信息 */
@@ -1523,34 +1289,15 @@ static uint8 menu_handle_record_param_view(void)
 
 static uint8 menu_handle_pid_view(void)
 {
-    if (PID_VIEW_NONE == pid_display_mode)
-    {
-        return 0U;
-    }
-
-    if (my_key_get_state(MY_KEY_1) == MY_KEY_LONG_PRESS)
-    {
-        my_key_clear_state(MY_KEY_1);
-        pid_exit_view();
-        return 1U;
-    }
-
-    if (If_Switch_Encoder_Change())
-    {
-        pid_apply_encoder_adjustment();
-    }
-
-    if (my_key_get_state(MY_KEY_1) == MY_KEY_SHORT_PRESS)
-    {
-        my_key_clear_state(MY_KEY_1);
-        if (pid_display_mode <= PID_VIEW_EDIT_KD)
-        {
-            pid_cycle_step(pid_display_mode);
-        }
-    }
-
-    pid_draw_active_view();
-    return 1U;
+    return menu_pid_handle_view(&pid_display_mode,
+                                &g_params,
+                                &menu_pid_param_cache,
+                                &pid_preview_controller,
+                                &pid_param_dirty,
+                                &menu_full_redraw,
+                                menu_request_redraw,
+                                menu_set_status_message,
+                                MENU_STATUS_SHOW_MS);
 }
 
 static void menu_execute_current_item(void)
@@ -1569,7 +1316,7 @@ static void menu_execute_current_item(void)
 
         if (PID_VIEW_NONE != pid_display_mode)
         {
-            pid_draw_active_view();
+            menu_handle_pid_view();
             return;
         }
 
@@ -1673,7 +1420,7 @@ uint8 menu_set_pid_param(const pid_param_t *param, uint8 save_to_flash)
     g_params.pid_i = param->ki;
     g_params.pid_d = param->kd;
     pid_param_dirty = 1U;
-    pid_sync_runtime_param();
+    menu_pid_sync_runtime_param(&g_params, &menu_pid_param_cache, &pid_preview_controller);
 
     if (save_to_flash)
     {
