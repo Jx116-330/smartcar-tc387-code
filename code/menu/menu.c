@@ -8,6 +8,7 @@
 #include "menu.h"
 #include "menu_params.h"
 #include "menu_pid.h"
+#include "menu_gps.h"
 #include "zf_device_ips200.h"
 #include "zf_common_headfile.h"
 #include "zf_driver_gpio.h"
@@ -17,22 +18,6 @@
 #include "MyEncoder.h"
 #include "wifi_menu.h"
 #include "tuning_soft.h"
-
-typedef enum
-{
-    GPS_VIEW_NONE = 0U,
-    GPS_VIEW_DATA,
-    GPS_VIEW_MAP,
-    GPS_VIEW_RAW_DEBUG,
-} gps_view_mode_t;
-
-typedef enum
-{
-    RECORD_PARAM_VIEW_NONE = 0U,
-    RECORD_PARAM_VIEW_DISTANCE,
-    RECORD_PARAM_VIEW_INTERVAL,
-    RECORD_PARAM_VIEW_MIN_SAT,
-} record_param_view_mode_t;
 
 MyParams_t g_params;
 
@@ -71,12 +56,6 @@ static char gps_record_menu_label[48] = "2. Track Record [IDLE]";
 static char gps_record_distance_label[48] = "1. Point Dist [0.20m]";
 static char gps_record_interval_label[48] = "2. Point Intv [50ms]";
 static char gps_record_sat_label[48] = "3. Min Sat [4]";
-static const float record_distance_steps[] = {0.05f, 0.10f, 0.20f, 0.50f};
-static const uint16 record_interval_steps[] = {10U, 20U, 50U, 100U};
-static const uint8 record_sat_steps[] = {1U, 2U, 3U};
-static uint8 record_distance_step_index = 1U;
-static uint8 record_interval_step_index = 1U;
-static uint8 record_sat_step_index = 0U;
 
 static void ips200_fill_rect(uint16 x_start, uint16 y_start, uint16 x_end, uint16 y_end, uint16 color);
 static void show_string_fit(uint16 x, uint16 y, const char *s);
@@ -101,29 +80,6 @@ static void menu_execute_current_item(void);
 static uint8 menu_handle_gps_view(void);
 static uint8 menu_handle_pid_view(void);
 static uint8 menu_handle_record_param_view(void);
-static void gps_clear_status_hint(void);
-static void gps_set_status_hint(const char *text);
-static const char *gps_get_record_state_text(void);
-static void gps_return_to_menu(void);
-static void gps_return_to_menu_with_hint(const char *text);
-static void gps_return_to_menu_with_message(const char *text);
-static void gps_enter_view(gps_view_mode_t mode);
-static void gps_open_view(gps_view_mode_t mode);
-static void gps_exit_view(void);
-static void gps_clear_current_track(void);
-static void gps_draw_page_header(const char *title);
-static void gps_draw_data_page(void);
-static void gps_draw_map_page(void);
-static void gps_draw_raw_debug_page(void);
-static void record_param_enter_view(record_param_view_mode_t mode);
-static void record_param_exit_view(void);
-static void record_param_apply_encoder_adjustment(void);
-static void record_param_draw_active_view(void);
-static void record_param_draw_edit_page(const char *title, const char *value_text, const char *step_text);
-static float record_param_get_distance_step(void);
-static uint16 record_param_get_interval_step(void);
-static uint8 record_param_get_sat_step(void);
-static void record_param_cycle_step(void);
 static void gps_action_record_param_distance(void);
 static void gps_action_record_param_interval(void);
 static void gps_action_record_param_min_sat(void);
@@ -135,17 +91,6 @@ static void pid_action_edit_kd(void);
 static void pid_action_preview(void);
 static void pid_action_reset(void);
 static void gps_action_raw_debug(void);
-
-static uint8 gps_menu_gnss_ready(void)
-{
-    const path_record_config_t *config = path_recorder_get_config();
-
-    return ((gnss.state == 1) &&
-            (gnss.satellite_used >= config->min_satellites) &&
-            (gnss.speed <= config->max_record_speed_kph) &&
-            (gnss.latitude != 0.0) &&
-            (gnss.longitude != 0.0));
-}
 
 /* 持久化参数已拆到 menu_params.c；这里保留运行时同步逻辑。 */
 static void params_set_default(void)
@@ -193,11 +138,7 @@ static void Init_Load_Params(void)
 
     menu_pid_sync_runtime_param(&g_params, &menu_pid_param_cache, &pid_preview_controller);
     menu_params_apply_record_config(&g_params);
-}
-
-static void gps_clear_status_hint(void)
-{
-    gps_status_hint[0] = '\0';
+    menu_gps_init_state(gps_status_hint, (uint32)sizeof(gps_status_hint));
 }
 
 static void menu_copy_text(char *dest, uint32 dest_size, const char *source)
@@ -653,17 +594,17 @@ static void record_param_draw_active_view(void)
 
 static void gps_action_record_param_distance(void)
 {
-    record_param_enter_view(RECORD_PARAM_VIEW_DISTANCE);
+    menu_gps_action_record_param_distance(&record_param_view_mode, &menu_full_redraw, menu_request_redraw);
 }
 
 static void gps_action_record_param_interval(void)
 {
-    record_param_enter_view(RECORD_PARAM_VIEW_INTERVAL);
+    menu_gps_action_record_param_interval(&record_param_view_mode, &menu_full_redraw, menu_request_redraw);
 }
 
 static void gps_action_record_param_min_sat(void)
 {
-    record_param_enter_view(RECORD_PARAM_VIEW_MIN_SAT);
+    menu_gps_action_record_param_min_sat(&record_param_view_mode, &menu_full_redraw, menu_request_redraw);
 }
 
 static void pid_action_edit_kp(void)
@@ -721,78 +662,57 @@ static void pid_action_reset(void)
 /* 打开 GPS 数据页，显示当前定位与轨迹统计信息 */
 static void gps_action_display_data(void)
 {
-    gps_open_view(GPS_VIEW_DATA);
+    menu_gps_action_display_data(&gps_display_mode,
+                                 &menu_full_redraw,
+                                 menu_drain_encoder_events,
+                                 menu_request_redraw,
+                                 menu_reset_dynamic_region);
 }
 
 /* 根据当前记录状态启动或停止轨迹记录，并更新状态提示 */
 static void gps_action_toggle_record(void)
 {
-    path_state_enum state = path_recorder_get_state();
-
-    if (state == PATH_STATE_RECORDING)
-    {
-        path_recorder_stop();
-        gps_return_to_menu_with_hint("Track stopped");
-    }
-    else
-    {
-        if (gps_menu_gnss_ready())
-        {
-            if (path_recorder_start_new())
-            {
-                gps_return_to_menu_with_hint("Track recording");
-            }
-            else
-            {
-                gps_return_to_menu_with_hint("Start failed");
-            }
-        }
-        else
-        {
-            gps_return_to_menu_with_hint("GPS not ready");
-        }
-    }
+    menu_gps_action_toggle_record(&gps_display_mode,
+                                  gps_status_hint,
+                                  (uint32)sizeof(gps_status_hint),
+                                  menu_set_status_message,
+                                  MENU_STATUS_SHOW_MS,
+                                  menu_request_redraw);
 }
 
 /* 初始化轨迹显示区域并进入 GPS 地图页面 */
 static void gps_action_map(void)
 {
-    path_display_init();
-    gps_open_view(GPS_VIEW_MAP);
+    menu_gps_action_map(&gps_display_mode,
+                        &menu_full_redraw,
+                        menu_drain_encoder_events,
+                        menu_request_redraw,
+                        menu_reset_dynamic_region);
 }
 
 static void gps_action_save_track_flash(void)
 {
-    if (path_recorder_save_to_flash())
-    {
-        gps_return_to_menu_with_message("Track saved");
-    }
-    else
-    {
-        gps_return_to_menu_with_message("No track to save");
-    }
+    menu_gps_action_save_track_flash(&gps_display_mode,
+                                     menu_set_status_message,
+                                     MENU_STATUS_SHOW_MS,
+                                     menu_request_redraw);
 }
 
 static void gps_action_load_track_flash(void)
 {
-    if (path_recorder_get_state() == PATH_STATE_RECORDING)
-    {
-        gps_return_to_menu_with_message("Stop record first");
-    }
-    else if (path_recorder_load_from_flash())
-    {
-        path_display_init();
-        gps_return_to_menu_with_message("Track loaded");
-    }
-    else
-    {
-        gps_return_to_menu_with_message("Load failed");
-    }
+    menu_gps_action_load_track_flash(&gps_display_mode,
+                                     menu_set_status_message,
+                                     MENU_STATUS_SHOW_MS,
+                                     menu_request_redraw);
 }
 
 static void gps_action_raw_debug(void)
 {
-    gps_open_view(GPS_VIEW_RAW_DEBUG);
+    menu_gps_action_raw_debug(&gps_display_mode,
+                              &menu_full_redraw,
+                              menu_drain_encoder_events,
+                              menu_request_redraw,
+                              menu_reset_dynamic_region);
 }
 
 static MenuItem gps_record_param_items[] = {
@@ -1233,58 +1153,24 @@ static void gps_draw_active_view(void)
 
 static uint8 menu_handle_gps_view(void)
 {
-    if (GPS_VIEW_NONE == gps_display_mode)
-    {
-        return 0U;
-    }
-
-    if (my_key_get_state(MY_KEY_1) == MY_KEY_LONG_PRESS)
-    {
-        my_key_clear_state(MY_KEY_1);
-        gps_exit_view();
-        return 1U;
-    }
-
-    if ((GPS_VIEW_MAP == gps_display_mode) &&
-        (my_key_get_state(MY_KEY_1) == MY_KEY_SHORT_PRESS))
-    {
-        my_key_clear_state(MY_KEY_1);
-        gps_clear_current_track();
-        gps_draw_map_page();
-        return 1U;
-    }
-
-    gps_draw_active_view();
-    return 1U;
+    return menu_gps_handle_view(&gps_display_mode,
+                                gps_status_hint,
+                                (uint32)sizeof(gps_status_hint),
+                                &menu_full_redraw,
+                                menu_drain_encoder_events,
+                                menu_request_redraw,
+                                menu_reset_dynamic_region);
 }
 
 static uint8 menu_handle_record_param_view(void)
 {
-    if (RECORD_PARAM_VIEW_NONE == record_param_view_mode)
-    {
-        return 0U;
-    }
-
-    if (my_key_get_state(MY_KEY_1) == MY_KEY_LONG_PRESS)
-    {
-        my_key_clear_state(MY_KEY_1);
-        record_param_exit_view();
-        return 1U;
-    }
-
-    if (If_Switch_Encoder_Change())
-    {
-        record_param_apply_encoder_adjustment();
-    }
-
-    if (my_key_get_state(MY_KEY_1) == MY_KEY_SHORT_PRESS)
-    {
-        my_key_clear_state(MY_KEY_1);
-        record_param_cycle_step();
-    }
-
-    record_param_draw_active_view();
-    return 1U;
+    return menu_gps_handle_record_param_view(&record_param_view_mode,
+                                             &g_params,
+                                             &menu_full_redraw,
+                                             menu_request_redraw,
+                                             menu_set_status_message,
+                                             MENU_STATUS_SHOW_MS,
+                                             menu_sync_gps_record_param_items);
 }
 
 static uint8 menu_handle_pid_view(void)
@@ -1322,13 +1208,13 @@ static void menu_execute_current_item(void)
 
         if (RECORD_PARAM_VIEW_NONE != record_param_view_mode)
         {
-            record_param_draw_active_view();
+            menu_handle_record_param_view();
             return;
         }
 
         if (GPS_VIEW_NONE != gps_display_mode)
         {
-            gps_draw_active_view();
+            menu_handle_gps_view();
             return;
         }
 
