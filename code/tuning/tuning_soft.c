@@ -225,6 +225,12 @@ static uint8 tuning_send_once(void)
     float feedback = 0.0f;
     float error = 0.0f;
     float output = 0.0f;
+    float gyro_x = icm42688_gyro_x;
+    float gyro_y = icm42688_gyro_y;
+    float gyro_z = icm42688_gyro_z;
+    float acc_x = icm42688_acc_x;
+    float acc_y = icm42688_acc_y;
+    float acc_z = icm42688_acc_z;
 
     if (!wifi_menu_get_tcp_status())
     {
@@ -240,7 +246,7 @@ static uint8 tuning_send_once(void)
 
     snprintf(line,
              sizeof(line),
-             "TEL,ms=%lu,fix=%d,sat=%d,spd=%.2f,lat=%.6f,lon=%.6f,enc=%d,step=%d,kp=%.3f,ki=%.3f,kd=%.3f,target=%.2f,feedback=%.2f,error=%.2f,output=%.2f\r\n",
+             "TEL,ms=%lu,fix=%d,sat=%d,spd=%.2f,lat=%.6f,lon=%.6f,enc=%d,step=%d,kp=%.3f,ki=%.3f,kd=%.3f,target=%.2f,feedback=%.2f,error=%.2f,output=%.2f,gx=%.3f,gy=%.3f,gz=%.3f,ax=%.4f,ay=%.4f,az=%.4f\r\n",
              (unsigned long)now_ms,
              gnss.state,
              gnss.satellite_used,
@@ -255,7 +261,13 @@ static uint8 tuning_send_once(void)
              target,
              feedback,
              error,
-             output);
+             output,
+             gyro_x,
+             gyro_y,
+             gyro_z,
+             acc_x,
+             acc_y,
+             acc_z);
 
     remain = wifi_spi_send_buffer((const uint8 *)line, (uint32)strlen(line));
     if (0U == remain)
