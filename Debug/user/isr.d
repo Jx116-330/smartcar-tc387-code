@@ -330,3 +330,43 @@ isr.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\libraries\\zf_components\se
 "E:\\ads\\Seekfree_TC387_Opensource_Library\\libraries\\zf_components\seekfree_assistant.h" :
 isr.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\libraries\\zf_components\seekfree_assistant_interface.h"
 "E:\\ads\\Seekfree_TC387_Opensource_Library\\libraries\\zf_components\seekfree_assistant_interface.h" :
+isr.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\ICM43688\ICM42688.h"
+"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\ICM43688\ICM42688.h" :
+isr.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\myhead.h"
+"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\myhead.h" :
+isr.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\libraries\\zf_common\zf_common_headfile.h"
+"E:\\ads\\Seekfree_TC387_Opensource_Library\\libraries\\zf_common\zf_common_headfile.h" :
+isr.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\ICM43688\ICM42688.h"
+"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\ICM43688\ICM42688.h" :
+isr.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\GPS\display_gps.h"
+"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\GPS\display_gps.h" :
+isr.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\GPS\path_config.h"
+"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\GPS\path_config.h" :
+isr.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\libraries\\zf_common\zf_common_headfile.h"
+"E:\\ads\\Seekfree_TC387_Opensource_Library\\libraries\\zf_common\zf_common_headfile.h" :
+isr.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\Beep\Beep.h"
+"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\Beep\Beep.h" :
+isr.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\myhead.h"
+"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\myhead.h" :
+isr.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\MyEncoder\MyEncoder.h"
+"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\MyEncoder\MyEncoder.h" :
+isr.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\menu\menu.h"
+"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\menu\menu.h" :
+isr.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\menu\pid_runtime.h"
+"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\menu\pid_runtime.h" :
+isr.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\menu\wifi_menu.h"
+"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\menu\wifi_menu.h" :
+isr.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\ips.h"
+"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\ips.h" :
+isr.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\GPS\path_recorder.h"
+"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\GPS\path_recorder.h" :
+isr.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\libraries\\zf_common\zf_common_headfile.h"
+"E:\\ads\\Seekfree_TC387_Opensource_Library\\libraries\\zf_common\zf_common_headfile.h" :
+isr.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\GPS\path_display.h"
+"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\GPS\path_display.h" :
+isr.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\libraries\\zf_common\zf_common_headfile.h"
+"E:\\ads\\Seekfree_TC387_Opensource_Library\\libraries\\zf_common\zf_common_headfile.h" :
+isr.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\tuning\tuning_soft.h"
+"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\tuning\tuning_soft.h" :
+isr.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\tuning\autotune.h"
+"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\tuning\autotune.h" :

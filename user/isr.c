@@ -6,12 +6,15 @@
 
 #include "isr_config.h"
 #include "isr.h"
+#include "ICM42688.h"
 
-
+/* 1ms 定时中断：以固定 1kHz 采样 ICM42688，保证惯导积分 dt 稳定 */
 IFX_INTERRUPT(cc60_pit_ch0_isr, CCU6_0_CH0_INT_VECTAB_NUM, CCU6_0_CH0_ISR_PRIORITY)
 {
     interrupt_global_enable(0);                     // 开启中断嵌套
     pit_clear_flag(CCU60_CH0);
+    Get_Acc_ICM42688();
+    Get_Gyro_ICM42688();
 }
 
 

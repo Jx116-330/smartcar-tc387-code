@@ -7,6 +7,7 @@ int core0_main(void)
     debug_init();
     Beep_Init();
     Init_ICM42688();
+    pit_ms_init(CCU60_CH0, 1);                      // 1ms 定时中断采样 ICM42688（1kHz）
     gnss_init(TAU1201);
     path_recorder_init();
     menu_init();
@@ -23,8 +24,6 @@ int core0_main(void)
             }
         }
 
-        Get_Acc_ICM42688();
-        Get_Gyro_ICM42688();
         tuning_soft_task();
         menu_task();
     }
