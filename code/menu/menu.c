@@ -18,6 +18,7 @@
 #include "MyEncoder.h"
 #include "wifi_menu.h"
 #include "tuning_soft.h"
+#include "menu_icm.h"
 
 MyParams_t g_params;
 
@@ -43,6 +44,7 @@ static uint8 menu_dynamic_clear_enable = 1;
 static gps_view_mode_t gps_display_mode = GPS_VIEW_NONE;
 static pid_view_mode_t pid_display_mode = PID_VIEW_NONE;
 static record_param_view_mode_t record_param_view_mode = RECORD_PARAM_VIEW_NONE;
+static icm_view_mode_t icm_display_mode = ICM_VIEW_NONE;
 static char gps_status_hint[64] = "";
 static MenuPage *current_page = NULL;
 static MenuPage gps_menu;
@@ -91,6 +93,7 @@ static void pid_action_edit_kd(void);
 static void pid_action_preview(void);
 static void pid_action_reset(void);
 static void gps_action_raw_debug(void);
+static void icm_action_raw_data(void);
 
 /* 持久化参数已拆到 menu_params.c；这里保留运行时同步逻辑。 */
 static void params_set_default(void)
@@ -260,6 +263,26 @@ static void gps_action_raw_debug(void)
                               menu_reset_dynamic_region);
 }
 
+static void icm_action_raw_data(void)
+{
+    menu_icm_action_raw_data(&icm_display_mode,
+                             &menu_full_redraw,
+                             menu_drain_encoder_events,
+                             menu_request_redraw,
+                             menu_reset_dynamic_region);
+}
+
+static MenuItem icm_items[] = {
+    {"1. Raw Data", icm_action_raw_data, NULL},
+};
+
+static MenuPage icm_menu = {
+    "ICM42688",
+    icm_items,
+    sizeof(icm_items) / sizeof(MenuItem),
+    NULL
+};
+
 static MenuItem gps_record_param_items[] = {
     {gps_record_distance_label, gps_action_record_param_distance, NULL},
     {gps_record_interval_label, gps_action_record_param_interval, NULL},
@@ -340,6 +363,7 @@ static MenuItem main_items[] = {
     {"3. PID", NULL, &pid_menu},
     {"4. WiFi", NULL, &wifi_page},
     {"5. Tuning", NULL, &tuning_menu},
+    {"6. ICM42688", NULL, &icm_menu},
 };
 
 static MenuPage main_menu = {
@@ -675,6 +699,7 @@ static void menu_return_to_parent(void)
     current_selection = 0;
     gps_display_mode = GPS_VIEW_NONE;
     record_param_view_mode = RECORD_PARAM_VIEW_NONE;
+    icm_display_mode = ICM_VIEW_NONE;
     gps_clear_status_hint();
     menu_reset_dynamic_region();
     menu_request_redraw(1U);
@@ -750,6 +775,16 @@ static void menu_execute_current_item(void)
         if (wifi_menu_is_active())
         {
             wifi_menu_handle_view();
+            return;
+        }
+
+        if (ICM_VIEW_NONE != icm_display_mode)
+        {
+            menu_icm_handle_view(&icm_display_mode,
+                                 &menu_full_redraw,
+                                 menu_drain_encoder_events,
+                                 menu_request_redraw,
+                                 menu_reset_dynamic_region);
             return;
         }
 
@@ -896,6 +931,15 @@ void menu_task(void)
         return;
     }
 
+    if (menu_icm_handle_view(&icm_display_mode,
+                             &menu_full_redraw,
+                             menu_drain_encoder_events,
+                             menu_request_redraw,
+                             menu_reset_dynamic_region))
+    {
+        return;
+    }
+
     menu_update_selection_from_encoder();
 
     if (my_key_get_state(MY_KEY_1) == MY_KEY_LONG_PRESS)
@@ -910,7 +954,7 @@ void menu_task(void)
         my_key_clear_state(MY_KEY_1);
         menu_execute_current_item();
 
-        if ((PID_VIEW_NONE != pid_display_mode) || (GPS_VIEW_NONE != gps_display_mode) || wifi_menu_is_active() || tuning_soft_is_active())
+        if ((PID_VIEW_NONE != pid_display_mode) || (GPS_VIEW_NONE != gps_display_mode) || wifi_menu_is_active() || tuning_soft_is_active() || (ICM_VIEW_NONE != icm_display_mode))
         {
             menu_needs_update = 0U;
             menu_footer_needs_update = 0U;

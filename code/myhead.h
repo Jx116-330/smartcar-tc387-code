@@ -2,6 +2,7 @@
 #define __MYHEAD_H__
 
 #include "zf_common_headfile.h"
+#include "ICM42688.h"
 #include "display_gps.h"
 #include "Beep.h"
 #include "MyEncoder.h"

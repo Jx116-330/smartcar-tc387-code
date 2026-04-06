@@ -50,6 +50,7 @@ RM := rm -rf
 -include code/menu/subdir.mk
 -include code/MyKey/subdir.mk
 -include code/MyEncoder/subdir.mk
+-include code/ICM43688/subdir.mk
 -include code/GPS/subdir.mk
 -include code/Beep/subdir.mk
 ifneq ($(MAKECMDGOALS),clean)

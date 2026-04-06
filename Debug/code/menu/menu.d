@@ -348,14 +348,16 @@ menu.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\myhead.h"
 "E:\\ads\\Seekfree_TC387_Opensource_Library\\code\myhead.h" :
 menu.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\libraries\\zf_common\zf_common_headfile.h"
 "E:\\ads\\Seekfree_TC387_Opensource_Library\\libraries\\zf_common\zf_common_headfile.h" :
+menu.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\ICM43688\ICM42688.h"
+"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\ICM43688\ICM42688.h" :
+menu.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\myhead.h"
+"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\myhead.h" :
 menu.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\GPS\display_gps.h"
 "E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\GPS\display_gps.h" :
 menu.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\libraries\\zf_common\zf_common_headfile.h"
 "E:\\ads\\Seekfree_TC387_Opensource_Library\\libraries\\zf_common\zf_common_headfile.h" :
 menu.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\Beep\Beep.h"
 "E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\Beep\Beep.h" :
-menu.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\myhead.h"
-"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\myhead.h" :
 menu.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\MyEncoder\MyEncoder.h"
 "E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\MyEncoder\MyEncoder.h" :
 menu.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\menu\wifi_menu.h"
@@ -384,5 +386,9 @@ menu.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\GPS\path_recorder.h"
 "E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\GPS\path_recorder.h" :
 menu.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\GPS\path_display.h"
 "E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\GPS\path_display.h" :
+menu.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\MyKey\MyKey.h"
+"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\MyKey\MyKey.h" :
+menu.o :	..\code\menu\menu_icm.h
+..\code\menu\menu_icm.h :
 menu.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\MyKey\MyKey.h"
 "E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\MyKey\MyKey.h" :

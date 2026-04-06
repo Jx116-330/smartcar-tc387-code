@@ -6,6 +6,7 @@ int core0_main(void)
     clock_init();
     debug_init();
     Beep_Init();
+    Init_ICM42688();
     gnss_init(TAU1201);
     path_recorder_init();
     menu_init();
@@ -22,6 +23,8 @@ int core0_main(void)
             }
         }
 
+        Get_Acc_ICM42688();
+        Get_Gyro_ICM42688();
         tuning_soft_task();
         menu_task();
     }

@@ -332,6 +332,10 @@ MyEncoder.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\libraries\\zf_compone
 "E:\\ads\\Seekfree_TC387_Opensource_Library\\libraries\\zf_components\seekfree_assistant.h" :
 MyEncoder.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\libraries\\zf_components\seekfree_assistant_interface.h"
 "E:\\ads\\Seekfree_TC387_Opensource_Library\\libraries\\zf_components\seekfree_assistant_interface.h" :
+MyEncoder.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\ICM43688\ICM42688.h"
+"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\ICM43688\ICM42688.h" :
+MyEncoder.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\myhead.h"
+"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\myhead.h" :
 MyEncoder.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\GPS\display_gps.h"
 "E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\GPS\display_gps.h" :
 MyEncoder.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\GPS\path_config.h"
@@ -340,8 +344,6 @@ MyEncoder.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\libraries\\zf_common\
 "E:\\ads\\Seekfree_TC387_Opensource_Library\\libraries\\zf_common\zf_common_headfile.h" :
 MyEncoder.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\Beep\Beep.h"
 "E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\Beep\Beep.h" :
-MyEncoder.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\myhead.h"
-"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\myhead.h" :
 MyEncoder.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\MyEncoder\MyEncoder.h"
 "E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\MyEncoder\MyEncoder.h" :
 MyEncoder.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\menu\menu.h"
