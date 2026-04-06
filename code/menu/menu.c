@@ -94,6 +94,8 @@ static void pid_action_preview(void);
 static void pid_action_reset(void);
 static void gps_action_raw_debug(void);
 static void icm_action_raw_data(void);
+static void icm_action_attitude(void);
+static void icm_action_gyro_bias_calib(void);
 
 /* 持久化参数已拆到 menu_params.c；这里保留运行时同步逻辑。 */
 static void params_set_default(void)
@@ -272,8 +274,28 @@ static void icm_action_raw_data(void)
                              menu_reset_dynamic_region);
 }
 
+static void icm_action_attitude(void)
+{
+    menu_icm_action_attitude(&icm_display_mode,
+                             &menu_full_redraw,
+                             menu_drain_encoder_events,
+                             menu_request_redraw,
+                             menu_reset_dynamic_region);
+}
+
+static void icm_action_gyro_bias_calib(void)
+{
+    menu_icm_action_gyro_bias_calib(&icm_display_mode,
+                                    &menu_full_redraw,
+                                    menu_drain_encoder_events,
+                                    menu_request_redraw,
+                                    menu_reset_dynamic_region);
+}
+
 static MenuItem icm_items[] = {
     {"1. Raw Data", icm_action_raw_data, NULL},
+    {"2. Attitude", icm_action_attitude, NULL},
+    {"3. Gyro Bias Calib", icm_action_gyro_bias_calib, NULL},
 };
 
 static MenuPage icm_menu = {

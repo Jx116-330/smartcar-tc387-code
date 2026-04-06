@@ -1,4 +1,5 @@
 #include "myhead.h"
+#include "icm_attitude.h"
 #pragma section all "cpu0_dsram"
 
 int core0_main(void)
@@ -7,6 +8,7 @@ int core0_main(void)
     debug_init();
     Beep_Init();
     Init_ICM42688();
+    icm_attitude_init();
     pit_ms_init(CCU60_CH0, 1);                      // 1ms 定时中断采样 ICM42688（1kHz）
     gnss_init(TAU1201);
     path_recorder_init();

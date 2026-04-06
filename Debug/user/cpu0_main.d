@@ -364,3 +364,5 @@ cpu0_main.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\tuning\tuning_s
 "E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\tuning\tuning_soft.h" :
 cpu0_main.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\tuning\autotune.h"
 "E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\tuning\autotune.h" :
+cpu0_main.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\ICM43688\icm_attitude.h"
+"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\ICM43688\icm_attitude.h" :
