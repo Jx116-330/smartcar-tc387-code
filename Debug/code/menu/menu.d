@@ -370,6 +370,8 @@ menu.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\libraries\\zf_common\zf_co
 "E:\\ads\\Seekfree_TC387_Opensource_Library\\libraries\\zf_common\zf_common_headfile.h" :
 menu.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\tuning\tuning_soft.h"
 "E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\tuning\tuning_soft.h" :
+menu.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\tuning\autotune.h"
+"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\tuning\autotune.h" :
 menu.o :	..\code\menu\menu_gps.h
 ..\code\menu\menu_gps.h :
 menu.o :	..\code\menu\menu_params.h

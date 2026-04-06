@@ -362,3 +362,5 @@ Beep.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\libraries\\zf_common\zf_co
 "E:\\ads\\Seekfree_TC387_Opensource_Library\\libraries\\zf_common\zf_common_headfile.h" :
 Beep.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\tuning\tuning_soft.h"
 "E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\tuning\tuning_soft.h" :
+Beep.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\tuning\autotune.h"
+"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\tuning\autotune.h" :

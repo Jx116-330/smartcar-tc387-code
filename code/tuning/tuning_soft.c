@@ -7,6 +7,7 @@
 #include "path_recorder.h"
 #include "MyKey.h"
 #include "MyEncoder.h"
+#include "autotune.h"
 
 #define TUNING_DEFAULT_PERIOD_MS 100U
 #define TUNING_MIN_PERIOD_MS 50U
@@ -164,6 +165,7 @@ void tuning_soft_init(void)
     tuning_view_mode = TUNING_VIEW_NONE;
     tuning_full_redraw = 1U;
     tuning_last_view_ms = 0U;
+    autotune_init();
     tuning_update_labels();
 }
 
@@ -217,17 +219,29 @@ static uint8 tuning_send_once(void)
 {
     char line[TUNING_SEND_BUFFER_LEN];
     uint32 remain;
+    uint32 now_ms = system_getval_ms();
     const pid_param_t *pid_param = menu_get_pid_param();
+    float target = 100.0f;
+    float feedback = 0.0f;
+    float error = 0.0f;
+    float output = 0.0f;
 
     if (!wifi_menu_get_tcp_status())
     {
         return 0U;
     }
 
+    /* 当前尚未接整车真实控制链，这里先提供占位测试值给桌面端联调使用。 */
+    feedback = (float)switch_encoder_num * 0.5f + gnss.speed;
+    error = target - feedback;
+    output = (NULL != pid_param)
+             ? (pid_param->kp * error + pid_param->ki * (error * 0.1f) + pid_param->kd * (error * 0.05f))
+             : 0.0f;
+
     snprintf(line,
              sizeof(line),
-             "TEL,ms=%lu,fix=%d,sat=%d,spd=%.2f,lat=%.6f,lon=%.6f,enc=%d,step=%d,kp=%.3f,ki=%.3f,kd=%.3f\r\n",
-             (unsigned long)system_getval_ms(),
+             "TEL,ms=%lu,fix=%d,sat=%d,spd=%.2f,lat=%.6f,lon=%.6f,enc=%d,step=%d,kp=%.3f,ki=%.3f,kd=%.3f,target=%.2f,feedback=%.2f,error=%.2f,output=%.2f\r\n",
+             (unsigned long)now_ms,
              gnss.state,
              gnss.satellite_used,
              gnss.speed,
@@ -237,7 +251,11 @@ static uint8 tuning_send_once(void)
              switch_encoder_change_num,
              (NULL != pid_param) ? pid_param->kp : 0.0f,
              (NULL != pid_param) ? pid_param->ki : 0.0f,
-             (NULL != pid_param) ? pid_param->kd : 0.0f);
+             (NULL != pid_param) ? pid_param->kd : 0.0f,
+             target,
+             feedback,
+             error,
+             output);
 
     remain = wifi_spi_send_buffer((const uint8 *)line, (uint32)strlen(line));
     if (0U == remain)
@@ -303,11 +321,33 @@ static void tuning_reply_ack_pid(const char *cmd)
 
     snprintf(response,
              sizeof(response),
-             "ACK,cmd=%s,kp=%.3f,ki=%.3f,kd=%.3f\r\n",
+             "ACK,cmd=%s,ms=%lu,kp=%.3f,ki=%.3f,kd=%.3f\r\n",
              (NULL != cmd) ? cmd : "UNKNOWN",
+             (unsigned long)system_getval_ms(),
              (NULL != pid_param) ? pid_param->kp : 0.0f,
              (NULL != pid_param) ? pid_param->ki : 0.0f,
              (NULL != pid_param) ? pid_param->kd : 0.0f);
+    tuning_send_response(response);
+}
+
+static void tuning_reply_autotune_status(const char *cmd)
+{
+    char response[TUNING_RESP_BUFFER_LEN];
+    const autotune_status_t *status = autotune_get_status();
+
+    snprintf(response,
+             sizeof(response),
+             "ACK,cmd=%s,state=%u,idx=%u,total=%u,best=%u,last=%.3f,bestScore=%.3f,kp=%.3f,ki=%.3f,kd=%.3f\r\n",
+             (NULL != cmd) ? cmd : "AUTO_STATUS",
+             (unsigned int)((NULL != status) ? status->state : 0U),
+             (unsigned int)((NULL != status) ? status->candidate_index : 0U),
+             (unsigned int)((NULL != status) ? status->candidate_total : 0U),
+             (unsigned int)((NULL != status) ? status->best_valid : 0U),
+             (NULL != status) ? status->last_score : 0.0f,
+             (NULL != status) ? status->best_score : 0.0f,
+             (NULL != status) ? status->current.kp : 0.0f,
+             (NULL != status) ? status->current.ki : 0.0f,
+             (NULL != status) ? status->current.kd : 0.0f);
     tuning_send_response(response);
 }
 
@@ -332,9 +372,9 @@ static void tuning_process_rx_line(char *line)
         return;
     }
 
-    if (0 == strcmp(line, "GET PID"))
+    if ((0 == strcmp(line, "GET PID")) || (0 == strcmp(line, "GET PID RUNTIME")))
     {
-        tuning_reply_ack_pid("GET_PID");
+        tuning_reply_ack_pid("GET_PID_RUNTIME");
         return;
     }
 
@@ -422,6 +462,66 @@ static void tuning_process_rx_line(char *line)
         else
         {
             tuning_reply_error("SAVE_PID", "FLASH_SAVE_FAILED");
+        }
+        return;
+    }
+
+    if (0 == strcmp(line, "AUTO STATUS"))
+    {
+        tuning_reply_autotune_status("AUTO_STATUS");
+        return;
+    }
+
+    if (0 == strcmp(line, "AUTO STOP"))
+    {
+        autotune_stop();
+        tuning_reply_autotune_status("AUTO_STOP");
+        return;
+    }
+
+    if (0 == strcmp(line, "AUTO APPLY BEST"))
+    {
+        if (autotune_apply_best(1U))
+        {
+            tuning_reply_autotune_status("AUTO_APPLY_BEST");
+        }
+        else
+        {
+            tuning_reply_error("AUTO_APPLY_BEST", "BEST_UNAVAILABLE");
+        }
+        return;
+    }
+
+    if (0 == strcmp(line, "AUTO START"))
+    {
+        const pid_param_t *current = menu_get_pid_param();
+        if ((NULL != current) && autotune_start(current))
+        {
+            tuning_reply_autotune_status("AUTO_START");
+        }
+        else
+        {
+            tuning_reply_error("AUTO_START", "START_FAILED");
+        }
+        return;
+    }
+
+    if (3 == sscanf(line, "AUTO STEP %f %f %f", &param.kp, &param.ki, &param.kd))
+    {
+        autotune_set_steps(param.kp, param.ki, param.kd);
+        tuning_reply_autotune_status("AUTO_STEP");
+        return;
+    }
+
+    if (1 == sscanf(line, "AUTO SCORE %f", &value))
+    {
+        if (autotune_submit_score(value))
+        {
+            tuning_reply_autotune_status("AUTO_SCORE");
+        }
+        else
+        {
+            tuning_reply_error("AUTO_SCORE", "STATE_INVALID");
         }
         return;
     }

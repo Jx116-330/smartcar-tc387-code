@@ -11,6 +11,7 @@
 #include "path_recorder.h"
 #include "path_display.h"
 #include "tuning_soft.h"
+#include "autotune.h"
 
 typedef enum
 {
