@@ -12,6 +12,7 @@
 #include "path_display.h"
 #include "tuning_soft.h"
 #include "autotune.h"
+#include "icm42688.h"
 
 typedef enum
 {

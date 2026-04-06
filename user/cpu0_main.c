@@ -8,11 +8,14 @@ int core0_main(void)
     Beep_Init();
     gnss_init(TAU1201);
     path_recorder_init();
+    icm42688_init(&ICM42688_CONFIG);
     menu_init();
     cpu_wait_event_ready();
 
     while (TRUE)
     {
+        ICM42688_Get_Data();
+
         if (gnss_flag)
         {
             gnss_flag = 0;
