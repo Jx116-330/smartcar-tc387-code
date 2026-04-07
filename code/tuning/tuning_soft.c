@@ -15,7 +15,7 @@
 #define TUNING_MIN_PERIOD_MS 50U
 #define TUNING_MAX_PERIOD_MS 1000U
 #define TUNING_STEP_MS 50U
-#define TUNING_SEND_BUFFER_LEN 192U
+#define TUNING_SEND_BUFFER_LEN 256U
 #define TUNING_RECV_BUFFER_LEN 192U
 #define TUNING_RESP_BUFFER_LEN 128U
 #define TUNING_TITLE_H 30U
@@ -58,6 +58,7 @@ static void tuning_action_status(void);
 static void tuning_action_period_plus(void);
 static void tuning_action_period_minus(void);
 static uint8 tuning_send_once(void);
+static uint8 tuning_send_line(const char *line);
 static void tuning_send_response(const char *response);
 static void tuning_reply_error(const char *cmd, const char *reason);
 static void tuning_reply_ack_pid(const char *cmd);
@@ -217,10 +218,29 @@ static void tuning_action_period_minus(void)
     menu_request_full_redraw();
 }
 
+static uint8 tuning_send_line(const char *line)
+{
+    uint32 remain;
+
+    if (NULL == line)
+    {
+        return 0U;
+    }
+
+    remain = wifi_spi_send_buffer((const uint8 *)line, (uint32)strlen(line));
+    if (0U == remain)
+    {
+        tuning_total_sent++;
+        return 1U;
+    }
+
+    tuning_total_fail++;
+    return 0U;
+}
+
 static uint8 tuning_send_once(void)
 {
     char line[TUNING_SEND_BUFFER_LEN];
-    uint32 remain;
     uint32 now_ms = system_getval_ms();
     float gyro_x = icm42688_gyro_x;
     float gyro_y = icm42688_gyro_y;
@@ -249,6 +269,7 @@ static uint8 tuning_send_once(void)
     uint32 attitude_update_count = 0U;
     uint32 bias_sample_count = 0U;
     uint32 bias_target_count = 0U;
+    uint8 ok = 1U;
 
     if (!wifi_menu_get_tcp_status())
     {
@@ -279,13 +300,11 @@ static uint8 tuning_send_once(void)
 
     snprintf(line,
              sizeof(line),
-             "TEL,ms=%lu,fix=%d,sat=%d,spd=%.2f,lat=%.6f,lon=%.6f,enc=%d,gx=%.3f,gy=%.3f,gz=%.3f,gcx=%.3f,gcy=%.3f,gcz=%.3f,gxyz=%.3f,gbx=%.3f,gby=%.3f,gbz=%.3f,bias_ok=%u,bias_cal=%u,bias_n=%lu,bias_t=%lu,bias_flash=%u,roll=%.2f,pitch=%.2f,yaw=%.2f,q0=%.5f,q1=%.5f,q2=%.5f,q3=%.5f,ax=%.4f,ay=%.4f,az=%.4f,anorm=%.4f,nx=%.4f,ny=%.4f,nz=%.4f,att_upd=%lu\r\n",
+             "TELG,ms=%lu,fix=%d,sat=%d,spd=%.2f,enc=%d,gx=%.3f,gy=%.3f,gz=%.3f,gcx=%.3f,gcy=%.3f,gcz=%.3f,gxyz=%.3f,gbx=%.3f,gby=%.3f,gbz=%.3f,bias_ok=%u,bias_cal=%u,bias_n=%lu,bias_t=%lu,bias_flash=%u\r\n",
              (unsigned long)now_ms,
              gnss.state,
              gnss.satellite_used,
              gnss.speed,
-             gnss.latitude,
-             gnss.longitude,
              switch_encoder_num,
              gyro_x,
              gyro_y,
@@ -301,7 +320,16 @@ static uint8 tuning_send_once(void)
              (unsigned int)icm_attitude_is_gyro_bias_calibrating(),
              (unsigned long)bias_sample_count,
              (unsigned long)bias_target_count,
-             (unsigned int)icm_attitude_is_gyro_bias_from_flash(),
+             (unsigned int)icm_attitude_is_gyro_bias_from_flash());
+    if (!tuning_send_line(line))
+    {
+        ok = 0U;
+    }
+
+    snprintf(line,
+             sizeof(line),
+             "TELA,ms=%lu,roll=%.2f,pitch=%.2f,yaw=%.2f,q0=%.5f,q1=%.5f,q2=%.5f,q3=%.5f,ax=%.4f,ay=%.4f,az=%.4f,anorm=%.4f,nx=%.4f,ny=%.4f,nz=%.4f,att_upd=%lu,lat=%.6f,lon=%.6f\r\n",
+             (unsigned long)now_ms,
              roll_deg,
              pitch_deg,
              yaw_deg,
@@ -316,17 +344,15 @@ static uint8 tuning_send_once(void)
              nx,
              ny,
              nz,
-             (unsigned long)attitude_update_count);
-
-    remain = wifi_spi_send_buffer((const uint8 *)line, (uint32)strlen(line));
-    if (0U == remain)
+             (unsigned long)attitude_update_count,
+             gnss.latitude,
+             gnss.longitude);
+    if (!tuning_send_line(line))
     {
-        tuning_total_sent++;
-        return 1U;
+        ok = 0U;
     }
 
-    tuning_total_fail++;
-    return 0U;
+    return ok;
 }
 
 void tuning_soft_task(void)
