@@ -8,6 +8,8 @@
 #include "MyKey.h"
 #include "MyEncoder.h"
 #include "autotune.h"
+#include "icm_attitude.h"
+#include <math.h>
 
 #define TUNING_DEFAULT_PERIOD_MS 100U
 #define TUNING_MIN_PERIOD_MS 50U
@@ -231,6 +233,16 @@ static uint8 tuning_send_once(void)
     float acc_x = icm42688_acc_x;
     float acc_y = icm42688_acc_y;
     float acc_z = icm42688_acc_z;
+    float gyro_bias_x = 0.0f;
+    float gyro_bias_y = 0.0f;
+    float gyro_bias_z = 0.0f;
+    float roll_deg = 0.0f;
+    float pitch_deg = 0.0f;
+    float yaw_deg = 0.0f;
+    float acc_norm_g = 0.0f;
+    float gyro_norm = 0.0f;
+    uint32 bias_sample_count = 0U;
+    uint32 bias_target_count = 0U;
 
     if (!wifi_menu_get_tcp_status())
     {
@@ -244,9 +256,15 @@ static uint8 tuning_send_once(void)
              ? (pid_param->kp * error + pid_param->ki * (error * 0.1f) + pid_param->kd * (error * 0.05f))
              : 0.0f;
 
+    icm_attitude_get_gyro_bias(&gyro_bias_x, &gyro_bias_y, &gyro_bias_z);
+    icm_attitude_get_gyro_bias_calibration_progress(&bias_sample_count, &bias_target_count);
+    icm_attitude_get_euler(&roll_deg, &pitch_deg, &yaw_deg);
+    acc_norm_g = icm_attitude_get_acc_norm_g();
+    gyro_norm = sqrtf(gyro_x * gyro_x + gyro_y * gyro_y + gyro_z * gyro_z);
+
     snprintf(line,
              sizeof(line),
-             "TEL,ms=%lu,fix=%d,sat=%d,spd=%.2f,lat=%.6f,lon=%.6f,enc=%d,step=%d,kp=%.3f,ki=%.3f,kd=%.3f,target=%.2f,feedback=%.2f,error=%.2f,output=%.2f,gx=%.3f,gy=%.3f,gz=%.3f,ax=%.4f,ay=%.4f,az=%.4f\r\n",
+             "TEL,ms=%lu,fix=%d,sat=%d,spd=%.2f,lat=%.6f,lon=%.6f,enc=%d,step=%d,kp=%.3f,ki=%.3f,kd=%.3f,target=%.2f,feedback=%.2f,error=%.2f,output=%.2f,gx=%.3f,gy=%.3f,gz=%.3f,gxyz=%.3f,gbx=%.3f,gby=%.3f,gbz=%.3f,bias_ok=%u,bias_cal=%u,bias_n=%lu,bias_t=%lu,roll=%.2f,pitch=%.2f,yaw=%.2f,ax=%.4f,ay=%.4f,az=%.4f,anorm=%.4f\r\n",
              (unsigned long)now_ms,
              gnss.state,
              gnss.satellite_used,
@@ -265,9 +283,21 @@ static uint8 tuning_send_once(void)
              gyro_x,
              gyro_y,
              gyro_z,
+             gyro_norm,
+             gyro_bias_x,
+             gyro_bias_y,
+             gyro_bias_z,
+             (unsigned int)icm_attitude_is_gyro_bias_valid(),
+             (unsigned int)icm_attitude_is_gyro_bias_calibrating(),
+             (unsigned long)bias_sample_count,
+             (unsigned long)bias_target_count,
+             roll_deg,
+             pitch_deg,
+             yaw_deg,
              acc_x,
              acc_y,
-             acc_z);
+             acc_z,
+             acc_norm_g);
 
     remain = wifi_spi_send_buffer((const uint8 *)line, (uint32)strlen(line));
     if (0U == remain)
