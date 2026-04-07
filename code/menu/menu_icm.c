@@ -12,6 +12,7 @@
 #include "zf_device_ips200.h"
 #include "ICM42688.h"
 #include "icm_attitude.h"
+#include "icm_ins.h"
 
 #define ICM_GYRO_BIAS_CALIB_SAMPLES 2000U
 #define ICM_VIEW_EXIT_HOLD_MS       250U
@@ -316,22 +317,21 @@ static void icm_draw_gyro_bias_calib_page(uint8 *menu_full_redraw)
     icm_show_pad(10, 200, col_w, line);
 }
 
-/* ---- INS Debug: body_acc -> rotate -> remove gravity ------------------ */
+/* ---- INS Dead Reckoning: ZUPT + velocity + position ------------------- */
 
 static void icm_draw_ins_debug_page(uint8 *menu_full_redraw)
 {
     static uint32 last_refresh_ms = 0U;
     char line[48];
-    float q0 = 1.0f;
-    float q1 = 0.0f;
-    float q2 = 0.0f;
-    float q3 = 0.0f;
-    float roll_deg = 0.0f;
-    float pitch_deg = 0.0f;
+    float ax = 0.0f;
+    float ay = 0.0f;
+    float vx = 0.0f;
+    float vy = 0.0f;
+    float px = 0.0f;
+    float py = 0.0f;
     float yaw_deg = 0.0f;
-    float nx = 0.0f;
-    float ny = 0.0f;
-    float nz = 0.0f;
+    float pitch_deg = 0.0f;
+    float roll_deg = 0.0f;
     uint32 now_ms = system_getval_ms();
     uint16 col_w  = (uint16)(ips200_width_max - 20U);
 
@@ -347,83 +347,82 @@ static void icm_draw_ins_debug_page(uint8 *menu_full_redraw)
         ips200_full(RGB565_BLACK);
 
         ips200_set_color(RGB565_YELLOW, RGB565_BLACK);
-        ips200_show_string(10, 10, "INS Debug");
+        ips200_show_string(10, 10, "INS Dead Reckoning");
         ips200_draw_line(0, 30, ips200_width_max - 1, 30, RGB565_GRAY);
 
         ips200_set_color(RGB565_CYAN, RGB565_BLACK);
-        ips200_show_string(10, 38, "Body Acc (g)");
+        ips200_show_string(10, 38, "Linear Acc (m/s^2)");
         ips200_draw_line(10, 52, (uint16)(ips200_width_max - 10U), 52, RGB565_GRAY);
 
         ips200_set_color(RGB565_CYAN, RGB565_BLACK);
-        ips200_show_string(10, 108, "Nav Acc (-grav, g)");
-        ips200_draw_line(10, 122, (uint16)(ips200_width_max - 10U), 122, RGB565_GRAY);
+        ips200_show_string(10, 96, "Velocity (m/s)");
+        ips200_draw_line(10, 110, (uint16)(ips200_width_max - 10U), 110, RGB565_GRAY);
 
         ips200_set_color(RGB565_CYAN, RGB565_BLACK);
-        ips200_show_string(10, 170, "Attitude / Bias");
-        ips200_draw_line(10, 184, (uint16)(ips200_width_max - 10U), 184, RGB565_GRAY);
+        ips200_show_string(10, 152, "Position (m)");
+        ips200_draw_line(10, 166, (uint16)(ips200_width_max - 10U), 166, RGB565_GRAY);
 
         ips200_set_color(RGB565_GRAY, RGB565_BLACK);
         icm_show_pad(5, (uint16)(ips200_height_max - 20U),
-                     (uint16)(ips200_width_max - 10U), "LONG: Exit");
+                     (uint16)(ips200_width_max - 10U), "K1:Reset Pos  LONG:Exit");
 
         *menu_full_redraw = 0U;
     }
 
-    icm_attitude_get_quaternion(&q0, &q1, &q2, &q3);
-    icm_attitude_get_euler(&roll_deg, &pitch_deg, &yaw_deg);
+    /* K1 short press: reset position and velocity */
+    if (my_key_get_state(MY_KEY_1) == MY_KEY_SHORT_PRESS)
+    {
+        icm_ins_reset_velocity();
+        icm_ins_reset_position();
+        icm_consume_key1_press();
+    }
 
-    /* R_body2nav * body_acc - [0,0,1]g  (Z-up/ENU) */
-    nx = (q0*q0+q1*q1-q2*q2-q3*q3)*icm42688_acc_x
-        + 2.0f*(q1*q2-q0*q3)*icm42688_acc_y
-        + 2.0f*(q1*q3+q0*q2)*icm42688_acc_z;
-    ny = 2.0f*(q1*q2+q0*q3)*icm42688_acc_x
-        + (q0*q0-q1*q1+q2*q2-q3*q3)*icm42688_acc_y
-        + 2.0f*(q2*q3-q0*q1)*icm42688_acc_z;
-    nz = 2.0f*(q1*q3-q0*q2)*icm42688_acc_x
-        + 2.0f*(q2*q3+q0*q1)*icm42688_acc_y
-        + (q0*q0-q1*q1-q2*q2+q3*q3)*icm42688_acc_z - 1.0f;
+    icm_ins_get_linear_acc(&ax, &ay, NULL);
+    icm_ins_get_velocity(&vx, &vy, NULL);
+    icm_ins_get_position(&px, &py);
+    icm_attitude_get_euler(&roll_deg, &pitch_deg, &yaw_deg);
 
     ips200_set_color(RGB565_WHITE, RGB565_BLACK);
 
-    /* Body Acc XY */
-    snprintf(line, sizeof(line), "Bx:%+7.3f By:%+7.3f",
-             (double)icm42688_acc_x, (double)icm42688_acc_y);
+    /* Lin Acc XY */
+    snprintf(line, sizeof(line), "Ax:%+7.3f Ay:%+7.3f", (double)ax, (double)ay);
     icm_fill_rect(10U, 56U, (uint16)(ips200_width_max - 10U), 70U, RGB565_BLACK);
     icm_show_pad(10, 56, col_w, line);
 
-    /* Body Acc Z + norm */
-    snprintf(line, sizeof(line), "Bz:%+7.3f |a|:%5.3fg",
-             (double)icm42688_acc_z, (double)icm_attitude_get_acc_norm_g());
-    icm_fill_rect(10U, 78U, (uint16)(ips200_width_max - 10U), 92U, RGB565_BLACK);
-    icm_show_pad(10, 78, col_w, line);
-
-    /* Quaternion */
-    snprintf(line, sizeof(line), "q:%+5.3f%+5.3f%+5.3f%+5.3f",
-             (double)q0, (double)q1, (double)q2, (double)q3);
-    icm_fill_rect(10U, 96U, (uint16)(ips200_width_max - 10U), 110U, RGB565_BLACK);
-    icm_show_pad(10, 96, col_w, line);
-
-    /* Nav Acc XY */
-    snprintf(line, sizeof(line), "Nx:%+7.3f Ny:%+7.3f", (double)nx, (double)ny);
-    icm_fill_rect(10U, 126U, (uint16)(ips200_width_max - 10U), 140U, RGB565_BLACK);
-    icm_show_pad(10, 126, col_w, line);
-
-    /* Nav Acc Z */
-    snprintf(line, sizeof(line), "Nz:%+7.3f", (double)nz);
-    icm_fill_rect(10U, 148U, (uint16)(ips200_width_max - 10U), 162U, RGB565_BLACK);
-    icm_show_pad(10, 148, col_w, line);
-
-    /* Roll / Pitch */
-    snprintf(line, sizeof(line), "R:%+7.2f P:%+7.2f", (double)roll_deg, (double)pitch_deg);
-    icm_fill_rect(10U, 188U, (uint16)(ips200_width_max - 10U), 202U, RGB565_BLACK);
-    icm_show_pad(10, 188, col_w, line);
-
-    /* Yaw / Bias */
-    snprintf(line, sizeof(line), "Y:%+7.2f Bias:[%s]",
-             (double)yaw_deg,
+    /* ZUPT + Bias status */
+    snprintf(line, sizeof(line), "ZUPT:[%s] Bias:[%s]",
+             icm_ins_is_stationary() ? "ON" : "--",
              icm_attitude_is_gyro_bias_valid() ? "ON" : "--");
-    icm_fill_rect(10U, 208U, (uint16)(ips200_width_max - 10U), 222U, RGB565_BLACK);
-    icm_show_pad(10, 208, col_w, line);
+    icm_fill_rect(10U, 74U, (uint16)(ips200_width_max - 10U), 88U, RGB565_BLACK);
+    if (icm_ins_is_stationary())
+    {
+        ips200_set_color(RGB565_GREEN, RGB565_BLACK);
+    }
+    icm_show_pad(10, 74, col_w, line);
+    ips200_set_color(RGB565_WHITE, RGB565_BLACK);
+
+    /* Vel XY + speed */
+    snprintf(line, sizeof(line), "Vx:%+7.3f Vy:%+7.3f", (double)vx, (double)vy);
+    icm_fill_rect(10U, 114U, (uint16)(ips200_width_max - 10U), 128U, RGB565_BLACK);
+    icm_show_pad(10, 114, col_w, line);
+
+    snprintf(line, sizeof(line), "Spd:%7.3f m/s", (double)icm_ins_get_speed_ms());
+    icm_fill_rect(10U, 132U, (uint16)(ips200_width_max - 10U), 146U, RGB565_BLACK);
+    icm_show_pad(10, 132, col_w, line);
+
+    /* Position XY */
+    snprintf(line, sizeof(line), "Px:%+8.2f Py:%+8.2f", (double)px, (double)py);
+    icm_fill_rect(10U, 170U, (uint16)(ips200_width_max - 10U), 184U, RGB565_BLACK);
+    icm_show_pad(10, 170, col_w, line);
+
+    /* Yaw + Roll/Pitch */
+    snprintf(line, sizeof(line), "Yaw:%+7.1f", (double)yaw_deg);
+    icm_fill_rect(10U, 192U, (uint16)(ips200_width_max - 10U), 206U, RGB565_BLACK);
+    icm_show_pad(10, 192, col_w, line);
+
+    snprintf(line, sizeof(line), "R:%+6.1f P:%+6.1f", (double)roll_deg, (double)pitch_deg);
+    icm_fill_rect(10U, 210U, (uint16)(ips200_width_max - 10U), 224U, RGB565_BLACK);
+    icm_show_pad(10, 210, col_w, line);
 }
 
 /* ---- 公共接口 ---------------------------------------------------------- */

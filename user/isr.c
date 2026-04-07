@@ -8,6 +8,7 @@
 #include "isr.h"
 #include "ICM42688.h"
 #include "icm_attitude.h"
+#include "icm_ins.h"
 
 /* 1ms 定时中断：以固定 1kHz 采样 ICM42688，保证惯导积分 dt 稳定 */
 IFX_INTERRUPT(cc60_pit_ch0_isr, CCU6_0_CH0_INT_VECTAB_NUM, CCU6_0_CH0_ISR_PRIORITY)
@@ -23,6 +24,13 @@ IFX_INTERRUPT(cc60_pit_ch0_isr, CCU6_0_CH0_INT_VECTAB_NUM, CCU6_0_CH0_ISR_PRIORI
                         icm42688_acc_y,
                         icm42688_acc_z,
                         0.001f);
+    icm_ins_update(icm42688_acc_x,
+                   icm42688_acc_y,
+                   icm42688_acc_z,
+                   icm42688_gyro_x,
+                   icm42688_gyro_y,
+                   icm42688_gyro_z,
+                   0.001f);
 }
 
 
