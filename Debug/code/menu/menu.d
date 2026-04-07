@@ -392,3 +392,7 @@ menu.o :	..\code\menu\menu_icm.h
 ..\code\menu\menu_icm.h :
 menu.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\MyKey\MyKey.h"
 "E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\MyKey\MyKey.h" :
+menu.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\ICM43688\ins_record.h"
+"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\ICM43688\ins_record.h" :
+menu.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\ICM43688\ins_playback.h"
+"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\ICM43688\ins_playback.h" :

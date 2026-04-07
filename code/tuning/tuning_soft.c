@@ -9,6 +9,10 @@
 #include "MyEncoder.h"
 #include "autotune.h"
 #include "icm_attitude.h"
+#include "icm_ins.h"
+#include "ins_record.h"
+#include "ins_playback.h"
+#include "ins_ctrl.h"
 #include <math.h>
 
 #define TUNING_DEFAULT_PERIOD_MS 100U
@@ -350,6 +354,56 @@ static uint8 tuning_send_once(void)
     if (!tuning_send_line(line))
     {
         ok = 0U;
+    }
+
+    {
+        float ins_px = 0.0f;
+        float ins_py = 0.0f;
+        float ins_vx = 0.0f;
+        float ins_vy = 0.0f;
+
+        icm_ins_get_position(&ins_px, &ins_py);
+        icm_ins_get_velocity(&ins_vx, &ins_vy, NULL);
+
+        snprintf(line,
+                 sizeof(line),
+                 "TELINS,ms=%lu,ins_rec=%u,ins_pts=%u,px=%.3f,py=%.3f,vx=%.3f,vy=%.3f,yaw=%.2f,stat=%u\r\n",
+                 (unsigned long)now_ms,
+                 (unsigned int)ins_record_is_recording(),
+                 (unsigned int)ins_record_get_point_count(),
+                 ins_px,
+                 ins_py,
+                 ins_vx,
+                 ins_vy,
+                 yaw_deg,
+                 (unsigned int)icm_ins_is_stationary());
+        if (!tuning_send_line(line))
+        {
+            ok = 0U;
+        }
+    }
+
+    {
+        const ins_ctrl_output_t *ctrl = ins_ctrl_get_output();
+
+        snprintf(line,
+                 sizeof(line),
+                 "TELPLAY,ms=%lu,play=%u,tgt_idx=%u,tgt_px=%.3f,tgt_py=%.3f"
+                 ",tgt_dist=%.3f,tgt_yaw=%.2f,yaw_err=%.2f,spd=%.3f,drv=%u\r\n",
+                 (unsigned long)now_ms,
+                 (unsigned int)ins_playback_is_running(),
+                 (unsigned int)ins_playback_get_target_idx(),
+                 ctrl->tgt_px_m,
+                 ctrl->tgt_py_m,
+                 ctrl->tgt_dist_m,
+                 ctrl->tgt_yaw_deg,
+                 ctrl->yaw_err_deg,
+                 ctrl->speed_cmd,
+                 (unsigned int)ctrl->drive_enable);
+        if (!tuning_send_line(line))
+        {
+            ok = 0U;
+        }
     }
 
     return ok;

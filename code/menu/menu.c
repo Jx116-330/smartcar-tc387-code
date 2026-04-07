@@ -19,6 +19,8 @@
 #include "wifi_menu.h"
 #include "tuning_soft.h"
 #include "menu_icm.h"
+#include "ins_record.h"
+#include "ins_playback.h"
 
 MyParams_t g_params;
 
@@ -48,6 +50,8 @@ static icm_view_mode_t icm_display_mode = ICM_VIEW_NONE;
 static char gps_status_hint[64] = "";
 static MenuPage *current_page = NULL;
 static MenuPage gps_menu;
+static MenuPage icm_menu;
+static MenuPage ins_replay_menu;
 static pid_param_t menu_pid_param_cache;
 static pid_controller_t pid_preview_controller;
 static char menu_status_message[32] = "";
@@ -96,6 +100,15 @@ static void gps_action_raw_debug(void);
 static void icm_action_raw_data(void);
 static void icm_action_attitude(void);
 static void icm_action_gyro_bias_calib(void);
+static void icm_action_ins_debug(void);
+static void icm_action_ins_track_map(void);
+static void icm_action_ins_rec_toggle(void);
+static void menu_sync_ins_rec_item(void);
+static void ins_replay_action_load(void);
+static void ins_replay_action_start(void);
+static void ins_replay_action_stop(void);
+static void ins_replay_action_clear(void);
+static void menu_sync_ins_replay_labels(void);
 
 /* 持久化参数已拆到 menu_params.c；这里保留运行时同步逻辑。 */
 static void params_set_default(void)
@@ -301,11 +314,209 @@ static void icm_action_ins_debug(void)
                               menu_reset_dynamic_region);
 }
 
+static void icm_action_ins_track_map(void)
+{
+    menu_icm_action_ins_track_map(&icm_display_mode,
+                                  &menu_full_redraw,
+                                  menu_drain_encoder_events,
+                                  menu_request_redraw,
+                                  menu_reset_dynamic_region);
+}
+
+static char icm_ins_rec_label[48] = "5. INS REC [IDLE]";
+
+static void icm_action_ins_rec_toggle(void)
+{
+    if (ins_record_is_recording())
+    {
+        ins_record_stop();
+        menu_set_status_message("INS Rec Stopped", MENU_STATUS_SHOW_MS);
+    }
+    else
+    {
+        ins_record_start();
+        menu_set_status_message("INS Rec Started", MENU_STATUS_SHOW_MS);
+    }
+    menu_request_full_redraw();
+}
+
+static void menu_sync_ins_rec_item(void)
+{
+    char new_label[48];
+
+    if (ins_record_is_recording())
+    {
+        sprintf(new_label, "5. INS REC [REC:%u]", (unsigned int)ins_record_get_point_count());
+    }
+    else
+    {
+        sprintf(new_label, "5. INS REC [%u pts]", (unsigned int)ins_record_get_point_count());
+    }
+
+    if (0 != strcmp(icm_ins_rec_label, new_label))
+    {
+        strcpy(icm_ins_rec_label, new_label);
+        /* 仅当当前页面是 icm_menu 且无子视图时，直接局部刷新该行 */
+        if ((current_page == &icm_menu) &&
+            (ICM_VIEW_NONE == icm_display_mode) &&
+            !menu_full_redraw)
+        {
+            menu_draw_item(4, (uint8)(current_selection == 4));
+        }
+    }
+}
+
+/* ---- INS Replay 子菜单 ---- */
+
+/* 动态标签：随状态每帧刷新 */
+static char ins_replay_load_label[48]  = "1. Load Track [0 pts]";
+static char ins_replay_rec_status[48]  = "5. REC:OFF 0pts";
+static char ins_replay_play_status[64] = "6. PLAY:IDLE";
+
+static void ins_replay_action_load(void)
+{
+    if (ins_playback_load())
+    {
+        menu_set_status_message("Load OK", MENU_STATUS_SHOW_MS);
+    }
+    else
+    {
+        menu_set_status_message("Load FAIL: no pts", MENU_STATUS_SHOW_MS);
+    }
+    menu_request_full_redraw();
+}
+
+static void ins_replay_action_start(void)
+{
+    if (INS_PLAY_READY != ins_playback_get_state())
+    {
+        menu_set_status_message("Load first!", MENU_STATUS_SHOW_MS);
+        return;
+    }
+    ins_playback_start();
+    menu_set_status_message("Replay Started", MENU_STATUS_SHOW_MS);
+    menu_request_full_redraw();
+}
+
+static void ins_replay_action_stop(void)
+{
+    ins_playback_stop();
+    menu_set_status_message("Replay Stopped", MENU_STATUS_SHOW_MS);
+    menu_request_full_redraw();
+}
+
+static void ins_replay_action_clear(void)
+{
+    /* 先停止 playback，再清除轨迹，防止 playback 访问已清除内存 */
+    ins_playback_stop();
+    ins_record_clear();
+    menu_set_status_message("Track Cleared", MENU_STATUS_SHOW_MS);
+    menu_request_full_redraw();
+}
+
+static void menu_sync_ins_replay_labels(void)
+{
+    char buf[64];
+    ins_play_state_t play_st = ins_playback_get_state();
+    float dist;
+
+    /* ---- 1. Load Track 标签：显示已加载点数或回放进度 ---- */
+    if (INS_PLAY_RUNNING == play_st)
+    {
+        sprintf(buf, "1. Load [RUN:%u/%u]",
+                (unsigned int)ins_playback_get_target_idx(),
+                (unsigned int)ins_playback_get_total_points());
+    }
+    else if (INS_PLAY_READY == play_st)
+    {
+        sprintf(buf, "1. Load [RDY:%u pts]",
+                (unsigned int)ins_playback_get_total_points());
+    }
+    else
+    {
+        sprintf(buf, "1. Load Track [%u pts]",
+                (unsigned int)ins_record_get_point_count());
+    }
+    if (0 != strcmp(ins_replay_load_label, buf))
+    {
+        strcpy(ins_replay_load_label, buf);
+        if ((current_page == &ins_replay_menu) && !menu_full_redraw)
+        {
+            menu_draw_item(0, (uint8)(current_selection == 0));
+        }
+    }
+
+    /* ---- 5. REC 状态行 ---- */
+    if (ins_record_is_recording())
+    {
+        sprintf(buf, "5. REC:ON  %u pts", (unsigned int)ins_record_get_point_count());
+    }
+    else
+    {
+        sprintf(buf, "5. REC:OFF %u pts", (unsigned int)ins_record_get_point_count());
+    }
+    if (0 != strcmp(ins_replay_rec_status, buf))
+    {
+        strcpy(ins_replay_rec_status, buf);
+        if ((current_page == &ins_replay_menu) && !menu_full_redraw)
+        {
+            menu_draw_item(4, (uint8)(current_selection == 4));
+        }
+    }
+
+    /* ---- 6. PLAY 状态行 ---- */
+    if (INS_PLAY_RUNNING == play_st)
+    {
+        dist = ins_playback_get_dist_to_target();
+        if (dist < 0.0f) { dist = 0.0f; }
+        sprintf(buf, "6. PLAY:RUN %u/%u %.2fm",
+                (unsigned int)ins_playback_get_target_idx(),
+                (unsigned int)ins_playback_get_total_points(),
+                dist);
+    }
+    else if (INS_PLAY_READY == play_st)
+    {
+        sprintf(buf, "6. PLAY:RDY %u pts",
+                (unsigned int)ins_playback_get_total_points());
+    }
+    else
+    {
+        sprintf(buf, "6. PLAY:IDLE");
+    }
+    if (0 != strcmp(ins_replay_play_status, buf))
+    {
+        strcpy(ins_replay_play_status, buf);
+        if ((current_page == &ins_replay_menu) && !menu_full_redraw)
+        {
+            menu_draw_item(5, (uint8)(current_selection == 5));
+        }
+    }
+}
+
+static MenuItem ins_replay_items[] = {
+    {ins_replay_load_label,  ins_replay_action_load,  NULL},  /* 1. Load Track  */
+    {"2. Start Replay",      ins_replay_action_start, NULL},  /* 2. Start       */
+    {"3. Stop Replay",       ins_replay_action_stop,  NULL},  /* 3. Stop        */
+    {"4. Clear Track",       ins_replay_action_clear, NULL},  /* 4. Clear       */
+    {ins_replay_rec_status,  NULL,                    NULL},  /* 5. REC status  */
+    {ins_replay_play_status, NULL,                    NULL},  /* 6. PLAY status */
+};
+
+static MenuPage ins_replay_menu = {
+    "INS Replay",
+    ins_replay_items,
+    sizeof(ins_replay_items) / sizeof(MenuItem),
+    NULL
+};
+
 static MenuItem icm_items[] = {
-    {"1. Raw Data", icm_action_raw_data, NULL},
-    {"2. Attitude", icm_action_attitude, NULL},
-    {"3. Gyro Bias Calib", icm_action_gyro_bias_calib, NULL},
-    {"4. INS Debug", icm_action_ins_debug, NULL},
+    {"1. Raw Data",      icm_action_raw_data,         NULL},
+    {"2. Attitude",      icm_action_attitude,          NULL},
+    {"3. Gyro Bias Cal", icm_action_gyro_bias_calib,  NULL},
+    {"4. INS Debug",     icm_action_ins_debug,         NULL},
+    {icm_ins_rec_label,  icm_action_ins_rec_toggle,   NULL},  /* 5. INS REC toggle */
+    {"6. INS Track Map", icm_action_ins_track_map,     NULL},
+    {"7. INS Replay",    NULL,                          &ins_replay_menu},
 };
 
 static MenuPage icm_menu = {
@@ -844,6 +1055,8 @@ void menu_init(void)
     Init_Load_Params();
     menu_sync_gps_record_item();
     menu_sync_gps_record_param_items();
+    menu_sync_ins_rec_item();
+    menu_sync_ins_replay_labels();
     tuning_soft_init();
 
     current_page = &main_menu;
@@ -932,6 +1145,8 @@ void menu_task(void)
     Get_Switch_Num();
     menu_process_status_timeout(now_ms);
     menu_sync_gps_record_item();
+    menu_sync_ins_rec_item();
+    menu_sync_ins_replay_labels();
     tuning_soft_task();
 
     if (current_page == NULL || current_page->num_items <= 0)
