@@ -932,6 +932,7 @@ void menu_task(void)
     Get_Switch_Num();
     menu_process_status_timeout(now_ms);
     menu_sync_gps_record_item();
+    tuning_soft_task();
 
     if (current_page == NULL || current_page->num_items <= 0)
     {
