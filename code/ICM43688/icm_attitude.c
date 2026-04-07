@@ -2,6 +2,12 @@
 
 #include <stddef.h>
 #include <math.h>
+#include "zf_driver_flash.h"
+
+#define GYRO_BIAS_FLASH_SECTOR  0U
+#define GYRO_BIAS_FLASH_PAGE    115U
+#define GYRO_BIAS_FLASH_WORDS   4U
+#define GYRO_BIAS_MAGIC         0x42494153U
 
 #ifndef ICM_ATTITUDE_PI
 #define ICM_ATTITUDE_PI 3.14159265358979323846f
@@ -33,6 +39,7 @@ typedef struct
     uint32 gyro_bias_target_count;
     uint8 gyro_bias_calibrating;
     uint8 gyro_bias_valid;
+    uint8 gyro_bias_from_flash;
 } icm_attitude_state_t;
 
 static volatile icm_attitude_state_t g_icm_attitude = {
@@ -43,7 +50,7 @@ static volatile icm_attitude_state_t g_icm_attitude = {
     0.0f, 0.0f, 0.0f,
     0.0f, 0.0f, 0.0f,
     0U, 0U,
-    0U, 0U
+    0U, 0U, 0U
 };
 
 static float icm_attitude_clamp(float value, float min_value, float max_value)
@@ -81,6 +88,65 @@ void icm_attitude_reset(void)
     icm_attitude_reset_pose();
 }
 
+uint8 icm_attitude_save_gyro_bias_to_flash(void)
+{
+    uint32 buf[GYRO_BIAS_FLASH_WORDS];
+
+    if (!g_icm_attitude.gyro_bias_valid)
+    {
+        return 0U;
+    }
+
+    buf[0] = *((const uint32 *)(const void *)&g_icm_attitude.gyro_bias_x_dps);
+    buf[1] = *((const uint32 *)(const void *)&g_icm_attitude.gyro_bias_y_dps);
+    buf[2] = *((const uint32 *)(const void *)&g_icm_attitude.gyro_bias_z_dps);
+    buf[3] = GYRO_BIAS_MAGIC;
+
+    flash_write_page(GYRO_BIAS_FLASH_SECTOR, GYRO_BIAS_FLASH_PAGE,
+                     buf, (uint16)GYRO_BIAS_FLASH_WORDS);
+    return 1U;
+}
+
+uint8 icm_attitude_load_gyro_bias_from_flash(void)
+{
+    uint32 buf[GYRO_BIAS_FLASH_WORDS];
+    float bx;
+    float by;
+    float bz;
+
+    flash_read_page(GYRO_BIAS_FLASH_SECTOR, GYRO_BIAS_FLASH_PAGE,
+                    buf, (uint16)GYRO_BIAS_FLASH_WORDS);
+
+    if (buf[3] != GYRO_BIAS_MAGIC)
+    {
+        return 0U;
+    }
+
+    bx = *((const float *)(const void *)&buf[0]);
+    by = *((const float *)(const void *)&buf[1]);
+    bz = *((const float *)(const void *)&buf[2]);
+
+    /* 简单有效性检查：偏置超过 20 dps 视为异常数据 */
+    if ((bx < -20.0f) || (bx > 20.0f) ||
+        (by < -20.0f) || (by > 20.0f) ||
+        (bz < -20.0f) || (bz > 20.0f))
+    {
+        return 0U;
+    }
+
+    g_icm_attitude.gyro_bias_x_dps = bx;
+    g_icm_attitude.gyro_bias_y_dps = by;
+    g_icm_attitude.gyro_bias_z_dps = bz;
+    g_icm_attitude.gyro_bias_valid = 1U;
+    g_icm_attitude.gyro_bias_from_flash = 1U;
+    return 1U;
+}
+
+uint8 icm_attitude_is_gyro_bias_from_flash(void)
+{
+    return g_icm_attitude.gyro_bias_from_flash;
+}
+
 void icm_attitude_init(void)
 {
     icm_attitude_reset_pose();
@@ -88,7 +154,11 @@ void icm_attitude_init(void)
     g_icm_attitude.gyro_bias_y_dps = 0.0f;
     g_icm_attitude.gyro_bias_z_dps = 0.0f;
     g_icm_attitude.gyro_bias_valid = 0U;
+    g_icm_attitude.gyro_bias_from_flash = 0U;
     icm_attitude_reset_gyro_bias_calibration_state();
+
+    /* 尝试从 flash 恢复上次校准结果 */
+    (void)icm_attitude_load_gyro_bias_from_flash();
 }
 
 void icm_attitude_start_gyro_bias_calibration(uint32 sample_count)
@@ -176,6 +246,8 @@ void icm_attitude_update(float gyro_x_dps,
                 g_icm_attitude.gyro_bias_y_dps = g_icm_attitude.gyro_bias_sum_y_dps / sample_count;
                 g_icm_attitude.gyro_bias_z_dps = g_icm_attitude.gyro_bias_sum_z_dps / sample_count;
                 g_icm_attitude.gyro_bias_valid = 1U;
+                g_icm_attitude.gyro_bias_from_flash = 0U;
+                (void)icm_attitude_save_gyro_bias_to_flash();
             }
 
             g_icm_attitude.gyro_bias_calibrating = 0U;
@@ -248,6 +320,14 @@ void icm_attitude_get_euler(float *roll_deg, float *pitch_deg, float *yaw_deg)
     if (NULL != roll_deg) *roll_deg = g_icm_attitude.roll_deg;
     if (NULL != pitch_deg) *pitch_deg = g_icm_attitude.pitch_deg;
     if (NULL != yaw_deg) *yaw_deg = g_icm_attitude.yaw_deg;
+}
+
+void icm_attitude_get_quaternion(float *q0, float *q1, float *q2, float *q3)
+{
+    if (NULL != q0) *q0 = g_icm_attitude.q0;
+    if (NULL != q1) *q1 = g_icm_attitude.q1;
+    if (NULL != q2) *q2 = g_icm_attitude.q2;
+    if (NULL != q3) *q3 = g_icm_attitude.q3;
 }
 
 float icm_attitude_get_acc_norm_g(void)

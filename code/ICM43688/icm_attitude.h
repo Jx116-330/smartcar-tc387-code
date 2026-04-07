@@ -18,7 +18,11 @@ uint8 icm_attitude_is_gyro_bias_calibrating(void);
 uint8 icm_attitude_is_gyro_bias_valid(void);
 void icm_attitude_get_gyro_bias(float *bias_x_dps, float *bias_y_dps, float *bias_z_dps);
 void icm_attitude_get_gyro_bias_calibration_progress(uint32 *sample_count, uint32 *target_count);
+uint8 icm_attitude_is_gyro_bias_from_flash(void);
+uint8 icm_attitude_save_gyro_bias_to_flash(void);
+uint8 icm_attitude_load_gyro_bias_from_flash(void);
 void icm_attitude_get_euler(float *roll_deg, float *pitch_deg, float *yaw_deg);
+void icm_attitude_get_quaternion(float *q0, float *q1, float *q2, float *q3);
 float icm_attitude_get_acc_norm_g(void);
 uint32 icm_attitude_get_update_count(void);
 

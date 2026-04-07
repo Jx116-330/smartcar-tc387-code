@@ -292,10 +292,20 @@ static void icm_action_gyro_bias_calib(void)
                                     menu_reset_dynamic_region);
 }
 
+static void icm_action_ins_debug(void)
+{
+    menu_icm_action_ins_debug(&icm_display_mode,
+                              &menu_full_redraw,
+                              menu_drain_encoder_events,
+                              menu_request_redraw,
+                              menu_reset_dynamic_region);
+}
+
 static MenuItem icm_items[] = {
     {"1. Raw Data", icm_action_raw_data, NULL},
     {"2. Attitude", icm_action_attitude, NULL},
     {"3. Gyro Bias Calib", icm_action_gyro_bias_calib, NULL},
+    {"4. INS Debug", icm_action_ins_debug, NULL},
 };
 
 static MenuPage icm_menu = {
