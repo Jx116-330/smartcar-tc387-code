@@ -222,11 +222,6 @@ static uint8 tuning_send_once(void)
     char line[TUNING_SEND_BUFFER_LEN];
     uint32 remain;
     uint32 now_ms = system_getval_ms();
-    const pid_param_t *pid_param = menu_get_pid_param();
-    float target = 100.0f;
-    float feedback = 0.0f;
-    float error = 0.0f;
-    float output = 0.0f;
     float gyro_x = icm42688_gyro_x;
     float gyro_y = icm42688_gyro_y;
     float gyro_z = icm42688_gyro_z;
@@ -236,11 +231,22 @@ static uint8 tuning_send_once(void)
     float gyro_bias_x = 0.0f;
     float gyro_bias_y = 0.0f;
     float gyro_bias_z = 0.0f;
+    float gyro_corr_x = 0.0f;
+    float gyro_corr_y = 0.0f;
+    float gyro_corr_z = 0.0f;
     float roll_deg = 0.0f;
     float pitch_deg = 0.0f;
     float yaw_deg = 0.0f;
+    float q0 = 1.0f;
+    float q1 = 0.0f;
+    float q2 = 0.0f;
+    float q3 = 0.0f;
     float acc_norm_g = 0.0f;
     float gyro_norm = 0.0f;
+    float nx = 0.0f;
+    float ny = 0.0f;
+    float nz = 0.0f;
+    uint32 attitude_update_count = 0U;
     uint32 bias_sample_count = 0U;
     uint32 bias_target_count = 0U;
 
@@ -249,22 +255,31 @@ static uint8 tuning_send_once(void)
         return 0U;
     }
 
-    /* 当前尚未接整车真实控制链，这里先提供占位测试值给桌面端联调使用。 */
-    feedback = (float)switch_encoder_num * 0.5f + gnss.speed;
-    error = target - feedback;
-    output = (NULL != pid_param)
-             ? (pid_param->kp * error + pid_param->ki * (error * 0.1f) + pid_param->kd * (error * 0.05f))
-             : 0.0f;
-
     icm_attitude_get_gyro_bias(&gyro_bias_x, &gyro_bias_y, &gyro_bias_z);
     icm_attitude_get_gyro_bias_calibration_progress(&bias_sample_count, &bias_target_count);
     icm_attitude_get_euler(&roll_deg, &pitch_deg, &yaw_deg);
+    icm_attitude_get_quaternion(&q0, &q1, &q2, &q3);
     acc_norm_g = icm_attitude_get_acc_norm_g();
-    gyro_norm = sqrtf(gyro_x * gyro_x + gyro_y * gyro_y + gyro_z * gyro_z);
+    attitude_update_count = icm_attitude_get_update_count();
+
+    gyro_corr_x = gyro_x - gyro_bias_x;
+    gyro_corr_y = gyro_y - gyro_bias_y;
+    gyro_corr_z = gyro_z - gyro_bias_z;
+    gyro_norm = sqrtf(gyro_corr_x * gyro_corr_x + gyro_corr_y * gyro_corr_y + gyro_corr_z * gyro_corr_z);
+
+    nx = (q0 * q0 + q1 * q1 - q2 * q2 - q3 * q3) * acc_x
+       + 2.0f * (q1 * q2 - q0 * q3) * acc_y
+       + 2.0f * (q1 * q3 + q0 * q2) * acc_z;
+    ny = 2.0f * (q1 * q2 + q0 * q3) * acc_x
+       + (q0 * q0 - q1 * q1 + q2 * q2 - q3 * q3) * acc_y
+       + 2.0f * (q2 * q3 - q0 * q1) * acc_z;
+    nz = 2.0f * (q1 * q3 - q0 * q2) * acc_x
+       + 2.0f * (q2 * q3 + q0 * q1) * acc_y
+       + (q0 * q0 - q1 * q1 - q2 * q2 + q3 * q3) * acc_z - 1.0f;
 
     snprintf(line,
              sizeof(line),
-             "TEL,ms=%lu,fix=%d,sat=%d,spd=%.2f,lat=%.6f,lon=%.6f,enc=%d,step=%d,kp=%.3f,ki=%.3f,kd=%.3f,target=%.2f,feedback=%.2f,error=%.2f,output=%.2f,gx=%.3f,gy=%.3f,gz=%.3f,gxyz=%.3f,gbx=%.3f,gby=%.3f,gbz=%.3f,bias_ok=%u,bias_cal=%u,bias_n=%lu,bias_t=%lu,roll=%.2f,pitch=%.2f,yaw=%.2f,ax=%.4f,ay=%.4f,az=%.4f,anorm=%.4f\r\n",
+             "TEL,ms=%lu,fix=%d,sat=%d,spd=%.2f,lat=%.6f,lon=%.6f,enc=%d,gx=%.3f,gy=%.3f,gz=%.3f,gcx=%.3f,gcy=%.3f,gcz=%.3f,gxyz=%.3f,gbx=%.3f,gby=%.3f,gbz=%.3f,bias_ok=%u,bias_cal=%u,bias_n=%lu,bias_t=%lu,bias_flash=%u,roll=%.2f,pitch=%.2f,yaw=%.2f,q0=%.5f,q1=%.5f,q2=%.5f,q3=%.5f,ax=%.4f,ay=%.4f,az=%.4f,anorm=%.4f,nx=%.4f,ny=%.4f,nz=%.4f,att_upd=%lu\r\n",
              (unsigned long)now_ms,
              gnss.state,
              gnss.satellite_used,
@@ -272,17 +287,12 @@ static uint8 tuning_send_once(void)
              gnss.latitude,
              gnss.longitude,
              switch_encoder_num,
-             switch_encoder_change_num,
-             (NULL != pid_param) ? pid_param->kp : 0.0f,
-             (NULL != pid_param) ? pid_param->ki : 0.0f,
-             (NULL != pid_param) ? pid_param->kd : 0.0f,
-             target,
-             feedback,
-             error,
-             output,
              gyro_x,
              gyro_y,
              gyro_z,
+             gyro_corr_x,
+             gyro_corr_y,
+             gyro_corr_z,
              gyro_norm,
              gyro_bias_x,
              gyro_bias_y,
@@ -291,13 +301,22 @@ static uint8 tuning_send_once(void)
              (unsigned int)icm_attitude_is_gyro_bias_calibrating(),
              (unsigned long)bias_sample_count,
              (unsigned long)bias_target_count,
+             (unsigned int)icm_attitude_is_gyro_bias_from_flash(),
              roll_deg,
              pitch_deg,
              yaw_deg,
+             q0,
+             q1,
+             q2,
+             q3,
              acc_x,
              acc_y,
              acc_z,
-             acc_norm_g);
+             acc_norm_g,
+             nx,
+             ny,
+             nz,
+             (unsigned long)attitude_update_count);
 
     remain = wifi_spi_send_buffer((const uint8 *)line, (uint32)strlen(line));
     if (0U == remain)

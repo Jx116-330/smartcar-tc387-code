@@ -25,5 +25,6 @@ void icm_attitude_get_euler(float *roll_deg, float *pitch_deg, float *yaw_deg);
 void icm_attitude_get_quaternion(float *q0, float *q1, float *q2, float *q3);
 float icm_attitude_get_acc_norm_g(void);
 uint32 icm_attitude_get_update_count(void);
+uint8 icm_attitude_is_gyro_bias_from_flash(void);
 
 #endif /* __ICM_ATTITUDE_H__ */
