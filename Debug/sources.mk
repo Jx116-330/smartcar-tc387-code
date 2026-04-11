@@ -26,9 +26,11 @@ SECONDARY_SIZE :=
 SUBDIRS := \
 code/Beep \
 code/GPS \
+code/ICM43688 \
 code/MyEncoder \
 code/MyKey \
 code/menu \
+code/tuning \
 libraries/infineon_libraries/Configurations \
 libraries/infineon_libraries/Infra/Platform/Tricore/Compilers \
 libraries/infineon_libraries/Infra/Ssw/TC38A/Tricore \

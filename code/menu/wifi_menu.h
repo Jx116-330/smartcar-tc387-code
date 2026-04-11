@@ -19,6 +19,9 @@ void wifi_menu_set_tcp_status(uint8 connected);
 /* 返回当前是否处于 WiFi 视图（供 menu.c 的 menu_task 判断是否拦截输入）*/
 uint8 wifi_menu_is_active(void);
 
+/* 返回当前 TCP 是否已连接，供安全版软定时遥测发送前检查 */
+uint8 wifi_menu_get_tcp_status(void);
+
 /* 在 menu_task() 中调用，处理 WiFi 视图的按键与刷新逻辑
  * 返回 1 表示视图已接管当前帧，menu_task 应直接 return  */
 uint8 wifi_menu_handle_view(void);

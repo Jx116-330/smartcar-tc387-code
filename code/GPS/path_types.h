@@ -1,4 +1,4 @@
-﻿/***
+/***
  * @file path_types.h
  * @brief 轨迹模块共享类型定义
  * @author JX116

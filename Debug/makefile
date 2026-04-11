@@ -46,9 +46,11 @@ RM := rm -rf
 -include libraries/infineon_libraries/Infra/Ssw/TC38A/Tricore/subdir.mk
 -include libraries/infineon_libraries/Infra/Platform/Tricore/Compilers/subdir.mk
 -include libraries/infineon_libraries/Configurations/subdir.mk
+-include code/tuning/subdir.mk
 -include code/menu/subdir.mk
 -include code/MyKey/subdir.mk
 -include code/MyEncoder/subdir.mk
+-include code/ICM43688/subdir.mk
 -include code/GPS/subdir.mk
 -include code/Beep/subdir.mk
 ifneq ($(MAKECMDGOALS),clean)

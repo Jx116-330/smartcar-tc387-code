@@ -47,6 +47,8 @@ typedef enum
 static wifi_view_mode_t wifi_view_mode  = WIFI_VIEW_NONE;
 static uint8            wifi_tcp_connected = 0U;
 static uint8            wifi_full_redraw   = 1U;
+static uint8            wifi_operation_cancelled = 0U;
+static uint32           wifi_last_key_scan_ms    = 0U;
 
 /* ----------------------------- 前向声明 ----------------------------- */
 static void wifi_fill_rect(uint16 x0, uint16 y0, uint16 x1, uint16 y1, uint16 color);
@@ -55,6 +57,9 @@ static void wifi_draw_header(const char *title);
 static void wifi_draw_footer(const char *hint);
 static void wifi_enter_view(wifi_view_mode_t mode);
 static void wifi_exit_view(void);
+static void wifi_begin_blocking_operation(void);
+static void wifi_end_blocking_operation(void);
+static uint8 wifi_wait_cancel_hook(void);
 static void wifi_action_net_info(void);
 static void wifi_action_connect(void);
 static void wifi_action_send_test(void);
@@ -129,6 +134,39 @@ static void wifi_draw_footer(const char *hint)
     ips200_set_color(RGB565_WHITE, RGB565_BLACK);
 }
 
+static void wifi_begin_blocking_operation(void)
+{
+    wifi_operation_cancelled = 0U;
+    wifi_last_key_scan_ms    = system_getval_ms();
+    my_key_clear_state(MY_KEY_1);
+    wifi_spi_set_wait_hook(wifi_wait_cancel_hook);
+}
+
+static void wifi_end_blocking_operation(void)
+{
+    wifi_spi_set_wait_hook(NULL);
+}
+
+static uint8 wifi_wait_cancel_hook(void)
+{
+    uint32 now_ms = system_getval_ms();
+
+    if ((uint32)(now_ms - wifi_last_key_scan_ms) >= 10U)
+    {
+        wifi_last_key_scan_ms = now_ms;
+        my_key_scanner();
+    }
+
+    if (MY_KEY_LONG_PRESS == my_key_get_state(MY_KEY_1))
+    {
+        wifi_operation_cancelled = 1U;
+        my_key_clear_state(MY_KEY_1);
+        return 1U;
+    }
+
+    return 0U;
+}
+
 /* =========================================================
  * 视图进入 / 退出
  * ========================================================= */
@@ -144,6 +182,8 @@ static void wifi_exit_view(void)
     wifi_view_mode   = WIFI_VIEW_NONE;
     wifi_full_redraw = 1U;
     /* 通知菜单系统需要整页重绘，否则退出后屏幕不刷新 */
+    wifi_spi_set_wait_hook(NULL);
+    my_key_clear_state(MY_KEY_1);
     menu_request_full_redraw();
 }
 
@@ -179,13 +219,13 @@ static void wifi_draw_net_info(void)
         /* 静态行：版本 / MAC / IP，只在 full_redraw 时绘制 */
         ips200_set_color(RGB565_WHITE, RGB565_BLACK);
 
-        sprintf(line, "Ver: %s", wifi_spi_version[0] ? wifi_spi_version : "---");
+        snprintf(line, sizeof(line), "Ver: %s", wifi_spi_version[0] ? wifi_spi_version : "---");
         wifi_show_padded(PAD_X, (uint16)(LINE_START), line);
 
-        sprintf(line, "MAC: %s", wifi_spi_mac_addr[0] ? wifi_spi_mac_addr : "---");
+        snprintf(line, sizeof(line), "MAC: %s", wifi_spi_mac_addr[0] ? wifi_spi_mac_addr : "---");
         wifi_show_padded(PAD_X, (uint16)(LINE_START + LINE_H), line);
 
-        sprintf(line, "IP : %s", wifi_spi_ip_addr_port[0] ? wifi_spi_ip_addr_port : "---");
+        snprintf(line, sizeof(line), "IP : %s", wifi_spi_ip_addr_port[0] ? wifi_spi_ip_addr_port : "---");
         wifi_show_padded(PAD_X, (uint16)(LINE_START + LINE_H * 2U), line);
 
         wifi_full_redraw = 0U;
@@ -243,16 +283,16 @@ static void wifi_draw_config(void)
 
     ips200_set_color(RGB565_WHITE, RGB565_BLACK);
 
-    sprintf(line, "SSID    : %s", WIFI_SSID);
+    snprintf(line, sizeof(line), "SSID    : %s", WIFI_SSID);
     wifi_show_padded(PAD_X, LINE_START, line);
 
-    sprintf(line, "Svr IP  : %s", WIFI_TCP_TARGET_IP);
+    snprintf(line, sizeof(line), "Svr IP  : %s", WIFI_TCP_TARGET_IP);
     wifi_show_padded(PAD_X, (uint16)(LINE_START + LINE_H), line);
 
-    sprintf(line, "Svr Port: %s", WIFI_TCP_TARGET_PORT);
+    snprintf(line, sizeof(line), "Svr Port: %s", WIFI_TCP_TARGET_PORT);
     wifi_show_padded(PAD_X, (uint16)(LINE_START + LINE_H * 2U), line);
 
-    sprintf(line, "Loc Port: %s", WIFI_LOCAL_PORT);
+    snprintf(line, sizeof(line), "Loc Port: %s", WIFI_LOCAL_PORT);
     wifi_show_padded(PAD_X, (uint16)(LINE_START + LINE_H * 3U), line);
 }
 
@@ -341,25 +381,40 @@ static void wifi_draw_reconnect(uint8 phase)
 
 static void wifi_action_connect(void)
 {
-    uint8 retry_count = 0U;
     uint8 ret;
 
     wifi_enter_view(WIFI_VIEW_CONNECT);
     wifi_draw_connect(0U);
 
-    while (wifi_spi_init(WIFI_SSID, WIFI_PASSWORD))
+    wifi_begin_blocking_operation();
+    ret = wifi_spi_init(WIFI_SSID, WIFI_PASSWORD);
+    wifi_end_blocking_operation();
+
+    if (wifi_operation_cancelled)
     {
-        system_delay_ms(100);
-        if (++retry_count > 30U)
-        {
-            wifi_draw_connect(2U);
-            return;
-        }
+        wifi_exit_view();
+        return;
+    }
+
+    if (0U != ret)
+    {
+        wifi_tcp_connected = 0U;
+        wifi_draw_connect(2U);
+        return;
     }
 
     wifi_draw_connect(1U);
 
+    wifi_begin_blocking_operation();
     ret = wifi_spi_socket_connect("TCP", WIFI_TCP_TARGET_IP, WIFI_TCP_TARGET_PORT, WIFI_LOCAL_PORT);
+    wifi_end_blocking_operation();
+
+    if (wifi_operation_cancelled)
+    {
+        wifi_exit_view();
+        return;
+    }
+
     if (0U == ret)
     {
         wifi_tcp_connected = 1U;
@@ -388,7 +443,16 @@ static void wifi_action_send_test(void)
     wifi_enter_view(WIFI_VIEW_SEND_TEST);
     wifi_draw_send_test(0U, 0U);
 
+    wifi_begin_blocking_operation();
     remain = wifi_spi_send_buffer((const uint8 *)test_msg, (uint32)strlen(test_msg));
+    wifi_end_blocking_operation();
+
+    if (wifi_operation_cancelled)
+    {
+        wifi_exit_view();
+        return;
+    }
+
     wifi_draw_send_test(1U, (uint8)(remain == 0U));
 }
 
@@ -400,13 +464,24 @@ static void wifi_action_config(void)
 
 static void wifi_action_reconnect(void)
 {
-    uint8 ret;
+    uint8 ret = 1U;
 
     wifi_enter_view(WIFI_VIEW_RECONNECT);
     wifi_draw_reconnect(0U);
 
+    wifi_begin_blocking_operation();
     wifi_spi_socket_disconnect();
-    ret = wifi_spi_socket_connect("TCP", WIFI_TCP_TARGET_IP, WIFI_TCP_TARGET_PORT, WIFI_LOCAL_PORT);
+    if (!wifi_operation_cancelled)
+    {
+        ret = wifi_spi_socket_connect("TCP", WIFI_TCP_TARGET_IP, WIFI_TCP_TARGET_PORT, WIFI_LOCAL_PORT);
+    }
+    wifi_end_blocking_operation();
+
+    if (wifi_operation_cancelled)
+    {
+        wifi_exit_view();
+        return;
+    }
 
     if (0U == ret)
     {
@@ -449,6 +524,11 @@ void wifi_menu_set_tcp_status(uint8 connected)
 uint8 wifi_menu_is_active(void)
 {
     return (WIFI_VIEW_NONE != wifi_view_mode) ? 1U : 0U;
+}
+
+uint8 wifi_menu_get_tcp_status(void)
+{
+    return wifi_tcp_connected;
 }
 
 /*

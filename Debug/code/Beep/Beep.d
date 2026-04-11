@@ -332,6 +332,10 @@ Beep.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\libraries\\zf_components\s
 "E:\\ads\\Seekfree_TC387_Opensource_Library\\libraries\\zf_components\seekfree_assistant.h" :
 Beep.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\libraries\\zf_components\seekfree_assistant_interface.h"
 "E:\\ads\\Seekfree_TC387_Opensource_Library\\libraries\\zf_components\seekfree_assistant_interface.h" :
+Beep.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\ICM43688\ICM42688.h"
+"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\ICM43688\ICM42688.h" :
+Beep.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\myhead.h"
+"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\myhead.h" :
 Beep.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\GPS\display_gps.h"
 "E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\GPS\display_gps.h" :
 Beep.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\GPS\path_config.h"
@@ -342,8 +346,6 @@ Beep.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\Beep\Beep.h"
 "E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\Beep\Beep.h" :
 Beep.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\MyEncoder\MyEncoder.h"
 "E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\MyEncoder\MyEncoder.h" :
-Beep.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\myhead.h"
-"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\myhead.h" :
 Beep.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\menu\menu.h"
 "E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\menu\menu.h" :
 Beep.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\menu\pid_runtime.h"
@@ -360,3 +362,7 @@ Beep.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\GPS\path_display.h"
 "E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\GPS\path_display.h" :
 Beep.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\libraries\\zf_common\zf_common_headfile.h"
 "E:\\ads\\Seekfree_TC387_Opensource_Library\\libraries\\zf_common\zf_common_headfile.h" :
+Beep.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\tuning\tuning_soft.h"
+"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\tuning\tuning_soft.h" :
+Beep.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\tuning\autotune.h"
+"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\tuning\autotune.h" :

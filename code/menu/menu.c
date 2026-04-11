@@ -6,79 +6,24 @@
 *********************************************************************************************************************/
 
 #include "menu.h"
+#include "menu_params.h"
+#include "menu_pid.h"
+#include "menu_gps.h"
 #include "zf_device_ips200.h"
 #include "zf_common_headfile.h"
 #include "zf_driver_gpio.h"
-#include "zf_driver_flash.h"
-#include "path_config.h"
 #include "path_recorder.h"
 #include "path_display.h"
 #include "MyKey.h"
 #include "MyEncoder.h"
 #include "wifi_menu.h"
-
-
-/* 参数结构体：用于保存 PID 和菜单相关配置 */
-typedef struct {
-    float pid_p;
-    float pid_i;
-    float pid_d;
-    float record_min_distance;
-    uint32 record_min_interval_ms;
-    float record_max_speed_kph;
-    uint8 record_min_satellites;
-    uint8 threshold_mode;
-    uint8 threshold_val;
-    uint32_t magic_code;
-} MyParams_t;
-
-typedef enum
-{
-    GPS_VIEW_NONE = 0U,
-    GPS_VIEW_DATA,
-    GPS_VIEW_MAP,
-    GPS_VIEW_RAW_DEBUG,
-} gps_view_mode_t;
-
-typedef enum
-{
-    PID_VIEW_NONE = 0U,
-    PID_VIEW_EDIT_KP,
-    PID_VIEW_EDIT_KI,
-    PID_VIEW_EDIT_KD,
-    PID_VIEW_PREVIEW,
-} pid_view_mode_t;
-
-typedef enum
-{
-    RECORD_PARAM_VIEW_NONE = 0U,
-    RECORD_PARAM_VIEW_DISTANCE,
-    RECORD_PARAM_VIEW_INTERVAL,
-    RECORD_PARAM_VIEW_MIN_SAT,
-} record_param_view_mode_t;
+#include "tuning_soft.h"
+#include "menu_icm.h"
+#include "ins_record.h"
+#include "ins_playback.h"
 
 MyParams_t g_params;
 
-/* Flash 参数存储位置定义 */
-#define FLASH_SECTOR    0
-#define FLASH_PAGE      127
-#define MAGIC_NUM       0x5A5A5A5A
-#define SAVE_LEN        ((sizeof(MyParams_t) + 3) / 4)
-#define PARAM_PID_P_MIN             0.0f
-#define PARAM_PID_P_MAX             50.0f
-#define PARAM_PID_I_MIN             0.0f
-#define PARAM_PID_I_MAX             10.0f
-#define PARAM_PID_D_MIN             0.0f
-#define PARAM_PID_D_MAX             20.0f
-#define PARAM_THRESHOLD_MODE_MAX    3U
-#define PARAM_RECORD_DISTANCE_MIN   0.05f
-#define PARAM_RECORD_DISTANCE_MAX   5.0f
-#define PARAM_RECORD_INTERVAL_MIN   10U
-#define PARAM_RECORD_INTERVAL_MAX   1000U
-#define PARAM_RECORD_SPEED_MIN      5.0f
-#define PARAM_RECORD_SPEED_MAX      120.0f
-#define PARAM_RECORD_SAT_MIN        3U
-#define PARAM_RECORD_SAT_MAX        12U
 #define MENU_STATUS_SHOW_MS         1200U
 #define MENU_TITLE_HEIGHT           30U
 #define MENU_ITEM_START_Y           40U
@@ -101,20 +46,14 @@ static uint8 menu_dynamic_clear_enable = 1;
 static gps_view_mode_t gps_display_mode = GPS_VIEW_NONE;
 static pid_view_mode_t pid_display_mode = PID_VIEW_NONE;
 static record_param_view_mode_t record_param_view_mode = RECORD_PARAM_VIEW_NONE;
+static icm_view_mode_t icm_display_mode = ICM_VIEW_NONE;
 static char gps_status_hint[64] = "";
 static MenuPage *current_page = NULL;
 static MenuPage gps_menu;
+static MenuPage icm_menu;
+static MenuPage ins_replay_menu;
 static pid_param_t menu_pid_param_cache;
 static pid_controller_t pid_preview_controller;
-static float pid_preview_target = 100.0f;
-static float pid_preview_feedback = 0.0f;
-static float pid_preview_output = 0.0f;
-static const float pid_kp_steps[] = {0.01f, 0.10f, 0.50f, 1.00f};
-static const float pid_ki_steps[] = {0.001f, 0.005f, 0.010f, 0.050f};
-static const float pid_kd_steps[] = {0.01f, 0.05f, 0.10f, 0.20f};
-static uint8 pid_kp_step_index = 1U;
-static uint8 pid_ki_step_index = 2U;
-static uint8 pid_kd_step_index = 1U;
 static char menu_status_message[32] = "";
 static uint32 menu_status_expire_ms = 0U;
 static uint8 menu_footer_needs_update = 1U;
@@ -123,17 +62,12 @@ static char gps_record_menu_label[48] = "2. Track Record [IDLE]";
 static char gps_record_distance_label[48] = "1. Point Dist [0.20m]";
 static char gps_record_interval_label[48] = "2. Point Intv [50ms]";
 static char gps_record_sat_label[48] = "3. Min Sat [4]";
-static const float record_distance_steps[] = {0.05f, 0.10f, 0.20f, 0.50f};
-static const uint16 record_interval_steps[] = {10U, 20U, 50U, 100U};
-static const uint8 record_sat_steps[] = {1U, 2U, 3U};
-static uint8 record_distance_step_index = 1U;
-static uint8 record_interval_step_index = 1U;
-static uint8 record_sat_step_index = 0U;
 
 static void ips200_fill_rect(uint16 x_start, uint16 y_start, uint16 x_end, uint16 y_end, uint16 color);
 static void show_string_fit(uint16 x, uint16 y, const char *s);
 static void show_string_fit_width(uint16 x, uint16 y, uint16 max_width, const char *s);
 static void show_string_fit_width_pad(uint16 x, uint16 y, uint16 max_width, const char *s);
+static void menu_copy_text(char *dest, uint32 dest_size, const char *source);
 static void menu_set_status_message(const char *text, uint32 duration_ms);
 static void menu_draw_footer(void);
 static void menu_drain_encoder_events(void);
@@ -141,6 +75,7 @@ static void menu_reset_dynamic_region(void);
 static void menu_request_redraw(uint8 full_redraw);
 static void menu_process_status_timeout(uint32 now_ms);
 static void menu_update_selection_from_encoder(void);
+static uint8 menu_is_gps_root_idle(void);
 static void menu_sync_gps_record_item(void);
 static void menu_sync_gps_record_param_items(void);
 static void menu_draw_item(int index, uint8 selected);
@@ -151,202 +86,68 @@ static void menu_execute_current_item(void);
 static uint8 menu_handle_gps_view(void);
 static uint8 menu_handle_pid_view(void);
 static uint8 menu_handle_record_param_view(void);
-static uint8 params_are_valid(const MyParams_t *params);
-static void params_save_to_flash(void);
-static void params_apply_record_config(void);
-static void params_capture_record_config(void);
-static void gps_clear_status_hint(void);
-static void gps_set_status_hint(const char *text);
-static const char *gps_get_record_state_text(void);
-static void gps_return_to_menu(void);
-static void gps_enter_view(gps_view_mode_t mode);
-static void gps_exit_view(void);
-static void gps_clear_current_track(void);
-static void gps_draw_page_header(const char *title);
-static void gps_draw_data_page(void);
-static void gps_draw_map_page(void);
-static void gps_draw_raw_debug_page(void);
-static void record_param_enter_view(record_param_view_mode_t mode);
-static void record_param_exit_view(void);
-static void record_param_apply_encoder_adjustment(void);
-static void record_param_draw_active_view(void);
-static void record_param_draw_edit_page(const char *title, const char *value_text, const char *step_text);
-static float record_param_get_distance_step(void);
-static uint16 record_param_get_interval_step(void);
-static uint8 record_param_get_sat_step(void);
-static void record_param_cycle_step(void);
 static void gps_action_record_param_distance(void);
 static void gps_action_record_param_interval(void);
 static void gps_action_record_param_min_sat(void);
-static void pid_sync_runtime_param(void);
-static void pid_save_if_dirty(void);
-static void pid_reset_preview_state(void);
-static void pid_enter_view(pid_view_mode_t mode);
-static void pid_exit_view(void);
-static void pid_apply_encoder_adjustment(void);
-static void pid_draw_active_view(void);
-static void pid_draw_edit_page(const char *title, float value, float step);
-static void pid_draw_preview_page(void);
-static float pid_get_current_step(uint8 mode);
-static void pid_cycle_step(uint8 mode);
+static void gps_action_save_track_flash(void);
+static void gps_action_load_track_flash(void);
 static void pid_action_edit_kp(void);
 static void pid_action_edit_ki(void);
 static void pid_action_edit_kd(void);
 static void pid_action_preview(void);
 static void pid_action_reset(void);
 static void gps_action_raw_debug(void);
+static void icm_action_raw_data(void);
+static void icm_action_attitude(void);
+static void icm_action_gyro_bias_calib(void);
+static void icm_action_ins_debug(void);
+static void icm_action_ins_track_map(void);
+static void icm_action_ins_rec_toggle(void);
+static void menu_sync_ins_rec_item(void);
+static void ins_replay_action_load(void);
+static void ins_replay_action_start(void);
+static void ins_replay_action_stop(void);
+static void ins_replay_action_clear(void);
+static void menu_sync_ins_replay_labels(void);
 
-static uint8 gps_menu_gnss_ready(void)
-{
-    const path_record_config_t *config = path_recorder_get_config();
-
-    return ((gnss.state == 1) &&
-            (gnss.satellite_used >= config->min_satellites) &&
-            (gnss.speed <= config->max_record_speed_kph) &&
-            (gnss.latitude != 0.0) &&
-            (gnss.longitude != 0.0));
-}
-
-/* 检查从 Flash 读取的参数是否有效，避免加载异常数据 */
-static uint8 params_are_valid(const MyParams_t *params)
-{
-    if (NULL == params)
-    {
-        return 0;
-    }
-
-    if (params->magic_code != MAGIC_NUM)
-    {
-        return 0;
-    }
-
-    if (!(params->pid_p >= PARAM_PID_P_MIN && params->pid_p <= PARAM_PID_P_MAX))
-    {
-        return 0;
-    }
-
-    if (!(params->pid_i >= PARAM_PID_I_MIN && params->pid_i <= PARAM_PID_I_MAX))
-    {
-        return 0;
-    }
-
-    if (!(params->pid_d >= PARAM_PID_D_MIN && params->pid_d <= PARAM_PID_D_MAX))
-    {
-        return 0;
-    }
-
-    if (!(params->record_min_distance >= PARAM_RECORD_DISTANCE_MIN && params->record_min_distance <= PARAM_RECORD_DISTANCE_MAX))
-    {
-        return 0;
-    }
-
-    if (!(params->record_min_interval_ms >= PARAM_RECORD_INTERVAL_MIN && params->record_min_interval_ms <= PARAM_RECORD_INTERVAL_MAX))
-    {
-        return 0;
-    }
-
-    if (!(params->record_max_speed_kph >= PARAM_RECORD_SPEED_MIN && params->record_max_speed_kph <= PARAM_RECORD_SPEED_MAX))
-    {
-        return 0;
-    }
-
-    if (!(params->record_min_satellites >= PARAM_RECORD_SAT_MIN && params->record_min_satellites <= PARAM_RECORD_SAT_MAX))
-    {
-        return 0;
-    }
-
-    if (params->threshold_mode > PARAM_THRESHOLD_MODE_MAX)
-    {
-        return 0;
-    }
-
-    return 1;
-}
-
-static void params_save_to_flash(void)
-{
-    g_params.magic_code = MAGIC_NUM;
-    flash_write_page(FLASH_SECTOR, FLASH_PAGE, (const uint32 *)&g_params, SAVE_LEN);
-}
-
-static void params_apply_record_config(void)
-{
-    path_recorder_set_min_distance(g_params.record_min_distance);
-    path_recorder_set_min_interval_ms(g_params.record_min_interval_ms);
-    path_recorder_set_max_speed_kph(g_params.record_max_speed_kph);
-    path_recorder_set_min_satellites(g_params.record_min_satellites);
-}
-
-static void params_capture_record_config(void)
-{
-    const path_record_config_t *config = path_recorder_get_config();
-
-    g_params.record_min_distance = config->min_record_distance;
-    g_params.record_min_interval_ms = config->min_record_interval_ms;
-    g_params.record_max_speed_kph = config->max_record_speed_kph;
-    g_params.record_min_satellites = config->min_satellites;
-}
-/* 恢复默认 PID 与菜单参数，并同步到运行时缓存 */
+/* 持久化参数已拆到 menu_params.c；这里保留运行时同步逻辑。 */
 static void params_set_default(void)
 {
-    g_params.pid_p = 1.2f;
-    g_params.pid_i = 0.01f;
-    g_params.pid_d = 0.5f;
-    g_params.record_min_distance = MIN_RECORD_DISTANCE;
-    g_params.record_min_interval_ms = MIN_RECORD_INTERVAL_MS;
-    g_params.record_max_speed_kph = MAX_RECORD_SPEED_KPH;
-    g_params.record_min_satellites = GPS_MIN_SATELLITES;
-    g_params.threshold_mode = 0;
-    g_params.threshold_val = 128;
-    g_params.magic_code = MAGIC_NUM;
-    pid_sync_runtime_param();
-    params_apply_record_config();
-}
-
-/* 按步进调整参数值，并限制在给定最小值和最大值之间 */
-static void adjust_param(float *ptr, float step, float min, float max, uint8_t is_add)
-{
-    if (is_add)
-    {
-        if (*ptr + step <= max)
-        {
-            *ptr += step;
-        }
-        else
-        {
-            *ptr = max;
-        }
-    }
-    else
-    {
-        if (*ptr - step >= min)
-        {
-            *ptr -= step;
-        }
-        else
-        {
-            *ptr = min;
-        }
-    }
+    menu_params_set_default(&g_params);
+    menu_pid_sync_runtime_param(&g_params, &menu_pid_param_cache, &pid_preview_controller);
+    menu_params_apply_record_config(&g_params);
 }
 
 /* 上电时从 Flash 加载参数，若无效则回退到默认配置 */
 static void Init_Load_Params(void)
 {
-    MyParams_t temp_read;
-
-    flash_read_page(FLASH_SECTOR, FLASH_PAGE, (uint32 *)&temp_read, SAVE_LEN);
-
-    if (params_are_valid(&temp_read))
-    {
-        g_params = temp_read;
-    }
-    else
+    if (!menu_params_load_or_default(&g_params))
     {
         params_set_default();
+        return;
     }
-    pid_sync_runtime_param();
-    params_apply_record_config();
+
+    menu_pid_sync_runtime_param(&g_params, &menu_pid_param_cache, &pid_preview_controller);
+    menu_params_apply_record_config(&g_params);
+    menu_gps_init_state(gps_status_hint, (uint32)sizeof(gps_status_hint));
+}
+
+static void menu_copy_text(char *dest, uint32 dest_size, const char *source)
+{
+    uint32 index = 0U;
+    const char *text = (NULL != source) ? source : "";
+
+    if ((NULL == dest) || (0U == dest_size))
+    {
+        return;
+    }
+
+    while ((index + 1U) < dest_size && text[index] != '\0')
+    {
+        dest[index] = text[index];
+        index++;
+    }
+    dest[index] = '\0';
 }
 
 static void gps_clear_status_hint(void)
@@ -354,742 +155,376 @@ static void gps_clear_status_hint(void)
     gps_status_hint[0] = '\0';
 }
 
-static void gps_set_status_hint(const char *text)
-{
-    uint32 i = 0U;
-    const char *source = (NULL != text) ? text : "";
-
-    while (source[i] != '\0' && i < (sizeof(gps_status_hint) - 1U))
-    {
-        gps_status_hint[i] = source[i];
-        i++;
-    }
-    gps_status_hint[i] = '\0';
-}
-
-static const char *gps_get_record_state_text(void)
-{
-    switch (path_recorder_get_state())
-    {
-        case PATH_STATE_RECORDING:
-            return "REC";
-        case PATH_STATE_COMPLETED:
-            return "DONE";
-        case PATH_STATE_IDLE:
-        default:
-            return "IDLE";
-    }
-}
-
-static void gps_return_to_menu(void)
-{
-    gps_display_mode = GPS_VIEW_NONE;
-    menu_request_redraw(1U);
-}
-
-/* 进入 GPS 详情页前清空输入状态，并请求整页刷新 */
-static void gps_enter_view(gps_view_mode_t mode)
-{
-    gps_display_mode = mode;
-    menu_drain_encoder_events();
-    my_key_clear_state(MY_KEY_1);
-    my_key_clear_state(MY_KEY_4);
-    menu_reset_dynamic_region();
-    menu_request_redraw(1U);
-}
-
-static void gps_exit_view(void)
-{
-    gps_display_mode = GPS_VIEW_NONE;
-    menu_drain_encoder_events();
-    menu_reset_dynamic_region();
-    menu_request_redraw(1U);
-}
-
-static void gps_clear_current_track(void)
-{
-    path_state_enum state = path_recorder_get_state();
-
-    path_recorder_clear();
-
-    if ((state == PATH_STATE_RECORDING) && gps_menu_gnss_ready())
-    {
-        path_recorder_start();
-        gps_set_status_hint("Track reset");
-    }
-    else
-    {
-        gps_set_status_hint("Track cleared");
-    }
-
-    path_display_init();
-    menu_request_redraw(1U);
-}
-
-static void gps_draw_page_header(const char *title)
-{
-    ips200_set_color(RGB565_YELLOW, RGB565_BLACK);
-    show_string_fit(10, 10, title);
-    ips200_draw_line(0, 30, ips200_width_max - 1, 30, RGB565_GRAY);
-    ips200_set_color(RGB565_WHITE, RGB565_BLACK);
-}
-
-static void gps_draw_data_page(void)
-{
-    static uint32 last_refresh_ms = 0;
-    char line0[64];
-    char line1[64];
-    char line2[64];
-    char line3[64];
-    char line4[64];
-    uint32 now_ms = system_getval_ms();
-    float total_distance = 0.0f;
-
-    if (!menu_full_redraw && (now_ms - last_refresh_ms < 200U))
-    {
-        return;
-    }
-
-    last_refresh_ms = now_ms;
-    if (menu_full_redraw)
-    {
-        ips200_fill_rect(0, 32, ips200_width_max - 1, ips200_height_max - 1, RGB565_BLACK);
-        gps_draw_page_header("GPS Data");
-        show_string_fit_width(5, (uint16)(ips200_height_max - 20U), (uint16)(ips200_width_max - 10U), "K1 LONG Exit");
-    }
-
-    path_recorder_get_stats(&total_distance, NULL, NULL);
-
-    sprintf(line0, "Fix:%d Sat:%d Rec:%s", (int)gnss.state, (int)gnss.satellite_used, gps_get_record_state_text());
-    sprintf(line1, "Lat:%.6f", gnss.latitude);
-    sprintf(line2, "Lon:%.6f", gnss.longitude);
-    sprintf(line3, "Spd:%.2f Dir:%.1f", gnss.speed, gnss.direction);
-    if (gps_status_hint[0] != '\0')
-    {
-        sprintf(line4, "%s", gps_status_hint);
-    }
-    else
-    {
-        sprintf(line4, "Pts:%d Dist:%.1fm", path_recorder_get_point_count(), total_distance);
-    }
-
-    ips200_set_color(RGB565_WHITE, RGB565_BLACK);
-    show_string_fit_width_pad(10, 60, (uint16)(ips200_width_max - 20U), line0);
-    show_string_fit_width_pad(10, 84, (uint16)(ips200_width_max - 20U), line1);
-    show_string_fit_width_pad(10, 108, (uint16)(ips200_width_max - 20U), line2);
-    show_string_fit_width_pad(10, 132, (uint16)(ips200_width_max - 20U), line3);
-    show_string_fit_width_pad(10, 156, (uint16)(ips200_width_max - 20U), line4);
-    menu_full_redraw = 0;
-}
-
-static void gps_draw_map_page(void)
-{
-    static uint32 last_refresh_ms = 0;
-    char line0[64];
-    char line1[64];
-    char line2[64];
-    uint16 map_x = 5U;
-    uint16 map_y = 105U;
-    uint16 map_w = (uint16)(ips200_width_max - 10U);
-    uint16 map_h;
-    uint32 now_ms = system_getval_ms();
-    float total_distance = 0.0f;
-
-    if (!menu_full_redraw && (now_ms - last_refresh_ms < 800U))
-    {
-        return;
-    }
-
-    last_refresh_ms = now_ms;
-    if (menu_full_redraw)
-    {
-        ips200_fill_rect(0, 32, ips200_width_max - 1, ips200_height_max - 1, RGB565_BLACK);
-        gps_draw_page_header("GPS Map");
-        show_string_fit_width(5, (uint16)(ips200_height_max - 20U), (uint16)(ips200_width_max - 10U), "K1 Clear  LONG Exit");
-    }
-
-    path_recorder_get_stats(&total_distance, NULL, NULL);
-    sprintf(line0, "Sat:%d Pts:%d Fix:%d", (int)gnss.satellite_used, path_recorder_get_point_count(), (int)gnss.state);
-    if (gps_status_hint[0] != '\0')
-    {
-        sprintf(line1, "%s", gps_status_hint);
-    }
-    else
-    {
-        sprintf(line1, "Rec:%s Dist:%.1fm", gps_get_record_state_text(), total_distance);
-    }
-    sprintf(line2, "Spd:%.1fkm/h H:%.1fm", gnss.speed, gnss.height);
-
-    if (ips200_height_max > 190U)
-    {
-        map_h = (uint16)(ips200_height_max - 190U);
-    }
-    else
-    {
-        map_h = (uint16)(ips200_height_max / 2U);
-    }
-
-    if (map_h < 60U)
-    {
-        map_h = 60U;
-    }
-
-    if ((uint32)map_y + (uint32)map_h > (uint32)(ips200_height_max - 25U))
-    {
-        map_h = (uint16)(ips200_height_max - map_y - 25U);
-    }
-
-    if (map_h < 60U)
-    {
-        map_h = 60U;
-    }
-
-    ips200_set_color(RGB565_WHITE, RGB565_BLACK);
-    show_string_fit_width_pad(10, 36, (uint16)(ips200_width_max - 20U), line0);
-    show_string_fit_width_pad(10, 56, (uint16)(ips200_width_max - 20U), line1);
-    show_string_fit_width_pad(10, 76, (uint16)(ips200_width_max - 20U), line2);
-
-    path_display_set_area(map_x, map_y, map_w, map_h);
-    path_display_draw_map(RGB565_CYAN);
-    menu_full_redraw = 0;
-}
-
-static void gps_draw_raw_debug_page(void)
-{
-    static uint32 last_refresh_ms = 0;
-    gnss_debug_info_t debug_info;
-    char line0[64];
-    char line1[64];
-    char line2[64];
-    char line3[96];
-    char line4[96];
-    char line5[96];
-    uint32 now_ms = system_getval_ms();
-
-    if (!menu_full_redraw && (now_ms - last_refresh_ms < 300U))
-    {
-        return;
-    }
-
-    last_refresh_ms = now_ms;
-    if (menu_full_redraw)
-    {
-        ips200_fill_rect(0, 32, ips200_width_max - 1, ips200_height_max - 1, RGB565_BLACK);
-        gps_draw_page_header("GPS RAW/DEBUG");
-        show_string_fit_width(5, (uint16)(ips200_height_max - 20U), (uint16)(ips200_width_max - 10U), "K1 LONG Exit");
-    }
-
-    gnss_get_debug_info(&debug_info);
-    sprintf(line0, "Fix:%d Sat:%d Flag:%d Err:%lu", (int)gnss.state, (int)gnss.satellite_used, (int)debug_info.rx_flag, (unsigned long)debug_info.parse_error_count);
-    sprintf(line1, "Init:%d R:%lu G:%lu T:%lu", (int)debug_info.initialized, (unsigned long)debug_info.rmc_frame_count, (unsigned long)debug_info.gga_frame_count, (unsigned long)debug_info.ths_frame_count);
-    sprintf(line2, "St R:%u G:%u T:%u", debug_info.rmc_state, debug_info.gga_state, debug_info.ths_state);
-    sprintf(line3, "RMC:%s", (debug_info.rmc_sentence[0] != '\0') ? debug_info.rmc_sentence : "<none>");
-    sprintf(line4, "GGA:%s", (debug_info.gga_sentence[0] != '\0') ? debug_info.gga_sentence : "<none>");
-    sprintf(line5, "THS:%s", (debug_info.ths_sentence[0] != '\0') ? debug_info.ths_sentence : "<none>");
-
-    ips200_set_color(RGB565_WHITE, RGB565_BLACK);
-    show_string_fit_width_pad(10, 40, (uint16)(ips200_width_max - 20U), line0);
-    show_string_fit_width_pad(10, 60, (uint16)(ips200_width_max - 20U), line1);
-    show_string_fit_width_pad(10, 80, (uint16)(ips200_width_max - 20U), line2);
-    show_string_fit_width_pad(10, 112, (uint16)(ips200_width_max - 20U), line3);
-    show_string_fit_width_pad(10, 136, (uint16)(ips200_width_max - 20U), line4);
-    show_string_fit_width_pad(10, 160, (uint16)(ips200_width_max - 20U), line5);
-    menu_full_redraw = 0;
-}
-
-static void record_param_enter_view(record_param_view_mode_t mode)
-{
-    record_param_view_mode = mode;
-    my_key_clear_state(MY_KEY_1);
-    menu_request_redraw(1U);
-}
-
-static void record_param_exit_view(void)
-{
-    if (RECORD_PARAM_VIEW_NONE == record_param_view_mode)
-    {
-        return;
-    }
-
-    record_param_view_mode = RECORD_PARAM_VIEW_NONE;
-    params_capture_record_config();
-    params_save_to_flash();
-    menu_set_status_message("Record saved", MENU_STATUS_SHOW_MS);
-    menu_sync_gps_record_param_items();
-    menu_request_redraw(1U);
-}
-
-static float record_param_get_distance_step(void)
-{
-    return record_distance_steps[record_distance_step_index];
-}
-
-static uint16 record_param_get_interval_step(void)
-{
-    return record_interval_steps[record_interval_step_index];
-}
-
-static uint8 record_param_get_sat_step(void)
-{
-    return record_sat_steps[record_sat_step_index];
-}
-
-static void record_param_cycle_step(void)
-{
-    if (RECORD_PARAM_VIEW_DISTANCE == record_param_view_mode)
-    {
-        record_distance_step_index = (uint8)((record_distance_step_index + 1U) % (sizeof(record_distance_steps) / sizeof(record_distance_steps[0])));
-    }
-    else if (RECORD_PARAM_VIEW_INTERVAL == record_param_view_mode)
-    {
-        record_interval_step_index = (uint8)((record_interval_step_index + 1U) % (sizeof(record_interval_steps) / sizeof(record_interval_steps[0])));
-    }
-    else if (RECORD_PARAM_VIEW_MIN_SAT == record_param_view_mode)
-    {
-        record_sat_step_index = (uint8)((record_sat_step_index + 1U) % (sizeof(record_sat_steps) / sizeof(record_sat_steps[0])));
-    }
-}
-
-static void record_param_apply_encoder_adjustment(void)
-{
-    const path_record_config_t *config = path_recorder_get_config();
-
-    if (RECORD_PARAM_VIEW_DISTANCE == record_param_view_mode)
-    {
-        float value = config->min_record_distance;
-        adjust_param(&value, record_param_get_distance_step(), PARAM_RECORD_DISTANCE_MIN, PARAM_RECORD_DISTANCE_MAX, (switch_encoder_change_num < 0) ? 1U : 0U);
-        path_recorder_set_min_distance(value);
-    }
-    else if (RECORD_PARAM_VIEW_INTERVAL == record_param_view_mode)
-    {
-        uint32 value = config->min_record_interval_ms;
-        uint16 step = record_param_get_interval_step();
-
-        if (switch_encoder_change_num < 0)
-        {
-            value += step;
-        }
-        else if (value > step)
-        {
-            value -= step;
-        }
-        else
-        {
-            value = PARAM_RECORD_INTERVAL_MIN;
-        }
-
-        path_recorder_set_min_interval_ms(value);
-    }
-    else if (RECORD_PARAM_VIEW_MIN_SAT == record_param_view_mode)
-    {
-        uint32 value = config->min_satellites;
-        uint8 step = record_param_get_sat_step();
-
-        if (switch_encoder_change_num < 0)
-        {
-            value += step;
-        }
-        else if (value > step)
-        {
-            value -= step;
-        }
-        else
-        {
-            value = PARAM_RECORD_SAT_MIN;
-        }
-
-        path_recorder_set_min_satellites((uint8)value);
-    }
-
-    menu_sync_gps_record_param_items();
-}
-
-static void record_param_draw_edit_page(const char *title, const char *value_text, const char *step_text)
-{
-    static record_param_view_mode_t last_draw_mode = RECORD_PARAM_VIEW_NONE;
-    static char last_value_text[32] = "";
-    static char last_step_text[32] = "";
-
-    if (!menu_full_redraw &&
-        last_draw_mode == record_param_view_mode &&
-        0 == strcmp(last_value_text, value_text) &&
-        0 == strcmp(last_step_text, step_text))
-    {
-        return;
-    }
-
-    if (menu_full_redraw)
-    {
-        ips200_full(RGB565_BLACK);
-        ips200_set_color(RGB565_CYAN, RGB565_BLACK);
-        show_string_fit(10, 10, title);
-        ips200_draw_line(0, 30, ips200_width_max - 1, 30, RGB565_GRAY);
-        ips200_set_color(RGB565_GRAY, RGB565_BLACK);
-        show_string_fit_width_pad(10, 40, (uint16)(ips200_width_max - 20U), "ENC: Adjust record param");
-        show_string_fit_width_pad(10, 56, (uint16)(ips200_width_max - 20U), "K1: Change step   LONG: Back");
-        show_string_fit_width_pad(18, 88, (uint16)(ips200_width_max - 36U), "Current Value");
-        show_string_fit_width_pad(18, 144, (uint16)(ips200_width_max - 36U), "Step Size");
-    }
-
-    ips200_set_color(RGB565_YELLOW, RGB565_BLACK);
-    show_string_fit_width_pad(18, 110, (uint16)(ips200_width_max - 36U), value_text);
-
-    ips200_set_color(RGB565_GREEN, RGB565_BLACK);
-    show_string_fit_width_pad(18, 166, (uint16)(ips200_width_max - 36U), step_text);
-
-    strncpy(last_value_text, value_text, sizeof(last_value_text) - 1U);
-    last_value_text[sizeof(last_value_text) - 1U] = '\0';
-    strncpy(last_step_text, step_text, sizeof(last_step_text) - 1U);
-    last_step_text[sizeof(last_step_text) - 1U] = '\0';
-    last_draw_mode = record_param_view_mode;
-    menu_full_redraw = 0U;
-}
-
-static void record_param_draw_active_view(void)
-{
-    const path_record_config_t *config = path_recorder_get_config();
-    char value_text[32];
-    char step_text[32];
-
-    if (RECORD_PARAM_VIEW_DISTANCE == record_param_view_mode)
-    {
-        sprintf(value_text, "%.2f m", config->min_record_distance);
-        sprintf(step_text, "%.2f m", record_param_get_distance_step());
-        record_param_draw_edit_page("Point Distance", value_text, step_text);
-    }
-    else if (RECORD_PARAM_VIEW_INTERVAL == record_param_view_mode)
-    {
-        sprintf(value_text, "%lu ms", (unsigned long)config->min_record_interval_ms);
-        sprintf(step_text, "%u ms", record_param_get_interval_step());
-        record_param_draw_edit_page("Point Interval", value_text, step_text);
-    }
-    else if (RECORD_PARAM_VIEW_MIN_SAT == record_param_view_mode)
-    {
-        sprintf(value_text, "%u", config->min_satellites);
-        sprintf(step_text, "%u", record_param_get_sat_step());
-        record_param_draw_edit_page("Min Satellites", value_text, step_text);
-    }
-}
-
 static void gps_action_record_param_distance(void)
 {
-    record_param_enter_view(RECORD_PARAM_VIEW_DISTANCE);
+    menu_gps_action_record_param_distance(&record_param_view_mode, &menu_full_redraw, menu_request_redraw);
 }
 
 static void gps_action_record_param_interval(void)
 {
-    record_param_enter_view(RECORD_PARAM_VIEW_INTERVAL);
+    menu_gps_action_record_param_interval(&record_param_view_mode, &menu_full_redraw, menu_request_redraw);
 }
 
 static void gps_action_record_param_min_sat(void)
 {
-    record_param_enter_view(RECORD_PARAM_VIEW_MIN_SAT);
-}
-
-static void pid_sync_runtime_param(void)
-{
-    menu_pid_param_cache.kp = g_params.pid_p;
-    menu_pid_param_cache.ki = g_params.pid_i;
-    menu_pid_param_cache.kd = g_params.pid_d;
-    menu_pid_param_cache.integral_limit = 500.0f;
-    menu_pid_param_cache.output_limit = 1000.0f;
-    pid_set_param(&pid_preview_controller, &menu_pid_param_cache);
-}
-
-static void pid_save_if_dirty(void)
-{
-    if (!pid_param_dirty)
-    {
-        return;
-    }
-
-    params_save_to_flash();
-    pid_param_dirty = 0U;
-    menu_set_status_message("PID saved", MENU_STATUS_SHOW_MS);
-}
-
-static void pid_reset_preview_state(void)
-{
-    pid_reset(&pid_preview_controller);
-    pid_preview_feedback = 0.0f;
-    pid_preview_output = 0.0f;
-}
-
-static void pid_enter_view(pid_view_mode_t mode)
-{
-    pid_display_mode = mode;
-    pid_sync_runtime_param();
-    pid_reset_preview_state();
-    my_key_clear_state(MY_KEY_1);
-    menu_request_redraw(1U);
-}
-
-static void pid_exit_view(void)
-{
-    if ((PID_VIEW_NONE != pid_display_mode) && (pid_display_mode <= PID_VIEW_EDIT_KD) && pid_param_dirty)
-    {
-        pid_save_if_dirty();
-    }
-
-    pid_display_mode = PID_VIEW_NONE;
-    menu_request_redraw(1U);
-}
-
-static void pid_apply_encoder_adjustment(void)
-{
-    float step = pid_get_current_step(pid_display_mode);
-    uint8 updated = 0U;
-
-    if (PID_VIEW_EDIT_KP == pid_display_mode)
-    {
-        adjust_param(&g_params.pid_p, step, PARAM_PID_P_MIN, PARAM_PID_P_MAX, (switch_encoder_change_num < 0) ? 1U : 0U);
-        updated = 1U;
-    }
-    else if (PID_VIEW_EDIT_KI == pid_display_mode)
-    {
-        adjust_param(&g_params.pid_i, step, PARAM_PID_I_MIN, PARAM_PID_I_MAX, (switch_encoder_change_num < 0) ? 1U : 0U);
-        updated = 1U;
-    }
-    else if (PID_VIEW_EDIT_KD == pid_display_mode)
-    {
-        adjust_param(&g_params.pid_d, step, PARAM_PID_D_MIN, PARAM_PID_D_MAX, (switch_encoder_change_num < 0) ? 1U : 0U);
-        updated = 1U;
-    }
-
-    if (updated)
-    {
-        pid_param_dirty = 1U;
-        pid_sync_runtime_param();
-    }
-}
-
-static void pid_draw_active_view(void)
-{
-    if (PID_VIEW_EDIT_KP == pid_display_mode)
-    {
-        pid_draw_edit_page("Edit Kp", g_params.pid_p, pid_get_current_step(PID_VIEW_EDIT_KP));
-    }
-    else if (PID_VIEW_EDIT_KI == pid_display_mode)
-    {
-        pid_draw_edit_page("Edit Ki", g_params.pid_i, pid_get_current_step(PID_VIEW_EDIT_KI));
-    }
-    else if (PID_VIEW_EDIT_KD == pid_display_mode)
-    {
-        pid_draw_edit_page("Edit Kd", g_params.pid_d, pid_get_current_step(PID_VIEW_EDIT_KD));
-    }
-    else if (PID_VIEW_PREVIEW == pid_display_mode)
-    {
-        pid_draw_preview_page();
-    }
-}
-
-static void pid_draw_edit_page(const char *title, float value, float step)
-{
-    char value_line[32];
-    char step_line[32];
-    static pid_view_mode_t last_draw_mode = PID_VIEW_NONE;
-    static float last_draw_value = -1.0f;
-    static float last_draw_step = -1.0f;
-
-    if (!menu_full_redraw &&
-        last_draw_mode == pid_display_mode &&
-        last_draw_value == value &&
-        last_draw_step == step)
-    {
-        return;
-    }
-
-    if (menu_full_redraw)
-    {
-        ips200_full(RGB565_BLACK);
-        ips200_set_color(RGB565_CYAN, RGB565_BLACK);
-        show_string_fit(10, 10, title);
-        ips200_draw_line(0, 30, ips200_width_max - 1, 30, RGB565_GRAY);
-        ips200_set_color(RGB565_GRAY, RGB565_BLACK);
-        show_string_fit_width_pad(10, 40, (uint16)(ips200_width_max - 20U), "ENC: Adjust parameter");
-        show_string_fit_width_pad(10, 56, (uint16)(ips200_width_max - 20U), "K1: Change step   LONG: Exit");
-        show_string_fit_width_pad(18, 82, (uint16)(ips200_width_max - 36U), "Current Value");
-        show_string_fit_width_pad(18, 138, (uint16)(ips200_width_max - 36U), "Step Size");
-        show_string_fit_width_pad(18, 194, (uint16)(ips200_width_max - 36U), "Rotate encoder to tune");
-        show_string_fit_width_pad(18, 210, (uint16)(ips200_width_max - 36U), "Exit auto-saves PID");
-    }
-
-    sprintf(value_line, "%.4f", value);
-    sprintf(step_line, "%.4f", step);
-
-    ips200_set_color(RGB565_YELLOW, RGB565_BLACK);
-    show_string_fit_width_pad(18, 104, (uint16)(ips200_width_max - 36U), value_line);
-
-    ips200_set_color(RGB565_GREEN, RGB565_BLACK);
-    show_string_fit_width_pad(18, 160, (uint16)(ips200_width_max - 36U), step_line);
-
-    last_draw_mode = pid_display_mode;
-    last_draw_value = value;
-    last_draw_step = step;
-    menu_full_redraw = 0;
-}
-
-static void pid_draw_preview_page(void)
-{
-    static uint32 last_refresh_ms = 0;
-    char line0[64];
-    char line1[64];
-    char line2[64];
-    char line3[64];
-    char line4[64];
-    uint32 now_ms = system_getval_ms();
-    float error;
-
-    if (!menu_full_redraw && (now_ms - last_refresh_ms < 120U))
-    {
-        return;
-    }
-
-    last_refresh_ms = now_ms;
-
-    if (menu_full_redraw)
-    {
-        ips200_fill_rect(0, 32, ips200_width_max - 1, ips200_height_max - 1, RGB565_BLACK);
-        gps_draw_page_header("PID Preview");
-        show_string_fit_width(5, (uint16)(ips200_height_max - 20U), (uint16)(ips200_width_max - 10U), "K1 LONG Exit");
-    }
-
-    pid_preview_output = pid_calculate(&pid_preview_controller, pid_preview_target, pid_preview_feedback);
-    pid_preview_feedback += pid_preview_output * 0.02f;
-    pid_preview_feedback *= 0.995f;
-    error = pid_preview_target - pid_preview_feedback;
-
-    sprintf(line0, "Kp:%.3f Ki:%.3f", g_params.pid_p, g_params.pid_i);
-    sprintf(line1, "Kd:%.3f Target:%.1f", g_params.pid_d, pid_preview_target);
-    sprintf(line2, "Feedback:%.2f", pid_preview_feedback);
-    sprintf(line3, "Error:%.2f Output:%.2f", error, pid_preview_output);
-    sprintf(line4, "Adjust gains in PID menu");
-
-    ips200_set_color(RGB565_WHITE, RGB565_BLACK);
-    show_string_fit_width_pad(10, 56, (uint16)(ips200_width_max - 20U), line0);
-    show_string_fit_width_pad(10, 80, (uint16)(ips200_width_max - 20U), line1);
-    show_string_fit_width_pad(10, 104, (uint16)(ips200_width_max - 20U), line2);
-    show_string_fit_width_pad(10, 128, (uint16)(ips200_width_max - 20U), line3);
-    show_string_fit_width_pad(10, 152, (uint16)(ips200_width_max - 20U), line4);
-    menu_full_redraw = 0;
-}
-
-static float pid_get_current_step(uint8 mode)
-{
-    if (1U == mode)
-    {
-        return pid_kp_steps[pid_kp_step_index];
-    }
-    else if (2U == mode)
-    {
-        return pid_ki_steps[pid_ki_step_index];
-    }
-    else
-    {
-        return pid_kd_steps[pid_kd_step_index];
-    }
-}
-
-static void pid_cycle_step(uint8 mode)
-{
-    if (1U == mode)
-    {
-        pid_kp_step_index = (uint8)((pid_kp_step_index + 1U) % (sizeof(pid_kp_steps) / sizeof(pid_kp_steps[0])));
-    }
-    else if (2U == mode)
-    {
-        pid_ki_step_index = (uint8)((pid_ki_step_index + 1U) % (sizeof(pid_ki_steps) / sizeof(pid_ki_steps[0])));
-    }
-    else if (3U == mode)
-    {
-        pid_kd_step_index = (uint8)((pid_kd_step_index + 1U) % (sizeof(pid_kd_steps) / sizeof(pid_kd_steps[0])));
-    }
+    menu_gps_action_record_param_min_sat(&record_param_view_mode, &menu_full_redraw, menu_request_redraw);
 }
 
 static void pid_action_edit_kp(void)
 {
-    pid_enter_view(PID_VIEW_EDIT_KP);
+    menu_pid_action_edit_kp(&pid_display_mode,
+                            &g_params,
+                            &menu_pid_param_cache,
+                            &pid_preview_controller,
+                            &menu_full_redraw,
+                            menu_request_redraw);
 }
 
 static void pid_action_edit_ki(void)
 {
-    pid_enter_view(PID_VIEW_EDIT_KI);
+    menu_pid_action_edit_ki(&pid_display_mode,
+                            &g_params,
+                            &menu_pid_param_cache,
+                            &pid_preview_controller,
+                            &menu_full_redraw,
+                            menu_request_redraw);
 }
 
 static void pid_action_edit_kd(void)
 {
-    pid_enter_view(PID_VIEW_EDIT_KD);
+    menu_pid_action_edit_kd(&pid_display_mode,
+                            &g_params,
+                            &menu_pid_param_cache,
+                            &pid_preview_controller,
+                            &menu_full_redraw,
+                            menu_request_redraw);
 }
 
 static void pid_action_preview(void)
 {
-    pid_enter_view(PID_VIEW_PREVIEW);
+    menu_pid_action_preview(&pid_display_mode,
+                            &g_params,
+                            &menu_pid_param_cache,
+                            &pid_preview_controller,
+                            &menu_full_redraw,
+                            menu_request_redraw);
 }
 
 static void pid_action_reset(void)
 {
-    g_params.pid_p = 1.2f;
-    g_params.pid_i = 0.01f;
-    g_params.pid_d = 0.5f;
-    pid_param_dirty = 1U;
-    pid_sync_runtime_param();
-    pid_reset_preview_state();
-    pid_save_if_dirty();
-    menu_full_redraw = 1;
+    menu_pid_action_reset(&g_params,
+                          &pid_display_mode,
+                          &menu_pid_param_cache,
+                          &pid_preview_controller,
+                          &pid_param_dirty,
+                          &menu_full_redraw,
+                          menu_set_status_message,
+                          MENU_STATUS_SHOW_MS);
 }
 
 /* 打开 GPS 数据页，显示当前定位与轨迹统计信息 */
 static void gps_action_display_data(void)
 {
-    gps_clear_status_hint();
-    gps_enter_view(GPS_VIEW_DATA);
+    menu_gps_action_display_data(&gps_display_mode,
+                                 &menu_full_redraw,
+                                 menu_drain_encoder_events,
+                                 menu_request_redraw,
+                                 menu_reset_dynamic_region);
 }
 
 /* 根据当前记录状态启动或停止轨迹记录，并更新状态提示 */
 static void gps_action_toggle_record(void)
 {
-    path_state_enum state = path_recorder_get_state();
-
-    if (state == PATH_STATE_RECORDING)
-    {
-        path_recorder_stop();
-        gps_set_status_hint("Track stopped");
-    }
-    else
-    {
-        if (gps_menu_gnss_ready())
-        {
-            if (path_recorder_start_new())
-            {
-                gps_set_status_hint("Track recording");
-            }
-            else
-            {
-                gps_set_status_hint("Start failed");
-            }
-        }
-        else
-        {
-            gps_set_status_hint("GPS not ready");
-        }
-    }
-
-    gps_return_to_menu();
+    menu_gps_action_toggle_record(&gps_display_mode,
+                                  gps_status_hint,
+                                  (uint32)sizeof(gps_status_hint),
+                                  menu_set_status_message,
+                                  MENU_STATUS_SHOW_MS,
+                                  menu_request_redraw);
 }
 
 /* 初始化轨迹显示区域并进入 GPS 地图页面 */
 static void gps_action_map(void)
 {
-    gps_clear_status_hint();
-    path_display_init();
-    gps_enter_view(GPS_VIEW_MAP);
+    menu_gps_action_map(&gps_display_mode,
+                        &menu_full_redraw,
+                        menu_drain_encoder_events,
+                        menu_request_redraw,
+                        menu_reset_dynamic_region);
+}
+
+static void gps_action_save_track_flash(void)
+{
+    menu_gps_action_save_track_flash(&gps_display_mode,
+                                     menu_set_status_message,
+                                     MENU_STATUS_SHOW_MS,
+                                     menu_request_redraw);
+}
+
+static void gps_action_load_track_flash(void)
+{
+    menu_gps_action_load_track_flash(&gps_display_mode,
+                                     menu_set_status_message,
+                                     MENU_STATUS_SHOW_MS,
+                                     menu_request_redraw);
 }
 
 static void gps_action_raw_debug(void)
 {
-    gps_clear_status_hint();
-    gps_enter_view(GPS_VIEW_RAW_DEBUG);
+    menu_gps_action_raw_debug(&gps_display_mode,
+                              &menu_full_redraw,
+                              menu_drain_encoder_events,
+                              menu_request_redraw,
+                              menu_reset_dynamic_region);
 }
+
+static void icm_action_raw_data(void)
+{
+    menu_icm_action_raw_data(&icm_display_mode,
+                             &menu_full_redraw,
+                             menu_drain_encoder_events,
+                             menu_request_redraw,
+                             menu_reset_dynamic_region);
+}
+
+static void icm_action_attitude(void)
+{
+    menu_icm_action_attitude(&icm_display_mode,
+                             &menu_full_redraw,
+                             menu_drain_encoder_events,
+                             menu_request_redraw,
+                             menu_reset_dynamic_region);
+}
+
+static void icm_action_gyro_bias_calib(void)
+{
+    menu_icm_action_gyro_bias_calib(&icm_display_mode,
+                                    &menu_full_redraw,
+                                    menu_drain_encoder_events,
+                                    menu_request_redraw,
+                                    menu_reset_dynamic_region);
+}
+
+static void icm_action_ins_debug(void)
+{
+    menu_icm_action_ins_debug(&icm_display_mode,
+                              &menu_full_redraw,
+                              menu_drain_encoder_events,
+                              menu_request_redraw,
+                              menu_reset_dynamic_region);
+}
+
+static void icm_action_ins_track_map(void)
+{
+    menu_icm_action_ins_track_map(&icm_display_mode,
+                                  &menu_full_redraw,
+                                  menu_drain_encoder_events,
+                                  menu_request_redraw,
+                                  menu_reset_dynamic_region);
+}
+
+static char icm_ins_rec_label[48] = "5. INS REC [IDLE]";
+
+static void icm_action_ins_rec_toggle(void)
+{
+    if (ins_record_is_recording())
+    {
+        ins_record_stop();
+        menu_set_status_message("INS Rec Stopped", MENU_STATUS_SHOW_MS);
+    }
+    else
+    {
+        ins_record_start();
+        menu_set_status_message("INS Rec Started", MENU_STATUS_SHOW_MS);
+    }
+    menu_request_full_redraw();
+}
+
+static void menu_sync_ins_rec_item(void)
+{
+    char new_label[48];
+
+    if (ins_record_is_recording())
+    {
+        sprintf(new_label, "5. INS REC [REC:%u]", (unsigned int)ins_record_get_point_count());
+    }
+    else
+    {
+        sprintf(new_label, "5. INS REC [%u pts]", (unsigned int)ins_record_get_point_count());
+    }
+
+    if (0 != strcmp(icm_ins_rec_label, new_label))
+    {
+        strcpy(icm_ins_rec_label, new_label);
+        /* 仅当当前页面是 icm_menu 且无子视图时，直接局部刷新该行 */
+        if ((current_page == &icm_menu) &&
+            (ICM_VIEW_NONE == icm_display_mode) &&
+            !menu_full_redraw)
+        {
+            menu_draw_item(4, (uint8)(current_selection == 4));
+        }
+    }
+}
+
+/* ---- INS Replay 子菜单 ---- */
+
+/* 动态标签：随状态每帧刷新 */
+static char ins_replay_load_label[48]  = "1. Load Track [0 pts]";
+static char ins_replay_rec_status[48]  = "5. REC:OFF 0pts";
+static char ins_replay_play_status[64] = "6. PLAY:IDLE";
+
+static void ins_replay_action_load(void)
+{
+    if (ins_playback_load())
+    {
+        menu_set_status_message("Load OK", MENU_STATUS_SHOW_MS);
+    }
+    else
+    {
+        menu_set_status_message("Load FAIL: no pts", MENU_STATUS_SHOW_MS);
+    }
+    menu_request_full_redraw();
+}
+
+static void ins_replay_action_start(void)
+{
+    if (INS_PLAY_READY != ins_playback_get_state())
+    {
+        menu_set_status_message("Load first!", MENU_STATUS_SHOW_MS);
+        return;
+    }
+    ins_playback_start();
+    menu_set_status_message("Replay Started", MENU_STATUS_SHOW_MS);
+    menu_request_full_redraw();
+}
+
+static void ins_replay_action_stop(void)
+{
+    ins_playback_stop();
+    menu_set_status_message("Replay Stopped", MENU_STATUS_SHOW_MS);
+    menu_request_full_redraw();
+}
+
+static void ins_replay_action_clear(void)
+{
+    /* 先停止 playback，再清除轨迹，防止 playback 访问已清除内存 */
+    ins_playback_stop();
+    ins_record_clear();
+    menu_set_status_message("Track Cleared", MENU_STATUS_SHOW_MS);
+    menu_request_full_redraw();
+}
+
+static void menu_sync_ins_replay_labels(void)
+{
+    char buf[64];
+    ins_play_state_t play_st = ins_playback_get_state();
+    float dist;
+
+    /* ---- 1. Load Track 标签：显示已加载点数或回放进度 ---- */
+    if (INS_PLAY_RUNNING == play_st)
+    {
+        sprintf(buf, "1. Load [RUN:%u/%u]",
+                (unsigned int)ins_playback_get_target_idx(),
+                (unsigned int)ins_playback_get_total_points());
+    }
+    else if (INS_PLAY_READY == play_st)
+    {
+        sprintf(buf, "1. Load [RDY:%u pts]",
+                (unsigned int)ins_playback_get_total_points());
+    }
+    else
+    {
+        sprintf(buf, "1. Load Track [%u pts]",
+                (unsigned int)ins_record_get_point_count());
+    }
+    if (0 != strcmp(ins_replay_load_label, buf))
+    {
+        strcpy(ins_replay_load_label, buf);
+        if ((current_page == &ins_replay_menu) && !menu_full_redraw)
+        {
+            menu_draw_item(0, (uint8)(current_selection == 0));
+        }
+    }
+
+    /* ---- 5. REC 状态行 ---- */
+    if (ins_record_is_recording())
+    {
+        sprintf(buf, "5. REC:ON  %u pts", (unsigned int)ins_record_get_point_count());
+    }
+    else
+    {
+        sprintf(buf, "5. REC:OFF %u pts", (unsigned int)ins_record_get_point_count());
+    }
+    if (0 != strcmp(ins_replay_rec_status, buf))
+    {
+        strcpy(ins_replay_rec_status, buf);
+        if ((current_page == &ins_replay_menu) && !menu_full_redraw)
+        {
+            menu_draw_item(4, (uint8)(current_selection == 4));
+        }
+    }
+
+    /* ---- 6. PLAY 状态行 ---- */
+    if (INS_PLAY_RUNNING == play_st)
+    {
+        dist = ins_playback_get_dist_to_target();
+        if (dist < 0.0f) { dist = 0.0f; }
+        sprintf(buf, "6. PLAY:RUN %u/%u %.2fm",
+                (unsigned int)ins_playback_get_target_idx(),
+                (unsigned int)ins_playback_get_total_points(),
+                dist);
+    }
+    else if (INS_PLAY_READY == play_st)
+    {
+        sprintf(buf, "6. PLAY:RDY %u pts",
+                (unsigned int)ins_playback_get_total_points());
+    }
+    else
+    {
+        sprintf(buf, "6. PLAY:IDLE");
+    }
+    if (0 != strcmp(ins_replay_play_status, buf))
+    {
+        strcpy(ins_replay_play_status, buf);
+        if ((current_page == &ins_replay_menu) && !menu_full_redraw)
+        {
+            menu_draw_item(5, (uint8)(current_selection == 5));
+        }
+    }
+}
+
+static MenuItem ins_replay_items[] = {
+    {ins_replay_load_label,  ins_replay_action_load,  NULL},  /* 1. Load Track  */
+    {"2. Start Replay",      ins_replay_action_start, NULL},  /* 2. Start       */
+    {"3. Stop Replay",       ins_replay_action_stop,  NULL},  /* 3. Stop        */
+    {"4. Clear Track",       ins_replay_action_clear, NULL},  /* 4. Clear       */
+    {ins_replay_rec_status,  NULL,                    NULL},  /* 5. REC status  */
+    {ins_replay_play_status, NULL,                    NULL},  /* 6. PLAY status */
+};
+
+static MenuPage ins_replay_menu = {
+    "INS Replay",
+    ins_replay_items,
+    sizeof(ins_replay_items) / sizeof(MenuItem),
+    NULL
+};
+
+static MenuItem icm_items[] = {
+    {"1. Raw Data",      icm_action_raw_data,         NULL},
+    {"2. Attitude",      icm_action_attitude,          NULL},
+    {"3. Gyro Bias Cal", icm_action_gyro_bias_calib,  NULL},
+    {"4. INS Debug",     icm_action_ins_debug,         NULL},
+    {icm_ins_rec_label,  icm_action_ins_rec_toggle,   NULL},  /* 5. INS REC toggle */
+    {"6. INS Track Map", icm_action_ins_track_map,     NULL},
+    {"7. INS Replay",    NULL,                          &ins_replay_menu},
+};
+
+static MenuPage icm_menu = {
+    "ICM42688",
+    icm_items,
+    sizeof(icm_items) / sizeof(MenuItem),
+    NULL
+};
 
 static MenuItem gps_record_param_items[] = {
     {gps_record_distance_label, gps_action_record_param_distance, NULL},
@@ -1109,7 +544,9 @@ static MenuItem gps_items[] = {
     {gps_record_menu_label, gps_action_toggle_record, NULL},
     {"3. Track Map", gps_action_map, NULL},
     {"4. Record Params", NULL, &gps_record_param_menu},
-    {"5. GPS RAW/DEBUG", gps_action_raw_debug, NULL},
+    {"5. Save Track Flash", gps_action_save_track_flash, NULL},
+    {"6. Load Track Flash", gps_action_load_track_flash, NULL},
+    {"7. GPS RAW/DEBUG", gps_action_raw_debug, NULL},
 };
 
 static MenuPage gps_menu = {
@@ -1168,6 +605,8 @@ static MenuItem main_items[] = {
     {"2. Camera", NULL, &camera_menu},
     {"3. PID", NULL, &pid_menu},
     {"4. WiFi", NULL, &wifi_page},
+    {"5. Tuning", NULL, &tuning_menu},
+    {"6. ICM42688", NULL, &icm_menu},
 };
 
 static MenuPage main_menu = {
@@ -1269,8 +708,6 @@ static void show_string_fit_width_pad(uint16 x, uint16 y, uint16 max_width, cons
 
 static void menu_set_status_message(const char *text, uint32 duration_ms)
 {
-    uint32 i = 0U;
-
     menu_status_message[0] = '\0';
     menu_status_expire_ms = 0U;
 
@@ -1280,12 +717,7 @@ static void menu_set_status_message(const char *text, uint32 duration_ms)
         return;
     }
 
-    while (text[i] != '\0' && i < (sizeof(menu_status_message) - 1U))
-    {
-        menu_status_message[i] = text[i];
-        i++;
-    }
-    menu_status_message[i] = '\0';
+    menu_copy_text(menu_status_message, (uint32)sizeof(menu_status_message), text);
     menu_status_expire_ms = system_getval_ms() + duration_ms;
     menu_footer_needs_update = 1U;
 }
@@ -1372,6 +804,13 @@ static void menu_update_selection_from_encoder(void)
     }
 }
 
+static uint8 menu_is_gps_root_idle(void)
+{
+    return ((current_page == &gps_menu) &&
+            (GPS_VIEW_NONE == gps_display_mode) &&
+            !menu_full_redraw) ? 1U : 0U;
+}
+
 static void menu_sync_gps_record_item(void)
 {
     char new_label[48];
@@ -1395,9 +834,7 @@ static void menu_sync_gps_record_item(void)
     {
         strcpy(gps_record_menu_label, new_label);
 
-        if ((current_page == &gps_menu) &&
-            (GPS_VIEW_NONE == gps_display_mode) &&
-            !menu_full_redraw)
+        if (menu_is_gps_root_idle())
         {
             menu_draw_item(1, (uint8)(current_selection == 1));
         }
@@ -1503,115 +940,47 @@ static void menu_return_to_parent(void)
 
     current_page = current_page->parent;
     current_selection = 0;
-    gps_exit_view();
-    record_param_exit_view();
+    gps_display_mode = GPS_VIEW_NONE;
+    record_param_view_mode = RECORD_PARAM_VIEW_NONE;
+    icm_display_mode = ICM_VIEW_NONE;
     gps_clear_status_hint();
     menu_reset_dynamic_region();
     menu_request_redraw(1U);
 }
 
-static void gps_draw_active_view(void)
-{
-    if (GPS_VIEW_DATA == gps_display_mode)
-    {
-        gps_draw_data_page();
-    }
-    else if (GPS_VIEW_MAP == gps_display_mode)
-    {
-        gps_draw_map_page();
-    }
-    else if (GPS_VIEW_RAW_DEBUG == gps_display_mode)
-    {
-        gps_draw_raw_debug_page();
-    }
-}
-
 static uint8 menu_handle_gps_view(void)
 {
-    if (GPS_VIEW_NONE == gps_display_mode)
-    {
-        return 0U;
-    }
-
-    if (my_key_get_state(MY_KEY_1) == MY_KEY_LONG_PRESS)
-    {
-        my_key_clear_state(MY_KEY_1);
-        gps_exit_view();
-        return 1U;
-    }
-
-    if ((GPS_VIEW_MAP == gps_display_mode) &&
-        (my_key_get_state(MY_KEY_1) == MY_KEY_SHORT_PRESS))
-    {
-        my_key_clear_state(MY_KEY_1);
-        gps_clear_current_track();
-        gps_draw_map_page();
-        return 1U;
-    }
-
-    gps_draw_active_view();
-    return 1U;
+    return menu_gps_handle_view(&gps_display_mode,
+                                gps_status_hint,
+                                (uint32)sizeof(gps_status_hint),
+                                &menu_full_redraw,
+                                menu_drain_encoder_events,
+                                menu_request_redraw,
+                                menu_reset_dynamic_region);
 }
 
 static uint8 menu_handle_record_param_view(void)
 {
-    if (RECORD_PARAM_VIEW_NONE == record_param_view_mode)
-    {
-        return 0U;
-    }
-
-    if (my_key_get_state(MY_KEY_1) == MY_KEY_LONG_PRESS)
-    {
-        my_key_clear_state(MY_KEY_1);
-        record_param_exit_view();
-        return 1U;
-    }
-
-    if (If_Switch_Encoder_Change())
-    {
-        record_param_apply_encoder_adjustment();
-    }
-
-    if (my_key_get_state(MY_KEY_1) == MY_KEY_SHORT_PRESS)
-    {
-        my_key_clear_state(MY_KEY_1);
-        record_param_cycle_step();
-    }
-
-    record_param_draw_active_view();
-    return 1U;
+    return menu_gps_handle_record_param_view(&record_param_view_mode,
+                                             &g_params,
+                                             &menu_full_redraw,
+                                             menu_request_redraw,
+                                             menu_set_status_message,
+                                             MENU_STATUS_SHOW_MS,
+                                             menu_sync_gps_record_param_items);
 }
 
 static uint8 menu_handle_pid_view(void)
 {
-    if (PID_VIEW_NONE == pid_display_mode)
-    {
-        return 0U;
-    }
-
-    if (my_key_get_state(MY_KEY_1) == MY_KEY_LONG_PRESS)
-    {
-        my_key_clear_state(MY_KEY_1);
-        pid_exit_view();
-        return 1U;
-    }
-
-    if (If_Switch_Encoder_Change())
-    {
-        pid_apply_encoder_adjustment();
-    }
-
-    if (my_key_get_state(MY_KEY_1) == MY_KEY_SHORT_PRESS)
-    {
-        my_key_clear_state(MY_KEY_1);
-        if (pid_display_mode <= PID_VIEW_EDIT_KD)
-        {
-            pid_cycle_step(pid_display_mode);
-        }
-    }
-
-    pid_draw_active_view();
-    return 1U;
+    return menu_pid_handle_view(&pid_display_mode,
+                                &g_params,
+                                &menu_pid_param_cache,
+                                &pid_preview_controller,
+                                &pid_param_dirty,
+                                &menu_full_redraw,
+                                menu_request_redraw,
+                                menu_set_status_message,
+                                MENU_STATUS_SHOW_MS);
 }
 
 static void menu_execute_current_item(void)
@@ -1630,25 +999,35 @@ static void menu_execute_current_item(void)
 
         if (PID_VIEW_NONE != pid_display_mode)
         {
-            pid_draw_active_view();
+            menu_handle_pid_view();
             return;
         }
 
         if (RECORD_PARAM_VIEW_NONE != record_param_view_mode)
         {
-            record_param_draw_active_view();
+            menu_handle_record_param_view();
             return;
         }
 
         if (GPS_VIEW_NONE != gps_display_mode)
         {
-            gps_draw_active_view();
+            menu_handle_gps_view();
             return;
         }
 
         if (wifi_menu_is_active())
         {
             wifi_menu_handle_view();
+            return;
+        }
+
+        if (ICM_VIEW_NONE != icm_display_mode)
+        {
+            menu_icm_handle_view(&icm_display_mode,
+                                 &menu_full_redraw,
+                                 menu_drain_encoder_events,
+                                 menu_request_redraw,
+                                 menu_reset_dynamic_region);
             return;
         }
 
@@ -1676,6 +1055,9 @@ void menu_init(void)
     Init_Load_Params();
     menu_sync_gps_record_item();
     menu_sync_gps_record_param_items();
+    menu_sync_ins_rec_item();
+    menu_sync_ins_replay_labels();
+    tuning_soft_init();
 
     current_page = &main_menu;
     current_page->parent = NULL;
@@ -1715,6 +1097,38 @@ const pid_param_t *menu_get_pid_param(void)
     return &menu_pid_param_cache;
 }
 
+uint8 menu_set_pid_param(const pid_param_t *param, uint8 save_to_flash)
+{
+    if (NULL == param)
+    {
+        return 0U;
+    }
+
+    if ((param->kp < PARAM_PID_P_MIN) || (param->kp > PARAM_PID_P_MAX) ||
+        (param->ki < PARAM_PID_I_MIN) || (param->ki > PARAM_PID_I_MAX) ||
+        (param->kd < PARAM_PID_D_MIN) || (param->kd > PARAM_PID_D_MAX))
+    {
+        return 0U;
+    }
+
+    g_params.pid_p = param->kp;
+    g_params.pid_i = param->ki;
+    g_params.pid_d = param->kd;
+    pid_param_dirty = 1U;
+    menu_pid_sync_runtime_param(&g_params, &menu_pid_param_cache, &pid_preview_controller);
+
+    if (save_to_flash)
+    {
+        if (!menu_params_save_to_flash(&g_params))
+        {
+            return 0U;
+        }
+        pid_param_dirty = 0U;
+    }
+
+    return 1U;
+}
+
 void menu_request_full_redraw(void)
 {
     menu_request_redraw(1U);
@@ -1731,6 +1145,9 @@ void menu_task(void)
     Get_Switch_Num();
     menu_process_status_timeout(now_ms);
     menu_sync_gps_record_item();
+    menu_sync_ins_rec_item();
+    menu_sync_ins_replay_labels();
+    tuning_soft_task();
 
     if (current_page == NULL || current_page->num_items <= 0)
     {
@@ -1757,6 +1174,20 @@ void menu_task(void)
         return;
     }
 
+    if (tuning_soft_handle_view())
+    {
+        return;
+    }
+
+    if (menu_icm_handle_view(&icm_display_mode,
+                             &menu_full_redraw,
+                             menu_drain_encoder_events,
+                             menu_request_redraw,
+                             menu_reset_dynamic_region))
+    {
+        return;
+    }
+
     menu_update_selection_from_encoder();
 
     if (my_key_get_state(MY_KEY_1) == MY_KEY_LONG_PRESS)
@@ -1771,7 +1202,7 @@ void menu_task(void)
         my_key_clear_state(MY_KEY_1);
         menu_execute_current_item();
 
-        if ((PID_VIEW_NONE != pid_display_mode) || (GPS_VIEW_NONE != gps_display_mode) || wifi_menu_is_active())
+        if ((PID_VIEW_NONE != pid_display_mode) || (GPS_VIEW_NONE != gps_display_mode) || wifi_menu_is_active() || tuning_soft_is_active() || (ICM_VIEW_NONE != icm_display_mode))
         {
             menu_needs_update = 0U;
             menu_footer_needs_update = 0U;

@@ -330,6 +330,10 @@ cpu0_main.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\libraries\\zf_compone
 "E:\\ads\\Seekfree_TC387_Opensource_Library\\libraries\\zf_components\seekfree_assistant.h" :
 cpu0_main.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\libraries\\zf_components\seekfree_assistant_interface.h"
 "E:\\ads\\Seekfree_TC387_Opensource_Library\\libraries\\zf_components\seekfree_assistant_interface.h" :
+cpu0_main.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\ICM43688\ICM42688.h"
+"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\ICM43688\ICM42688.h" :
+cpu0_main.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\myhead.h"
+"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\myhead.h" :
 cpu0_main.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\GPS\display_gps.h"
 "E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\GPS\display_gps.h" :
 cpu0_main.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\GPS\path_config.h"
@@ -338,8 +342,6 @@ cpu0_main.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\libraries\\zf_common\
 "E:\\ads\\Seekfree_TC387_Opensource_Library\\libraries\\zf_common\zf_common_headfile.h" :
 cpu0_main.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\Beep\Beep.h"
 "E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\Beep\Beep.h" :
-cpu0_main.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\myhead.h"
-"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\myhead.h" :
 cpu0_main.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\MyEncoder\MyEncoder.h"
 "E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\MyEncoder\MyEncoder.h" :
 cpu0_main.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\menu\menu.h"
@@ -358,3 +360,17 @@ cpu0_main.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\GPS\path_displa
 "E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\GPS\path_display.h" :
 cpu0_main.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\libraries\\zf_common\zf_common_headfile.h"
 "E:\\ads\\Seekfree_TC387_Opensource_Library\\libraries\\zf_common\zf_common_headfile.h" :
+cpu0_main.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\tuning\tuning_soft.h"
+"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\tuning\tuning_soft.h" :
+cpu0_main.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\tuning\autotune.h"
+"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\tuning\autotune.h" :
+cpu0_main.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\ICM43688\icm_attitude.h"
+"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\ICM43688\icm_attitude.h" :
+cpu0_main.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\ICM43688\icm_ins.h"
+"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\ICM43688\icm_ins.h" :
+cpu0_main.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\ICM43688\ins_record.h"
+"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\ICM43688\ins_record.h" :
+cpu0_main.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\ICM43688\ins_playback.h"
+"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\ICM43688\ins_playback.h" :
+cpu0_main.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\ICM43688\ins_ctrl.h"
+"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\ICM43688\ins_ctrl.h" :
