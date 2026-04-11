@@ -1,6 +1,10 @@
 /*********************************************************************************************************************
 * File: menu_pedal.c
-* Brief: 踏板调试菜单实现 —— 显示 A45/A47 原始 ADC 值
+* Brief: 踏板调试菜单实现
+*        - 显示 A45（油门）raw / filtered / percent / pressed
+*        - Step 3：新增控制层输出 throttle valid / enable / cmd
+*        - 显示 A47 raw
+*        - 刹车当前因板级硬件复用问题不可用，标记为 "unavailable"
 * Author: JX116
 *********************************************************************************************************************/
 
@@ -92,19 +96,109 @@ static void pedal_draw_debug_page(uint8 *menu_full_redraw)
         *menu_full_redraw = 0U;
     }
 
-    y = 30U;
+    /* ---- Throttle (A45) primitive block ---- */
+    y = 20U;
     ips200_set_color(RGB565_CYAN, RGB565_BLACK);
-    ips200_show_string(10, y, "ADC Raw (0~4095)");
+    ips200_show_string(10, y, "Throttle (A45)");
 
     ips200_set_color(RGB565_WHITE, RGB565_BLACK);
 
-    y = 52U;
-    snprintf(line, sizeof(line), "Pedal1(A45): %4u", (unsigned int)pedal_input_get_a45());
+    y = 34U;
+    snprintf(line, sizeof(line), "A45 raw : %4u",
+             (unsigned int)pedal_input_get_a45());
     pedal_fill_rect(10U, y, (uint16)(ips200_width_max - 10U), (uint16)(y + 12U), RGB565_BLACK);
     pedal_show_pad(10, y, col_w, line);
 
-    y = 72U;
-    snprintf(line, sizeof(line), "Pedal2(A47): %4u", (unsigned int)pedal_input_get_a47());
+    y = 48U;
+    snprintf(line, sizeof(line), "A45 filt: %4u",
+             (unsigned int)pedal_input_get_throttle_filtered());
+    pedal_fill_rect(10U, y, (uint16)(ips200_width_max - 10U), (uint16)(y + 12U), RGB565_BLACK);
+    pedal_show_pad(10, y, col_w, line);
+
+    y = 62U;
+    snprintf(line, sizeof(line), "A45 %%   : %4u/1000",
+             (unsigned int)pedal_input_get_throttle_percent());
+    pedal_fill_rect(10U, y, (uint16)(ips200_width_max - 10U), (uint16)(y + 12U), RGB565_BLACK);
+    pedal_show_pad(10, y, col_w, line);
+
+    y = 76U;
+    {
+        uint8 pressed = pedal_input_get_throttle_pressed();
+        snprintf(line, sizeof(line), "A45 pressed: %s",
+                 (0U != pressed) ? "YES" : "no ");
+        pedal_fill_rect(10U, y, (uint16)(ips200_width_max - 10U), (uint16)(y + 12U), RGB565_BLACK);
+        if (0U != pressed)
+        {
+            ips200_set_color(RGB565_GREEN, RGB565_BLACK);
+        }
+        else
+        {
+            ips200_set_color(RGB565_WHITE, RGB565_BLACK);
+        }
+        pedal_show_pad(10, y, col_w, line);
+    }
+
+    /* ---- Control-layer command block (Step 3) ---- */
+    y = 96U;
+    ips200_set_color(RGB565_CYAN, RGB565_BLACK);
+    ips200_show_string(10, y, "Throttle Cmd");
+
+    y = 110U;
+    {
+        uint8 valid = pedal_input_get_throttle_valid();
+        snprintf(line, sizeof(line), "valid : %s",
+                 (0U != valid) ? "YES" : "NO ");
+        pedal_fill_rect(10U, y, (uint16)(ips200_width_max - 10U), (uint16)(y + 12U), RGB565_BLACK);
+        if (0U != valid)
+        {
+            ips200_set_color(RGB565_GREEN, RGB565_BLACK);
+        }
+        else
+        {
+            ips200_set_color(RGB565_RED, RGB565_BLACK);
+        }
+        pedal_show_pad(10, y, col_w, line);
+    }
+
+    y = 124U;
+    {
+        uint8 enable = pedal_input_get_throttle_enable_request();
+        snprintf(line, sizeof(line), "enable: %s",
+                 (0U != enable) ? "YES" : "no ");
+        pedal_fill_rect(10U, y, (uint16)(ips200_width_max - 10U), (uint16)(y + 12U), RGB565_BLACK);
+        if (0U != enable)
+        {
+            ips200_set_color(RGB565_GREEN, RGB565_BLACK);
+        }
+        else
+        {
+            ips200_set_color(RGB565_WHITE, RGB565_BLACK);
+        }
+        pedal_show_pad(10, y, col_w, line);
+    }
+
+    y = 138U;
+    ips200_set_color(RGB565_WHITE, RGB565_BLACK);
+    snprintf(line, sizeof(line), "cmd   : %4u/1000",
+             (unsigned int)pedal_input_get_throttle_cmd());
+    pedal_fill_rect(10U, y, (uint16)(ips200_width_max - 10U), (uint16)(y + 12U), RGB565_BLACK);
+    pedal_show_pad(10, y, col_w, line);
+
+    /* ---- Brake (A47) — 当前板级硬件不可用，只显示 raw + unavailable ---- */
+    y = 158U;
+    ips200_set_color(RGB565_CYAN, RGB565_BLACK);
+    ips200_show_string(10, y, "Brake (A47)");
+
+    y = 172U;
+    ips200_set_color(RGB565_WHITE, RGB565_BLACK);
+    snprintf(line, sizeof(line), "A47 raw : %4u",
+             (unsigned int)pedal_input_get_a47());
+    pedal_fill_rect(10U, y, (uint16)(ips200_width_max - 10U), (uint16)(y + 12U), RGB565_BLACK);
+    pedal_show_pad(10, y, col_w, line);
+
+    y = 186U;
+    ips200_set_color(RGB565_RED, RGB565_BLACK);
+    snprintf(line, sizeof(line), "Brake: unavailable");
     pedal_fill_rect(10U, y, (uint16)(ips200_width_max - 10U), (uint16)(y + 12U), RGB565_BLACK);
     pedal_show_pad(10, y, col_w, line);
 
