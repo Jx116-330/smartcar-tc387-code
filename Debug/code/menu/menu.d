@@ -380,6 +380,10 @@ menu.o :	..\code\menu\menu_params.h
 ..\code\menu\menu_params.h :
 menu.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\MyKey\MyKey.h"
 "E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\MyKey\MyKey.h" :
+menu.o :	..\code\menu\menu_fusion.h
+..\code\menu\menu_fusion.h :
+menu.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\MyKey\MyKey.h"
+"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\MyKey\MyKey.h" :
 menu.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\libraries\\zf_common\zf_common_headfile.h"
 "E:\\ads\\Seekfree_TC387_Opensource_Library\\libraries\\zf_common\zf_common_headfile.h" :
 menu.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\GPS\path_recorder.h"
@@ -390,6 +394,10 @@ menu.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\MyKey\MyKey.h"
 "E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\MyKey\MyKey.h" :
 menu.o :	..\code\menu\menu_icm.h
 ..\code\menu\menu_icm.h :
+menu.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\MyKey\MyKey.h"
+"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\MyKey\MyKey.h" :
+menu.o :	..\code\menu\menu_pedal.h
+..\code\menu\menu_pedal.h :
 menu.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\MyKey\MyKey.h"
 "E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\MyKey\MyKey.h" :
 menu.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\ICM43688\ins_record.h"

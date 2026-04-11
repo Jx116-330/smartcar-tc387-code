@@ -30,6 +30,7 @@ code/ICM43688 \
 code/MyEncoder \
 code/MyKey \
 code/menu \
+code/pedal \
 code/tuning \
 libraries/infineon_libraries/Configurations \
 libraries/infineon_libraries/Infra/Platform/Tricore/Compilers \

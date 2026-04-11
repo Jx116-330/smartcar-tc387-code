@@ -5,6 +5,7 @@
 #include "ins_record.h"
 #include "ins_playback.h"
 #include "ins_ctrl.h"
+#include "pedal_input.h"
 #pragma section all "cpu0_dsram"
 
 int core0_main(void)
@@ -22,6 +23,7 @@ int core0_main(void)
     ins_playback_init();
     ins_ctrl_init();
     icm_gps_fusion_init();
+    pedal_input_init();
     menu_init();
     cpu_wait_event_ready();
 
@@ -45,6 +47,7 @@ int core0_main(void)
         ins_record_task();
         ins_playback_task();
         ins_ctrl_task();
+        pedal_input_task();
         menu_task();   /* 内部调用 tuning_soft_task() */
     }
 }

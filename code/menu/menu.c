@@ -20,6 +20,7 @@
 #include "wifi_menu.h"
 #include "tuning_soft.h"
 #include "menu_icm.h"
+#include "menu_pedal.h"
 #include "ins_record.h"
 #include "ins_playback.h"
 
@@ -49,12 +50,14 @@ static pid_view_mode_t pid_display_mode = PID_VIEW_NONE;
 static record_param_view_mode_t record_param_view_mode = RECORD_PARAM_VIEW_NONE;
 static icm_view_mode_t icm_display_mode = ICM_VIEW_NONE;
 static fusion_view_mode_t fusion_display_mode = FUSION_VIEW_NONE;
+static pedal_view_mode_t  pedal_display_mode  = PEDAL_VIEW_NONE;
 static char gps_status_hint[64] = "";
 static MenuPage *current_page = NULL;
 static MenuPage gps_menu;
 static MenuPage icm_menu;
 static MenuPage ins_replay_menu;
 static MenuPage fusion_menu;
+static MenuPage pedal_menu;
 static pid_param_t menu_pid_param_cache;
 static pid_controller_t pid_preview_controller;
 static char menu_status_message[32] = "";
@@ -391,6 +394,26 @@ static uint8 menu_handle_fusion_view(void)
                                    menu_reset_dynamic_region);
 }
 
+/* ---- Pedal ---- */
+
+static void pedal_action_debug(void)
+{
+    menu_pedal_action_debug(&pedal_display_mode,
+                            &menu_full_redraw,
+                            menu_drain_encoder_events,
+                            menu_request_redraw,
+                            menu_reset_dynamic_region);
+}
+
+static uint8 menu_handle_pedal_view(void)
+{
+    return menu_pedal_handle_view(&pedal_display_mode,
+                                  &menu_full_redraw,
+                                  menu_drain_encoder_events,
+                                  menu_request_redraw,
+                                  menu_reset_dynamic_region);
+}
+
 /* ---- INS Replay 子菜单 ---- */
 
 /* 动态标签：随状态每帧刷新 */
@@ -636,6 +659,17 @@ static MenuPage fusion_menu = {
     NULL
 };
 
+static MenuItem pedal_items[] = {
+    {"1. Pedal Debug", pedal_action_debug, NULL},
+};
+
+static MenuPage pedal_menu = {
+    "Pedal",
+    pedal_items,
+    sizeof(pedal_items) / sizeof(MenuItem),
+    NULL
+};
+
 static MenuItem main_items[] = {
     {"1. GPS", NULL, &gps_menu},
     {"2. Camera", NULL, &camera_menu},
@@ -644,6 +678,7 @@ static MenuItem main_items[] = {
     {"5. Tuning", NULL, &tuning_menu},
     {"6. ICM42688", NULL, &icm_menu},
     {"7. Fusion", NULL, &fusion_menu},
+    {"8. Pedal", NULL, &pedal_menu},
 };
 
 static MenuPage main_menu = {
@@ -981,6 +1016,7 @@ static void menu_return_to_parent(void)
     record_param_view_mode = RECORD_PARAM_VIEW_NONE;
     icm_display_mode = ICM_VIEW_NONE;
     fusion_display_mode = FUSION_VIEW_NONE;
+    pedal_display_mode = PEDAL_VIEW_NONE;
     gps_clear_status_hint();
     menu_reset_dynamic_region();
     menu_request_redraw(1U);
@@ -1072,6 +1108,12 @@ static void menu_execute_current_item(void)
         if (FUSION_VIEW_NONE != fusion_display_mode)
         {
             menu_handle_fusion_view();
+            return;
+        }
+
+        if (PEDAL_VIEW_NONE != pedal_display_mode)
+        {
+            menu_handle_pedal_view();
             return;
         }
 
@@ -1237,6 +1279,11 @@ void menu_task(void)
         return;
     }
 
+    if (menu_handle_pedal_view())
+    {
+        return;
+    }
+
     menu_update_selection_from_encoder();
 
     if (my_key_get_state(MY_KEY_1) == MY_KEY_LONG_PRESS)
@@ -1251,7 +1298,7 @@ void menu_task(void)
         my_key_clear_state(MY_KEY_1);
         menu_execute_current_item();
 
-        if ((PID_VIEW_NONE != pid_display_mode) || (GPS_VIEW_NONE != gps_display_mode) || wifi_menu_is_active() || tuning_soft_is_active() || (ICM_VIEW_NONE != icm_display_mode) || (FUSION_VIEW_NONE != fusion_display_mode))
+        if ((PID_VIEW_NONE != pid_display_mode) || (GPS_VIEW_NONE != gps_display_mode) || wifi_menu_is_active() || tuning_soft_is_active() || (ICM_VIEW_NONE != icm_display_mode) || (FUSION_VIEW_NONE != fusion_display_mode) || (PEDAL_VIEW_NONE != pedal_display_mode))
         {
             menu_needs_update = 0U;
             menu_footer_needs_update = 0U;

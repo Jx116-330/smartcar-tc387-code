@@ -368,9 +368,13 @@ cpu0_main.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\ICM43688\icm_at
 "E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\ICM43688\icm_attitude.h" :
 cpu0_main.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\ICM43688\icm_ins.h"
 "E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\ICM43688\icm_ins.h" :
+cpu0_main.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\ICM43688\icm_gps_fusion.h"
+"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\ICM43688\icm_gps_fusion.h" :
 cpu0_main.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\ICM43688\ins_record.h"
 "E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\ICM43688\ins_record.h" :
 cpu0_main.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\ICM43688\ins_playback.h"
 "E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\ICM43688\ins_playback.h" :
 cpu0_main.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\ICM43688\ins_ctrl.h"
 "E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\ICM43688\ins_ctrl.h" :
+cpu0_main.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\pedal\pedal_input.h"
+"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\pedal\pedal_input.h" :
