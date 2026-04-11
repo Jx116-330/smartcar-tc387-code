@@ -9,6 +9,7 @@
 #include "menu_params.h"
 #include "menu_pid.h"
 #include "menu_gps.h"
+#include "menu_fusion.h"
 #include "zf_device_ips200.h"
 #include "zf_common_headfile.h"
 #include "zf_driver_gpio.h"
@@ -47,11 +48,13 @@ static gps_view_mode_t gps_display_mode = GPS_VIEW_NONE;
 static pid_view_mode_t pid_display_mode = PID_VIEW_NONE;
 static record_param_view_mode_t record_param_view_mode = RECORD_PARAM_VIEW_NONE;
 static icm_view_mode_t icm_display_mode = ICM_VIEW_NONE;
+static fusion_view_mode_t fusion_display_mode = FUSION_VIEW_NONE;
 static char gps_status_hint[64] = "";
 static MenuPage *current_page = NULL;
 static MenuPage gps_menu;
 static MenuPage icm_menu;
 static MenuPage ins_replay_menu;
+static MenuPage fusion_menu;
 static pid_param_t menu_pid_param_cache;
 static pid_controller_t pid_preview_controller;
 static char menu_status_message[32] = "";
@@ -109,6 +112,8 @@ static void ins_replay_action_start(void);
 static void ins_replay_action_stop(void);
 static void ins_replay_action_clear(void);
 static void menu_sync_ins_replay_labels(void);
+static void fusion_action_debug(void);
+static uint8 menu_handle_fusion_view(void);
 
 /* 持久化参数已拆到 menu_params.c；这里保留运行时同步逻辑。 */
 static void params_set_default(void)
@@ -366,6 +371,26 @@ static void menu_sync_ins_rec_item(void)
     }
 }
 
+/* ---- GPS+INS Fusion 菜单 ---- */
+
+static void fusion_action_debug(void)
+{
+    menu_fusion_action_debug(&fusion_display_mode,
+                             &menu_full_redraw,
+                             menu_drain_encoder_events,
+                             menu_request_redraw,
+                             menu_reset_dynamic_region);
+}
+
+static uint8 menu_handle_fusion_view(void)
+{
+    return menu_fusion_handle_view(&fusion_display_mode,
+                                   &menu_full_redraw,
+                                   menu_drain_encoder_events,
+                                   menu_request_redraw,
+                                   menu_reset_dynamic_region);
+}
+
 /* ---- INS Replay 子菜单 ---- */
 
 /* 动态标签：随状态每帧刷新 */
@@ -600,6 +625,17 @@ static MenuPage pid_menu = {
     NULL
 };
 
+static MenuItem fusion_items[] = {
+    {"1. Fusion Debug", fusion_action_debug, NULL},
+};
+
+static MenuPage fusion_menu = {
+    "GPS+INS Fusion",
+    fusion_items,
+    sizeof(fusion_items) / sizeof(MenuItem),
+    NULL
+};
+
 static MenuItem main_items[] = {
     {"1. GPS", NULL, &gps_menu},
     {"2. Camera", NULL, &camera_menu},
@@ -607,6 +643,7 @@ static MenuItem main_items[] = {
     {"4. WiFi", NULL, &wifi_page},
     {"5. Tuning", NULL, &tuning_menu},
     {"6. ICM42688", NULL, &icm_menu},
+    {"7. Fusion", NULL, &fusion_menu},
 };
 
 static MenuPage main_menu = {
@@ -943,6 +980,7 @@ static void menu_return_to_parent(void)
     gps_display_mode = GPS_VIEW_NONE;
     record_param_view_mode = RECORD_PARAM_VIEW_NONE;
     icm_display_mode = ICM_VIEW_NONE;
+    fusion_display_mode = FUSION_VIEW_NONE;
     gps_clear_status_hint();
     menu_reset_dynamic_region();
     menu_request_redraw(1U);
@@ -1028,6 +1066,12 @@ static void menu_execute_current_item(void)
                                  menu_drain_encoder_events,
                                  menu_request_redraw,
                                  menu_reset_dynamic_region);
+            return;
+        }
+
+        if (FUSION_VIEW_NONE != fusion_display_mode)
+        {
+            menu_handle_fusion_view();
             return;
         }
 
@@ -1188,6 +1232,11 @@ void menu_task(void)
         return;
     }
 
+    if (menu_handle_fusion_view())
+    {
+        return;
+    }
+
     menu_update_selection_from_encoder();
 
     if (my_key_get_state(MY_KEY_1) == MY_KEY_LONG_PRESS)
@@ -1202,7 +1251,7 @@ void menu_task(void)
         my_key_clear_state(MY_KEY_1);
         menu_execute_current_item();
 
-        if ((PID_VIEW_NONE != pid_display_mode) || (GPS_VIEW_NONE != gps_display_mode) || wifi_menu_is_active() || tuning_soft_is_active() || (ICM_VIEW_NONE != icm_display_mode))
+        if ((PID_VIEW_NONE != pid_display_mode) || (GPS_VIEW_NONE != gps_display_mode) || wifi_menu_is_active() || tuning_soft_is_active() || (ICM_VIEW_NONE != icm_display_mode) || (FUSION_VIEW_NONE != fusion_display_mode))
         {
             menu_needs_update = 0U;
             menu_footer_needs_update = 0U;

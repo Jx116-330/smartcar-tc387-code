@@ -1,3 +1,18 @@
+/**
+ * @file icm_ins.c
+ * @brief 纯惯导积分层（1kHz ISR 驱动）
+ *
+ * 导航坐标系约定（全链路统一）：
+ *   x = East    东向
+ *   y = North   北向
+ *   z = Up      天向
+ * 即标准 ENU (East-North-Up) 右手坐标系。
+ *
+ * 四元数 yaw 定义：从 +X(East) 方向逆时针为正。
+ * GPS 局部平面坐标、INS 位置/速度、ins_ctrl 方位角
+ * 均使用此同一约定，保证融合与控制全链路一致。
+ */
+
 #include "icm_ins.h"
 #include "icm_attitude.h"
 
@@ -26,6 +41,12 @@ typedef struct
     uint32 zupt_count;
     uint32 zupt_exit_count;
     uint8  is_stationary;
+    /* 外部校正待应用缓冲区（主循环写，ISR 读清）
+     * 避免在主循环中对 pos/vel 做非原子 +=，防止 ISR 竞争 */
+    float  correct_px_pending;
+    float  correct_py_pending;
+    float  correct_vx_pending;
+    float  correct_vy_pending;
 } icm_ins_state_t;
 
 static volatile icm_ins_state_t g_icm_ins = {
@@ -33,7 +54,8 @@ static volatile icm_ins_state_t g_icm_ins = {
     0.0f, 0.0f,
     0.0f, 0.0f, 0.0f,
     0U, 0U,
-    0U
+    0U,
+    0.0f, 0.0f, 0.0f, 0.0f
 };
 
 void icm_ins_init(void)
@@ -49,6 +71,10 @@ void icm_ins_init(void)
     g_icm_ins.zupt_count     = 0U;
     g_icm_ins.zupt_exit_count = 0U;
     g_icm_ins.is_stationary  = 0U;
+    g_icm_ins.correct_px_pending = 0.0f;
+    g_icm_ins.correct_py_pending = 0.0f;
+    g_icm_ins.correct_vx_pending = 0.0f;
+    g_icm_ins.correct_vy_pending = 0.0f;
 }
 
 void icm_ins_reset_velocity(void)
@@ -175,6 +201,28 @@ void icm_ins_update(float acc_x_g, float acc_y_g, float acc_z_g,
     /* Position integration (horizontal only) */
     g_icm_ins.pos_x_m += g_icm_ins.vel_x_ms * dt_s;
     g_icm_ins.pos_y_m += g_icm_ins.vel_y_ms * dt_s;
+
+    /* 应用外部校正（主循环写入 pending，ISR 内原子消费） */
+    {
+        float cpx = g_icm_ins.correct_px_pending;
+        float cpy = g_icm_ins.correct_py_pending;
+        float cvx = g_icm_ins.correct_vx_pending;
+        float cvy = g_icm_ins.correct_vy_pending;
+        if ((cpx != 0.0f) || (cpy != 0.0f))
+        {
+            g_icm_ins.pos_x_m += cpx;
+            g_icm_ins.pos_y_m += cpy;
+            g_icm_ins.correct_px_pending = 0.0f;
+            g_icm_ins.correct_py_pending = 0.0f;
+        }
+        if ((cvx != 0.0f) || (cvy != 0.0f))
+        {
+            g_icm_ins.vel_x_ms += cvx;
+            g_icm_ins.vel_y_ms += cvy;
+            g_icm_ins.correct_vx_pending = 0.0f;
+            g_icm_ins.correct_vy_pending = 0.0f;
+        }
+    }
 }
 
 void icm_ins_get_velocity(float *vx_ms, float *vy_ms, float *vz_ms)
@@ -207,4 +255,22 @@ float icm_ins_get_speed_ms(void)
 uint8 icm_ins_is_stationary(void)
 {
     return g_icm_ins.is_stationary;
+}
+
+/* ---------- 外部校正接口（供 GPS 融合等模块调用） ---------- */
+/* 主循环调用：写入 pending 缓冲区，由 ISR 内 icm_ins_update 原子消费。
+ * 这样避免主循环对 pos/vel 做非原子 +=，消除与 1kHz ISR 的竞争。
+ * 注意：两次 GNSS 更新之间只应写入一次，后写会覆盖前值。
+ * 当前 GNSS 频率（1~10Hz）远低于 ISR（1kHz），ISR 总能在下次写入前消费完。 */
+
+void icm_ins_correct_position(float delta_px_m, float delta_py_m)
+{
+    g_icm_ins.correct_px_pending = delta_px_m;
+    g_icm_ins.correct_py_pending = delta_py_m;
+}
+
+void icm_ins_correct_velocity(float delta_vx_ms, float delta_vy_ms)
+{
+    g_icm_ins.correct_vx_pending = delta_vx_ms;
+    g_icm_ins.correct_vy_pending = delta_vy_ms;
 }

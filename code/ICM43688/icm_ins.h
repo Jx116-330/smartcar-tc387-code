@@ -16,4 +16,8 @@ void  icm_ins_get_linear_acc(float *ax_ms2, float *ay_ms2, float *az_ms2);
 float icm_ins_get_speed_ms(void);
 uint8 icm_ins_is_stationary(void);
 
+/* 外部校正接口（供 GPS 融合模块在主循环调用，增量式修正） */
+void  icm_ins_correct_position(float delta_px_m, float delta_py_m);
+void  icm_ins_correct_velocity(float delta_vx_ms, float delta_vy_ms);
+
 #endif /* __ICM_INS_H__ */

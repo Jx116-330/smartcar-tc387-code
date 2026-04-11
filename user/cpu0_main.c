@@ -1,6 +1,7 @@
 #include "myhead.h"
 #include "icm_attitude.h"
 #include "icm_ins.h"
+#include "icm_gps_fusion.h"
 #include "ins_record.h"
 #include "ins_playback.h"
 #include "ins_ctrl.h"
@@ -20,6 +21,7 @@ int core0_main(void)
     ins_record_init();
     ins_playback_init();
     ins_ctrl_init();
+    icm_gps_fusion_init();
     menu_init();
     cpu_wait_event_ready();
 
@@ -28,6 +30,12 @@ int core0_main(void)
         if (gnss_flag)
         {
             gnss_flag = 0;
+
+            /* GPS+INS 融合：每次 GNSS 更新时校正 INS */
+            icm_gps_fusion_update(gnss.latitude, gnss.longitude,
+                                  gnss.speed, gnss.direction,
+                                  gnss.state, gnss.satellite_used);
+
             if (path_recorder_get_state() == PATH_STATE_RECORDING)
             {
                 path_recorder_task();

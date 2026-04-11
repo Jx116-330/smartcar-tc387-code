@@ -107,9 +107,9 @@ void ins_ctrl_task(void)
     dy   = tgt.py_m - cur_py;
     dist = sqrtf(dx * dx + dy * dy);
 
-    /* 目标方位角（导航坐标系 atan2：y=前，x=右 → atan2(dy, dx) 为标准数学角）
-     * 实际平台轴定义与此一致（icm_ins x=北/前，y=东/右），此处直接使用。
-     * 注意：如果平台 yaw 定义不同，此处需对应调整符号。 */
+    /* 目标方位角（导航坐标系约定：x=East, y=North, z=Up，即标准 ENU）
+     * atan2(dy, dx) 给出从 +X(East) 方向逆时针到目标的数学角，
+     * 与四元数 yaw 定义一致（正值=逆时针），可直接相减得到航向误差。 */
     tgt_yaw = atan2f(dy, dx) * (180.0f / 3.14159265f);
 
     yaw_err = ctrl_normalize_angle_deg(tgt_yaw - cur_yaw);
