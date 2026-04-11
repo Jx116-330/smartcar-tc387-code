@@ -17,7 +17,7 @@
 #include "icm_ins.h"
 #include "ins_record.h"
 
-#define ICM_GYRO_BIAS_CALIB_SAMPLES 2000U
+#define ICM_GYRO_BIAS_CALIB_SAMPLES 20000U
 #define ICM_VIEW_EXIT_HOLD_MS       250U
 #define ICM_VIEW_EXIT_KEY_PIN       P20_2
 #define ICM_INS_MAP_REFRESH_MS      250U

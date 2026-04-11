@@ -15,22 +15,21 @@ IFX_INTERRUPT(cc60_pit_ch0_isr, CCU6_0_CH0_INT_VECTAB_NUM, CCU6_0_CH0_ISR_PRIORI
 {
     interrupt_global_enable(0);                     // 开启中断嵌套
     pit_clear_flag(CCU60_CH0);
-    Get_Acc_ICM42688();
-    Get_Gyro_ICM42688();
+    Get_AccGyro_ICM42688();
     icm_attitude_update(icm42688_gyro_x,
                         icm42688_gyro_y,
                         icm42688_gyro_z,
                         icm42688_acc_x,
                         icm42688_acc_y,
                         icm42688_acc_z,
-                        0.001f);
+                        ICM42688_INS_SAMPLE_DT_S);
     icm_ins_update(icm42688_acc_x,
                    icm42688_acc_y,
                    icm42688_acc_z,
                    icm42688_gyro_x,
                    icm42688_gyro_y,
                    icm42688_gyro_z,
-                   0.001f);
+                   ICM42688_INS_SAMPLE_DT_S);
 }
 
 

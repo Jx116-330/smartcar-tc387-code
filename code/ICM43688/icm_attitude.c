@@ -13,9 +13,19 @@
 #define ICM_ATTITUDE_PI 3.14159265358979323846f
 #endif
 
-#define ICM_ATTITUDE_KP           1.6f
-#define ICM_ATTITUDE_ACC_MIN_NORM 0.60f
-#define ICM_ATTITUDE_ACC_MAX_NORM 1.40f
+#define ICM_ATTITUDE_KP                    1.6f
+#define ICM_ATTITUDE_KI                    0.005f   /* 积分增益，保守慢修正 */
+#define ICM_ATTITUDE_ACC_MIN_NORM          0.60f
+#define ICM_ATTITUDE_ACC_MAX_NORM          1.40f
+#define ICM_ATTITUDE_KI_ACC_MIN            0.88f    /* Ki 门控：加速度模长下限 */
+#define ICM_ATTITUDE_KI_ACC_MAX            1.12f    /* Ki 门控：加速度模长上限 */
+#define ICM_ATTITUDE_KI_GYRO_MAX_DPS       20.0f    /* Ki 门控：角速度幅值上限 */
+#define ICM_ATTITUDE_KI_INT_LIMIT          0.40f    /* 积分项饱和限幅（无量纲误差×s；最大修正 Ki×0.40=0.002 rad/s） */
+#define ICM_ATTITUDE_KI_LEAK               0.9999f  /* 极端情况泄放系数：1s后保留~90%，10s后保留~37% */
+#define ICM_ATTITUDE_BIAS_TRACK_ACC_MIN    0.97f    /* ???????????????????? */
+#define ICM_ATTITUDE_BIAS_TRACK_ACC_MAX    1.03f
+#define ICM_ATTITUDE_BIAS_TRACK_GYRO_MAX   6.0f     /* dps????????? */
+#define ICM_ATTITUDE_BIAS_TRACK_RATE       0.03f    /* 1/s?? 33s ????????? */
 #define ICM_ATTITUDE_CALIB_SAMPLES_DEFAULT 20000U
 
 typedef struct
@@ -40,6 +50,9 @@ typedef struct
     uint8 gyro_bias_calibrating;
     uint8 gyro_bias_valid;
     uint8 gyro_bias_from_flash;
+    float ex_int;   /* Mahony Ki 积分状态 x（roll/pitch 修正） */
+    float ey_int;   /* Mahony Ki 积分状态 y（roll/pitch 修正） */
+    /* ez_int 不使用：6轴无航向参考，gz 不加 Ki，避免 yaw 自强化漂移 */
 } icm_attitude_state_t;
 
 static volatile icm_attitude_state_t g_icm_attitude = {
@@ -50,7 +63,8 @@ static volatile icm_attitude_state_t g_icm_attitude = {
     0.0f, 0.0f, 0.0f,
     0.0f, 0.0f, 0.0f,
     0U, 0U,
-    0U, 0U, 0U
+    0U, 0U, 0U,
+    0.0f, 0.0f
 };
 
 static float icm_attitude_clamp(float value, float min_value, float max_value)
@@ -71,6 +85,8 @@ static void icm_attitude_reset_pose(void)
     g_icm_attitude.yaw_deg = 0.0f;
     g_icm_attitude.acc_norm_g = 0.0f;
     g_icm_attitude.update_count = 0U;
+    g_icm_attitude.ex_int = 0.0f;
+    g_icm_attitude.ey_int = 0.0f;
 }
 
 static void icm_attitude_reset_gyro_bias_calibration_state(void)
@@ -81,6 +97,43 @@ static void icm_attitude_reset_gyro_bias_calibration_state(void)
     g_icm_attitude.gyro_bias_sample_count = 0U;
     g_icm_attitude.gyro_bias_target_count = 0U;
     g_icm_attitude.gyro_bias_calibrating = 0U;
+}
+
+static void icm_attitude_track_gyro_bias(float gyro_x_dps,
+                                         float gyro_y_dps,
+                                         float gyro_z_dps,
+                                         float acc_norm_g,
+                                         float dt_s)
+{
+    float gyro_sq;
+    float gyro_lim_sq;
+    float alpha;
+
+    if ((!g_icm_attitude.gyro_bias_valid) || (dt_s <= 0.0f))
+    {
+        return;
+    }
+
+    if ((acc_norm_g < ICM_ATTITUDE_BIAS_TRACK_ACC_MIN) ||
+        (acc_norm_g > ICM_ATTITUDE_BIAS_TRACK_ACC_MAX))
+    {
+        return;
+    }
+
+    gyro_sq = gyro_x_dps * gyro_x_dps
+            + gyro_y_dps * gyro_y_dps
+            + gyro_z_dps * gyro_z_dps;
+    gyro_lim_sq = ICM_ATTITUDE_BIAS_TRACK_GYRO_MAX * ICM_ATTITUDE_BIAS_TRACK_GYRO_MAX;
+    if (gyro_sq > gyro_lim_sq)
+    {
+        return;
+    }
+
+    alpha = icm_attitude_clamp(ICM_ATTITUDE_BIAS_TRACK_RATE * dt_s, 0.0f, 1.0f);
+    g_icm_attitude.gyro_bias_x_dps += (gyro_x_dps - g_icm_attitude.gyro_bias_x_dps) * alpha;
+    g_icm_attitude.gyro_bias_y_dps += (gyro_y_dps - g_icm_attitude.gyro_bias_y_dps) * alpha;
+    g_icm_attitude.gyro_bias_z_dps += (gyro_z_dps - g_icm_attitude.gyro_bias_z_dps) * alpha;
+    g_icm_attitude.gyro_bias_from_flash = 0U;
 }
 
 void icm_attitude_reset(void)
@@ -256,6 +309,12 @@ void icm_attitude_update(float gyro_x_dps,
         return;
     }
 
+    icm_attitude_track_gyro_bias(gyro_x_dps,
+                                gyro_y_dps,
+                                gyro_z_dps,
+                                acc_norm,
+                                dt_s);
+
     if (g_icm_attitude.gyro_bias_valid)
     {
         gyro_x_corrected_dps -= g_icm_attitude.gyro_bias_x_dps;
@@ -279,9 +338,46 @@ void icm_attitude_update(float gyro_x_dps,
         float ey = az * vx - ax * vz;
         float ez = ax * vy - ay * vx;
 
+        /* Kp 比例反馈（保持原有逻辑不变） */
         gx += ICM_ATTITUDE_KP * ex;
         gy += ICM_ATTITUDE_KP * ey;
         gz += ICM_ATTITUDE_KP * ez;
+
+        /* Ki 门控：加速度模长更严格 + 角速度幅值较小时，才认为当前处于准静止可信状态 */
+        {
+            float gyro_sq = gyro_x_corrected_dps * gyro_x_corrected_dps
+                          + gyro_y_corrected_dps * gyro_y_corrected_dps
+                          + gyro_z_corrected_dps * gyro_z_corrected_dps;
+            float gyro_lim_sq = ICM_ATTITUDE_KI_GYRO_MAX_DPS * ICM_ATTITUDE_KI_GYRO_MAX_DPS;
+
+            if ((acc_norm > ICM_ATTITUDE_KI_ACC_MIN) && (acc_norm < ICM_ATTITUDE_KI_ACC_MAX)
+                && (gyro_sq < gyro_lim_sq))
+            {
+                /* 可信状态：缓慢累积积分，附带限幅防止 windup
+                 * 仅累积 x/y 两轴：6轴方案重力叉积对纯 yaw 误差不可观测，
+                 * z 轴积分无有效参考，不累积，避免 yaw 自强化漂移。 */
+                g_icm_attitude.ex_int += ex * dt_s;
+                g_icm_attitude.ey_int += ey * dt_s;
+                g_icm_attitude.ex_int = icm_attitude_clamp(g_icm_attitude.ex_int,
+                                                           -ICM_ATTITUDE_KI_INT_LIMIT,
+                                                            ICM_ATTITUDE_KI_INT_LIMIT);
+                g_icm_attitude.ey_int = icm_attitude_clamp(g_icm_attitude.ey_int,
+                                                           -ICM_ATTITUDE_KI_INT_LIMIT,
+                                                            ICM_ATTITUDE_KI_INT_LIMIT);
+            }
+            /* 内层门控未通过（动态运动）：冻结积分，保留已积累的修正量 */
+        }
+
+        /* Ki 积分反馈：仅修正 gx/gy（roll/pitch），gz 不加 Ki */
+        gx += ICM_ATTITUDE_KI * g_icm_attitude.ex_int;
+        gy += ICM_ATTITUDE_KI * g_icm_attitude.ey_int;
+    }
+    else
+    {
+        /* 加速度完全不可信（自由落体或剧烈冲击）：缓慢泄放积分
+         * 0.9999^1000 ≈ 0.905（1s后保留90%），0.9999^10000 ≈ 0.368（10s后保留37%） */
+        g_icm_attitude.ex_int *= ICM_ATTITUDE_KI_LEAK;
+        g_icm_attitude.ey_int *= ICM_ATTITUDE_KI_LEAK;
     }
 
     q_dot0 = 0.5f * (-q1 * gx - q2 * gy - q3 * gz);
