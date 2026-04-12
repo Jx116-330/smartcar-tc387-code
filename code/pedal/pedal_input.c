@@ -1,10 +1,13 @@
 /*********************************************************************************************************************
 * File: pedal_input.c
 * Brief: 踏板 ADC 采样模块
-*        - A45：油门（均值 + 一阶 IIR 滤波、线性百分比、带回差 pressed）
-*        - A47：刹车（当前板级 ADC 复用问题，暂不可用，仅保留 raw 观察）
-*        - Step 3：新增控制层接口 throttle_valid / enable_request / cmd
-*                  （带死区 + 再拉伸，本模块不直接驱动任何执行器）
+*        - A47：油门（实测当前实际插在 A47 上）
+*                 均值 + 一阶 IIR 滤波、线性百分比、带回差 pressed
+*                 方向：踩下时数值增大（约 1000 松 → 约 3000 踩到底）
+*        - A45：历史上曾作为油门，现在改插 A47，A45 保留 raw 观察，不参与控制
+*        - 刹车：当前硬件未提供可用通道，brake_available 固定 0
+*        - 控制层接口：throttle_valid / enable_request / cmd
+*                       （带死区 + 再拉伸，本模块不直接驱动任何执行器）
 * Author: JX116
 *********************************************************************************************************************/
 
@@ -20,20 +23,20 @@
  */
 #define PEDAL_IIR_SHIFT         2U
 
-/* ==== A45 油门标定（临时）============================================ */
+/* ==== A47 油门标定（临时）============================================ */
 /*
- * 来自现场实测：
+ * 当前现场实测（油门实际插在 A47）：
  *   - 松开约 1000
- *   - 踩到底约 4000+
- *   - 数值随踩下增大
- * 后续若换踏板再重新标定
+ *   - 踩到底约 4000
+ *   - 数值随踩下增大（方向与之前 A45 一致）
+ * 后续若换踏板或重新标定，只改这几个宏即可
  */
-#define THROTTLE_A45_MIN        1000U
-#define THROTTLE_A45_MAX        4000U
+#define THROTTLE_MIN            1000U
+#define THROTTLE_MAX            4000U
 
 /* 带回差的 pressed 判定 */
-#define THROTTLE_PRESS_ON       1500U
-#define THROTTLE_PRESS_OFF      1350U
+#define THROTTLE_PRESS_ON       1350U    /* 贴近 MIN 之上，较早触发 pressed */
+#define THROTTLE_PRESS_OFF      1250U    /* 回差 100 counts */
 
 /* ==== 控制层参数 ====================================================== */
 /*
@@ -51,13 +54,13 @@
 #define THROTTLE_CMD_FULL       1000U
 
 /* ==== 内部状态 ======================================================== */
-static uint16 pedal_a45_raw      = 0U;
-static uint16 pedal_a47_raw      = 0U;   /* 仅用于原始观察，硬件问题下不可信 */
+static uint16 pedal_a45_raw      = 0U;   /* 仅作观察：A45 当前没接油门，保留采样便于调试 */
+static uint16 pedal_a47_raw      = 0U;   /* 当前油门原始值：经控制管线后产出 filtered/percent/pressed */
 
-static uint16 pedal_a45_filtered = 0U;
-static uint16 pedal_a45_percent  = 0U;   /* 0~1000 */
-static uint8  pedal_a45_pressed  = 0U;
-static uint8  pedal_a45_filt_inited = 0U;
+static uint16 pedal_thr_filtered = 0U;
+static uint16 pedal_thr_percent  = 0U;   /* 0~1000 */
+static uint8  pedal_thr_pressed  = 0U;
+static uint8  pedal_thr_filt_inited = 0U;
 
 /* 控制层输出 */
 static uint8  pedal_throttle_valid       = 0U;
@@ -67,17 +70,17 @@ static uint16 pedal_throttle_cmd         = 0U;   /* 0~1000 */
 /* ==== 内部工具 ======================================================== */
 static uint16 throttle_calc_percent(uint16 filtered)
 {
-    if (filtered <= THROTTLE_A45_MIN)
+    if (filtered <= THROTTLE_MIN)
     {
         return 0U;
     }
-    if (filtered >= THROTTLE_A45_MAX)
+    if (filtered >= THROTTLE_MAX)
     {
         return 1000U;
     }
     /* (filtered - MIN) * 1000 / (MAX - MIN)，不需要浮点 */
-    return (uint16)(((uint32)(filtered - THROTTLE_A45_MIN) * 1000U)
-                    / (uint32)(THROTTLE_A45_MAX - THROTTLE_A45_MIN));
+    return (uint16)(((uint32)(filtered - THROTTLE_MIN) * 1000U)
+                    / (uint32)(THROTTLE_MAX - THROTTLE_MIN));
 }
 
 static uint8 throttle_update_pressed(uint8 prev, uint16 filtered)
@@ -152,10 +155,10 @@ void pedal_input_init(void)
 
     pedal_a45_raw        = 0U;
     pedal_a47_raw        = 0U;
-    pedal_a45_filtered   = 0U;
-    pedal_a45_percent    = 0U;
-    pedal_a45_pressed    = 0U;
-    pedal_a45_filt_inited = 0U;
+    pedal_thr_filtered   = 0U;
+    pedal_thr_percent    = 0U;
+    pedal_thr_pressed    = 0U;
+    pedal_thr_filt_inited = 0U;
 
     pedal_throttle_valid      = 0U;
     pedal_throttle_enable_req = 0U;
@@ -167,42 +170,40 @@ void pedal_input_task(void)
     uint16 a45_sample;
     uint16 a47_sample;
 
-    /* 第一层：硬件均值滤波 */
+    /* 第一层：硬件均值滤波（两路都采，只是 A47 走控制管线） */
     a45_sample = adc_mean_filter_convert(ADC8_CH13_A45, PEDAL_FILTER_COUNT);
     a47_sample = adc_mean_filter_convert(ADC8_CH15_A47, PEDAL_FILTER_COUNT);
 
+    /* A45 raw 仅供 debug 页观察——当前硬件上 A45 已不再接油门 */
     pedal_a45_raw = a45_sample;
-    /*
-     * A47 raw 保留，仅给 debug 页观察；由于当前板级 ADC 复用问题，
-     * 这里的数值不做任何滤波/映射/pressed 判定。
-     */
+    /* A47 raw 是当前实际油门原始值 */
     pedal_a47_raw = a47_sample;
 
-    /* 第二层：一阶 IIR，首帧直接用 raw 初始化避免起步爬升 */
-    if (0U == pedal_a45_filt_inited)
+    /* 第二层：一阶 IIR，首帧直接用 A47 raw 初始化避免起步爬升 */
+    if (0U == pedal_thr_filt_inited)
     {
-        pedal_a45_filtered    = a45_sample;
-        pedal_a45_filt_inited = 1U;
+        pedal_thr_filtered    = a47_sample;
+        pedal_thr_filt_inited = 1U;
     }
     else
     {
         /* filt += (raw - filt) >> PEDAL_IIR_SHIFT  —— 等价于轻量 IIR */
-        int32 diff = (int32)a45_sample - (int32)pedal_a45_filtered;
-        pedal_a45_filtered = (uint16)((int32)pedal_a45_filtered
+        int32 diff = (int32)a47_sample - (int32)pedal_thr_filtered;
+        pedal_thr_filtered = (uint16)((int32)pedal_thr_filtered
                                       + (diff >> PEDAL_IIR_SHIFT));
     }
 
-    /* 第三层：映射 + 带回差 pressed 判定 */
-    pedal_a45_percent = throttle_calc_percent(pedal_a45_filtered);
-    pedal_a45_pressed = throttle_update_pressed(pedal_a45_pressed,
-                                                pedal_a45_filtered);
+    /* 第三层：映射 + 带回差 pressed 判定（基于 A47 处理结果） */
+    pedal_thr_percent = throttle_calc_percent(pedal_thr_filtered);
+    pedal_thr_pressed = throttle_update_pressed(pedal_thr_pressed,
+                                                pedal_thr_filtered);
 
     /* 第四层：控制层命令量（本函数是唯一的写入点） */
-    pedal_throttle_valid = throttle_check_valid(pedal_a45_filtered,
-                                                pedal_a45_filt_inited);
+    pedal_throttle_valid = throttle_check_valid(pedal_thr_filtered,
+                                                pedal_thr_filt_inited);
     pedal_throttle_enable_req = throttle_check_enable(pedal_throttle_valid,
-                                                      pedal_a45_pressed);
-    pedal_throttle_cmd = throttle_calc_command(pedal_a45_percent,
+                                                      pedal_thr_pressed);
+    pedal_throttle_cmd = throttle_calc_command(pedal_thr_percent,
                                                pedal_throttle_valid);
 }
 
@@ -210,14 +211,14 @@ void pedal_input_task(void)
 uint16 pedal_input_get_a45(void) { return pedal_a45_raw; }
 uint16 pedal_input_get_a47(void) { return pedal_a47_raw; }
 
-/* ---- A45 油门 ---------------------------------------------------------- */
-uint16 pedal_input_get_throttle_filtered(void) { return pedal_a45_filtered; }
-uint16 pedal_input_get_throttle_percent(void)  { return pedal_a45_percent; }
-uint8  pedal_input_get_throttle_pressed(void)  { return pedal_a45_pressed; }
+/* ---- 油门（当前来自 A47 处理管线） ------------------------------------ */
+uint16 pedal_input_get_throttle_filtered(void) { return pedal_thr_filtered; }
+uint16 pedal_input_get_throttle_percent(void)  { return pedal_thr_percent; }
+uint8  pedal_input_get_throttle_pressed(void)  { return pedal_thr_pressed; }
 
-/* ---- A47 刹车 ---------------------------------------------------------- */
+/* ---- 刹车 ------------------------------------------------------------- */
 /*
- * 注意：受当前板级硬件问题影响，刹车输入暂不可用。
+ * 当前硬件未提供可用的刹车输入通道。
  * 此函数固定返回 0，上层任何刹车相关逻辑都应据此跳过。
  */
 uint8 pedal_input_is_brake_available(void) { return 0U; }

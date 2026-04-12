@@ -378,3 +378,5 @@ cpu0_main.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\ICM43688\ins_ct
 "E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\ICM43688\ins_ctrl.h" :
 cpu0_main.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\pedal\pedal_input.h"
 "E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\pedal\pedal_input.h" :
+cpu0_main.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\board_comm\board_comm.h"
+"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\board_comm\board_comm.h" :

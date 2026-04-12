@@ -19,9 +19,9 @@
 #define TUNING_MIN_PERIOD_MS 50U
 #define TUNING_MAX_PERIOD_MS 1000U
 #define TUNING_STEP_MS 50U
-#define TUNING_SEND_BUFFER_LEN 256U
+#define TUNING_SEND_BUFFER_LEN 384U
 #define TUNING_RECV_BUFFER_LEN 192U
-#define TUNING_RESP_BUFFER_LEN 128U
+#define TUNING_RESP_BUFFER_LEN 256U
 #define TUNING_TITLE_H 30U
 #define TUNING_LINE_H 20U
 #define TUNING_LINE_START 38U
@@ -406,6 +406,49 @@ static uint8 tuning_send_once(void)
         }
     }
 
+    /* ---- TELY：yaw 专用调参遥测包 ---- */
+    {
+        float gz_raw = 0.0f, gz_bias = 0.0f, gz_comp = 0.0f;
+        float gz_scaled = 0.0f, yaw_integral = 0.0f;
+        float yaw_final = 0.0f, yaw_corr = 0.0f, yaw_dt = 0.0f;
+        uint8  zero_busy = 0U, zero_ok = 0U;
+        uint32 zero_n = 0U;
+        float  zero_gbz = 0.0f;
+
+        icm_attitude_yaw_get_debug(&gz_raw, &gz_bias, &gz_comp,
+                                    &gz_scaled, &yaw_integral,
+                                    &yaw_final, &yaw_corr, &yaw_dt);
+        icm_attitude_yaw_zero_get_state(&zero_busy, &zero_ok,
+                                         &zero_n, &zero_gbz);
+
+        snprintf(line,
+                 sizeof(line),
+                 "TELY,ms=%lu"
+                 ",gzr=%.3f,gzb=%.3f,gzc=%.3f"
+                 ",gzs=%.4f,gzd=%.3f"
+                 ",yi=%.2f,yf=%.2f,yc=%.4f"
+                 ",dt=%lu"
+                 ",dbg=%u,ver=%lu"
+                 ",ton=%u,tst=%.1f,tdl=%.1f"
+                 ",zb=%u,zok=%u,zn=%lu,zgz=%.3f\r\n",
+                 (unsigned long)now_ms,
+                 gz_raw, gz_bias, gz_comp,
+                 icm_attitude_yaw_get_scale(), gz_scaled,
+                 yaw_integral, yaw_final, yaw_corr,
+                 (unsigned long)(uint32)(yaw_dt * 1000000.0f),
+                 (unsigned int)icm_attitude_yaw_get_debug_enable(),
+                 (unsigned long)icm_attitude_yaw_get_param_version(),
+                 (unsigned int)icm_attitude_yaw_test_is_on(),
+                 icm_attitude_yaw_test_get_start(),
+                 icm_attitude_yaw_test_get_last_delta(),
+                 (unsigned int)zero_busy, (unsigned int)zero_ok,
+                 (unsigned long)zero_n, zero_gbz);
+        if (!tuning_send_line(line))
+        {
+            ok = 0U;
+        }
+    }
+
     return ok;
 }
 
@@ -589,6 +632,40 @@ static void tuning_process_rx_line(char *line)
             return;
         }
 
+        if (0 == strcmp(cmd, "YAW_BIAS"))
+        {
+            char resp[TUNING_RESP_BUFFER_LEN];
+            icm_attitude_yaw_set_manual_bias(value);
+            snprintf(resp, sizeof(resp),
+                     "ACK,cmd=SET_YAW_BIAS,val=%.4f,ver=%lu\r\n",
+                     icm_attitude_yaw_get_manual_bias(),
+                     (unsigned long)icm_attitude_yaw_get_param_version());
+            tuning_send_response(resp);
+            return;
+        }
+        if (0 == strcmp(cmd, "YAW_SCALE"))
+        {
+            char resp[TUNING_RESP_BUFFER_LEN];
+            icm_attitude_yaw_set_scale(value);
+            snprintf(resp, sizeof(resp),
+                     "ACK,cmd=SET_YAW_SCALE,val=%.4f,ver=%lu\r\n",
+                     icm_attitude_yaw_get_scale(),
+                     (unsigned long)icm_attitude_yaw_get_param_version());
+            tuning_send_response(resp);
+            return;
+        }
+        if (0 == strcmp(cmd, "YAW_DBG"))
+        {
+            char resp[TUNING_RESP_BUFFER_LEN];
+            icm_attitude_yaw_set_debug_enable((uint8)((int)value != 0));
+            snprintf(resp, sizeof(resp),
+                     "ACK,cmd=SET_YAW_DBG,val=%u,ver=%lu\r\n",
+                     (unsigned int)icm_attitude_yaw_get_debug_enable(),
+                     (unsigned long)icm_attitude_yaw_get_param_version());
+            tuning_send_response(resp);
+            return;
+        }
+
         tuning_reply_error(cmd, "UNKNOWN_SET_TARGET");
         return;
     }
@@ -664,6 +741,93 @@ static void tuning_process_rx_line(char *line)
         {
             tuning_reply_error("AUTO_SCORE", "STATE_INVALID");
         }
+        return;
+    }
+
+    /* ================================================================
+     *  YAW 调参命令
+     * ================================================================ */
+
+    if (0 == strcmp(line, "GET YAW"))
+    {
+        char resp[TUNING_RESP_BUFFER_LEN];
+        uint8  zero_busy = 0U, zero_ok = 0U;
+        uint32 zero_n = 0U;
+        float  zero_gbz = 0.0f;
+        float  yaw_final = 0.0f;
+        icm_attitude_yaw_zero_get_state(&zero_busy, &zero_ok, &zero_n, &zero_gbz);
+        icm_attitude_yaw_get_debug(NULL, NULL, NULL, NULL, NULL, &yaw_final, NULL, NULL);
+        snprintf(resp, sizeof(resp),
+                 "ACK,cmd=GET_YAW,ms=%lu"
+                 ",yaw_bias=%.4f,yaw_scale=%.4f"
+                 ",yaw_dbg=%u,yaw_param_ver=%lu"
+                 ",yaw_test_on=%u,yaw_test_start=%.2f,yaw_test_last_delta=%.2f"
+                 ",yaw_zero_busy=%u,yaw_zero_ok=%u"
+                 ",yaw_zero_n=%lu,yaw_zero_gbz=%.4f"
+                 ",yaw_final=%.2f\r\n",
+                 (unsigned long)system_getval_ms(),
+                 icm_attitude_yaw_get_manual_bias(),
+                 icm_attitude_yaw_get_scale(),
+                 (unsigned int)icm_attitude_yaw_get_debug_enable(),
+                 (unsigned long)icm_attitude_yaw_get_param_version(),
+                 (unsigned int)icm_attitude_yaw_test_is_on(),
+                 icm_attitude_yaw_test_get_start(),
+                 icm_attitude_yaw_test_get_last_delta(),
+                 (unsigned int)zero_busy, (unsigned int)zero_ok,
+                 (unsigned long)zero_n, zero_gbz,
+                 yaw_final);
+        tuning_send_response(resp);
+        return;
+    }
+
+    if (0 == strcmp(line, "YAW ZERO"))
+    {
+        char resp[TUNING_RESP_BUFFER_LEN];
+        icm_attitude_yaw_zero_start(1000U);  /* 采样 1000 个点，@1kHz 约 1s */
+        snprintf(resp, sizeof(resp),
+                 "ACK,cmd=YAW_ZERO,busy=1,target=1000\r\n");
+        tuning_send_response(resp);
+        return;
+    }
+
+    if (0 == strcmp(line, "YAW TEST START"))
+    {
+        char resp[TUNING_RESP_BUFFER_LEN];
+        icm_attitude_yaw_test_start();
+        snprintf(resp, sizeof(resp),
+                 "ACK,cmd=YAW_TEST_START,start=%.2f\r\n",
+                 icm_attitude_yaw_test_get_start());
+        tuning_send_response(resp);
+        return;
+    }
+
+    if (0 == strcmp(line, "YAW TEST STOP"))
+    {
+        char resp[TUNING_RESP_BUFFER_LEN];
+        float start_deg = 0.0f, end_deg = 0.0f, delta = 0.0f, err90 = 0.0f;
+        icm_attitude_yaw_test_stop(&start_deg, &end_deg, &delta, &err90);
+        /* YAWTEST 结果包 */
+        snprintf(resp, sizeof(resp),
+                 "YAWTEST,start=%.2f,end=%.2f,delta=%.2f,err90=%.2f\r\n",
+                 start_deg, end_deg, delta, err90);
+        tuning_send_response(resp);
+        return;
+    }
+
+    /* ---- yaw zero 完成时的异步通知由 TELY 携带，此处额外提供查询 ---- */
+    if (0 == strcmp(line, "YAW ZERO STATUS"))
+    {
+        char resp[TUNING_RESP_BUFFER_LEN];
+        uint8  busy = 0U, ok = 0U;
+        uint32 n = 0U;
+        float  gbz = 0.0f;
+        icm_attitude_yaw_zero_get_state(&busy, &ok, &n, &gbz);
+        snprintf(resp, sizeof(resp),
+                 "YAWCAL,busy=%u,ok=%u,n=%lu,gbz=%.4f,ver=%lu\r\n",
+                 (unsigned int)busy, (unsigned int)ok,
+                 (unsigned long)n, gbz,
+                 (unsigned long)icm_attitude_yaw_get_param_version());
+        tuning_send_response(resp);
         return;
     }
 

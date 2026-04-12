@@ -42,7 +42,7 @@ extern float icm42688_gyro_x , icm42688_gyro_y , icm42688_gyro_z ;   // ï¿½ï¿½ï¿
 /* ??????????ODR ? ISR ??? 1 kHz??????????????? */
 #define ICM42688_INS_ACCEL_RANGE           (ICM42688_AFS_2G)
 #define ICM42688_INS_ACCEL_ODR             (ICM42688_AODR_1000HZ)
-#define ICM42688_INS_GYRO_RANGE            (ICM42688_GFS_250DPS)
+#define ICM42688_INS_GYRO_RANGE            (ICM42688_GFS_2000DPS)
 #define ICM42688_INS_GYRO_ODR              (ICM42688_GODR_1000HZ)
 #define ICM42688_INS_SAMPLE_DT_S           (0.001f)
 

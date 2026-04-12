@@ -9,6 +9,7 @@
 #include "ICM42688.h"
 #include "icm_attitude.h"
 #include "icm_ins.h"
+#include "board_comm.h"   /* TC264 板间通信 RX 处理 */
 
 /* 1ms 定时中断：以固定 1kHz 采样 ICM42688，保证惯导积分 dt 稳定 */
 IFX_INTERRUPT(cc60_pit_ch0_isr, CCU6_0_CH0_INT_VECTAB_NUM, CCU6_0_CH0_ISR_PRIORITY)
@@ -135,7 +136,10 @@ IFX_INTERRUPT(uart1_tx_isr, UART1_INT_VECTAB_NUM, UART1_TX_INT_PRIO)
 IFX_INTERRUPT(uart1_rx_isr, UART1_INT_VECTAB_NUM, UART1_RX_INT_PRIO)
 {
     interrupt_global_enable(0);                     // 开启中断嵌套
-    camera_uart_handler();                          // 摄像头串口数据统一处理
+    uart1_rx_isr_hit_count++;                       // 诊断：ISR 命中计数（extern in board_comm.h）
+    /* 原来调用 camera_uart_handler()，现暂时切换为 TC264 板间通信接收。
+     * 恢复相机：将下一行改回 camera_uart_handler(); 即可。           */
+    board_comm_uart1_rx_handler();                  // TC264 板间通信接收
 }
 
 IFX_INTERRUPT(uart2_tx_isr, UART2_INT_VECTAB_NUM, UART2_TX_INT_PRIO)

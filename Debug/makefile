@@ -49,6 +49,7 @@ RM := rm -rf
 -include code/tuning/subdir.mk
 -include code/pedal/subdir.mk
 -include code/menu/subdir.mk
+-include code/board_comm/subdir.mk
 -include code/MyKey/subdir.mk
 -include code/MyEncoder/subdir.mk
 -include code/ICM43688/subdir.mk

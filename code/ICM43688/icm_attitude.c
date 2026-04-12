@@ -53,6 +53,33 @@ typedef struct
     float ex_int;   /* Mahony Ki 积分状态 x（roll/pitch 修正） */
     float ey_int;   /* Mahony Ki 积分状态 y（roll/pitch 修正） */
     /* ez_int 不使用：6轴无航向参考，gz 不加 Ki，避免 yaw 自强化漂移 */
+
+    /* ---- yaw 调试 / 调参状态 ---- */
+    float yaw_gz_raw;       /* 最新 gz 原始值（dps） */
+    float yaw_gz_bias;      /* 实际作用的 z 轴 bias（主校准 + 手动） */
+    float yaw_gz_comp;      /* gz 去偏后（dps） */
+    float yaw_gz_scaled;    /* gz 去偏 + 缩放后（dps，进入积分） */
+    float yaw_integral;     /* gz_scaled 纯积分累计（度，不回绕） */
+    float yaw_final;        /* 当前 yaw_deg（四元数输出，与 yaw_deg 相同） */
+    float yaw_correction;   /* Mahony Kp*ez 对 gz 的修正量（rad/s） */
+    float yaw_dt_s;         /* 上次 update 使用的 dt */
+    float yaw_manual_bias;  /* 额外手动 z-bias（dps），叠加在主校准之上 */
+    float yaw_scale;        /* z 轴陀螺缩放因子，默认 1.0 */
+    uint8  yaw_dbg_en;      /* 调试使能标志 */
+    uint32 yaw_param_ver;   /* 参数版本号，SET/ZERO 后自增 */
+
+    /* yaw zero 状态 */
+    uint8  yaw_zero_busy;
+    uint8  yaw_zero_ok;
+    uint32 yaw_zero_n;
+    uint32 yaw_zero_target;
+    float  yaw_zero_sum;
+    float  yaw_zero_gbz;    /* zero 结果：gz_raw 均值 */
+
+    /* yaw test 状态 */
+    uint8  yaw_test_on;
+    float  yaw_test_start_deg;
+    float  yaw_test_last_delta;
 } icm_attitude_state_t;
 
 static volatile icm_attitude_state_t g_icm_attitude = {
@@ -210,6 +237,29 @@ void icm_attitude_init(void)
     g_icm_attitude.gyro_bias_from_flash = 0U;
     icm_attitude_reset_gyro_bias_calibration_state();
 
+    /* yaw 调试状态初始化 */
+    g_icm_attitude.yaw_gz_raw       = 0.0f;
+    g_icm_attitude.yaw_gz_bias      = 0.0f;
+    g_icm_attitude.yaw_gz_comp      = 0.0f;
+    g_icm_attitude.yaw_gz_scaled    = 0.0f;
+    g_icm_attitude.yaw_integral     = 0.0f;
+    g_icm_attitude.yaw_final        = 0.0f;
+    g_icm_attitude.yaw_correction   = 0.0f;
+    g_icm_attitude.yaw_dt_s         = 0.0f;
+    g_icm_attitude.yaw_manual_bias  = 0.0f;
+    g_icm_attitude.yaw_scale        = 1.0f;
+    g_icm_attitude.yaw_dbg_en       = 0U;
+    g_icm_attitude.yaw_param_ver    = 0U;
+    g_icm_attitude.yaw_zero_busy    = 0U;
+    g_icm_attitude.yaw_zero_ok      = 0U;
+    g_icm_attitude.yaw_zero_n       = 0U;
+    g_icm_attitude.yaw_zero_target  = 0U;
+    g_icm_attitude.yaw_zero_sum     = 0.0f;
+    g_icm_attitude.yaw_zero_gbz     = 0.0f;
+    g_icm_attitude.yaw_test_on      = 0U;
+    g_icm_attitude.yaw_test_start_deg    = 0.0f;
+    g_icm_attitude.yaw_test_last_delta   = 0.0f;
+
     /* 尝试从 flash 恢复上次校准结果 */
     (void)icm_attitude_load_gyro_bias_from_flash();
 }
@@ -315,6 +365,26 @@ void icm_attitude_update(float gyro_x_dps,
                                 acc_norm,
                                 dt_s);
 
+    /* ---- yaw zero 静止采样（采集 gz 原始值） ---- */
+    if (g_icm_attitude.yaw_zero_busy)
+    {
+        g_icm_attitude.yaw_zero_sum += gyro_z_dps;
+        g_icm_attitude.yaw_zero_n++;
+        if (g_icm_attitude.yaw_zero_n >= g_icm_attitude.yaw_zero_target)
+        {
+            float gz_mean = g_icm_attitude.yaw_zero_sum
+                          / (float)g_icm_attitude.yaw_zero_n;
+            g_icm_attitude.yaw_zero_gbz = gz_mean;
+            /* 自动修正 manual_bias 使 gz_comp ≈ 0 */
+            g_icm_attitude.yaw_manual_bias = gz_mean
+                - (g_icm_attitude.gyro_bias_valid
+                   ? g_icm_attitude.gyro_bias_z_dps : 0.0f);
+            g_icm_attitude.yaw_param_ver++;
+            g_icm_attitude.yaw_zero_busy = 0U;
+            g_icm_attitude.yaw_zero_ok   = 1U;
+        }
+    }
+
     if (g_icm_attitude.gyro_bias_valid)
     {
         gyro_x_corrected_dps -= g_icm_attitude.gyro_bias_x_dps;
@@ -322,9 +392,30 @@ void icm_attitude_update(float gyro_x_dps,
         gyro_z_corrected_dps -= g_icm_attitude.gyro_bias_z_dps;
     }
 
-    gx = gyro_x_corrected_dps * (ICM_ATTITUDE_PI / 180.0f);
-    gy = gyro_y_corrected_dps * (ICM_ATTITUDE_PI / 180.0f);
-    gz = gyro_z_corrected_dps * (ICM_ATTITUDE_PI / 180.0f);
+    /* ---- 额外手动 bias + 缩放（仅 z 轴） ---- */
+    {
+        float gz_scaled_dps;
+        gyro_z_corrected_dps -= g_icm_attitude.yaw_manual_bias;
+        gz_scaled_dps = (g_icm_attitude.yaw_scale > 0.01f)
+                      ? gyro_z_corrected_dps * g_icm_attitude.yaw_scale
+                      : gyro_z_corrected_dps;
+
+        /* 记录调试量 */
+        g_icm_attitude.yaw_gz_raw    = gyro_z_dps;
+        g_icm_attitude.yaw_gz_bias   = (g_icm_attitude.gyro_bias_valid
+                                         ? g_icm_attitude.gyro_bias_z_dps
+                                         : 0.0f)
+                                       + g_icm_attitude.yaw_manual_bias;
+        g_icm_attitude.yaw_gz_comp   = gyro_z_corrected_dps;
+        g_icm_attitude.yaw_gz_scaled = gz_scaled_dps;
+        g_icm_attitude.yaw_dt_s      = dt_s;
+        /* 积分累计（度，用于观测纯陀螺积分路径） */
+        g_icm_attitude.yaw_integral += gz_scaled_dps * dt_s;
+
+        gx = gyro_x_corrected_dps * (ICM_ATTITUDE_PI / 180.0f);
+        gy = gyro_y_corrected_dps * (ICM_ATTITUDE_PI / 180.0f);
+        gz = gz_scaled_dps        * (ICM_ATTITUDE_PI / 180.0f);
+    }
 
     if ((acc_norm > ICM_ATTITUDE_ACC_MIN_NORM) && (acc_norm < ICM_ATTITUDE_ACC_MAX_NORM))
     {
@@ -337,6 +428,9 @@ void icm_attitude_update(float gyro_x_dps,
         float ex = ay * vz - az * vy;
         float ey = az * vx - ax * vz;
         float ez = ax * vy - ay * vx;
+
+        /* 捕获 yaw 修正量（Kp*ez，rad/s） */
+        g_icm_attitude.yaw_correction = ICM_ATTITUDE_KP * ez;
 
         /* Kp 比例反馈（保持原有逻辑不变） */
         gx += ICM_ATTITUDE_KP * ex;
@@ -408,6 +502,7 @@ void icm_attitude_update(float gyro_x_dps,
     g_icm_attitude.pitch_deg = asinf(icm_attitude_clamp(2.0f * (q0 * q2 - q3 * q1), -1.0f, 1.0f)) * (180.0f / ICM_ATTITUDE_PI);
     g_icm_attitude.yaw_deg = atan2f(2.0f * (q0 * q3 + q1 * q2),
                                     1.0f - 2.0f * (q2 * q2 + q3 * q3)) * (180.0f / ICM_ATTITUDE_PI);
+    g_icm_attitude.yaw_final = g_icm_attitude.yaw_deg;
     g_icm_attitude.update_count++;
 }
 
@@ -434,4 +529,127 @@ float icm_attitude_get_acc_norm_g(void)
 uint32 icm_attitude_get_update_count(void)
 {
     return g_icm_attitude.update_count;
+}
+
+/* =====================================================================
+ *  Yaw 调试 / 调参 API
+ * ===================================================================== */
+
+void icm_attitude_yaw_get_debug(float *gz_raw,       float *gz_bias,
+                                  float *gz_comp,      float *gz_scaled,
+                                  float *yaw_integral, float *yaw_final,
+                                  float *yaw_corr,     float *dt_s)
+{
+    if (NULL != gz_raw)       *gz_raw       = g_icm_attitude.yaw_gz_raw;
+    if (NULL != gz_bias)      *gz_bias      = g_icm_attitude.yaw_gz_bias;
+    if (NULL != gz_comp)      *gz_comp      = g_icm_attitude.yaw_gz_comp;
+    if (NULL != gz_scaled)    *gz_scaled    = g_icm_attitude.yaw_gz_scaled;
+    if (NULL != yaw_integral) *yaw_integral = g_icm_attitude.yaw_integral;
+    if (NULL != yaw_final)    *yaw_final    = g_icm_attitude.yaw_final;
+    if (NULL != yaw_corr)     *yaw_corr     = g_icm_attitude.yaw_correction;
+    if (NULL != dt_s)         *dt_s         = g_icm_attitude.yaw_dt_s;
+}
+
+void icm_attitude_yaw_set_manual_bias(float bias_dps)
+{
+    g_icm_attitude.yaw_manual_bias = bias_dps;
+    g_icm_attitude.yaw_param_ver++;
+}
+
+float icm_attitude_yaw_get_manual_bias(void)
+{
+    return g_icm_attitude.yaw_manual_bias;
+}
+
+void icm_attitude_yaw_set_scale(float scale)
+{
+    if (scale > 0.01f)
+    {
+        g_icm_attitude.yaw_scale = scale;
+        g_icm_attitude.yaw_param_ver++;
+    }
+}
+
+float icm_attitude_yaw_get_scale(void)
+{
+    return g_icm_attitude.yaw_scale;
+}
+
+void icm_attitude_yaw_set_debug_enable(uint8 en)
+{
+    g_icm_attitude.yaw_dbg_en = en ? 1U : 0U;
+}
+
+uint8 icm_attitude_yaw_get_debug_enable(void)
+{
+    return g_icm_attitude.yaw_dbg_en;
+}
+
+uint32 icm_attitude_yaw_get_param_version(void)
+{
+    return g_icm_attitude.yaw_param_ver;
+}
+
+/* ---- Yaw Zero ---- */
+
+void icm_attitude_yaw_zero_start(uint32 samples)
+{
+    g_icm_attitude.yaw_zero_sum    = 0.0f;
+    g_icm_attitude.yaw_zero_n      = 0U;
+    g_icm_attitude.yaw_zero_target = (samples > 0U) ? samples : 1000U;
+    g_icm_attitude.yaw_zero_ok     = 0U;
+    g_icm_attitude.yaw_zero_busy   = 1U;
+}
+
+void icm_attitude_yaw_zero_get_state(uint8 *busy, uint8 *ok,
+                                      uint32 *n,   float *gbz)
+{
+    if (NULL != busy) *busy = g_icm_attitude.yaw_zero_busy;
+    if (NULL != ok)   *ok   = g_icm_attitude.yaw_zero_ok;
+    if (NULL != n)    *n    = g_icm_attitude.yaw_zero_n;
+    if (NULL != gbz)  *gbz  = g_icm_attitude.yaw_zero_gbz;
+}
+
+/* ---- Yaw Test ---- */
+
+void icm_attitude_yaw_test_start(void)
+{
+    g_icm_attitude.yaw_test_start_deg   = g_icm_attitude.yaw_deg;
+    g_icm_attitude.yaw_test_last_delta  = 0.0f;
+    g_icm_attitude.yaw_test_on          = 1U;
+}
+
+void icm_attitude_yaw_test_stop(float *out_start, float *out_end,
+                                  float *out_delta, float *out_err90)
+{
+    float start_deg = g_icm_attitude.yaw_test_start_deg;
+    float end_deg   = g_icm_attitude.yaw_deg;
+    float delta     = end_deg - start_deg;
+
+    /* 回绕到 [-180, 180] */
+    while (delta >  180.0f) { delta -= 360.0f; }
+    while (delta < -180.0f) { delta += 360.0f; }
+
+    g_icm_attitude.yaw_test_last_delta = delta;
+    g_icm_attitude.yaw_test_on         = 0U;
+
+    if (NULL != out_start) *out_start = start_deg;
+    if (NULL != out_end)   *out_end   = end_deg;
+    if (NULL != out_delta) *out_delta = delta;
+    if (NULL != out_err90) *out_err90 = delta - 90.0f;  /* 正值 = 转多了 */
+}
+
+uint8 icm_attitude_yaw_test_is_on(void)
+{
+    return g_icm_attitude.yaw_test_on;
+}
+
+float icm_attitude_yaw_test_get_start(void)
+{
+    return g_icm_attitude.yaw_test_start_deg;
+}
+
+float icm_attitude_yaw_test_get_last_delta(void)
+{
+    return g_icm_attitude.yaw_test_last_delta;
 }

@@ -374,3 +374,5 @@ isr.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\ICM43688\icm_attitude
 "E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\ICM43688\icm_attitude.h" :
 isr.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\ICM43688\icm_ins.h"
 "E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\ICM43688\icm_ins.h" :
+isr.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\board_comm\board_comm.h"
+"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\board_comm\board_comm.h" :

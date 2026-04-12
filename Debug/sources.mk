@@ -29,6 +29,7 @@ code/GPS \
 code/ICM43688 \
 code/MyEncoder \
 code/MyKey \
+code/board_comm \
 code/menu \
 code/pedal \
 code/tuning \
