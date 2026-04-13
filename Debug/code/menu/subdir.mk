@@ -12,6 +12,7 @@ C_SRCS += \
 "../code/menu/menu_params.c" \
 "../code/menu/menu_pedal.c" \
 "../code/menu/menu_pid.c" \
+"../code/menu/menu_ui_utils.c" \
 "../code/menu/wifi_menu.c" 
 
 COMPILED_SRCS += \
@@ -23,6 +24,7 @@ COMPILED_SRCS += \
 "code/menu/menu_params.src" \
 "code/menu/menu_pedal.src" \
 "code/menu/menu_pid.src" \
+"code/menu/menu_ui_utils.src" \
 "code/menu/wifi_menu.src" 
 
 C_DEPS += \
@@ -34,6 +36,7 @@ C_DEPS += \
 "./code/menu/menu_params.d" \
 "./code/menu/menu_pedal.d" \
 "./code/menu/menu_pid.d" \
+"./code/menu/menu_ui_utils.d" \
 "./code/menu/wifi_menu.d" 
 
 OBJS += \
@@ -45,6 +48,7 @@ OBJS += \
 "code/menu/menu_params.o" \
 "code/menu/menu_pedal.o" \
 "code/menu/menu_pid.o" \
+"code/menu/menu_ui_utils.o" \
 "code/menu/wifi_menu.o" 
 
 
@@ -81,6 +85,10 @@ OBJS += \
 	cctc -cs --dep-file="$*.d" --misrac-version=2004 "-fE:/ads/Seekfree_TC387_Opensource_Library/Debug/TASKING_C_C___Compiler-Include_paths__-I_.opt" --iso=99 --c++14 --language=+volatile --exceptions --anachronisms --fp-model=3 -O0 --tradeoff=4 --compact-max-size=200 -g -Wc-w544 -Wc-w557 -Ctc38x -Y0 -N0 -Z0 -o "$@" "$<"
 "code/menu/menu_pid.o":"code/menu/menu_pid.src" "code/menu/subdir.mk"
 	astc -Og -Os --no-warnings= --error-limit=42 -o  "$@" "$<"
+"code/menu/menu_ui_utils.src":"../code/menu/menu_ui_utils.c" "code/menu/subdir.mk"
+	cctc -cs --dep-file="$*.d" --misrac-version=2004 "-fE:/ads/Seekfree_TC387_Opensource_Library/Debug/TASKING_C_C___Compiler-Include_paths__-I_.opt" --iso=99 --c++14 --language=+volatile --exceptions --anachronisms --fp-model=3 -O0 --tradeoff=4 --compact-max-size=200 -g -Wc-w544 -Wc-w557 -Ctc38x -Y0 -N0 -Z0 -o "$@" "$<"
+"code/menu/menu_ui_utils.o":"code/menu/menu_ui_utils.src" "code/menu/subdir.mk"
+	astc -Og -Os --no-warnings= --error-limit=42 -o  "$@" "$<"
 "code/menu/wifi_menu.src":"../code/menu/wifi_menu.c" "code/menu/subdir.mk"
 	cctc -cs --dep-file="$*.d" --misrac-version=2004 "-fE:/ads/Seekfree_TC387_Opensource_Library/Debug/TASKING_C_C___Compiler-Include_paths__-I_.opt" --iso=99 --c++14 --language=+volatile --exceptions --anachronisms --fp-model=3 -O0 --tradeoff=4 --compact-max-size=200 -g -Wc-w544 -Wc-w557 -Ctc38x -Y0 -N0 -Z0 -o "$@" "$<"
 "code/menu/wifi_menu.o":"code/menu/wifi_menu.src" "code/menu/subdir.mk"
@@ -89,7 +97,7 @@ OBJS += \
 clean: clean-code-2f-menu
 
 clean-code-2f-menu:
-	-$(RM) ./code/menu/menu.d ./code/menu/menu.o ./code/menu/menu.src ./code/menu/menu_fusion.d ./code/menu/menu_fusion.o ./code/menu/menu_fusion.src ./code/menu/menu_gps.d ./code/menu/menu_gps.o ./code/menu/menu_gps.src ./code/menu/menu_icm.d ./code/menu/menu_icm.o ./code/menu/menu_icm.src ./code/menu/menu_link.d ./code/menu/menu_link.o ./code/menu/menu_link.src ./code/menu/menu_params.d ./code/menu/menu_params.o ./code/menu/menu_params.src ./code/menu/menu_pedal.d ./code/menu/menu_pedal.o ./code/menu/menu_pedal.src ./code/menu/menu_pid.d ./code/menu/menu_pid.o ./code/menu/menu_pid.src ./code/menu/wifi_menu.d ./code/menu/wifi_menu.o ./code/menu/wifi_menu.src
+	-$(RM) ./code/menu/menu.d ./code/menu/menu.o ./code/menu/menu.src ./code/menu/menu_fusion.d ./code/menu/menu_fusion.o ./code/menu/menu_fusion.src ./code/menu/menu_gps.d ./code/menu/menu_gps.o ./code/menu/menu_gps.src ./code/menu/menu_icm.d ./code/menu/menu_icm.o ./code/menu/menu_icm.src ./code/menu/menu_link.d ./code/menu/menu_link.o ./code/menu/menu_link.src ./code/menu/menu_params.d ./code/menu/menu_params.o ./code/menu/menu_params.src ./code/menu/menu_pedal.d ./code/menu/menu_pedal.o ./code/menu/menu_pedal.src ./code/menu/menu_pid.d ./code/menu/menu_pid.o ./code/menu/menu_pid.src ./code/menu/menu_ui_utils.d ./code/menu/menu_ui_utils.o ./code/menu/menu_ui_utils.src ./code/menu/wifi_menu.d ./code/menu/wifi_menu.o ./code/menu/wifi_menu.src
 
 .PHONY: clean-code-2f-menu
 

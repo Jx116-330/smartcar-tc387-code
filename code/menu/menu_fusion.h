@@ -10,6 +10,7 @@
 #include "menu.h"
 #include "MyKey.h"
 #include "MyEncoder.h"
+#include "menu_ui_utils.h"
 
 typedef enum
 {
@@ -17,16 +18,7 @@ typedef enum
     FUSION_VIEW_DEBUG,
 } fusion_view_mode_t;
 
-void menu_fusion_action_debug(fusion_view_mode_t *fusion_mode,
-                              uint8 *menu_full_redraw,
-                              void (*drain_encoder_events)(void),
-                              void (*request_redraw)(uint8 full_redraw),
-                              void (*reset_dynamic_region)(void));
-
-uint8 menu_fusion_handle_view(fusion_view_mode_t *fusion_mode,
-                              uint8 *menu_full_redraw,
-                              void (*drain_encoder_events)(void),
-                              void (*request_redraw)(uint8 full_redraw),
-                              void (*reset_dynamic_region)(void));
+void  menu_fusion_action_enter(menu_view_ctx_t *ctx, uint8 target_mode);
+uint8 menu_fusion_handle_view(menu_view_ctx_t *ctx);
 
 #endif /* __MENU_FUSION_H__ */

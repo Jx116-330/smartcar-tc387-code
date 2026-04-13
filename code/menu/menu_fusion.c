@@ -16,91 +16,25 @@
 #include "zf_device_ips200.h"
 #include "icm_gps_fusion.h"
 #include "icm_ins.h"
+#include "menu_ui_utils.h"
 
-#define FUSION_VIEW_EXIT_HOLD_MS  250U
-#define FUSION_VIEW_EXIT_KEY_PIN  P20_2
 #define FUSION_REFRESH_MS         100U
 
-/* ---- 内部工具 --------------------------------------------------------- */
+static uint32 fusion_exit_hold_timer = 0U;
 
-static void fusion_fill_rect(uint16 x0, uint16 y0, uint16 x1, uint16 y1, uint16 color)
-{
-    uint16 y;
-    for (y = y0; y <= y1; y++)
-    {
-        ips200_draw_line(x0, y, x1, y, color);
-    }
-}
-
-static void fusion_show_pad(uint16 x, uint16 y, uint16 max_width, const char *s)
-{
-    char buf[64];
-    int max_chars = (int)(max_width / 8U);
-    int i = 0;
-
-    if (max_chars > (int)(sizeof(buf) - 1)) max_chars = (int)(sizeof(buf) - 1);
-    while ((i < max_chars) && (NULL != s) && (s[i] != '\0')) { buf[i] = s[i]; i++; }
-    while (i < max_chars) { buf[i++] = ' '; }
-    buf[i] = '\0';
-    ips200_show_string(x, y, buf);
-}
-
-static void fusion_consume_key1_press(void)
-{
-    my_key_clear_state(MY_KEY_1);
-    key_long_press_flag[MY_KEY_1] = close_status;
-}
-
-static uint8 fusion_is_exit_hold_triggered(void)
-{
-    static uint32 key_press_start_ms = 0U;
-    uint32 now_ms = system_getval_ms();
-
-    if (MY_KEY_RELEASE_LEVEL != gpio_get_level(FUSION_VIEW_EXIT_KEY_PIN))
-    {
-        if (0U == key_press_start_ms)
-        {
-            key_press_start_ms = now_ms;
-        }
-        else if ((now_ms - key_press_start_ms) >= FUSION_VIEW_EXIT_HOLD_MS)
-        {
-            key_press_start_ms = 0U;
-            return 1U;
-        }
-    }
-    else
-    {
-        key_press_start_ms = 0U;
-    }
-
-    return 0U;
-}
-
-static void fusion_enter_view(fusion_view_mode_t *fusion_mode,
-                              fusion_view_mode_t mode,
-                              uint8 *menu_full_redraw,
-                              void (*drain_encoder_events)(void),
-                              void (*request_redraw)(uint8 full_redraw),
-                              void (*reset_dynamic_region)(void))
-{
-    *fusion_mode = mode;
-    if (NULL != drain_encoder_events) drain_encoder_events();
-    fusion_consume_key1_press();
-    if (NULL != reset_dynamic_region) reset_dynamic_region();
-    if (NULL != menu_full_redraw) *menu_full_redraw = 1U;
-    if (NULL != request_redraw) request_redraw(1U);
-}
+/* fusion_enter_view 已被 menu_view_enter(ctx, mode) 替代 */
 
 /* ---- 融合调试页绘制 ---------------------------------------------------- */
 
 static void fusion_draw_debug_page(uint8 *menu_full_redraw)
 {
     static uint32 last_refresh_ms = 0U;
-    char line[64];
+    char val[48];
     const icm_gps_fusion_debug_t *d = icm_gps_fusion_get_debug();
     uint32 now_ms = system_getval_ms();
-    uint16 col_w  = (uint16)(ips200_width_max - 20U);
-    uint16 y = 0U;
+    uint16 end_x  = (uint16)(ips200_width_max - 10U);
+    uint16 val_w  = (uint16)(ips200_width_max - 36U);  /* 26 起始的值宽 */
+    uint16 val_w3 = (uint16)(ips200_width_max - 44U);  /* 34 起始的值宽 */
 
     if ((NULL != menu_full_redraw) && !(*menu_full_redraw) &&
         (now_ms - last_refresh_ms < FUSION_REFRESH_MS))
@@ -109,6 +43,7 @@ static void fusion_draw_debug_page(uint8 *menu_full_redraw)
     }
     last_refresh_ms = now_ms;
 
+    /* ---- 静态标签（仅 full_redraw 绘制一次）---- */
     if ((NULL != menu_full_redraw) && *menu_full_redraw)
     {
         ips200_full(RGB565_BLACK);
@@ -116,6 +51,29 @@ static void fusion_draw_debug_page(uint8 *menu_full_redraw)
         ips200_set_color(RGB565_YELLOW, RGB565_BLACK);
         ips200_show_string(10, 2, "GPS+INS Fusion");
         ips200_draw_line(0, 16, ips200_width_max - 1, 16, RGB565_GRAY);
+
+        /* section headers */
+        ips200_set_color(RGB565_CYAN, RGB565_BLACK);
+        ips200_show_string(10, 50, "Position (m)");
+        ips200_show_string(10, 108, "Velocity (m/s)");
+        ips200_show_string(10, 166, "Innovation");
+
+        /* 数据行标签 */
+        ips200_set_color(RGB565_GREEN, RGB565_BLACK);
+        ips200_show_string(10, 64, "F:");
+        ips200_show_string(10, 122, "F:");
+        ips200_set_color(RGB565_YELLOW, RGB565_BLACK);
+        ips200_show_string(10, 78, "G:");
+        ips200_show_string(10, 136, "G:");
+        ips200_set_color(RGB565_WHITE, RGB565_BLACK);
+        ips200_show_string(10, 92, "I:");
+        ips200_show_string(10, 150, "I:");
+        ips200_show_string(10, 180, "dP:");
+        ips200_show_string(10, 194, "dV:");
+
+        /* footer */
+        ips200_set_color(RGB565_GRAY, RGB565_BLACK);
+        ips200_show_string(5, (uint16)(ips200_height_max - 14U), "K1:Rst Origin LONG:Exit");
 
         *menu_full_redraw = 0U;
     }
@@ -126,151 +84,101 @@ static void fusion_draw_debug_page(uint8 *menu_full_redraw)
         icm_gps_fusion_reset_origin();
         icm_ins_reset_position();
         icm_ins_reset_velocity();
-        fusion_consume_key1_press();
+        menu_ui_consume_key1();
     }
 
+    /* ---- 状态标志行（混合内容，仅覆写不清黑）---- */
     ips200_set_color(RGB565_WHITE, RGB565_BLACK);
 
-    /* ---- 状态标志行 ---- */
-    y = 20U;
-    snprintf(line, sizeof(line), "ORI:%s EN:%s ACT:%s",
+    snprintf(val, sizeof(val), "ORI:%s EN:%s ACT:%s",
              d->origin_ready    ? "Y" : "-",
              d->fusion_enable   ? "Y" : "-",
              d->correction_active ? "Y" : "-");
-    fusion_fill_rect(10U, y, (uint16)(ips200_width_max - 10U), (uint16)(y + 12U), RGB565_BLACK);
-    fusion_show_pad(10, y, col_w, line);
+    menu_ui_show_pad(10, 20, (uint16)(ips200_width_max - 20U), val);
 
-    y = 34U;
-    snprintf(line, sizeof(line), "GPS:%s SPD:%s HDG:%s N:%lu",
+    snprintf(val, sizeof(val), "GPS:%s SPD:%s HDG:%s N:%lu",
              d->gps_valid         ? "Y" : "-",
              d->gps_speed_valid   ? "Y" : "-",
              d->gps_heading_valid ? "Y" : "-",
              (unsigned long)d->gps_update_count);
-    fusion_fill_rect(10U, y, (uint16)(ips200_width_max - 10U), (uint16)(y + 12U), RGB565_BLACK);
-    fusion_show_pad(10, y, col_w, line);
+    menu_ui_show_pad(10, 34, (uint16)(ips200_width_max - 20U), val);
 
-    /* ---- 位置：融合后 / GPS / INS ---- */
-    y = 50U;
-    ips200_set_color(RGB565_CYAN, RGB565_BLACK);
-    ips200_show_string(10, y, "Position (m)");
-    ips200_set_color(RGB565_WHITE, RGB565_BLACK);
-
-    y = 64U;
+    /* ---- 位置数值（仅值区 x=26 起）---- */
     {
         float fx = 0.0f, fy = 0.0f;
         icm_gps_fusion_get_position(&fx, &fy);
-        snprintf(line, sizeof(line), "F:%+7.2f %+7.2f", (double)fx, (double)fy);
+        snprintf(val, sizeof(val), "%+7.2f %+7.2f", (double)fx, (double)fy);
     }
-    fusion_fill_rect(10U, y, (uint16)(ips200_width_max - 10U), (uint16)(y + 12U), RGB565_BLACK);
     ips200_set_color(RGB565_GREEN, RGB565_BLACK);
-    fusion_show_pad(10, y, col_w, line);
+    menu_ui_show_pad(26, 64, val_w, val);
 
-    y = 78U;
-    snprintf(line, sizeof(line), "G:%+7.2f %+7.2f", (double)d->gps_x_m, (double)d->gps_y_m);
-    fusion_fill_rect(10U, y, (uint16)(ips200_width_max - 10U), (uint16)(y + 12U), RGB565_BLACK);
+    snprintf(val, sizeof(val), "%+7.2f %+7.2f", (double)d->gps_x_m, (double)d->gps_y_m);
     ips200_set_color(RGB565_YELLOW, RGB565_BLACK);
-    fusion_show_pad(10, y, col_w, line);
+    menu_ui_show_pad(26, 78, val_w, val);
 
-    y = 92U;
-    snprintf(line, sizeof(line), "I:%+7.2f %+7.2f", (double)d->ins_x_m, (double)d->ins_y_m);
-    fusion_fill_rect(10U, y, (uint16)(ips200_width_max - 10U), (uint16)(y + 12U), RGB565_BLACK);
+    snprintf(val, sizeof(val), "%+7.2f %+7.2f", (double)d->ins_x_m, (double)d->ins_y_m);
     ips200_set_color(RGB565_WHITE, RGB565_BLACK);
-    fusion_show_pad(10, y, col_w, line);
+    menu_ui_show_pad(26, 92, val_w, val);
 
-    /* ---- 速度：融合后 / GPS / INS ---- */
-    y = 108U;
-    ips200_set_color(RGB565_CYAN, RGB565_BLACK);
-    ips200_show_string(10, y, "Velocity (m/s)");
-    ips200_set_color(RGB565_WHITE, RGB565_BLACK);
-
-    y = 122U;
+    /* ---- 速度数值（仅值区 x=26 起）---- */
     {
         float fvx = 0.0f, fvy = 0.0f;
         icm_gps_fusion_get_velocity(&fvx, &fvy);
-        snprintf(line, sizeof(line), "F:%+6.2f %+6.2f", (double)fvx, (double)fvy);
+        snprintf(val, sizeof(val), "%+6.2f %+6.2f", (double)fvx, (double)fvy);
     }
-    fusion_fill_rect(10U, y, (uint16)(ips200_width_max - 10U), (uint16)(y + 12U), RGB565_BLACK);
     ips200_set_color(RGB565_GREEN, RGB565_BLACK);
-    fusion_show_pad(10, y, col_w, line);
+    menu_ui_show_pad(26, 122, val_w, val);
 
-    y = 136U;
-    snprintf(line, sizeof(line), "G:%+6.2f %+6.2f", (double)d->gps_vx_ms, (double)d->gps_vy_ms);
-    fusion_fill_rect(10U, y, (uint16)(ips200_width_max - 10U), (uint16)(y + 12U), RGB565_BLACK);
+    snprintf(val, sizeof(val), "%+6.2f %+6.2f", (double)d->gps_vx_ms, (double)d->gps_vy_ms);
     ips200_set_color(RGB565_YELLOW, RGB565_BLACK);
-    fusion_show_pad(10, y, col_w, line);
+    menu_ui_show_pad(26, 136, val_w, val);
 
-    y = 150U;
-    snprintf(line, sizeof(line), "I:%+6.2f %+6.2f", (double)d->ins_vx_ms, (double)d->ins_vy_ms);
-    fusion_fill_rect(10U, y, (uint16)(ips200_width_max - 10U), (uint16)(y + 12U), RGB565_BLACK);
+    snprintf(val, sizeof(val), "%+6.2f %+6.2f", (double)d->ins_vx_ms, (double)d->ins_vy_ms);
     ips200_set_color(RGB565_WHITE, RGB565_BLACK);
-    fusion_show_pad(10, y, col_w, line);
+    menu_ui_show_pad(26, 150, val_w, val);
 
-    /* ---- 创新量 ---- */
-    y = 166U;
-    ips200_set_color(RGB565_CYAN, RGB565_BLACK);
-    ips200_show_string(10, y, "Innovation");
-    ips200_set_color(RGB565_WHITE, RGB565_BLACK);
-
-    y = 180U;
-    snprintf(line, sizeof(line), "dP:%+6.2f %+6.2f",
+    /* ---- 创新量数值（仅值区 x=34 起）---- */
+    snprintf(val, sizeof(val), "%+6.2f %+6.2f",
              (double)d->innov_px_m, (double)d->innov_py_m);
-    fusion_fill_rect(10U, y, (uint16)(ips200_width_max - 10U), (uint16)(y + 12U), RGB565_BLACK);
-    fusion_show_pad(10, y, col_w, line);
+    ips200_set_color(RGB565_WHITE, RGB565_BLACK);
+    menu_ui_show_pad(34, 180, val_w3, val);
 
-    y = 194U;
-    snprintf(line, sizeof(line), "dV:%+6.2f %+6.2f",
+    snprintf(val, sizeof(val), "%+6.2f %+6.2f",
              (double)d->innov_vx_ms, (double)d->innov_vy_ms);
-    fusion_fill_rect(10U, y, (uint16)(ips200_width_max - 10U), (uint16)(y + 12U), RGB565_BLACK);
-    fusion_show_pad(10, y, col_w, line);
+    menu_ui_show_pad(34, 194, val_w3, val);
 
-    /* ---- 统计 ---- */
-    y = 210U;
-    snprintf(line, sizeof(line), "ZUPT:%s Corr:%lu",
+    /* ---- 统计行（混合内容，仅覆写不清黑）---- */
+    snprintf(val, sizeof(val), "ZUPT:%s Corr:%lu",
              icm_ins_is_stationary() ? "ON" : "--",
              (unsigned long)d->correction_count);
-    fusion_fill_rect(10U, y, (uint16)(ips200_width_max - 10U), (uint16)(y + 12U), RGB565_BLACK);
-    fusion_show_pad(10, y, col_w, line);
-
-    /* ---- 底部提示 ---- */
-    ips200_set_color(RGB565_GRAY, RGB565_BLACK);
-    fusion_show_pad(5, (uint16)(ips200_height_max - 14U),
-                    (uint16)(ips200_width_max - 10U), "K1:Rst Origin LONG:Exit");
+    menu_ui_show_pad(10, 210, (uint16)(ips200_width_max - 20U), val);
 }
 
 /* ---- 公共接口 ---------------------------------------------------------- */
 
-void menu_fusion_action_debug(fusion_view_mode_t *fusion_mode,
-                              uint8 *menu_full_redraw,
-                              void (*drain_encoder_events)(void),
-                              void (*request_redraw)(uint8 full_redraw),
-                              void (*reset_dynamic_region)(void))
+void menu_fusion_action_enter(menu_view_ctx_t *ctx, uint8 target_mode)
 {
-    fusion_enter_view(fusion_mode, FUSION_VIEW_DEBUG, menu_full_redraw,
-                      drain_encoder_events, request_redraw, reset_dynamic_region);
+    menu_view_enter(ctx, target_mode);
 }
 
-uint8 menu_fusion_handle_view(fusion_view_mode_t *fusion_mode,
-                              uint8 *menu_full_redraw,
-                              void (*drain_encoder_events)(void),
-                              void (*request_redraw)(uint8 full_redraw),
-                              void (*reset_dynamic_region)(void))
+uint8 menu_fusion_handle_view(menu_view_ctx_t *ctx)
 {
-    if ((NULL == fusion_mode) || (FUSION_VIEW_NONE == *fusion_mode)) return 0U;
+    if ((NULL == ctx) || (NULL == ctx->mode) || (FUSION_VIEW_NONE == *(ctx->mode))) return 0U;
 
     /* 长按退出 */
-    if ((MY_KEY_LONG_PRESS == my_key_get_state(MY_KEY_1)) || fusion_is_exit_hold_triggered())
+    if ((MY_KEY_LONG_PRESS == my_key_get_state(MY_KEY_1)) || menu_ui_check_exit_hold(&fusion_exit_hold_timer, 250U))
     {
-        fusion_consume_key1_press();
-        *fusion_mode = FUSION_VIEW_NONE;
-        if (NULL != drain_encoder_events) drain_encoder_events();
-        if (NULL != reset_dynamic_region) reset_dynamic_region();
-        if (NULL != request_redraw) request_redraw(1U);
+        menu_ui_consume_key1();
+        *(ctx->mode) = FUSION_VIEW_NONE;
+        if (NULL != ctx->drain_encoder_events) ctx->drain_encoder_events();
+        if (NULL != ctx->reset_dynamic_region) ctx->reset_dynamic_region();
+        if (NULL != ctx->request_redraw) ctx->request_redraw(1U);
         return 1U;
     }
 
-    if (FUSION_VIEW_DEBUG == *fusion_mode)
+    if (FUSION_VIEW_DEBUG == *(ctx->mode))
     {
-        fusion_draw_debug_page(menu_full_redraw);
+        fusion_draw_debug_page(ctx->menu_full_redraw);
     }
 
     return 1U;

@@ -16,10 +16,9 @@
 #include "icm_attitude.h"
 #include "icm_ins.h"
 #include "ins_record.h"
+#include "menu_ui_utils.h"
 
 #define ICM_GYRO_BIAS_CALIB_SAMPLES 20000U
-#define ICM_VIEW_EXIT_HOLD_MS       250U
-#define ICM_VIEW_EXIT_KEY_PIN       P20_2
 #define ICM_INS_MAP_REFRESH_MS      250U
 #define ICM_TRACK_LINE_COLOR        RGB565_WHITE
 #define ICM_TRACK_START_COLOR       RGB565_GREEN
@@ -52,73 +51,9 @@ static char icm_ins_map_hint_cache[48] = "";
 
 /* ---- 内部工具 --------------------------------------------------------- */
 
-static void icm_fill_rect(uint16 x0, uint16 y0, uint16 x1, uint16 y1, uint16 color)
-{
-    uint16 y;
-    for (y = y0; y <= y1; y++)
-    {
-        ips200_draw_line(x0, y, x1, y, color);
-    }
-}
+static uint32 icm_exit_hold_timer = 0U;
 
-static void icm_show_pad(uint16 x, uint16 y, uint16 max_width, const char *s)
-{
-    char buf[64];
-    int max_chars = (int)(max_width / 8U);
-    int i = 0;
-
-    if (max_chars > (int)(sizeof(buf) - 1)) max_chars = (int)(sizeof(buf) - 1);
-    while ((i < max_chars) && (NULL != s) && (s[i] != '\0')) { buf[i] = s[i]; i++; }
-    while (i < max_chars) { buf[i++] = ' '; }
-    buf[i] = '\0';
-    ips200_show_string(x, y, buf);
-}
-
-static void icm_consume_key1_press(void)
-{
-    my_key_clear_state(MY_KEY_1);
-    key_long_press_flag[MY_KEY_1] = close_status;
-}
-
-static uint8 icm_is_exit_hold_triggered(void)
-{
-    static uint32 key_press_start_ms = 0U;
-    uint32 now_ms = system_getval_ms();
-
-    if (MY_KEY_RELEASE_LEVEL != gpio_get_level(ICM_VIEW_EXIT_KEY_PIN))
-    {
-        if (0U == key_press_start_ms)
-        {
-            key_press_start_ms = now_ms;
-        }
-        else if ((now_ms - key_press_start_ms) >= ICM_VIEW_EXIT_HOLD_MS)
-        {
-            key_press_start_ms = 0U;
-            return 1U;
-        }
-    }
-    else
-    {
-        key_press_start_ms = 0U;
-    }
-
-    return 0U;
-}
-
-static void icm_enter_view(icm_view_mode_t *icm_mode,
-                           icm_view_mode_t mode,
-                           uint8 *menu_full_redraw,
-                           void (*drain_encoder_events)(void),
-                           void (*request_redraw)(uint8 full_redraw),
-                           void (*reset_dynamic_region)(void))
-{
-    *icm_mode = mode;
-    if (NULL != drain_encoder_events) drain_encoder_events();
-    icm_consume_key1_press();
-    if (NULL != reset_dynamic_region) reset_dynamic_region();
-    if (NULL != menu_full_redraw) *menu_full_redraw = 1U;
-    if (NULL != request_redraw) request_redraw(1U);
-}
+/* icm_enter_view 已被 menu_view_enter(ctx, mode) 替代 */
 
 static void icm_draw_box_border(uint16 x0, uint16 y0, uint16 width, uint16 height, uint16 color)
 {
@@ -319,7 +254,7 @@ static void icm_ins_map_clear_inner_area(uint16 map_x, uint16 map_y, uint16 map_
         return;
     }
 
-    icm_fill_rect((uint16)(map_x + 1U),
+    menu_ui_fill_rect((uint16)(map_x + 1U),
                   (uint16)(map_y + 1U),
                   (uint16)(map_x + map_w - 2U),
                   (uint16)(map_y + map_h - 2U),
@@ -401,7 +336,7 @@ static void icm_ins_map_update_text_line(uint16 x,
     }
 
     ips200_set_color(color, RGB565_BLACK);
-    icm_show_pad(x, y, max_width, text);
+    menu_ui_show_pad(x, y, max_width, text);
     icm_copy_text(cache, 48U, text);
 }
 
@@ -651,7 +586,7 @@ static void icm_draw_ins_track_map_page(uint8 *menu_full_redraw)
         ips200_draw_line(0, 30, ips200_width_max - 1, 30, RGB565_GRAY);
 
         ips200_set_color(RGB565_GRAY, RGB565_BLACK);
-        icm_show_pad(5, (uint16)(ips200_height_max - 20U),
+        menu_ui_show_pad(5, (uint16)(ips200_height_max - 20U),
                      (uint16)(ips200_width_max - 10U),
                      "S:GRN E:CYN C/L:RED LONG:Exit");
     }
@@ -865,7 +800,6 @@ static void icm_draw_raw_page(uint8 *menu_full_redraw)
     static uint32 last_refresh_ms = 0U;
     char line[48];
     uint32 now_ms = system_getval_ms();
-    uint16 col_w  = (uint16)(ips200_width_max - 20U);
 
     /* 限速：全刷时立即绘制，增量刷新 200 ms 一次 */
     if ((NULL != menu_full_redraw) && !(*menu_full_redraw) &&
@@ -893,38 +827,51 @@ static void icm_draw_raw_page(uint8 *menu_full_redraw)
         ips200_show_string(10, 108, "Gyro (dps)");
         ips200_draw_line(10, 122, (uint16)(ips200_width_max - 10U), 122, RGB565_GRAY);
 
+        /* 静态标签 (8px/char) */
+        ips200_set_color(RGB565_WHITE, RGB565_BLACK);
+        ips200_show_string(10, 56, "Ax:");        /* 3ch => val x=34 */
+        ips200_show_string(114, 56, "Ay:");       /* 3ch => val x=138 */
+        ips200_show_string(10, 78, "Az:");
+        ips200_show_string(10, 126, "Gx:");
+        ips200_show_string(114, 126, "Gy:");
+        ips200_show_string(10, 148, "Gz:");
+
         /* 页脚 */
         ips200_set_color(RGB565_GRAY, RGB565_BLACK);
-        icm_show_pad(5, (uint16)(ips200_height_max - 20U), (uint16)(ips200_width_max - 10U), "LONG: Exit");
+        menu_ui_show_pad(5, (uint16)(ips200_height_max - 20U), (uint16)(ips200_width_max - 10U), "LONG: Exit");
 
         *menu_full_redraw = 0U;
     }
 
-    /* 动态数据区域（全量刷新后也会走这里更新数值） */
+    /* 动态数据区域 — 仅刷新数值，不重绘标签 */
     ips200_set_color(RGB565_WHITE, RGB565_BLACK);
 
-    /* 加速度 X / Y */
-    snprintf(line, sizeof(line), "Ax:%+8.4f  Ay:%+8.4f", (double)icm42688_acc_x, (double)icm42688_acc_y);
-    icm_fill_rect(10U, 56U, (uint16)(ips200_width_max - 10U), 70U, RGB565_BLACK);
-    icm_show_pad(10, 56, col_w, line);
+    /* 加速度 X */
+    snprintf(line, sizeof(line), "%+8.4f", (double)icm42688_acc_x);
+    menu_ui_show_pad(34, 56, 64, line);
+
+    /* 加速度 Y */
+    snprintf(line, sizeof(line), "%+8.4f", (double)icm42688_acc_y);
+    menu_ui_show_pad(138, 56, 64, line);
 
     /* 加速度 Z */
-    snprintf(line, sizeof(line), "Az:%+8.4f", (double)icm42688_acc_z);
-    icm_fill_rect(10U, 78U, (uint16)(ips200_width_max - 10U), 92U, RGB565_BLACK);
-    icm_show_pad(10, 78, col_w, line);
+    snprintf(line, sizeof(line), "%+8.4f", (double)icm42688_acc_z);
+    menu_ui_show_pad(34, 78, 64, line);
 
     /* 温度占位行（如后续需要可换成温度读取） */
-    icm_fill_rect(10U, 100U, (uint16)(ips200_width_max - 10U), 106U, RGB565_BLACK);
+    menu_ui_fill_rect(10U, 100U, (uint16)(ips200_width_max - 10U), 106U, RGB565_BLACK);
 
-    /* 陀螺仪 X / Y */
-    snprintf(line, sizeof(line), "Gx:%+8.2f  Gy:%+8.2f", (double)icm42688_gyro_x, (double)icm42688_gyro_y);
-    icm_fill_rect(10U, 126U, (uint16)(ips200_width_max - 10U), 140U, RGB565_BLACK);
-    icm_show_pad(10, 126, col_w, line);
+    /* 陀螺仪 X */
+    snprintf(line, sizeof(line), "%+8.2f", (double)icm42688_gyro_x);
+    menu_ui_show_pad(34, 126, 64, line);
+
+    /* 陀螺仪 Y */
+    snprintf(line, sizeof(line), "%+8.2f", (double)icm42688_gyro_y);
+    menu_ui_show_pad(138, 126, 64, line);
 
     /* 陀螺仪 Z */
-    snprintf(line, sizeof(line), "Gz:%+8.2f", (double)icm42688_gyro_z);
-    icm_fill_rect(10U, 148U, (uint16)(ips200_width_max - 10U), 162U, RGB565_BLACK);
-    icm_show_pad(10, 148, col_w, line);
+    snprintf(line, sizeof(line), "%+8.2f", (double)icm42688_gyro_z);
+    menu_ui_show_pad(34, 148, 64, line);
 }
 
 static void icm_draw_attitude_page(uint8 *menu_full_redraw)
@@ -940,7 +887,6 @@ static void icm_draw_attitude_page(uint8 *menu_full_redraw)
     float acc_norm_g = 0.0f;
     uint32 now_ms = system_getval_ms();
     uint32 update_count = icm_attitude_get_update_count();
-    uint16 col_w  = (uint16)(ips200_width_max - 20U);
 
     if ((NULL != menu_full_redraw) && !(*menu_full_redraw) &&
         (now_ms - last_refresh_ms < 100U))
@@ -975,8 +921,19 @@ static void icm_draw_attitude_page(uint8 *menu_full_redraw)
         ips200_show_string(10, 132, "Solver Status");
         ips200_draw_line(10, 146, (uint16)(ips200_width_max - 10U), 146, RGB565_GRAY);
 
+        /* 静态标签 (8px/char): 6ch label => val x=58 */
+        ips200_set_color(RGB565_WHITE, RGB565_BLACK);
+        ips200_show_string(10, 60, "Roll :");
+        ips200_show_string(10, 82, "Pitch:");
+        ips200_show_string(10, 104, "Yaw  :");
+        ips200_show_string(10, 154, "AccNorm:");  /* 8ch => val x=74 */
+        ips200_show_string(122, 154, "g");         /* unit after 6-char value */
+        ips200_show_string(10, 176, "Upd:");       /* 4ch => val x=42 */
+        ips200_show_string(90, 176, "Hz");         /* unit after 6-char value */
+        ips200_show_string(114, 176, "Cnt:");      /* 4ch => val x=146 */
+
         ips200_set_color(RGB565_GRAY, RGB565_BLACK);
-        icm_show_pad(5, (uint16)(ips200_height_max - 20U), (uint16)(ips200_width_max - 10U), "Yaw drifts, LONG: Exit");
+        menu_ui_show_pad(5, (uint16)(ips200_height_max - 20U), (uint16)(ips200_width_max - 10U), "Yaw drifts, LONG: Exit");
 
         *menu_full_redraw = 0U;
     }
@@ -986,25 +943,29 @@ static void icm_draw_attitude_page(uint8 *menu_full_redraw)
 
     ips200_set_color(RGB565_WHITE, RGB565_BLACK);
 
-    snprintf(line, sizeof(line), "Roll :%+8.2f", (double)roll_deg);
-    icm_fill_rect(10U, 60U, (uint16)(ips200_width_max - 10U), 74U, RGB565_BLACK);
-    icm_show_pad(10, 60, col_w, line);
+    /* Roll value (6ch label, val x=58, 8ch value = 64px) */
+    snprintf(line, sizeof(line), "%+8.2f", (double)roll_deg);
+    menu_ui_show_pad(58, 60, 64, line);
 
-    snprintf(line, sizeof(line), "Pitch:%+8.2f", (double)pitch_deg);
-    icm_fill_rect(10U, 82U, (uint16)(ips200_width_max - 10U), 96U, RGB565_BLACK);
-    icm_show_pad(10, 82, col_w, line);
+    /* Pitch value */
+    snprintf(line, sizeof(line), "%+8.2f", (double)pitch_deg);
+    menu_ui_show_pad(58, 82, 64, line);
 
-    snprintf(line, sizeof(line), "Yaw  :%+8.2f", (double)yaw_deg);
-    icm_fill_rect(10U, 104U, (uint16)(ips200_width_max - 10U), 118U, RGB565_BLACK);
-    icm_show_pad(10, 104, col_w, line);
+    /* Yaw value */
+    snprintf(line, sizeof(line), "%+8.2f", (double)yaw_deg);
+    menu_ui_show_pad(58, 104, 64, line);
 
-    snprintf(line, sizeof(line), "AccNorm:%6.3fg", (double)acc_norm_g);
-    icm_fill_rect(10U, 154U, (uint16)(ips200_width_max - 10U), 168U, RGB565_BLACK);
-    icm_show_pad(10, 154, col_w, line);
+    /* AccNorm value (8ch label, val x=74, 6ch value = 48px) */
+    snprintf(line, sizeof(line), "%6.3f", (double)acc_norm_g);
+    menu_ui_show_pad(74, 154, 48, line);
 
-    snprintf(line, sizeof(line), "Upd:%6.1fHz Cnt:%lu", (double)update_hz, (unsigned long)update_count);
-    icm_fill_rect(10U, 176U, (uint16)(ips200_width_max - 10U), 190U, RGB565_BLACK);
-    icm_show_pad(10, 176, col_w, line);
+    /* Upd value (4ch label, val x=42, 6ch value = 48px) */
+    snprintf(line, sizeof(line), "%6.1f", (double)update_hz);
+    menu_ui_show_pad(42, 176, 48, line);
+
+    /* Cnt value (4ch label at x=114, val x=146) */
+    snprintf(line, sizeof(line), "%lu", (unsigned long)update_count);
+    menu_ui_show_pad(146, 176, (uint16)(ips200_width_max - 156U), line);
 }
 
 static void icm_draw_gyro_bias_calib_page(uint8 *menu_full_redraw)
@@ -1017,7 +978,6 @@ static void icm_draw_gyro_bias_calib_page(uint8 *menu_full_redraw)
     uint32 now_ms = system_getval_ms();
     uint32 sample_count = 0U;
     uint32 target_count = 0U;
-    uint16 col_w = (uint16)(ips200_width_max - 20U);
 
     if ((NULL != menu_full_redraw) && !(*menu_full_redraw) &&
         (now_ms - last_refresh_ms < 100U))
@@ -1035,15 +995,23 @@ static void icm_draw_gyro_bias_calib_page(uint8 *menu_full_redraw)
         ips200_draw_line(0, 30, ips200_width_max - 1, 30, RGB565_GRAY);
 
         ips200_set_color(RGB565_GRAY, RGB565_BLACK);
-        icm_show_pad(10, 40, (uint16)(ips200_width_max - 20U), "Keep the car still");
-        icm_show_pad(10, 56, (uint16)(ips200_width_max - 20U), "K1:Restart  LONG:Back");
-        icm_show_pad(10, 72, (uint16)(ips200_width_max - 20U), "Auto-save to flash on done");
+        menu_ui_show_pad(10, 40, (uint16)(ips200_width_max - 20U), "Keep the car still");
+        menu_ui_show_pad(10, 56, (uint16)(ips200_width_max - 20U), "K1:Restart  LONG:Back");
+        menu_ui_show_pad(10, 72, (uint16)(ips200_width_max - 20U), "Auto-save to flash on done");
 
         ips200_set_color(RGB565_CYAN, RGB565_BLACK);
         ips200_show_string(10, 94, "Calibration Status");
         ips200_draw_line(10, 108, (uint16)(ips200_width_max - 10U), 108, RGB565_GRAY);
         ips200_show_string(10, 158, "Gyro Bias (dps)");
         ips200_draw_line(10, 172, (uint16)(ips200_width_max - 10U), 172, RGB565_GRAY);
+
+        /* 静态标签 (8px/char) */
+        ips200_set_color(RGB565_WHITE, RGB565_BLACK);
+        ips200_show_string(10, 116, "Status:");   /* 7ch => val x=66 */
+        ips200_show_string(10, 136, "Samples:");  /* 8ch => val x=74 */
+        ips200_show_string(10, 180, "Bx:");       /* 3ch => val x=34 */
+        ips200_show_string(10, 200, "By:");       /* 3ch => val x=34 */
+        ips200_show_string(106, 200, "Bz:");      /* 3ch => val x=130 */
 
         *menu_full_redraw = 0U;
     }
@@ -1054,37 +1022,41 @@ static void icm_draw_gyro_bias_calib_page(uint8 *menu_full_redraw)
     ips200_set_color(RGB565_WHITE, RGB565_BLACK);
     if (icm_attitude_is_gyro_bias_calibrating())
     {
-        snprintf(line, sizeof(line), "Status: CALIBRATING");
+        snprintf(line, sizeof(line), " CALIBRATING");
     }
     else if (icm_attitude_is_gyro_bias_valid())
     {
         if (icm_attitude_is_gyro_bias_from_flash())
         {
-            snprintf(line, sizeof(line), "Status: DONE [FLASH]");
+            snprintf(line, sizeof(line), " DONE [FLASH]");
         }
         else
         {
-            snprintf(line, sizeof(line), "Status: DONE [SAVED]");
+            snprintf(line, sizeof(line), " DONE [SAVED]");
         }
     }
     else
     {
-        snprintf(line, sizeof(line), "Status: NOT READY");
+        snprintf(line, sizeof(line), " NOT READY");
     }
-    icm_fill_rect(10U, 116U, (uint16)(ips200_width_max - 10U), 130U, RGB565_BLACK);
-    icm_show_pad(10, 116, col_w, line);
+    /* Status value (7ch label, val x=66) */
+    menu_ui_show_pad(66, 116, (uint16)(ips200_width_max - 76U), line);
 
-    snprintf(line, sizeof(line), "Samples:%4lu/%4lu", (unsigned long)sample_count, (unsigned long)target_count);
-    icm_fill_rect(10U, 136U, (uint16)(ips200_width_max - 10U), 150U, RGB565_BLACK);
-    icm_show_pad(10, 136, col_w, line);
+    /* Samples value (8ch label, val x=74) */
+    snprintf(line, sizeof(line), "%4lu/%4lu", (unsigned long)sample_count, (unsigned long)target_count);
+    menu_ui_show_pad(74, 136, 72, line);
 
-    snprintf(line, sizeof(line), "Bx:%+8.3f", (double)bias_x);
-    icm_fill_rect(10U, 180U, (uint16)(ips200_width_max - 10U), 194U, RGB565_BLACK);
-    icm_show_pad(10, 180, col_w, line);
+    /* Bx value (3ch label, val x=34) */
+    snprintf(line, sizeof(line), "%+8.3f", (double)bias_x);
+    menu_ui_show_pad(34, 180, 64, line);
 
-    snprintf(line, sizeof(line), "By:%+8.3f Bz:%+8.3f", (double)bias_y, (double)bias_z);
-    icm_fill_rect(10U, 200U, (uint16)(ips200_width_max - 10U), 214U, RGB565_BLACK);
-    icm_show_pad(10, 200, col_w, line);
+    /* By value (3ch label, val x=34) */
+    snprintf(line, sizeof(line), "%+8.3f", (double)bias_y);
+    menu_ui_show_pad(34, 200, 64, line);
+
+    /* Bz value (3ch label at x=106, val x=130) */
+    snprintf(line, sizeof(line), "%+8.3f", (double)bias_z);
+    menu_ui_show_pad(130, 200, 64, line);
 }
 
 /* ---- INS Dead Reckoning: ZUPT + velocity + position ------------------- */
@@ -1103,7 +1075,6 @@ static void icm_draw_ins_debug_page(uint8 *menu_full_redraw)
     float pitch_deg = 0.0f;
     float roll_deg = 0.0f;
     uint32 now_ms = system_getval_ms();
-    uint16 col_w  = (uint16)(ips200_width_max - 20U);
 
     if ((NULL != menu_full_redraw) && !(*menu_full_redraw) &&
         (now_ms - last_refresh_ms < 100U))
@@ -1132,8 +1103,26 @@ static void icm_draw_ins_debug_page(uint8 *menu_full_redraw)
         ips200_show_string(10, 152, "Position (m)");
         ips200_draw_line(10, 166, (uint16)(ips200_width_max - 10U), 166, RGB565_GRAY);
 
+        /* 静态标签 (8px/char) */
+        ips200_set_color(RGB565_WHITE, RGB565_BLACK);
+        ips200_show_string(10, 56, "Ax:");        /* 3ch => val x=34 */
+        ips200_show_string(98, 56, "Ay:");        /* 3ch => val x=122 */
+        ips200_show_string(10, 74, "ZUPT:[");     /* 6ch => val x=58 */
+        ips200_show_string(74, 74, "]");
+        ips200_show_string(90, 74, "Bias:[");     /* 6ch => val x=138 */
+        ips200_show_string(154, 74, "]");
+        ips200_show_string(10, 114, "Vx:");       /* 3ch => val x=34 */
+        ips200_show_string(98, 114, "Vy:");       /* 3ch => val x=122 */
+        ips200_show_string(10, 132, "Spd:");      /* 4ch => val x=42 */
+        ips200_show_string(106, 132, "m/s");      /* unit suffix (1ch gap) */
+        ips200_show_string(10, 170, "Px:");       /* 3ch => val x=34 */
+        ips200_show_string(106, 170, "Py:");      /* 3ch => val x=130 */
+        ips200_show_string(10, 192, "Yaw:");      /* 4ch => val x=42 */
+        ips200_show_string(10, 210, "R:");        /* 2ch => val x=26 */
+        ips200_show_string(82, 210, "P:");        /* 2ch => val x=98 */
+
         ips200_set_color(RGB565_GRAY, RGB565_BLACK);
-        icm_show_pad(5, (uint16)(ips200_height_max - 20U),
+        menu_ui_show_pad(5, (uint16)(ips200_height_max - 20U),
                      (uint16)(ips200_width_max - 10U), "K1:Reset Pos  LONG:Exit");
 
         *menu_full_redraw = 0U;
@@ -1144,7 +1133,7 @@ static void icm_draw_ins_debug_page(uint8 *menu_full_redraw)
     {
         icm_ins_reset_velocity();
         icm_ins_reset_position();
-        icm_consume_key1_press();
+        menu_ui_consume_key1();
     }
 
     icm_ins_get_linear_acc(&ax, &ay, NULL);
@@ -1154,152 +1143,124 @@ static void icm_draw_ins_debug_page(uint8 *menu_full_redraw)
 
     ips200_set_color(RGB565_WHITE, RGB565_BLACK);
 
-    /* Lin Acc XY */
-    snprintf(line, sizeof(line), "Ax:%+7.3f Ay:%+7.3f", (double)ax, (double)ay);
-    icm_fill_rect(10U, 56U, (uint16)(ips200_width_max - 10U), 70U, RGB565_BLACK);
-    icm_show_pad(10, 56, col_w, line);
+    /* Lin Acc X (3ch label, val x=34, 7ch value = 56px) */
+    snprintf(line, sizeof(line), "%+7.3f", (double)ax);
+    menu_ui_show_pad(34, 56, 56, line);
 
-    /* ZUPT + Bias status */
-    snprintf(line, sizeof(line), "ZUPT:[%s] Bias:[%s]",
-             icm_ins_is_stationary() ? "ON" : "--",
-             icm_attitude_is_gyro_bias_valid() ? "ON" : "--");
-    icm_fill_rect(10U, 74U, (uint16)(ips200_width_max - 10U), 88U, RGB565_BLACK);
+    /* Lin Acc Y (3ch label at x=98, val x=122, 7ch = 56px) */
+    snprintf(line, sizeof(line), "%+7.3f", (double)ay);
+    menu_ui_show_pad(122, 56, 56, line);
+
+    /* ZUPT value (val x=58, 2ch = 16px) */
+    snprintf(line, sizeof(line), "%s", icm_ins_is_stationary() ? "ON" : "--");
     if (icm_ins_is_stationary())
     {
         ips200_set_color(RGB565_GREEN, RGB565_BLACK);
     }
-    icm_show_pad(10, 74, col_w, line);
+    menu_ui_show_pad(58, 74, 16, line);
     ips200_set_color(RGB565_WHITE, RGB565_BLACK);
 
-    /* Vel XY + speed */
-    snprintf(line, sizeof(line), "Vx:%+7.3f Vy:%+7.3f", (double)vx, (double)vy);
-    icm_fill_rect(10U, 114U, (uint16)(ips200_width_max - 10U), 128U, RGB565_BLACK);
-    icm_show_pad(10, 114, col_w, line);
+    /* Bias value (val x=138, 2ch = 16px) */
+    snprintf(line, sizeof(line), "%s", icm_attitude_is_gyro_bias_valid() ? "ON" : "--");
+    menu_ui_show_pad(138, 74, 16, line);
 
-    snprintf(line, sizeof(line), "Spd:%7.3f m/s", (double)icm_ins_get_speed_ms());
-    icm_fill_rect(10U, 132U, (uint16)(ips200_width_max - 10U), 146U, RGB565_BLACK);
-    icm_show_pad(10, 132, col_w, line);
+    /* Vel X (3ch label, val x=34, 7ch = 56px) */
+    snprintf(line, sizeof(line), "%+7.3f", (double)vx);
+    menu_ui_show_pad(34, 114, 56, line);
 
-    /* Position XY */
-    snprintf(line, sizeof(line), "Px:%+8.2f Py:%+8.2f", (double)px, (double)py);
-    icm_fill_rect(10U, 170U, (uint16)(ips200_width_max - 10U), 184U, RGB565_BLACK);
-    icm_show_pad(10, 170, col_w, line);
+    /* Vel Y (3ch label at x=98, val x=122, 7ch = 56px) */
+    snprintf(line, sizeof(line), "%+7.3f", (double)vy);
+    menu_ui_show_pad(122, 114, 56, line);
 
-    /* Yaw + Roll/Pitch */
-    snprintf(line, sizeof(line), "Yaw:%+7.1f", (double)yaw_deg);
-    icm_fill_rect(10U, 192U, (uint16)(ips200_width_max - 10U), 206U, RGB565_BLACK);
-    icm_show_pad(10, 192, col_w, line);
+    /* Speed value (4ch label, val x=42, 7ch = 56px) */
+    snprintf(line, sizeof(line), "%7.3f", (double)icm_ins_get_speed_ms());
+    menu_ui_show_pad(42, 132, 56, line);
 
-    snprintf(line, sizeof(line), "R:%+6.1f P:%+6.1f", (double)roll_deg, (double)pitch_deg);
-    icm_fill_rect(10U, 210U, (uint16)(ips200_width_max - 10U), 224U, RGB565_BLACK);
-    icm_show_pad(10, 210, col_w, line);
+    /* Position X (3ch label, val x=34, 8ch = 64px) */
+    snprintf(line, sizeof(line), "%+8.2f", (double)px);
+    menu_ui_show_pad(34, 170, 64, line);
+
+    /* Position Y (3ch label at x=106, val x=130, 8ch = 64px) */
+    snprintf(line, sizeof(line), "%+8.2f", (double)py);
+    menu_ui_show_pad(130, 170, 64, line);
+
+    /* Yaw value (4ch label, val x=42, 7ch = 56px) */
+    snprintf(line, sizeof(line), "%+7.1f", (double)yaw_deg);
+    menu_ui_show_pad(42, 192, 56, line);
+
+    /* Roll value (2ch label, val x=26, 6ch = 48px) */
+    snprintf(line, sizeof(line), "%+6.1f", (double)roll_deg);
+    menu_ui_show_pad(26, 210, 48, line);
+
+    /* Pitch value (2ch label at x=82, val x=98, 6ch = 48px) */
+    snprintf(line, sizeof(line), "%+6.1f", (double)pitch_deg);
+    menu_ui_show_pad(98, 210, 48, line);
 }
 
 /* ---- 公共接口 ---------------------------------------------------------- */
 
-void menu_icm_action_raw_data(icm_view_mode_t *icm_mode,
-                              uint8 *menu_full_redraw,
-                              void (*drain_encoder_events)(void),
-                              void (*request_redraw)(uint8 full_redraw),
-                              void (*reset_dynamic_region)(void))
+void menu_icm_action_enter(menu_view_ctx_t *ctx, uint8 target_mode)
 {
-    icm_enter_view(icm_mode, ICM_VIEW_RAW, menu_full_redraw,
-                   drain_encoder_events, request_redraw, reset_dynamic_region);
+    /* 特殊进入逻辑：部分视图需要额外初始化 */
+    if (ICM_VIEW_INS_MAP == target_mode)
+    {
+        icm_ins_map_reset_cache();
+    }
+    else if (ICM_VIEW_GYRO_BIAS_CALIB == target_mode)
+    {
+        icm_attitude_start_gyro_bias_calibration(ICM_GYRO_BIAS_CALIB_SAMPLES);
+    }
+
+    menu_view_enter(ctx, target_mode);
 }
 
-void menu_icm_action_attitude(icm_view_mode_t *icm_mode,
-                              uint8 *menu_full_redraw,
-                              void (*drain_encoder_events)(void),
-                              void (*request_redraw)(uint8 full_redraw),
-                              void (*reset_dynamic_region)(void))
+uint8 menu_icm_handle_view(menu_view_ctx_t *ctx)
 {
-    icm_enter_view(icm_mode, ICM_VIEW_ATTITUDE, menu_full_redraw,
-                   drain_encoder_events, request_redraw, reset_dynamic_region);
-}
-
-void menu_icm_action_ins_debug(icm_view_mode_t *icm_mode,
-                              uint8 *menu_full_redraw,
-                              void (*drain_encoder_events)(void),
-                              void (*request_redraw)(uint8 full_redraw),
-                              void (*reset_dynamic_region)(void))
-{
-    icm_enter_view(icm_mode, ICM_VIEW_INS_DEBUG, menu_full_redraw,
-                   drain_encoder_events, request_redraw, reset_dynamic_region);
-}
-
-void menu_icm_action_ins_track_map(icm_view_mode_t *icm_mode,
-                                   uint8 *menu_full_redraw,
-                                   void (*drain_encoder_events)(void),
-                                   void (*request_redraw)(uint8 full_redraw),
-                                   void (*reset_dynamic_region)(void))
-{
-    icm_ins_map_reset_cache();
-    icm_enter_view(icm_mode, ICM_VIEW_INS_MAP, menu_full_redraw,
-                   drain_encoder_events, request_redraw, reset_dynamic_region);
-}
-
-void menu_icm_action_gyro_bias_calib(icm_view_mode_t *icm_mode,
-                                     uint8 *menu_full_redraw,
-                                     void (*drain_encoder_events)(void),
-                                     void (*request_redraw)(uint8 full_redraw),
-                                     void (*reset_dynamic_region)(void))
-{
-    icm_attitude_start_gyro_bias_calibration(ICM_GYRO_BIAS_CALIB_SAMPLES);
-    icm_enter_view(icm_mode, ICM_VIEW_GYRO_BIAS_CALIB, menu_full_redraw,
-                   drain_encoder_events, request_redraw, reset_dynamic_region);
-}
-
-uint8 menu_icm_handle_view(icm_view_mode_t *icm_mode,
-                           uint8 *menu_full_redraw,
-                           void (*drain_encoder_events)(void),
-                           void (*request_redraw)(uint8 full_redraw),
-                           void (*reset_dynamic_region)(void))
-{
-    if ((NULL == icm_mode) || (ICM_VIEW_NONE == *icm_mode)) return 0U;
+    if ((NULL == ctx) || (NULL == ctx->mode) || (ICM_VIEW_NONE == *(ctx->mode))) return 0U;
 
     /* 长按退出 */
-    if ((MY_KEY_LONG_PRESS == my_key_get_state(MY_KEY_1)) || icm_is_exit_hold_triggered())
+    if ((MY_KEY_LONG_PRESS == my_key_get_state(MY_KEY_1)) || menu_ui_check_exit_hold(&icm_exit_hold_timer, 250U))
     {
-        icm_consume_key1_press();
-        if (ICM_VIEW_GYRO_BIAS_CALIB == *icm_mode)
+        menu_ui_consume_key1();
+        if (ICM_VIEW_GYRO_BIAS_CALIB == *(ctx->mode))
         {
             icm_attitude_cancel_gyro_bias_calibration();
         }
-        *icm_mode = ICM_VIEW_NONE;
-        if (NULL != drain_encoder_events) drain_encoder_events();
-        if (NULL != reset_dynamic_region) reset_dynamic_region();
-        if (NULL != request_redraw) request_redraw(1U);
+        *(ctx->mode) = ICM_VIEW_NONE;
+        if (NULL != ctx->drain_encoder_events) ctx->drain_encoder_events();
+        if (NULL != ctx->reset_dynamic_region) ctx->reset_dynamic_region();
+        if (NULL != ctx->request_redraw) ctx->request_redraw(1U);
         return 1U;
     }
 
-    if ((ICM_VIEW_GYRO_BIAS_CALIB == *icm_mode) &&
+    if ((ICM_VIEW_GYRO_BIAS_CALIB == *(ctx->mode)) &&
         (MY_KEY_SHORT_PRESS == my_key_get_state(MY_KEY_1)))
     {
-        icm_consume_key1_press();
+        menu_ui_consume_key1();
         icm_attitude_start_gyro_bias_calibration(ICM_GYRO_BIAS_CALIB_SAMPLES);
-        if (NULL != menu_full_redraw) *menu_full_redraw = 1U;
+        if (NULL != ctx->menu_full_redraw) *(ctx->menu_full_redraw) = 1U;
         return 1U;
     }
 
-    if (ICM_VIEW_RAW == *icm_mode)
+    if (ICM_VIEW_RAW == *(ctx->mode))
     {
-        icm_draw_raw_page(menu_full_redraw);
+        icm_draw_raw_page(ctx->menu_full_redraw);
     }
-    else if (ICM_VIEW_ATTITUDE == *icm_mode)
+    else if (ICM_VIEW_ATTITUDE == *(ctx->mode))
     {
-        icm_draw_attitude_page(menu_full_redraw);
+        icm_draw_attitude_page(ctx->menu_full_redraw);
     }
-    else if (ICM_VIEW_GYRO_BIAS_CALIB == *icm_mode)
+    else if (ICM_VIEW_GYRO_BIAS_CALIB == *(ctx->mode))
     {
-        icm_draw_gyro_bias_calib_page(menu_full_redraw);
+        icm_draw_gyro_bias_calib_page(ctx->menu_full_redraw);
     }
-    else if (ICM_VIEW_INS_DEBUG == *icm_mode)
+    else if (ICM_VIEW_INS_DEBUG == *(ctx->mode))
     {
-        icm_draw_ins_debug_page(menu_full_redraw);
+        icm_draw_ins_debug_page(ctx->menu_full_redraw);
     }
-    else if (ICM_VIEW_INS_MAP == *icm_mode)
+    else if (ICM_VIEW_INS_MAP == *(ctx->mode))
     {
-        icm_draw_ins_track_map_page(menu_full_redraw);
+        icm_draw_ins_track_map_page(ctx->menu_full_redraw);
     }
 
     return 1U;

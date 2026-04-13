@@ -10,6 +10,7 @@
 #include "menu.h"
 #include "MyKey.h"
 #include "MyEncoder.h"
+#include "menu_ui_utils.h"
 
 typedef enum
 {
@@ -21,40 +22,7 @@ typedef enum
     ICM_VIEW_INS_MAP,
 } icm_view_mode_t;
 
-void menu_icm_action_raw_data(icm_view_mode_t *icm_mode,
-                              uint8 *menu_full_redraw,
-                              void (*drain_encoder_events)(void),
-                              void (*request_redraw)(uint8 full_redraw),
-                              void (*reset_dynamic_region)(void));
-
-void menu_icm_action_attitude(icm_view_mode_t *icm_mode,
-                              uint8 *menu_full_redraw,
-                              void (*drain_encoder_events)(void),
-                              void (*request_redraw)(uint8 full_redraw),
-                              void (*reset_dynamic_region)(void));
-
-void menu_icm_action_gyro_bias_calib(icm_view_mode_t *icm_mode,
-                                     uint8 *menu_full_redraw,
-                                     void (*drain_encoder_events)(void),
-                                     void (*request_redraw)(uint8 full_redraw),
-                                     void (*reset_dynamic_region)(void));
-
-void menu_icm_action_ins_debug(icm_view_mode_t *icm_mode,
-                              uint8 *menu_full_redraw,
-                              void (*drain_encoder_events)(void),
-                              void (*request_redraw)(uint8 full_redraw),
-                              void (*reset_dynamic_region)(void));
-
-void menu_icm_action_ins_track_map(icm_view_mode_t *icm_mode,
-                                   uint8 *menu_full_redraw,
-                                   void (*drain_encoder_events)(void),
-                                   void (*request_redraw)(uint8 full_redraw),
-                                   void (*reset_dynamic_region)(void));
-
-uint8 menu_icm_handle_view(icm_view_mode_t *icm_mode,
-                           uint8 *menu_full_redraw,
-                           void (*drain_encoder_events)(void),
-                           void (*request_redraw)(uint8 full_redraw),
-                           void (*reset_dynamic_region)(void));
+void  menu_icm_action_enter(menu_view_ctx_t *ctx, uint8 target_mode);
+uint8 menu_icm_handle_view(menu_view_ctx_t *ctx);
 
 #endif /* __MENU_ICM_H__ */

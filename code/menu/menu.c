@@ -24,6 +24,7 @@
 #include "menu_link.h"
 #include "ins_record.h"
 #include "ins_playback.h"
+#include "menu_ui_utils.h"
 
 MyParams_t g_params;
 
@@ -49,10 +50,14 @@ static uint8 menu_dynamic_clear_enable = 1;
 static gps_view_mode_t gps_display_mode = GPS_VIEW_NONE;
 static pid_view_mode_t pid_display_mode = PID_VIEW_NONE;
 static record_param_view_mode_t record_param_view_mode = RECORD_PARAM_VIEW_NONE;
-static icm_view_mode_t icm_display_mode = ICM_VIEW_NONE;
-static fusion_view_mode_t fusion_display_mode = FUSION_VIEW_NONE;
-static pedal_view_mode_t  pedal_display_mode  = PEDAL_VIEW_NONE;
-static link_view_mode_t   link_display_mode   = LINK_VIEW_NONE;
+static uint8 icm_display_mode    = ICM_VIEW_NONE;
+static uint8 fusion_display_mode = FUSION_VIEW_NONE;
+static uint8 pedal_display_mode  = PEDAL_VIEW_NONE;
+static uint8 link_display_mode   = LINK_VIEW_NONE;
+static menu_view_ctx_t icm_ctx;
+static menu_view_ctx_t fusion_ctx;
+static menu_view_ctx_t pedal_ctx;
+static menu_view_ctx_t link_ctx;
 static char gps_status_hint[64] = "";
 static MenuPage *current_page = NULL;
 static MenuPage gps_menu;
@@ -71,11 +76,6 @@ static char gps_record_distance_label[48] = "1. Point Dist [0.20m]";
 static char gps_record_interval_label[48] = "2. Point Intv [50ms]";
 static char gps_record_sat_label[48] = "3. Min Sat [4]";
 
-static void ips200_fill_rect(uint16 x_start, uint16 y_start, uint16 x_end, uint16 y_end, uint16 color);
-static void show_string_fit(uint16 x, uint16 y, const char *s);
-static void show_string_fit_width(uint16 x, uint16 y, uint16 max_width, const char *s);
-static void show_string_fit_width_pad(uint16 x, uint16 y, uint16 max_width, const char *s);
-static void menu_copy_text(char *dest, uint32 dest_size, const char *source);
 static void menu_set_status_message(const char *text, uint32 duration_ms);
 static void menu_draw_footer(void);
 static void menu_drain_encoder_events(void);
@@ -118,7 +118,6 @@ static void ins_replay_action_stop(void);
 static void ins_replay_action_clear(void);
 static void menu_sync_ins_replay_labels(void);
 static void fusion_action_debug(void);
-static uint8 menu_handle_fusion_view(void);
 
 /* 持久化参数已拆到 menu_params.c；这里保留运行时同步逻辑。 */
 static void params_set_default(void)
@@ -142,23 +141,6 @@ static void Init_Load_Params(void)
     menu_gps_init_state(gps_status_hint, (uint32)sizeof(gps_status_hint));
 }
 
-static void menu_copy_text(char *dest, uint32 dest_size, const char *source)
-{
-    uint32 index = 0U;
-    const char *text = (NULL != source) ? source : "";
-
-    if ((NULL == dest) || (0U == dest_size))
-    {
-        return;
-    }
-
-    while ((index + 1U) < dest_size && text[index] != '\0')
-    {
-        dest[index] = text[index];
-        index++;
-    }
-    dest[index] = '\0';
-}
 
 static void gps_clear_status_hint(void)
 {
@@ -182,42 +164,34 @@ static void gps_action_record_param_min_sat(void)
 
 static void pid_action_edit_kp(void)
 {
-    menu_pid_action_edit_kp(&pid_display_mode,
-                            &g_params,
-                            &menu_pid_param_cache,
-                            &pid_preview_controller,
-                            &menu_full_redraw,
-                            menu_request_redraw);
+    menu_pid_action_enter(&pid_display_mode, PID_VIEW_EDIT_KP,
+                          &g_params, &menu_pid_param_cache,
+                          &pid_preview_controller, &menu_full_redraw,
+                          menu_request_redraw);
 }
 
 static void pid_action_edit_ki(void)
 {
-    menu_pid_action_edit_ki(&pid_display_mode,
-                            &g_params,
-                            &menu_pid_param_cache,
-                            &pid_preview_controller,
-                            &menu_full_redraw,
-                            menu_request_redraw);
+    menu_pid_action_enter(&pid_display_mode, PID_VIEW_EDIT_KI,
+                          &g_params, &menu_pid_param_cache,
+                          &pid_preview_controller, &menu_full_redraw,
+                          menu_request_redraw);
 }
 
 static void pid_action_edit_kd(void)
 {
-    menu_pid_action_edit_kd(&pid_display_mode,
-                            &g_params,
-                            &menu_pid_param_cache,
-                            &pid_preview_controller,
-                            &menu_full_redraw,
-                            menu_request_redraw);
+    menu_pid_action_enter(&pid_display_mode, PID_VIEW_EDIT_KD,
+                          &g_params, &menu_pid_param_cache,
+                          &pid_preview_controller, &menu_full_redraw,
+                          menu_request_redraw);
 }
 
 static void pid_action_preview(void)
 {
-    menu_pid_action_preview(&pid_display_mode,
-                            &g_params,
-                            &menu_pid_param_cache,
-                            &pid_preview_controller,
-                            &menu_full_redraw,
-                            menu_request_redraw);
+    menu_pid_action_enter(&pid_display_mode, PID_VIEW_PREVIEW,
+                          &g_params, &menu_pid_param_cache,
+                          &pid_preview_controller, &menu_full_redraw,
+                          menu_request_redraw);
 }
 
 static void pid_action_reset(void)
@@ -288,50 +262,11 @@ static void gps_action_raw_debug(void)
                               menu_reset_dynamic_region);
 }
 
-static void icm_action_raw_data(void)
-{
-    menu_icm_action_raw_data(&icm_display_mode,
-                             &menu_full_redraw,
-                             menu_drain_encoder_events,
-                             menu_request_redraw,
-                             menu_reset_dynamic_region);
-}
-
-static void icm_action_attitude(void)
-{
-    menu_icm_action_attitude(&icm_display_mode,
-                             &menu_full_redraw,
-                             menu_drain_encoder_events,
-                             menu_request_redraw,
-                             menu_reset_dynamic_region);
-}
-
-static void icm_action_gyro_bias_calib(void)
-{
-    menu_icm_action_gyro_bias_calib(&icm_display_mode,
-                                    &menu_full_redraw,
-                                    menu_drain_encoder_events,
-                                    menu_request_redraw,
-                                    menu_reset_dynamic_region);
-}
-
-static void icm_action_ins_debug(void)
-{
-    menu_icm_action_ins_debug(&icm_display_mode,
-                              &menu_full_redraw,
-                              menu_drain_encoder_events,
-                              menu_request_redraw,
-                              menu_reset_dynamic_region);
-}
-
-static void icm_action_ins_track_map(void)
-{
-    menu_icm_action_ins_track_map(&icm_display_mode,
-                                  &menu_full_redraw,
-                                  menu_drain_encoder_events,
-                                  menu_request_redraw,
-                                  menu_reset_dynamic_region);
-}
+static void icm_action_raw_data(void)      { menu_icm_action_enter(&icm_ctx, ICM_VIEW_RAW); }
+static void icm_action_attitude(void)      { menu_icm_action_enter(&icm_ctx, ICM_VIEW_ATTITUDE); }
+static void icm_action_gyro_bias_calib(void) { menu_icm_action_enter(&icm_ctx, ICM_VIEW_GYRO_BIAS_CALIB); }
+static void icm_action_ins_debug(void)     { menu_icm_action_enter(&icm_ctx, ICM_VIEW_INS_DEBUG); }
+static void icm_action_ins_track_map(void) { menu_icm_action_enter(&icm_ctx, ICM_VIEW_INS_MAP); }
 
 static char icm_ins_rec_label[48] = "5. INS REC [IDLE]";
 
@@ -363,89 +298,29 @@ static void menu_sync_ins_rec_item(void)
         sprintf(new_label, "5. INS REC [%u pts]", (unsigned int)ins_record_get_point_count());
     }
 
-    if (0 != strcmp(icm_ins_rec_label, new_label))
+    if (menu_ui_update_label(icm_ins_rec_label, sizeof(icm_ins_rec_label), new_label)
+        && (current_page == &icm_menu)
+        && (ICM_VIEW_NONE == icm_display_mode)
+        && !menu_full_redraw)
     {
-        strcpy(icm_ins_rec_label, new_label);
-        /* 仅当当前页面是 icm_menu 且无子视图时，直接局部刷新该行 */
-        if ((current_page == &icm_menu) &&
-            (ICM_VIEW_NONE == icm_display_mode) &&
-            !menu_full_redraw)
-        {
-            menu_draw_item(4, (uint8)(current_selection == 4));
-        }
+        menu_draw_item(4, (uint8)(current_selection == 4));
     }
 }
 
 /* ---- GPS+INS Fusion 菜单 ---- */
 
-static void fusion_action_debug(void)
-{
-    menu_fusion_action_debug(&fusion_display_mode,
-                             &menu_full_redraw,
-                             menu_drain_encoder_events,
-                             menu_request_redraw,
-                             menu_reset_dynamic_region);
-}
-
-static uint8 menu_handle_fusion_view(void)
-{
-    return menu_fusion_handle_view(&fusion_display_mode,
-                                   &menu_full_redraw,
-                                   menu_drain_encoder_events,
-                                   menu_request_redraw,
-                                   menu_reset_dynamic_region);
-}
+static void fusion_action_debug(void) { menu_fusion_action_enter(&fusion_ctx, FUSION_VIEW_DEBUG); }
 
 /* ---- Pedal ---- */
 
 /* ---- TC264 Link ---- */
 
-static void link_action_debug(void)
-{
-    menu_link_action_debug(&link_display_mode,
-                           &menu_full_redraw,
-                           menu_drain_encoder_events,
-                           menu_request_redraw,
-                           menu_reset_dynamic_region);
-}
-
-static void link_action_hq_status(void)
-{
-    menu_link_action_hq_status(&link_display_mode,
-                               &menu_full_redraw,
-                               menu_drain_encoder_events,
-                               menu_request_redraw,
-                               menu_reset_dynamic_region);
-}
-
-static uint8 menu_handle_link_view(void)
-{
-    return menu_link_handle_view(&link_display_mode,
-                                 &menu_full_redraw,
-                                 menu_drain_encoder_events,
-                                 menu_request_redraw,
-                                 menu_reset_dynamic_region);
-}
+static void link_action_debug(void)     { menu_link_action_enter(&link_ctx, LINK_VIEW_DEBUG); }
+static void link_action_hq_status(void) { menu_link_action_enter(&link_ctx, LINK_VIEW_HQ_STATUS); }
 
 /* ---- Pedal ---- */
 
-static void pedal_action_debug(void)
-{
-    menu_pedal_action_debug(&pedal_display_mode,
-                            &menu_full_redraw,
-                            menu_drain_encoder_events,
-                            menu_request_redraw,
-                            menu_reset_dynamic_region);
-}
-
-static uint8 menu_handle_pedal_view(void)
-{
-    return menu_pedal_handle_view(&pedal_display_mode,
-                                  &menu_full_redraw,
-                                  menu_drain_encoder_events,
-                                  menu_request_redraw,
-                                  menu_reset_dynamic_region);
-}
+static void pedal_action_debug(void) { menu_pedal_action_enter(&pedal_ctx, PEDAL_VIEW_DEBUG); }
 
 /* ---- INS Replay 子菜单 ---- */
 
@@ -518,13 +393,10 @@ static void menu_sync_ins_replay_labels(void)
         sprintf(buf, "1. Load Track [%u pts]",
                 (unsigned int)ins_record_get_point_count());
     }
-    if (0 != strcmp(ins_replay_load_label, buf))
+    if (menu_ui_update_label(ins_replay_load_label, sizeof(ins_replay_load_label), buf)
+        && (current_page == &ins_replay_menu) && !menu_full_redraw)
     {
-        strcpy(ins_replay_load_label, buf);
-        if ((current_page == &ins_replay_menu) && !menu_full_redraw)
-        {
-            menu_draw_item(0, (uint8)(current_selection == 0));
-        }
+        menu_draw_item(0, (uint8)(current_selection == 0));
     }
 
     /* ---- 5. REC 状态行 ---- */
@@ -536,13 +408,10 @@ static void menu_sync_ins_replay_labels(void)
     {
         sprintf(buf, "5. REC:OFF %u pts", (unsigned int)ins_record_get_point_count());
     }
-    if (0 != strcmp(ins_replay_rec_status, buf))
+    if (menu_ui_update_label(ins_replay_rec_status, sizeof(ins_replay_rec_status), buf)
+        && (current_page == &ins_replay_menu) && !menu_full_redraw)
     {
-        strcpy(ins_replay_rec_status, buf);
-        if ((current_page == &ins_replay_menu) && !menu_full_redraw)
-        {
-            menu_draw_item(4, (uint8)(current_selection == 4));
-        }
+        menu_draw_item(4, (uint8)(current_selection == 4));
     }
 
     /* ---- 6. PLAY 状态行 ---- */
@@ -564,13 +433,10 @@ static void menu_sync_ins_replay_labels(void)
     {
         sprintf(buf, "6. PLAY:IDLE");
     }
-    if (0 != strcmp(ins_replay_play_status, buf))
+    if (menu_ui_update_label(ins_replay_play_status, sizeof(ins_replay_play_status), buf)
+        && (current_page == &ins_replay_menu) && !menu_full_redraw)
     {
-        strcpy(ins_replay_play_status, buf);
-        if ((current_page == &ins_replay_menu) && !menu_full_redraw)
-        {
-            menu_draw_item(5, (uint8)(current_selection == 5));
-        }
+        menu_draw_item(5, (uint8)(current_selection == 5));
     }
 }
 
@@ -734,95 +600,7 @@ static MenuPage main_menu = {
     NULL
 };
 
-static void ips200_fill_rect(uint16 x_start, uint16 y_start, uint16 x_end, uint16 y_end, uint16 color)
-{
-    if (x_start >= ips200_width_max) x_start = ips200_width_max - 1;
-    if (x_end >= ips200_width_max) x_end = ips200_width_max - 1;
-    if (y_start >= ips200_height_max) y_start = ips200_height_max - 1;
-    if (y_end >= ips200_height_max) y_end = ips200_height_max - 1;
-    if (x_start > x_end) { uint16 t = x_start; x_start = x_end; x_end = t; }
-    if (y_start > y_end) { uint16 t = y_start; y_start = y_end; y_end = t; }
 
-    for (uint16 y = y_start; y <= y_end; y++)
-    {
-        ips200_draw_line(x_start, y, x_end, y, color);
-    }
-}
-
-static void show_string_fit(uint16 x, uint16 y, const char *s)
-{
-    int max_chars = (int)((ips200_width_max - 1 - x) / 8);
-    if (max_chars <= 0) return;
-
-    char buf[64];
-    int i = 0;
-    while (i < max_chars && s[i] != '\0' && i < (int)sizeof(buf) - 1)
-    {
-        buf[i] = s[i];
-        i++;
-    }
-    buf[i] = '\0';
-    ips200_show_string(x, y, buf);
-}
-
-static void show_string_fit_width(uint16 x, uint16 y, uint16 max_width, const char *s)
-{
-    int max_chars;
-    char buf[64];
-    int i = 0;
-
-    if (0U == max_width)
-    {
-        return;
-    }
-
-    max_chars = (int)(max_width / 8U);
-    if (max_chars <= 0)
-    {
-        return;
-    }
-
-    while (i < max_chars && s[i] != '\0' && i < (int)sizeof(buf) - 1)
-    {
-        buf[i] = s[i];
-        i++;
-    }
-    buf[i] = '\0';
-    ips200_show_string(x, y, buf);
-}
-
-static void show_string_fit_width_pad(uint16 x, uint16 y, uint16 max_width, const char *s)
-{
-    int max_chars;
-    char buf[64];
-    int i = 0;
-
-    if (0U == max_width)
-    {
-        return;
-    }
-
-    max_chars = (int)(max_width / 8U);
-    if (max_chars <= 0)
-    {
-        return;
-    }
-
-    while (i < max_chars && s[i] != '\0' && i < (int)sizeof(buf) - 1)
-    {
-        buf[i] = s[i];
-        i++;
-    }
-
-    while (i < max_chars && i < (int)sizeof(buf) - 1)
-    {
-        buf[i] = ' ';
-        i++;
-    }
-
-    buf[i] = '\0';
-    ips200_show_string(x, y, buf);
-}
 
 static void menu_set_status_message(const char *text, uint32 duration_ms)
 {
@@ -835,7 +613,7 @@ static void menu_set_status_message(const char *text, uint32 duration_ms)
         return;
     }
 
-    menu_copy_text(menu_status_message, (uint32)sizeof(menu_status_message), text);
+    menu_ui_copy_text(menu_status_message, (uint32)sizeof(menu_status_message), text);
     menu_status_expire_ms = system_getval_ms() + duration_ms;
     menu_footer_needs_update = 1U;
 }
@@ -851,13 +629,13 @@ static void menu_draw_footer(void)
         text_color = RGB565_YELLOW;
     }
 
-    ips200_fill_rect(0U,
+    menu_ui_fill_rect(0U,
                      (uint16)(ips200_height_max - 20U),
                      (uint16)(ips200_width_max - 1U),
                      (uint16)(ips200_height_max - 1U),
                      RGB565_BLACK);
     ips200_set_color(text_color, RGB565_BLACK);
-    show_string_fit_width_pad(5U,
+    menu_ui_show_pad(5U,
                               (uint16)(ips200_height_max - 20U),
                               (uint16)(ips200_width_max - 10U),
                               footer_text);
@@ -948,14 +726,10 @@ static void menu_sync_gps_record_item(void)
             break;
     }
 
-    if (0 != strcmp(gps_record_menu_label, new_label))
+    if (menu_ui_update_label(gps_record_menu_label, sizeof(gps_record_menu_label), new_label)
+        && menu_is_gps_root_idle())
     {
-        strcpy(gps_record_menu_label, new_label);
-
-        if (menu_is_gps_root_idle())
-        {
-            menu_draw_item(1, (uint8)(current_selection == 1));
-        }
+        menu_draw_item(1, (uint8)(current_selection == 1));
     }
 }
 
@@ -985,7 +759,7 @@ static void menu_draw_item(int index, uint8 selected)
         return;
     }
 
-    ips200_fill_rect(5U,
+    menu_ui_fill_rect(5U,
                      (uint16)(y_pos - 2U),
                      (uint16)(ips200_width_max - 5U),
                      (uint16)(y_pos + MENU_ITEM_TEXT_HEIGHT),
@@ -998,7 +772,7 @@ static void menu_draw_item(int index, uint8 selected)
     {
         ips200_set_color(current_font_color, RGB565_BLACK);
     }
-    show_string_fit_width(10U,
+    menu_ui_show_fit_width(10U,
                           y_pos,
                           (uint16)(ips200_width_max - 20U),
                           current_page->items[index].name);
@@ -1011,7 +785,7 @@ static void menu_draw_page(void)
     ips200_full(RGB565_BLACK);
 
     ips200_set_color(RGB565_YELLOW, RGB565_BLACK);
-    show_string_fit(10, 10, current_page->title);
+    menu_ui_show_fit(10, 10, current_page->title);
     ips200_draw_line(0, MENU_TITLE_HEIGHT, ips200_width_max - 1, MENU_TITLE_HEIGHT, RGB565_GRAY);
 
     for (i = 0; i < current_page->num_items; i++)
@@ -1060,10 +834,10 @@ static void menu_return_to_parent(void)
     current_selection = 0;
     gps_display_mode = GPS_VIEW_NONE;
     record_param_view_mode = RECORD_PARAM_VIEW_NONE;
-    icm_display_mode = ICM_VIEW_NONE;
-    fusion_display_mode = FUSION_VIEW_NONE;
-    pedal_display_mode = PEDAL_VIEW_NONE;
-    link_display_mode  = LINK_VIEW_NONE;
+    icm_display_mode    = 0U;
+    fusion_display_mode = 0U;
+    pedal_display_mode  = 0U;
+    link_display_mode   = 0U;
     gps_clear_status_hint();
     menu_reset_dynamic_region();
     menu_request_redraw(1U);
@@ -1144,29 +918,25 @@ static void menu_execute_current_item(void)
 
         if (ICM_VIEW_NONE != icm_display_mode)
         {
-            menu_icm_handle_view(&icm_display_mode,
-                                 &menu_full_redraw,
-                                 menu_drain_encoder_events,
-                                 menu_request_redraw,
-                                 menu_reset_dynamic_region);
+            menu_icm_handle_view(&icm_ctx);
             return;
         }
 
         if (FUSION_VIEW_NONE != fusion_display_mode)
         {
-            menu_handle_fusion_view();
+            menu_fusion_handle_view(&fusion_ctx);
             return;
         }
 
         if (PEDAL_VIEW_NONE != pedal_display_mode)
         {
-            menu_handle_pedal_view();
+            menu_pedal_handle_view(&pedal_ctx);
             return;
         }
 
         if (LINK_VIEW_NONE != link_display_mode)
         {
-            menu_handle_link_view();
+            menu_link_handle_view(&link_ctx);
             return;
         }
 
@@ -1190,6 +960,31 @@ void menu_init(void)
     my_key_init(10);
     my_key_clear_all_state();
     MyEncoder_Init();
+
+    /* 初始化 4 个视图上下文 */
+    icm_ctx.mode                 = &icm_display_mode;
+    icm_ctx.menu_full_redraw     = &menu_full_redraw;
+    icm_ctx.drain_encoder_events = menu_drain_encoder_events;
+    icm_ctx.request_redraw       = menu_request_redraw;
+    icm_ctx.reset_dynamic_region = menu_reset_dynamic_region;
+
+    fusion_ctx.mode                 = &fusion_display_mode;
+    fusion_ctx.menu_full_redraw     = &menu_full_redraw;
+    fusion_ctx.drain_encoder_events = menu_drain_encoder_events;
+    fusion_ctx.request_redraw       = menu_request_redraw;
+    fusion_ctx.reset_dynamic_region = menu_reset_dynamic_region;
+
+    pedal_ctx.mode                 = &pedal_display_mode;
+    pedal_ctx.menu_full_redraw     = &menu_full_redraw;
+    pedal_ctx.drain_encoder_events = menu_drain_encoder_events;
+    pedal_ctx.request_redraw       = menu_request_redraw;
+    pedal_ctx.reset_dynamic_region = menu_reset_dynamic_region;
+
+    link_ctx.mode                 = &link_display_mode;
+    link_ctx.menu_full_redraw     = &menu_full_redraw;
+    link_ctx.drain_encoder_events = menu_drain_encoder_events;
+    link_ctx.request_redraw       = menu_request_redraw;
+    link_ctx.reset_dynamic_region = menu_reset_dynamic_region;
 
     Init_Load_Params();
     menu_sync_gps_record_item();
@@ -1318,21 +1113,17 @@ void menu_task(void)
         return;
     }
 
-    if (menu_icm_handle_view(&icm_display_mode,
-                             &menu_full_redraw,
-                             menu_drain_encoder_events,
-                             menu_request_redraw,
-                             menu_reset_dynamic_region))
+    if (menu_icm_handle_view(&icm_ctx))
     {
         return;
     }
 
-    if (menu_handle_fusion_view())
+    if (menu_fusion_handle_view(&fusion_ctx))
     {
         return;
     }
 
-    if (menu_handle_pedal_view())
+    if (menu_pedal_handle_view(&pedal_ctx))
     {
         return;
     }
@@ -1382,7 +1173,7 @@ void menu_task(void)
         {
             uint16 x_end = (uint16)(menu_dynamic_x + menu_dynamic_w - 1);
             uint16 y_end = (uint16)(menu_dynamic_y + menu_dynamic_h - 1);
-            ips200_fill_rect(menu_dynamic_x, menu_dynamic_y, x_end, y_end, RGB565_BLACK);
+            menu_ui_fill_rect(menu_dynamic_x, menu_dynamic_y, x_end, y_end, RGB565_BLACK);
         }
         menu_dynamic_draw_cb(menu_dynamic_x, menu_dynamic_y, menu_dynamic_w, menu_dynamic_h);
     }

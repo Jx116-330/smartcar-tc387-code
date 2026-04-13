@@ -4,13 +4,16 @@
 
 #include "zf_common_headfile.h"
 #include "zf_device_ips200.h"
+#include "menu_ui_utils.h"
 
 static const float pid_kp_steps[] = {0.01f, 0.10f, 0.50f, 1.00f};
 static const float pid_ki_steps[] = {0.001f, 0.005f, 0.010f, 0.050f};
 static const float pid_kd_steps[] = {0.01f, 0.05f, 0.10f, 0.20f};
-static uint8 pid_kp_step_index = 1U;
-static uint8 pid_ki_step_index = 2U;
-static uint8 pid_kd_step_index = 1U;
+static menu_step_desc_t pid_step_descs[3] = {
+    { pid_kp_steps, 4U, 1U, 0U },  /* float, 4 entries, start at index 1 */
+    { pid_ki_steps, 4U, 2U, 0U },  /* float, 4 entries, start at index 2 */
+    { pid_kd_steps, 4U, 1U, 0U },  /* float, 4 entries, start at index 1 */
+};
 static float pid_preview_target = 100.0f;
 static float pid_preview_feedback = 0.0f;
 static float pid_preview_output = 0.0f;
@@ -23,14 +26,10 @@ static void menu_pid_request_enter(pid_view_mode_t *mode,
                                    uint8 *menu_full_redraw,
                                    void (*request_redraw)(uint8 full_redraw));
 static void menu_pid_reset_preview_state(pid_controller_t *preview_controller);
-static float menu_pid_get_current_step(uint8 mode);
-static void menu_pid_cycle_step(uint8 mode);
-static void menu_pid_adjust_param(float *ptr, float step, float min, float max, uint8 is_add);
 static void menu_pid_draw_active_view(pid_view_mode_t mode, const MyParams_t *params, pid_controller_t *preview_controller, uint8 *menu_full_redraw);
 static void menu_pid_draw_edit_page(pid_view_mode_t mode, const char *title, float value, float step, uint8 *menu_full_redraw);
 static void menu_pid_draw_preview_page(const MyParams_t *params, pid_controller_t *preview_controller, uint8 *menu_full_redraw);
 static void menu_pid_show_line(uint16 x, uint16 y, const char *text);
-static void menu_pid_show_line_pad(uint16 x, uint16 y, const char *text, uint16 width);
 static uint8 menu_pid_save_if_dirty(MyParams_t *params,
                                     uint8 *pid_param_dirty,
                                     void (*set_status_message)(const char *text, uint32 duration_ms),
@@ -90,44 +89,15 @@ static void menu_pid_request_enter(pid_view_mode_t *mode,
     }
 }
 
-void menu_pid_action_edit_kp(pid_view_mode_t *mode,
-                             MyParams_t *params,
-                             pid_param_t *runtime_param,
-                             pid_controller_t *preview_controller,
-                             uint8 *menu_full_redraw,
-                             void (*request_redraw)(uint8 full_redraw))
+void menu_pid_action_enter(pid_view_mode_t *mode,
+                           pid_view_mode_t target_mode,
+                           MyParams_t *params,
+                           pid_param_t *runtime_param,
+                           pid_controller_t *preview_controller,
+                           uint8 *menu_full_redraw,
+                           void (*request_redraw)(uint8 full_redraw))
 {
-    menu_pid_request_enter(mode, PID_VIEW_EDIT_KP, params, runtime_param, preview_controller, menu_full_redraw, request_redraw);
-}
-
-void menu_pid_action_edit_ki(pid_view_mode_t *mode,
-                             MyParams_t *params,
-                             pid_param_t *runtime_param,
-                             pid_controller_t *preview_controller,
-                             uint8 *menu_full_redraw,
-                             void (*request_redraw)(uint8 full_redraw))
-{
-    menu_pid_request_enter(mode, PID_VIEW_EDIT_KI, params, runtime_param, preview_controller, menu_full_redraw, request_redraw);
-}
-
-void menu_pid_action_edit_kd(pid_view_mode_t *mode,
-                             MyParams_t *params,
-                             pid_param_t *runtime_param,
-                             pid_controller_t *preview_controller,
-                             uint8 *menu_full_redraw,
-                             void (*request_redraw)(uint8 full_redraw))
-{
-    menu_pid_request_enter(mode, PID_VIEW_EDIT_KD, params, runtime_param, preview_controller, menu_full_redraw, request_redraw);
-}
-
-void menu_pid_action_preview(pid_view_mode_t *mode,
-                             MyParams_t *params,
-                             pid_param_t *runtime_param,
-                             pid_controller_t *preview_controller,
-                             uint8 *menu_full_redraw,
-                             void (*request_redraw)(uint8 full_redraw))
-{
-    menu_pid_request_enter(mode, PID_VIEW_PREVIEW, params, runtime_param, preview_controller, menu_full_redraw, request_redraw);
+    menu_pid_request_enter(mode, target_mode, params, runtime_param, preview_controller, menu_full_redraw, request_redraw);
 }
 
 static uint8 menu_pid_save_if_dirty(MyParams_t *params,
@@ -191,82 +161,9 @@ void menu_pid_action_reset(MyParams_t *params,
     }
 }
 
-static void menu_pid_adjust_param(float *ptr, float step, float min, float max, uint8 is_add)
-{
-    if (NULL == ptr)
-    {
-        return;
-    }
-
-    if (is_add)
-    {
-        *ptr = (*ptr + step <= max) ? (*ptr + step) : max;
-    }
-    else
-    {
-        *ptr = (*ptr - step >= min) ? (*ptr - step) : min;
-    }
-}
-
-static float menu_pid_get_current_step(uint8 mode)
-{
-    if (1U == mode)
-    {
-        return pid_kp_steps[pid_kp_step_index];
-    }
-    else if (2U == mode)
-    {
-        return pid_ki_steps[pid_ki_step_index];
-    }
-    else
-    {
-        return pid_kd_steps[pid_kd_step_index];
-    }
-}
-
-static void menu_pid_cycle_step(uint8 mode)
-{
-    if (1U == mode)
-    {
-        pid_kp_step_index = (uint8)((pid_kp_step_index + 1U) % (sizeof(pid_kp_steps) / sizeof(pid_kp_steps[0])));
-    }
-    else if (2U == mode)
-    {
-        pid_ki_step_index = (uint8)((pid_ki_step_index + 1U) % (sizeof(pid_ki_steps) / sizeof(pid_ki_steps[0])));
-    }
-    else if (3U == mode)
-    {
-        pid_kd_step_index = (uint8)((pid_kd_step_index + 1U) % (sizeof(pid_kd_steps) / sizeof(pid_kd_steps[0])));
-    }
-}
-
 static void menu_pid_show_line(uint16 x, uint16 y, const char *text)
 {
     ips200_show_string(x, y, (char *)text);
-}
-
-static void menu_pid_show_line_pad(uint16 x, uint16 y, const char *text, uint16 width)
-{
-    char line[40];
-    uint16 max_chars = (uint16)(width / 8U);
-    uint16 i = 0U;
-
-    if (max_chars > (sizeof(line) - 1U))
-    {
-        max_chars = (uint16)(sizeof(line) - 1U);
-    }
-
-    while ((i < max_chars) && (NULL != text) && (text[i] != '\0'))
-    {
-        line[i] = text[i];
-        i++;
-    }
-    while (i < max_chars)
-    {
-        line[i++] = ' ';
-    }
-    line[i] = '\0';
-    ips200_show_string(x, y, line);
 }
 
 static void menu_pid_draw_edit_page(pid_view_mode_t mode, const char *title, float value, float step, uint8 *menu_full_redraw)
@@ -292,22 +189,22 @@ static void menu_pid_draw_edit_page(pid_view_mode_t mode, const char *title, flo
         menu_pid_show_line(10, 10, title);
         ips200_draw_line(0, 30, ips200_width_max - 1, 30, RGB565_GRAY);
         ips200_set_color(RGB565_GRAY, RGB565_BLACK);
-        menu_pid_show_line_pad(10, 40, "ENC: Adjust parameter", (uint16)(ips200_width_max - 20U));
-        menu_pid_show_line_pad(10, 56, "K1: Change step   LONG: Exit", (uint16)(ips200_width_max - 20U));
-        menu_pid_show_line_pad(18, 82, "Current Value", (uint16)(ips200_width_max - 36U));
-        menu_pid_show_line_pad(18, 138, "Step Size", (uint16)(ips200_width_max - 36U));
-        menu_pid_show_line_pad(18, 194, "Rotate encoder to tune", (uint16)(ips200_width_max - 36U));
-        menu_pid_show_line_pad(18, 210, "Exit auto-saves PID", (uint16)(ips200_width_max - 36U));
+        menu_ui_show_pad(10, 40, (uint16)(ips200_width_max - 20U), "ENC: Adjust parameter");
+        menu_ui_show_pad(10, 56, (uint16)(ips200_width_max - 20U), "K1: Change step   LONG: Exit");
+        menu_ui_show_pad(18, 82, (uint16)(ips200_width_max - 36U), "Current Value");
+        menu_ui_show_pad(18, 138, (uint16)(ips200_width_max - 36U), "Step Size");
+        menu_ui_show_pad(18, 194, (uint16)(ips200_width_max - 36U), "Rotate encoder to tune");
+        menu_ui_show_pad(18, 210, (uint16)(ips200_width_max - 36U), "Exit auto-saves PID");
     }
 
     snprintf(value_line, sizeof(value_line), "%.4f", value);
     snprintf(step_line, sizeof(step_line), "%.4f", step);
 
     ips200_set_color(RGB565_YELLOW, RGB565_BLACK);
-    menu_pid_show_line_pad(18, 104, value_line, (uint16)(ips200_width_max - 36U));
+    menu_ui_show_pad(18, 104, (uint16)(ips200_width_max - 36U), value_line);
 
     ips200_set_color(RGB565_GREEN, RGB565_BLACK);
-    menu_pid_show_line_pad(18, 160, step_line, (uint16)(ips200_width_max - 36U));
+    menu_ui_show_pad(18, 160, (uint16)(ips200_width_max - 36U), step_line);
 
     last_draw_mode = mode;
     last_draw_value = value;
@@ -321,11 +218,7 @@ static void menu_pid_draw_edit_page(pid_view_mode_t mode, const char *title, flo
 static void menu_pid_draw_preview_page(const MyParams_t *params, pid_controller_t *preview_controller, uint8 *menu_full_redraw)
 {
     static uint32 last_refresh_ms = 0U;
-    char line0[64];
-    char line1[64];
-    char line2[64];
-    char line3[64];
-    char line4[64];
+    char val[16];
     uint32 now_ms = system_getval_ms();
     float error;
 
@@ -343,26 +236,48 @@ static void menu_pid_draw_preview_page(const MyParams_t *params, pid_controller_
         menu_pid_show_line(5, 10, "PID Preview");
         ips200_draw_line(0, 30, ips200_width_max - 1, 30, RGB565_GRAY);
         ips200_set_color(RGB565_WHITE, RGB565_BLACK);
-        menu_pid_show_line_pad(5, (uint16)(ips200_height_max - 20U), "K1 LONG Exit", (uint16)(ips200_width_max - 10U));
+        menu_ui_show_pad(5, (uint16)(ips200_height_max - 20U), (uint16)(ips200_width_max - 10U), "K1 LONG Exit");
+
+        /* Static labels -- drawn once */
+        ips200_show_string(10, 56, "Kp:         Ki:");
+        ips200_show_string(10, 80, "Kd:         Target:");
+        ips200_show_string(10, 104, "Feedback:");
+        ips200_show_string(10, 128, "Error:      Output:");
+        ips200_show_string(10, 152, "Adjust gains in PID menu");
     }
 
+    /* PID simulation step */
     pid_preview_output = pid_calculate(preview_controller, pid_preview_target, pid_preview_feedback);
     pid_preview_feedback += pid_preview_output * 0.02f;
     pid_preview_feedback *= 0.995f;
     error = pid_preview_target - pid_preview_feedback;
 
-    snprintf(line0, sizeof(line0), "Kp:%.3f Ki:%.3f", params->pid_p, params->pid_i);
-    snprintf(line1, sizeof(line1), "Kd:%.3f Target:%.1f", params->pid_d, pid_preview_target);
-    snprintf(line2, sizeof(line2), "Feedback:%.2f", pid_preview_feedback);
-    snprintf(line3, sizeof(line3), "Error:%.2f Output:%.2f", error, pid_preview_output);
-    snprintf(line4, sizeof(line4), "Adjust gains in PID menu");
-
+    /* Per-frame: update value slots only */
     ips200_set_color(RGB565_WHITE, RGB565_BLACK);
-    menu_pid_show_line_pad(10, 56, line0, (uint16)(ips200_width_max - 20U));
-    menu_pid_show_line_pad(10, 80, line1, (uint16)(ips200_width_max - 20U));
-    menu_pid_show_line_pad(10, 104, line2, (uint16)(ips200_width_max - 20U));
-    menu_pid_show_line_pad(10, 128, line3, (uint16)(ips200_width_max - 20U));
-    menu_pid_show_line_pad(10, 152, line4, (uint16)(ips200_width_max - 20U));
+
+    /* y=56: Kp value at x=34 (3*8+10), Ki value at x=130 (15*8+10) */
+    snprintf(val, sizeof(val), "%.3f", params->pid_p);
+    menu_ui_show_pad(34, 56, 88, val);   /* 11 chars * 8 = 88 */
+    snprintf(val, sizeof(val), "%.3f", params->pid_i);
+    menu_ui_show_pad(130, 56, 80, val);  /* 10 chars * 8 = 80 */
+
+    /* y=80: Kd value at x=34, Target value at x=162 (19*8+10) */
+    snprintf(val, sizeof(val), "%.3f", params->pid_d);
+    menu_ui_show_pad(34, 80, 120, val);  /* 15 chars * 8 = 120 */
+    snprintf(val, sizeof(val), "%.1f", pid_preview_target);
+    menu_ui_show_pad(162, 80, 56, val);  /* 7 chars * 8 = 56 */
+
+    /* y=104: Feedback value at x=82 (9*8+10) */
+    snprintf(val, sizeof(val), "%.2f", pid_preview_feedback);
+    menu_ui_show_pad(82, 104, 128, val); /* 16 chars * 8 = 128 */
+
+    /* y=128: Error value at x=58 (6*8+10), Output value at x=178 (21*8+10) */
+    snprintf(val, sizeof(val), "%.2f", error);
+    menu_ui_show_pad(58, 128, 112, val); /* 14 chars * 8 = 112 */
+    snprintf(val, sizeof(val), "%.2f", pid_preview_output);
+    menu_ui_show_pad(178, 128, 56, val); /* 7 chars * 8 = 56 */
+
+    /* y=152: fully static, no per-frame draw */
 
     if (NULL != menu_full_redraw)
     {
@@ -374,15 +289,15 @@ static void menu_pid_draw_active_view(pid_view_mode_t mode, const MyParams_t *pa
 {
     if (PID_VIEW_EDIT_KP == mode)
     {
-        menu_pid_draw_edit_page(mode, "Edit Kp", params->pid_p, menu_pid_get_current_step(PID_VIEW_EDIT_KP), menu_full_redraw);
+        menu_pid_draw_edit_page(mode, "Edit Kp", params->pid_p, menu_step_get_float(&pid_step_descs[mode - PID_VIEW_EDIT_KP]), menu_full_redraw);
     }
     else if (PID_VIEW_EDIT_KI == mode)
     {
-        menu_pid_draw_edit_page(mode, "Edit Ki", params->pid_i, menu_pid_get_current_step(PID_VIEW_EDIT_KI), menu_full_redraw);
+        menu_pid_draw_edit_page(mode, "Edit Ki", params->pid_i, menu_step_get_float(&pid_step_descs[mode - PID_VIEW_EDIT_KP]), menu_full_redraw);
     }
     else if (PID_VIEW_EDIT_KD == mode)
     {
-        menu_pid_draw_edit_page(mode, "Edit Kd", params->pid_d, menu_pid_get_current_step(PID_VIEW_EDIT_KD), menu_full_redraw);
+        menu_pid_draw_edit_page(mode, "Edit Kd", params->pid_d, menu_step_get_float(&pid_step_descs[mode - PID_VIEW_EDIT_KP]), menu_full_redraw);
     }
     else if (PID_VIEW_PREVIEW == mode)
     {
@@ -425,20 +340,20 @@ uint8 menu_pid_handle_view(pid_view_mode_t *mode,
 
     if ((switch_encoder_change_num != 0) && (*mode <= PID_VIEW_EDIT_KD))
     {
-        step = menu_pid_get_current_step(*mode);
+        step = menu_step_get_float(&pid_step_descs[*mode - PID_VIEW_EDIT_KP]);
         if (PID_VIEW_EDIT_KP == *mode)
         {
-            menu_pid_adjust_param(&params->pid_p, step, PARAM_PID_P_MIN, PARAM_PID_P_MAX, (switch_encoder_change_num < 0) ? 1U : 0U);
+            menu_param_adjust_float(&params->pid_p, step, PARAM_PID_P_MIN, PARAM_PID_P_MAX, (switch_encoder_change_num < 0) ? 1U : 0U);
             updated = 1U;
         }
         else if (PID_VIEW_EDIT_KI == *mode)
         {
-            menu_pid_adjust_param(&params->pid_i, step, PARAM_PID_I_MIN, PARAM_PID_I_MAX, (switch_encoder_change_num < 0) ? 1U : 0U);
+            menu_param_adjust_float(&params->pid_i, step, PARAM_PID_I_MIN, PARAM_PID_I_MAX, (switch_encoder_change_num < 0) ? 1U : 0U);
             updated = 1U;
         }
         else if (PID_VIEW_EDIT_KD == *mode)
         {
-            menu_pid_adjust_param(&params->pid_d, step, PARAM_PID_D_MIN, PARAM_PID_D_MAX, (switch_encoder_change_num < 0) ? 1U : 0U);
+            menu_param_adjust_float(&params->pid_d, step, PARAM_PID_D_MIN, PARAM_PID_D_MAX, (switch_encoder_change_num < 0) ? 1U : 0U);
             updated = 1U;
         }
 
@@ -457,7 +372,7 @@ uint8 menu_pid_handle_view(pid_view_mode_t *mode,
         my_key_clear_state(MY_KEY_1);
         if (*mode <= PID_VIEW_EDIT_KD)
         {
-            menu_pid_cycle_step(*mode);
+            menu_step_cycle(&pid_step_descs[*mode - PID_VIEW_EDIT_KP]);
             if (NULL != menu_full_redraw)
             {
                 *menu_full_redraw = 1U;
