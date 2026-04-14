@@ -10,6 +10,10 @@
 #include "icm_attitude.h"
 #include "icm_ins.h"
 #include "board_comm.h"   /* TC264 板间通信 RX 处理 */
+#include "pedal_input.h"  /* 踏板输入（10ms ISR 调用） */
+#include "ins_record.h"   /* 惯导记录（10ms ISR 调用） */
+#include "ins_playback.h" /* 惯导回放（10ms ISR 调用） */
+#include "ins_ctrl.h"     /* 惯导控制（10ms ISR 调用） */
 
 /* 1ms 定时中断：以固定 1kHz 采样 ICM42688，保证惯导积分 dt 稳定 */
 IFX_INTERRUPT(cc60_pit_ch0_isr, CCU6_0_CH0_INT_VECTAB_NUM, CCU6_0_CH0_ISR_PRIORITY)
@@ -34,16 +38,25 @@ IFX_INTERRUPT(cc60_pit_ch0_isr, CCU6_0_CH0_INT_VECTAB_NUM, CCU6_0_CH0_ISR_PRIORI
 }
 
 
+/* 10ms 定时中断：踏板输入采集（固定 100Hz 节拍，保证油门响应一致性）
+ * 优先级 43 < 1ms ICM(50)：不会抢占惯导采样 */
 IFX_INTERRUPT(cc60_pit_ch1_isr, CCU6_0_CH1_INT_VECTAB_NUM, CCU6_0_CH1_ISR_PRIORITY)
 {
-    interrupt_global_enable(0);                     // 开启中断嵌套
+    interrupt_global_enable(0);
     pit_clear_flag(CCU60_CH1);
+    pedal_input_task();
 }
 
+/* 10ms 定时中断：惯导记录 / 回放 / 控制（固定 100Hz 节拍）
+ * 优先级 44 < 1ms ICM(50)：不会抢占惯导采样
+ * ins_record_task 内部有 100ms 门控，不会每次都写点 */
 IFX_INTERRUPT(cc61_pit_ch0_isr, CCU6_1_CH0_INT_VECTAB_NUM, CCU6_1_CH0_ISR_PRIORITY)
 {
-    interrupt_global_enable(0);                     // 开启中断嵌套
+    interrupt_global_enable(0);
     pit_clear_flag(CCU61_CH0);
+    ins_record_task();
+    ins_playback_task();
+    ins_ctrl_task();
 }
 
 IFX_INTERRUPT(cc61_pit_ch1_isr, CCU6_1_CH1_INT_VECTAB_NUM, CCU6_1_CH1_ISR_PRIORITY)

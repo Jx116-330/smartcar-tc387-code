@@ -13,6 +13,8 @@
 #include "ins_record.h"
 #include "ins_playback.h"
 #include "ins_ctrl.h"
+#include "icm_gps_fusion.h"
+#include "board_comm.h"
 #include <math.h>
 
 #define TUNING_DEFAULT_PERIOD_MS 20U
@@ -44,9 +46,24 @@ static tuning_view_mode_t tuning_view_mode = TUNING_VIEW_NONE;
 static uint8 tuning_full_redraw = 1U;
 static uint32 tuning_last_view_ms = 0U;
 
+/* ---- Track streaming / dump state ---- */
+volatile uint8 track_stream_enabled = 0U;
+static uint16 track_stream_interval_ms = 50U;
+static uint32 track_stream_last_ms = 0U;
+volatile uint16 track_dump_index = 0U;
+volatile uint8  track_dump_active = 0U;
+
+#define TRACK_STREAM_MIN_MS   20U
+#define TRACK_STREAM_MAX_MS   500U
+#define TRACK_STREAM_STEP_MS  10U
+#define TRACK_DUMP_BATCH      5U
+
 static char tuning_toggle_label[48] = "1. Telemetry [OFF]";
 static char tuning_period_plus_label[48] = "3. Period + [100ms]";
 static char tuning_period_minus_label[48] = "4. Period - [100ms]";
+static char track_stream_label[48]  = "5. Track Stream [OFF]";
+static char track_record_label[48]  = "6. Track Record [IDLE]";
+static char track_rate_label[48]    = "7. Stream Rate [50ms]";
 
 static void tuning_fill_rect(uint16 x0, uint16 y0, uint16 x1, uint16 y1, uint16 color);
 static void tuning_show_padded(uint16 x, uint16 y, const char *s);
@@ -61,8 +78,13 @@ static void tuning_action_toggle(void);
 static void tuning_action_status(void);
 static void tuning_action_period_plus(void);
 static void tuning_action_period_minus(void);
+static void tuning_action_track_stream_toggle(void);
+static void tuning_action_track_record_toggle(void);
+static void tuning_action_track_rate_cycle(void);
 static uint8 tuning_send_once(void);
 static uint8 tuning_send_line(const char *line);
+static void tuning_send_track_point(void);
+static void tuning_send_track_dump_batch(void);
 static void tuning_send_response(const char *response);
 static void tuning_reply_error(const char *cmd, const char *reason);
 static void tuning_reply_ack_pid(const char *cmd);
@@ -74,6 +96,9 @@ static MenuItem tuning_items[] = {
     {"2. Status", tuning_action_status, NULL},
     {tuning_period_plus_label, tuning_action_period_plus, NULL},
     {tuning_period_minus_label, tuning_action_period_minus, NULL},
+    {track_stream_label, tuning_action_track_stream_toggle, NULL},
+    {track_record_label, tuning_action_track_record_toggle, NULL},
+    {track_rate_label, tuning_action_track_rate_cycle, NULL},
 };
 
 MenuPage tuning_menu = {
@@ -145,6 +170,9 @@ static void tuning_update_labels(void)
     snprintf(tuning_toggle_label, sizeof(tuning_toggle_label), "1. Telemetry [%s]", tuning_enabled ? "ON" : "OFF");
     snprintf(tuning_period_plus_label, sizeof(tuning_period_plus_label), "3. Period + [%ums]", (unsigned int)tuning_period_ms);
     snprintf(tuning_period_minus_label, sizeof(tuning_period_minus_label), "4. Period - [%ums]", (unsigned int)tuning_period_ms);
+    snprintf(track_stream_label, sizeof(track_stream_label), "5. Track Stream [%s]", track_stream_enabled ? "ON" : "OFF");
+    snprintf(track_record_label, sizeof(track_record_label), "6. Track Record [%s]", ins_record_is_recording() ? "REC" : "IDLE");
+    snprintf(track_rate_label, sizeof(track_rate_label), "7. Stream Rate [%ums]", (unsigned int)track_stream_interval_ms);
 }
 
 static void tuning_set_period(uint16 period_ms)
@@ -164,7 +192,7 @@ static void tuning_set_period(uint16 period_ms)
 
 void tuning_soft_init(void)
 {
-    tuning_enabled = 0U;
+    tuning_enabled = 0U;    /* 默认关闭，WiFi 连上后由命令或菜单开启 */
     tuning_period_ms = TUNING_DEFAULT_PERIOD_MS;
     tuning_last_send_ms = system_getval_ms();
     tuning_total_sent = 0U;
@@ -172,6 +200,11 @@ void tuning_soft_init(void)
     tuning_view_mode = TUNING_VIEW_NONE;
     tuning_full_redraw = 1U;
     tuning_last_view_ms = 0U;
+    track_stream_enabled = 0U;
+    track_stream_interval_ms = 50U;
+    track_stream_last_ms = system_getval_ms();
+    track_dump_index = 0U;
+    track_dump_active = 0U;
     autotune_init();
     tuning_update_labels();
 }
@@ -219,6 +252,42 @@ static void tuning_action_period_minus(void)
         next_period = (uint16)(next_period - TUNING_STEP_MS);
     }
     tuning_set_period(next_period);
+    menu_request_full_redraw();
+}
+
+static void tuning_action_track_stream_toggle(void)
+{
+    track_stream_enabled = track_stream_enabled ? 0U : 1U;
+    track_stream_last_ms = system_getval_ms();
+    tuning_update_labels();
+    menu_request_full_redraw();
+}
+
+static void tuning_action_track_record_toggle(void)
+{
+    if (ins_record_is_recording())
+    {
+        ins_record_stop();
+    }
+    else
+    {
+        ins_record_start();
+    }
+    tuning_update_labels();
+    menu_request_full_redraw();
+}
+
+static void tuning_action_track_rate_cycle(void)
+{
+    if (track_stream_interval_ms >= TRACK_STREAM_MAX_MS)
+    {
+        track_stream_interval_ms = TRACK_STREAM_MIN_MS;
+    }
+    else
+    {
+        track_stream_interval_ms = (uint16)(track_stream_interval_ms + TRACK_STREAM_STEP_MS);
+    }
+    tuning_update_labels();
     menu_request_full_redraw();
 }
 
@@ -274,11 +343,6 @@ static uint8 tuning_send_once(void)
     uint32 bias_sample_count = 0U;
     uint32 bias_target_count = 0U;
     uint8 ok = 1U;
-
-    if (!wifi_menu_get_tcp_status())
-    {
-        return 0U;
-    }
 
     icm_attitude_get_gyro_bias(&gyro_bias_x, &gyro_bias_y, &gyro_bias_z);
     icm_attitude_get_gyro_bias_calibration_progress(&bias_sample_count, &bias_target_count);
@@ -452,11 +516,126 @@ static uint8 tuning_send_once(void)
     return ok;
 }
 
+static void tuning_send_track_point(void)
+{
+    char line[TUNING_SEND_BUFFER_LEN];
+    float px = 0.0f, py = 0.0f, vx = 0.0f, vy = 0.0f;
+    float roll_tmp = 0.0f, pitch_tmp = 0.0f, yaw = 0.0f;
+    const icm_gps_fusion_debug_t *fdbg;
+
+    icm_gps_fusion_get_position(&px, &py);
+    icm_gps_fusion_get_velocity(&vx, &vy);
+    icm_attitude_get_euler(&roll_tmp, &pitch_tmp, &yaw);
+    fdbg = icm_gps_fusion_get_debug();
+
+    snprintf(line,
+             sizeof(line),
+             "TELPT,ms=%lu,px=%.3f,py=%.3f,vx=%.3f,vy=%.3f"
+             ",yaw=%.2f,spd=%.2f,lat=%.6f,lon=%.6f"
+             ",sat=%u,gv=%u,stat=%u,fpx=%.3f,fpy=%.3f"
+             ",esm=%ld,edm=%ld\r\n",
+             (unsigned long)system_getval_ms(),
+             px, py, vx, vy,
+             yaw, gnss.speed, gnss.latitude, gnss.longitude,
+             (unsigned int)gnss.satellite_used,
+             (unsigned int)(fdbg ? fdbg->gps_valid : 0U),
+             (unsigned int)icm_ins_is_stationary(),
+             fdbg ? fdbg->gps_x_m : 0.0f,
+             fdbg ? fdbg->gps_y_m : 0.0f,
+             (long)board_comm_encl_get_spd_mm_s(),
+             (long)board_comm_encl_get_dist_mm());
+    tuning_send_line(line);
+}
+
+static void tuning_send_track_dump_batch(void)
+{
+    char line[TUNING_SEND_BUFFER_LEN];
+    uint16 total = ins_record_get_point_count();
+    uint16 batch_end;
+    uint16 i;
+
+    if (!track_dump_active)
+    {
+        return;
+    }
+
+    if (track_dump_index >= total)
+    {
+        track_dump_active = 0U;
+        return;
+    }
+
+    /* Send header on first batch */
+    if (0U == track_dump_index)
+    {
+        snprintf(line, sizeof(line),
+                 "TELPTDUMP,count=%u\r\n",
+                 (unsigned int)total);
+        tuning_send_line(line);
+    }
+
+    batch_end = track_dump_index + TRACK_DUMP_BATCH;
+    if (batch_end > total)
+    {
+        batch_end = total;
+    }
+
+    for (i = track_dump_index; i < batch_end; i++)
+    {
+        ins_record_point_t pt;
+        if (ins_record_get_point(i, &pt))
+        {
+            snprintf(line,
+                     sizeof(line),
+                     "TELPT,ms=%lu,px=%.3f,py=%.3f,vx=%.3f,vy=%.3f"
+                     ",yaw=%.2f,spd=0.00,lat=0.000000,lon=0.000000"
+                     ",sat=0,gv=0,stat=0,fpx=0.000,fpy=0.000"
+                     ",esm=%ld,edm=%ld\r\n",
+                     (unsigned long)pt.t_ms,
+                     pt.px_m, pt.py_m, pt.vx_ms, pt.vy_ms,
+                     pt.yaw_deg,
+                     (long)pt.enc_spd_mm_s,
+                     (long)pt.enc_dist_mm);
+            tuning_send_line(line);
+        }
+    }
+
+    track_dump_index = batch_end;
+    if (track_dump_index >= total)
+    {
+        track_dump_active = 0U;
+    }
+}
+
 void tuning_soft_task(void)
 {
     uint32 now_ms;
 
+    /* WiFi SPI 未初始化时不能调用任何 wifi_spi 函数，否则访问未初始化外设会硬错误。
+     * wifi_tcp_connected 只在 wifi_spi_init + TCP 连接成功后才为 1，
+     * 此时 SPI 一定可用。连接成功后由命令自动开启 tuning_enabled。 */
+    if (!wifi_menu_get_tcp_status())
+    {
+        return;
+    }
+
     tuning_receive_task();
+
+    /* Track streaming runs independently of tuning_enabled */
+    now_ms = system_getval_ms();
+    if (track_stream_enabled)
+    {
+        if ((uint32)(now_ms - track_stream_last_ms) >= track_stream_interval_ms)
+        {
+            track_stream_last_ms = now_ms;
+            tuning_send_track_point();
+        }
+    }
+
+    if (track_dump_active)
+    {
+        tuning_send_track_dump_batch();
+    }
 
     if (!tuning_enabled)
     {
@@ -475,7 +654,7 @@ void tuning_soft_task(void)
 
 static void tuning_send_response(const char *response)
 {
-    if ((NULL == response) || !wifi_menu_get_tcp_status())
+    if (NULL == response)
     {
         return;
     }
@@ -831,6 +1010,95 @@ static void tuning_process_rx_line(char *line)
         return;
     }
 
+    /* ================================================================
+     *  TRACK 轨迹流 / 记录 / 导出命令
+     * ================================================================ */
+
+    if (0 == strcmp(line, "TRACK STREAM ON"))
+    {
+        char resp[TUNING_RESP_BUFFER_LEN];
+        track_stream_enabled = 1U;
+        track_stream_last_ms = system_getval_ms();
+        tuning_update_labels();
+        snprintf(resp, sizeof(resp),
+                 "ACK,cmd=TRACK_STREAM_ON,ms=%lu,interval=%u\r\n",
+                 (unsigned long)system_getval_ms(),
+                 (unsigned int)track_stream_interval_ms);
+        tuning_send_response(resp);
+        return;
+    }
+
+    if (0 == strcmp(line, "TRACK STREAM OFF"))
+    {
+        char resp[TUNING_RESP_BUFFER_LEN];
+        track_stream_enabled = 0U;
+        tuning_update_labels();
+        snprintf(resp, sizeof(resp),
+                 "ACK,cmd=TRACK_STREAM_OFF,ms=%lu\r\n",
+                 (unsigned long)system_getval_ms());
+        tuning_send_response(resp);
+        return;
+    }
+
+    if (0 == strcmp(line, "TRACK RECORD START"))
+    {
+        char resp[TUNING_RESP_BUFFER_LEN];
+        ins_record_start();
+        tuning_update_labels();
+        snprintf(resp, sizeof(resp),
+                 "ACK,cmd=TRACK_RECORD_START,ms=%lu,pts=%u\r\n",
+                 (unsigned long)system_getval_ms(),
+                 (unsigned int)ins_record_get_point_count());
+        tuning_send_response(resp);
+        return;
+    }
+
+    if (0 == strcmp(line, "TRACK RECORD STOP"))
+    {
+        char resp[TUNING_RESP_BUFFER_LEN];
+        ins_record_stop();
+        tuning_update_labels();
+        snprintf(resp, sizeof(resp),
+                 "ACK,cmd=TRACK_RECORD_STOP,ms=%lu,pts=%u\r\n",
+                 (unsigned long)system_getval_ms(),
+                 (unsigned int)ins_record_get_point_count());
+        tuning_send_response(resp);
+        return;
+    }
+
+    if (0 == strcmp(line, "TRACK DUMP"))
+    {
+        char resp[TUNING_RESP_BUFFER_LEN];
+        uint16 pts = ins_record_get_point_count();
+        if (0U == pts)
+        {
+            tuning_reply_error("TRACK_DUMP", "NO_POINTS");
+            return;
+        }
+        track_dump_index = 0U;
+        track_dump_active = 1U;
+        snprintf(resp, sizeof(resp),
+                 "ACK,cmd=TRACK_DUMP,ms=%lu,count=%u\r\n",
+                 (unsigned long)system_getval_ms(),
+                 (unsigned int)pts);
+        tuning_send_response(resp);
+        return;
+    }
+
+    if (0 == strcmp(line, "TRACK CLEAR"))
+    {
+        char resp[TUNING_RESP_BUFFER_LEN];
+        ins_record_clear();
+        track_dump_active = 0U;
+        track_dump_index = 0U;
+        tuning_update_labels();
+        snprintf(resp, sizeof(resp),
+                 "ACK,cmd=TRACK_CLEAR,ms=%lu\r\n",
+                 (unsigned long)system_getval_ms());
+        tuning_send_response(resp);
+        return;
+    }
+
     tuning_reply_error("UNKNOWN", "UNKNOWN_COMMAND");
 }
 
@@ -842,16 +1110,17 @@ static void tuning_receive_task(void)
     static uint32 line_len = 0U;
     uint32 i;
 
-    if (!wifi_menu_get_tcp_status())
-    {
-        line_len = 0U;
-        return;
-    }
-
     raw_len = wifi_spi_read_buffer(raw, sizeof(raw));
     if (0U == raw_len)
     {
         return;
+    }
+
+    /* 首次收到数据 → 自动开启遥测（用户不需手动到 Tuning 菜单开） */
+    if (!tuning_enabled)
+    {
+        tuning_enabled = 1U;
+        tuning_update_labels();
     }
 
     for (i = 0U; i < raw_len; i++)

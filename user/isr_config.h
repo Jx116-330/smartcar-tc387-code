@@ -11,10 +11,10 @@
 #define CCU6_0_CH0_ISR_PRIORITY 50                  // 配置 CCU6_0 PIT 通道 0 的中断优先级，范围 1~255，数值越小优先级越高，建议与常用外设中断错开
 
 #define CCU6_0_CH1_INT_SERVICE  IfxSrc_Tos_cpu0
-#define CCU6_0_CH1_ISR_PRIORITY 51
+#define CCU6_0_CH1_ISR_PRIORITY 43              /* 10ms 踏板输入 — 低于 1ms ICM(50) 以免抢占 */
 
 #define CCU6_1_CH0_INT_SERVICE  IfxSrc_Tos_cpu0
-#define CCU6_1_CH0_ISR_PRIORITY 52
+#define CCU6_1_CH0_ISR_PRIORITY 44              /* 10ms 惯导记录/回放/控制 — 同上 */
 
 #define CCU6_1_CH1_INT_SERVICE  IfxSrc_Tos_cpu0
 #define CCU6_1_CH1_ISR_PRIORITY 53

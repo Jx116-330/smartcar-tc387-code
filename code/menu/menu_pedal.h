@@ -15,6 +15,7 @@ typedef enum
 {
     PEDAL_VIEW_NONE = 0U,
     PEDAL_VIEW_DEBUG,
+    PEDAL_VIEW_DRIVE_CTRL,   /* 驱动控制页：开关 + PWM上限 + 实时出力 */
 } pedal_view_mode_t;
 
 void  menu_pedal_action_enter(menu_view_ctx_t *ctx, uint8 target_mode);

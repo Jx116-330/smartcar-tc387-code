@@ -17,6 +17,7 @@ typedef enum
     LINK_VIEW_NONE = 0U,
     LINK_VIEW_DEBUG,
     LINK_VIEW_HQ_STATUS,
+    LINK_VIEW_ENCODER,      /* 左后轮编码器显示页 */
 } link_view_mode_t;
 
 void  menu_link_action_enter(menu_view_ctx_t *ctx, uint8 target_mode);

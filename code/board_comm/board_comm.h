@@ -91,6 +91,18 @@ uint8 board_comm_has_enc_frame(void);
 int32 board_comm_get_spd2_cps(void);
 int32 board_comm_get_spd3_cps(void);
 
+/* ---- ENCL: 左后轮处理后编码器帧 ("ENCL,<count>,<dist_mm>,<spd_mm_s>") ----
+ * TC264 每 20ms 发一帧。仅左后轮有效，count 为累计值，dist/spd 是处理后结果。
+ */
+int32  board_comm_encl_get_count(void);
+int32  board_comm_encl_get_dist_mm(void);
+int32  board_comm_encl_get_spd_mm_s(void);
+uint32 board_comm_encl_get_last_rx_ms(void);
+uint8  board_comm_encl_has_frame(void);
+uint8  board_comm_encl_is_online(void);
+uint32 board_comm_encl_get_ok_count(void);   /* ENCL 解析成功总数 */
+uint32 board_comm_encl_get_fail_count(void); /* ENCL 前缀匹配但字段解析失败总数 */
+
 /* ---- HQ 状态帧解析（hq 板周期上报的整机状态快照） ---------------------
  * 协议：HQ,<arm>,<fresh>,<valid>,<en>,<drv>,<cmd>,<out>,<duty>\r\n
  *   arm   0/1   hq 侧 debug_arm

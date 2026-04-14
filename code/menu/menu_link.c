@@ -35,7 +35,8 @@
 #include "board_comm.h"
 #include "menu_ui_utils.h"
 
-#define LINK_REFRESH_MS         150U
+#define LINK_REFRESH_MS             150U
+#define BC_ENCL_DISPLAY_WARN_MS     1000U   /* AGEms 超过此值显示红色 */
 
 static uint32 link_exit_hold_timer = 0U;
 
@@ -448,6 +449,171 @@ static void link_draw_hq_page(uint8 *menu_full_redraw)
     }
 }
 
+/* ---- Encoder 页面（左后轮处理后编码器，只读展示 board_comm ENCL 帧） ---
+ *
+ * 页面布局（8×16 字体，ips200 240x320，footer = height_max-16 = 304）：
+ *   y= 2   "Encoder LR"            黄色标题
+ *   y=16   ─────────────────────  灰色分割线
+ *   y=22   "Left Rear Only"         青色单编码器提示
+ *   y=40   "ONLINE: YES/NO"         绿/红
+ *   y=60   "Wheel : Left Rear"      灰色静态标签
+ *   y=80   "Count : <n>"            白色，累计 count
+ *   y=100  "Dist  : <n> mm"         白色，距离
+ *   y=120  "Speed : <n> mm/s"       青色，速度
+ *   y=144  "AGEms : <n>"            白色，距上次帧
+ *   y=164  "Frame : OK/--"          绿/灰
+ *   y=304  "LONG:Exit"              底部灰色提示
+ */
+static void link_draw_encoder_page(uint8 *menu_full_redraw)
+{
+    static uint32 last_refresh_ms_enc = 0U;
+    char     val[64];
+    uint32   now_ms   = system_getval_ms();
+    uint16   end_x    = (uint16)(ips200_width_max - 10U);
+    uint16   val_w;
+
+    /* 限速：Encoder 页面用 50ms 刷新（20Hz），比其它页面的 150ms 更快 */
+    #define ENC_PAGE_REFRESH_MS   50U
+    if ((NULL != menu_full_redraw) && !(*menu_full_redraw) &&
+        (now_ms - last_refresh_ms_enc < ENC_PAGE_REFRESH_MS))
+    {
+        return;
+    }
+    last_refresh_ms_enc = now_ms;
+
+    /* 全屏重绘 */
+    if ((NULL != menu_full_redraw) && *menu_full_redraw)
+    {
+        ips200_full(RGB565_BLACK);
+
+        ips200_set_color(RGB565_YELLOW, RGB565_BLACK);
+        ips200_show_string(10, 2, "Encoder LR");
+        ips200_draw_line(0, 16, ips200_width_max - 1, 16, RGB565_GRAY);
+
+        ips200_set_color(RGB565_CYAN, RGB565_BLACK);
+        ips200_show_string(10, 22, "Left Rear Only");
+
+        ips200_set_color(RGB565_WHITE, RGB565_BLACK);
+        ips200_show_string(10,  40, "ONLINE: ");
+        ips200_set_color(RGB565_GRAY, RGB565_BLACK);
+        ips200_show_string(10,  60, "Wheel : Left Rear");
+        ips200_set_color(RGB565_WHITE, RGB565_BLACK);
+        ips200_show_string(10,  80, "Count : ");
+        ips200_show_string(10, 100, "Dist  : ");
+        ips200_set_color(RGB565_CYAN, RGB565_BLACK);
+        ips200_show_string(10, 120, "Speed : ");
+        ips200_set_color(RGB565_WHITE, RGB565_BLACK);
+        ips200_show_string(10, 144, "AGEms : ");
+        ips200_show_string(10, 164, "Frame : ");
+        ips200_set_color(RGB565_GRAY, RGB565_BLACK);
+        ips200_show_string(10, 184, "RxOK  : ");
+        ips200_show_string(10, 200, "RxFail: ");
+
+        ips200_set_color(RGB565_GRAY, RGB565_BLACK);
+        menu_ui_show_pad(5U, (uint16)(ips200_height_max - 16U),
+                      (uint16)(ips200_width_max - 10U), "LONG:Exit");
+
+        *menu_full_redraw = 0U;
+    }
+
+    /* ================================================================
+     * 每帧刷新：只清除并重绘 VALUE 部分
+     * 所有标签 8 chars ("ONLINE: " 等) => val_x = 74
+     * ================================================================ */
+
+    /* --- ONLINE --- */
+    {
+        uint8 online = board_comm_encl_is_online();
+        snprintf(val, sizeof(val), "%s", (0U != online) ? "YES" : "NO ");
+        val_w = (uint16)(end_x - 74U);
+        if (0U != online)
+            ips200_set_color(RGB565_GREEN, RGB565_BLACK);
+        else
+            ips200_set_color(RGB565_RED, RGB565_BLACK);
+        menu_ui_show_pad(74, 40, val_w, val);
+    }
+
+    /* --- Count --- */
+    snprintf(val, sizeof(val), "%ld",
+             (long)board_comm_encl_get_count());
+    val_w = (uint16)(end_x - 74U);
+    ips200_set_color(RGB565_WHITE, RGB565_BLACK);
+    menu_ui_show_pad(74, 80, val_w, val);
+
+    /* --- Dist --- */
+    snprintf(val, sizeof(val), "%ld mm",
+             (long)board_comm_encl_get_dist_mm());
+    val_w = (uint16)(end_x - 74U);
+    ips200_set_color(RGB565_WHITE, RGB565_BLACK);
+    menu_ui_show_pad(74, 100, val_w, val);
+
+    /* --- Speed --- */
+    snprintf(val, sizeof(val), "%ld mm/s",
+             (long)board_comm_encl_get_spd_mm_s());
+    val_w = (uint16)(end_x - 74U);
+    ips200_set_color(RGB565_CYAN, RGB565_BLACK);
+    menu_ui_show_pad(74, 120, val_w, val);
+
+    /* --- AGEms --- 封顶 9999，超时用红色警示 */
+    {
+        uint32 last = board_comm_encl_get_last_rx_ms();
+        uint32 age;
+        if (0U == last)
+        {
+            snprintf(val, sizeof(val), "--");
+            ips200_set_color(RGB565_GRAY, RGB565_BLACK);
+        }
+        else
+        {
+            age = now_ms - last;
+            if (age > 9999U)
+                snprintf(val, sizeof(val), ">9999");
+            else
+                snprintf(val, sizeof(val), "%lu", (unsigned long)age);
+
+            if (age <= 100U)
+                ips200_set_color(RGB565_GREEN, RGB565_BLACK);
+            else if (age <= BC_ENCL_DISPLAY_WARN_MS)
+                ips200_set_color(RGB565_WHITE, RGB565_BLACK);
+            else
+                ips200_set_color(RGB565_RED, RGB565_BLACK);
+        }
+        val_w = (uint16)(end_x - 74U);
+        menu_ui_show_pad(74, 144, val_w, val);
+    }
+
+    /* --- Frame --- */
+    {
+        uint8 has = board_comm_encl_has_frame();
+        snprintf(val, sizeof(val), "%s", (0U != has) ? "OK" : "--");
+        val_w = (uint16)(end_x - 74U);
+        if (0U != has)
+            ips200_set_color(RGB565_GREEN, RGB565_BLACK);
+        else
+            ips200_set_color(RGB565_GRAY, RGB565_BLACK);
+        menu_ui_show_pad(74, 164, val_w, val);
+    }
+
+    /* --- RxOK (ENCL 解析成功总数) --- */
+    snprintf(val, sizeof(val), "%lu",
+             (unsigned long)board_comm_encl_get_ok_count());
+    val_w = (uint16)(end_x - 74U);
+    ips200_set_color(RGB565_GREEN, RGB565_BLACK);
+    menu_ui_show_pad(74, 184, val_w, val);
+
+    /* --- RxFail (ENCL 前缀匹配但解析失败) --- */
+    {
+        uint32 fail = board_comm_encl_get_fail_count();
+        snprintf(val, sizeof(val), "%lu", (unsigned long)fail);
+        val_w = (uint16)(end_x - 74U);
+        if (0U != fail)
+            ips200_set_color(RGB565_RED, RGB565_BLACK);
+        else
+            ips200_set_color(RGB565_GRAY, RGB565_BLACK);
+        menu_ui_show_pad(74, 200, val_w, val);
+    }
+}
+
 /* ---- 公共接口 ------------------------------------------------------- */
 
 void menu_link_action_enter(menu_view_ctx_t *ctx, uint8 target_mode)
@@ -476,6 +642,10 @@ uint8 menu_link_handle_view(menu_view_ctx_t *ctx)
     else if (LINK_VIEW_HQ_STATUS == *(ctx->mode))
     {
         link_draw_hq_page(ctx->menu_full_redraw);
+    }
+    else if (LINK_VIEW_ENCODER == *(ctx->mode))
+    {
+        link_draw_encoder_page(ctx->menu_full_redraw);
     }
 
     return 1U;

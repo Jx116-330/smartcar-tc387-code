@@ -20,6 +20,7 @@ typedef enum
     ICM_VIEW_GYRO_BIAS_CALIB,
     ICM_VIEW_INS_DEBUG,
     ICM_VIEW_INS_MAP,
+    ICM_VIEW_ENCODER,       /* 编码器里程计 + 融合状态 */
 } icm_view_mode_t;
 
 void  menu_icm_action_enter(menu_view_ctx_t *ctx, uint8 target_mode);

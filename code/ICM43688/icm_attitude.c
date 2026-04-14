@@ -159,7 +159,8 @@ static void icm_attitude_track_gyro_bias(float gyro_x_dps,
     alpha = icm_attitude_clamp(ICM_ATTITUDE_BIAS_TRACK_RATE * dt_s, 0.0f, 1.0f);
     g_icm_attitude.gyro_bias_x_dps += (gyro_x_dps - g_icm_attitude.gyro_bias_x_dps) * alpha;
     g_icm_attitude.gyro_bias_y_dps += (gyro_y_dps - g_icm_attitude.gyro_bias_y_dps) * alpha;
-    g_icm_attitude.gyro_bias_z_dps += (gyro_z_dps - g_icm_attitude.gyro_bias_z_dps) * alpha;
+    /* Z 轴不跟踪：6轴无航向参考，慢速转弯时角速度仅 3~5 dps，
+     * 跟踪器会误将其吸收为零偏导致 yaw 冻结。Z 偏置仅靠开机校准。 */
     g_icm_attitude.gyro_bias_from_flash = 0U;
 }
 
@@ -432,10 +433,11 @@ void icm_attitude_update(float gyro_x_dps,
         /* 捕获 yaw 修正量（Kp*ez，rad/s） */
         g_icm_attitude.yaw_correction = ICM_ATTITUDE_KP * ez;
 
-        /* Kp 比例反馈（保持原有逻辑不变） */
+        /* Kp 比例反馈：仅修正 gx/gy（roll/pitch）。
+         * 6轴无磁力计，加速度计叉积的 ez 不含有效航向信息，
+         * 动态时离心力/加减速会产生虚假 ez，干扰 yaw 积分。 */
         gx += ICM_ATTITUDE_KP * ex;
         gy += ICM_ATTITUDE_KP * ey;
-        gz += ICM_ATTITUDE_KP * ez;
 
         /* Ki 门控：加速度模长更严格 + 角速度幅值较小时，才认为当前处于准静止可信状态 */
         {

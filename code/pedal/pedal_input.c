@@ -13,6 +13,7 @@
 
 #include "pedal_input.h"
 #include "zf_driver_adc.h"
+#include "zf_driver_gpio.h"
 
 /* ==== 采样与滤波参数 ================================================== */
 #define PEDAL_FILTER_COUNT      4U          /* adc_mean_filter_convert 样本数 */
@@ -66,6 +67,18 @@ static uint8  pedal_thr_filt_inited = 0U;
 static uint8  pedal_throttle_valid       = 0U;
 static uint8  pedal_throttle_enable_req  = 0U;
 static uint16 pedal_throttle_cmd         = 0U;   /* 0~1000 */
+
+/* 驱动控制参数（菜单设置） */
+static uint8  pedal_drive_enable         = 0U;    /* 总开关: 0=禁止驱动, 1=允许驱动 */
+static uint16 pedal_pwm_limit            = 300U;  /* PWM上限: 0~1000, 默认30%安全限 */
+
+/* 方向按钮 P20.7（上拉，按下=低电平） */
+#define DIR_BTN_PIN             (P20_7)
+#define DIR_BTN_DEBOUNCE_COUNT  3U      /* 3 次连续一致 = 30ms（10ms task 周期） */
+static uint8  dir_btn_direction    = 0U;   /* 0=前进 1=倒车 */
+static uint8  dir_btn_last_stable  = 1U;   /* 上次稳定电平（1=未按） */
+static uint8  dir_btn_reading      = 1U;   /* 当前读数 */
+static uint8  dir_btn_count        = 0U;   /* 去抖计数 */
 
 /* ==== 内部工具 ======================================================== */
 static uint16 throttle_calc_percent(uint16 filtered)
@@ -152,6 +165,7 @@ void pedal_input_init(void)
 {
     adc_init(ADC8_CH13_A45, ADC_12BIT);
     adc_init(ADC8_CH15_A47, ADC_12BIT);
+    /* P20_7 已由 MyKey 模块初始化，硬件有外部上拉+去抖电容，这里不重复 gpio_init */
 
     pedal_a45_raw        = 0U;
     pedal_a47_raw        = 0U;
@@ -163,6 +177,10 @@ void pedal_input_init(void)
     pedal_throttle_valid      = 0U;
     pedal_throttle_enable_req = 0U;
     pedal_throttle_cmd        = 0U;
+
+    dir_btn_direction   = 0U;
+    dir_btn_last_stable = 1U;
+    dir_btn_count       = 0U;
 }
 
 void pedal_input_task(void)
@@ -170,31 +188,32 @@ void pedal_input_task(void)
     uint16 a45_sample;
     uint16 a47_sample;
 
-    /* 第一层：硬件均值滤波（两路都采，只是 A47 走控制管线） */
+    /* 第一层：硬件均值滤波（两路都采） */
     a45_sample = adc_mean_filter_convert(ADC8_CH13_A45, PEDAL_FILTER_COUNT);
     a47_sample = adc_mean_filter_convert(ADC8_CH15_A47, PEDAL_FILTER_COUNT);
-
-    /* A45 raw 仅供 debug 页观察——当前硬件上 A45 已不再接油门 */
     pedal_a45_raw = a45_sample;
-    /* A47 raw 是当前实际油门原始值 */
     pedal_a47_raw = a47_sample;
 
-    /* 第二层：一阶 IIR，首帧直接用 A47 raw 初始化避免起步爬升 */
-    if (0U == pedal_thr_filt_inited)
+    /* 自动选源：哪路值大用哪路（油门接哪个通道就哪个能到高值） */
     {
-        pedal_thr_filtered    = a47_sample;
-        pedal_thr_filt_inited = 1U;
-    }
-    else
-    {
-        /* filt += (raw - filt) >> PEDAL_IIR_SHIFT  —— 等价于轻量 IIR */
-        int32 diff = (int32)a47_sample - (int32)pedal_thr_filtered;
-        pedal_thr_filtered = (uint16)((int32)pedal_thr_filtered
-                                      + (diff >> PEDAL_IIR_SHIFT));
+        uint16 active_sample = (a47_sample >= a45_sample) ? a47_sample : a45_sample;
+
+        /* 第二层：一阶 IIR */
+        if (0U == pedal_thr_filt_inited)
+        {
+            pedal_thr_filtered    = active_sample;
+            pedal_thr_filt_inited = 1U;
+        }
+        else
+        {
+            int32 diff = (int32)active_sample - (int32)pedal_thr_filtered;
+            pedal_thr_filtered = (uint16)((int32)pedal_thr_filtered
+                                          + (diff >> PEDAL_IIR_SHIFT));
+        }
     }
 
     /* 第三层：映射 + 带回差 pressed 判定（基于 A47 处理结果） */
-    pedal_thr_percent = throttle_calc_percent(pedal_thr_filtered);
+    pedal_thr_percent = throttle_calc_percent(pedal_thr_filtered)   ;
     pedal_thr_pressed = throttle_update_pressed(pedal_thr_pressed,
                                                 pedal_thr_filtered);
 
@@ -205,6 +224,31 @@ void pedal_input_task(void)
                                                       pedal_thr_pressed);
     pedal_throttle_cmd = throttle_calc_command(pedal_thr_percent,
                                                pedal_throttle_valid);
+
+    /* 方向按钮去抖：每 10ms 读一次，连续 3 次一致才更新稳定值 */
+    {
+        uint8 cur = gpio_get_level(DIR_BTN_PIN) ? 1U : 0U;
+        if (cur == dir_btn_reading)
+        {
+            if (dir_btn_count < DIR_BTN_DEBOUNCE_COUNT)
+                dir_btn_count++;
+        }
+        else
+        {
+            dir_btn_reading = cur;
+            dir_btn_count   = 0U;
+        }
+
+        if (dir_btn_count >= DIR_BTN_DEBOUNCE_COUNT && cur != dir_btn_last_stable)
+        {
+            dir_btn_last_stable = cur;
+            /* 下降沿（按下瞬间）触发切换 */
+            if (0U == cur)
+            {
+                dir_btn_direction = dir_btn_direction ? 0U : 1U;
+            }
+        }
+    }
 }
 
 /* ---- Raw 访问 ---------------------------------------------------------- */
@@ -227,3 +271,12 @@ uint8 pedal_input_is_brake_available(void) { return 0U; }
 uint8  pedal_input_get_throttle_valid(void)          { return pedal_throttle_valid; }
 uint8  pedal_input_get_throttle_enable_request(void) { return pedal_throttle_enable_req; }
 uint16 pedal_input_get_throttle_cmd(void)            { return pedal_throttle_cmd; }
+
+/* ---- 驱动控制参数（菜单设置） ------------------------------------------ */
+void   pedal_input_set_drive_enable(uint8 en)  { pedal_drive_enable = (0U != en) ? 1U : 0U; }
+uint8  pedal_input_get_drive_enable(void)      { return pedal_drive_enable; }
+void   pedal_input_set_pwm_limit(uint16 limit) { pedal_pwm_limit = (limit > 1000U) ? 1000U : limit; }
+uint16 pedal_input_get_pwm_limit(void)         { return pedal_pwm_limit; }
+
+/* ---- 方向按钮 ------------------------------------------------------------ */
+uint8  pedal_input_get_direction(void)         { return dir_btn_direction; }

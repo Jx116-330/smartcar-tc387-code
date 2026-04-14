@@ -24,6 +24,8 @@
 #include "menu_link.h"
 #include "ins_record.h"
 #include "ins_playback.h"
+#include "encoder_odom.h"
+#include "icm_ins.h"
 #include "menu_ui_utils.h"
 
 MyParams_t g_params;
@@ -63,7 +65,6 @@ static MenuPage *current_page = NULL;
 static MenuPage gps_menu;
 static MenuPage icm_menu;
 static MenuPage ins_replay_menu;
-static MenuPage fusion_menu;
 static MenuPage pedal_menu;
 static pid_param_t menu_pid_param_cache;
 static pid_controller_t pid_preview_controller;
@@ -117,7 +118,7 @@ static void ins_replay_action_start(void);
 static void ins_replay_action_stop(void);
 static void ins_replay_action_clear(void);
 static void menu_sync_ins_replay_labels(void);
-static void fusion_action_debug(void);
+/* static void fusion_action_debug(void); — Fusion 菜单已移除 */
 
 /* 持久化参数已拆到 menu_params.c；这里保留运行时同步逻辑。 */
 static void params_set_default(void)
@@ -262,13 +263,12 @@ static void gps_action_raw_debug(void)
                               menu_reset_dynamic_region);
 }
 
-static void icm_action_raw_data(void)      { menu_icm_action_enter(&icm_ctx, ICM_VIEW_RAW); }
-static void icm_action_attitude(void)      { menu_icm_action_enter(&icm_ctx, ICM_VIEW_ATTITUDE); }
-static void icm_action_gyro_bias_calib(void) { menu_icm_action_enter(&icm_ctx, ICM_VIEW_GYRO_BIAS_CALIB); }
-static void icm_action_ins_debug(void)     { menu_icm_action_enter(&icm_ctx, ICM_VIEW_INS_DEBUG); }
-static void icm_action_ins_track_map(void) { menu_icm_action_enter(&icm_ctx, ICM_VIEW_INS_MAP); }
+static void icm_action_raw_data(void)          { menu_icm_action_enter(&icm_ctx, ICM_VIEW_RAW); }
+static void icm_action_gyro_bias_calib(void)   { menu_icm_action_enter(&icm_ctx, ICM_VIEW_GYRO_BIAS_CALIB); }
+static void icm_action_ins_track_map(void)     { menu_icm_action_enter(&icm_ctx, ICM_VIEW_INS_MAP); }
+static void icm_action_encoder(void)           { menu_icm_action_enter(&icm_ctx, ICM_VIEW_ENCODER); }
 
-static char icm_ins_rec_label[48] = "5. INS REC [IDLE]";
+static char icm_ins_rec_label[48] = "4. INS REC [IDLE]";
 
 static void icm_action_ins_rec_toggle(void)
 {
@@ -285,17 +285,73 @@ static void icm_action_ins_rec_toggle(void)
     menu_request_full_redraw();
 }
 
+static void icm_action_clear_track(void)
+{
+    if (ins_record_is_recording())
+        ins_record_stop();
+    ins_record_clear();
+    ins_playback_stop();
+    encoder_odom_reset();
+    menu_set_status_message("Track Cleared", MENU_STATUS_SHOW_MS);
+    menu_request_full_redraw();
+}
+
+static void icm_action_reset_ins(void)
+{
+    icm_ins_reset_position();
+    icm_ins_reset_velocity();
+    encoder_odom_reset();
+    menu_set_status_message("INS Reset", MENU_STATUS_SHOW_MS);
+    menu_request_full_redraw();
+}
+
+static char icm_stream_label[48] = "6. Stream [OFF]";
+
+static void icm_action_stream_toggle(void)
+{
+    extern volatile uint8 track_stream_enabled;
+
+    track_stream_enabled = track_stream_enabled ? 0U : 1U;
+    snprintf(icm_stream_label, sizeof(icm_stream_label),
+             "6. Stream [%s]", track_stream_enabled ? "ON" : "OFF");
+    menu_set_status_message(track_stream_enabled ? "Stream Started" : "Stream Stopped",
+                            MENU_STATUS_SHOW_MS);
+    menu_request_full_redraw();
+}
+
+static void icm_action_upload_track(void)
+{
+    extern volatile uint8  track_dump_active;
+    extern volatile uint16 track_dump_index;
+    uint16 pts = ins_record_get_point_count();
+
+    if (0U == pts)
+    {
+        menu_set_status_message("No points to upload", MENU_STATUS_SHOW_MS);
+        menu_request_full_redraw();
+        return;
+    }
+    track_dump_index = 0U;
+    track_dump_active = 1U;
+    {
+        char msg[48];
+        snprintf(msg, sizeof(msg), "Uploading %u pts...", (unsigned int)pts);
+        menu_set_status_message(msg, MENU_STATUS_SHOW_MS);
+    }
+    menu_request_full_redraw();
+}
+
 static void menu_sync_ins_rec_item(void)
 {
     char new_label[48];
 
     if (ins_record_is_recording())
     {
-        sprintf(new_label, "5. INS REC [REC:%u]", (unsigned int)ins_record_get_point_count());
+        sprintf(new_label, "4. INS REC [REC:%u]", (unsigned int)ins_record_get_point_count());
     }
     else
     {
-        sprintf(new_label, "5. INS REC [%u pts]", (unsigned int)ins_record_get_point_count());
+        sprintf(new_label, "4. INS REC [%u pts]", (unsigned int)ins_record_get_point_count());
     }
 
     if (menu_ui_update_label(icm_ins_rec_label, sizeof(icm_ins_rec_label), new_label)
@@ -303,13 +359,29 @@ static void menu_sync_ins_rec_item(void)
         && (ICM_VIEW_NONE == icm_display_mode)
         && !menu_full_redraw)
     {
-        menu_draw_item(4, (uint8)(current_selection == 4));
+        menu_draw_item(3, (uint8)(current_selection == 3));
+    }
+
+    /* Stream label 同步 */
+    {
+        extern volatile uint8 track_stream_enabled;
+        char stream_lbl[48];
+        snprintf(stream_lbl, sizeof(stream_lbl),
+                 "6. Stream [%s]", track_stream_enabled ? "ON" : "OFF");
+        if (menu_ui_update_label(icm_stream_label, sizeof(icm_stream_label), stream_lbl)
+            && (current_page == &icm_menu)
+            && (ICM_VIEW_NONE == icm_display_mode)
+            && !menu_full_redraw)
+        {
+            menu_draw_item(5, (uint8)(current_selection == 5));
+        }
     }
 }
 
 /* ---- GPS+INS Fusion 菜单 ---- */
 
-static void fusion_action_debug(void) { menu_fusion_action_enter(&fusion_ctx, FUSION_VIEW_DEBUG); }
+/* Fusion 菜单已移除，保留 ctx/display_mode 供 handle_view 链兼容 */
+/* static void fusion_action_debug(void) { menu_fusion_action_enter(&fusion_ctx, FUSION_VIEW_DEBUG); } */
 
 /* ---- Pedal ---- */
 
@@ -320,7 +392,8 @@ static void link_action_hq_status(void) { menu_link_action_enter(&link_ctx, LINK
 
 /* ---- Pedal ---- */
 
-static void pedal_action_debug(void) { menu_pedal_action_enter(&pedal_ctx, PEDAL_VIEW_DEBUG); }
+static void pedal_action_debug(void)      { menu_pedal_action_enter(&pedal_ctx, PEDAL_VIEW_DEBUG); }
+static void pedal_action_drive_ctrl(void) { menu_pedal_action_enter(&pedal_ctx, PEDAL_VIEW_DRIVE_CTRL); }
 
 /* ---- INS Replay 子菜单 ---- */
 
@@ -457,17 +530,19 @@ static MenuPage ins_replay_menu = {
 };
 
 static MenuItem icm_items[] = {
-    {"1. Raw Data",      icm_action_raw_data,         NULL},
-    {"2. Attitude",      icm_action_attitude,          NULL},
-    {"3. Gyro Bias Cal", icm_action_gyro_bias_calib,  NULL},
-    {"4. INS Debug",     icm_action_ins_debug,         NULL},
-    {icm_ins_rec_label,  icm_action_ins_rec_toggle,   NULL},  /* 5. INS REC toggle */
-    {"6. INS Track Map", icm_action_ins_track_map,     NULL},
-    {"7. INS Replay",    NULL,                          &ins_replay_menu},
+    {"1. IMU Data",       icm_action_raw_data,          NULL},
+    {"2. Encoder",        icm_action_encoder,           NULL},
+    {"3. Gyro Bias Cal",  icm_action_gyro_bias_calib,   NULL},
+    {icm_ins_rec_label,   icm_action_ins_rec_toggle,    NULL},  /* 4. INS REC toggle */
+    {"5. Track Map",      icm_action_ins_track_map,     NULL},
+    {icm_stream_label,    icm_action_stream_toggle,     NULL},  /* 6. Stream ON/OFF */
+    {"7. Upload Track",   icm_action_upload_track,      NULL},  /* WiFi dump to PC */
+    {"8. Clear Track",    icm_action_clear_track,       NULL},
+    {"9. Reset INS",      icm_action_reset_ins,         NULL},
 };
 
 static MenuPage icm_menu = {
-    "ICM42688",
+    "INS",
     icm_items,
     sizeof(icm_items) / sizeof(MenuItem),
     NULL
@@ -503,20 +578,18 @@ static MenuPage gps_menu = {
     NULL
 };
 
+/* Camera 菜单已从主菜单移除（全部项为空实现），如需恢复取消注释即可 */
+#if 0
 static MenuItem threshold_algo_items[] = {
     {"1. Manual", NULL, NULL},
     {"2. Otsu", NULL, NULL},
     {"3. Kittler", NULL, NULL},
     {"4. Sauvola", NULL, NULL},
 };
-
 static MenuPage threshold_algo_menu = {
-    "Threshold Mode",
-    threshold_algo_items,
-    sizeof(threshold_algo_items) / sizeof(MenuItem),
-    NULL
+    "Threshold Mode", threshold_algo_items,
+    sizeof(threshold_algo_items) / sizeof(MenuItem), NULL
 };
-
 static MenuItem camera_items[] = {
     {"1. Preview", NULL, NULL},
     {"2. Threshold", NULL, NULL},
@@ -524,13 +597,11 @@ static MenuItem camera_items[] = {
     {"4. Threshold Mode", NULL, &threshold_algo_menu},
     {"5. Template Manage", NULL, NULL},
 };
-
 static MenuPage camera_menu = {
-    "Camera",
-    camera_items,
-    sizeof(camera_items) / sizeof(MenuItem),
-    NULL
+    "Camera", camera_items,
+    sizeof(camera_items) / sizeof(MenuItem), NULL
 };
+#endif
 
 static MenuItem pid_items[] = {
     {"1. Edit Kp", pid_action_edit_kp, NULL},
@@ -547,19 +618,20 @@ static MenuPage pid_menu = {
     NULL
 };
 
+/* Fusion 菜单已从主菜单移除（GPS+INS 融合调试），如需恢复取消注释即可 */
+#if 0
 static MenuItem fusion_items[] = {
     {"1. Fusion Debug", fusion_action_debug, NULL},
 };
-
 static MenuPage fusion_menu = {
-    "GPS+INS Fusion",
-    fusion_items,
-    sizeof(fusion_items) / sizeof(MenuItem),
-    NULL
+    "GPS+INS Fusion", fusion_items,
+    sizeof(fusion_items) / sizeof(MenuItem), NULL
 };
+#endif
 
 static MenuItem pedal_items[] = {
-    {"1. Pedal Debug", pedal_action_debug, NULL},
+    {"1. Pedal Debug",    pedal_action_debug,      NULL},
+    {"2. Drive Control",  pedal_action_drive_ctrl,  NULL},
 };
 
 static MenuPage pedal_menu = {
@@ -582,15 +654,13 @@ static MenuPage link_menu = {
 };
 
 static MenuItem main_items[] = {
-    {"1. GPS", NULL, &gps_menu},
-    {"2. Camera", NULL, &camera_menu},
-    {"3. PID", NULL, &pid_menu},
-    {"4. WiFi", NULL, &wifi_page},
-    {"5. Tuning", NULL, &tuning_menu},
-    {"6. ICM42688", NULL, &icm_menu},
-    {"7. Fusion", NULL, &fusion_menu},
-    {"8. Pedal", NULL, &pedal_menu},
-    {"9. TC264 Link", NULL, &link_menu},
+    {"1. GPS",          NULL, &gps_menu},
+    {"2. INS",          NULL, &icm_menu},
+    {"3. Pedal",        NULL, &pedal_menu},
+    {"4. TC264 Link",   NULL, &link_menu},
+    {"5. PID",          NULL, &pid_menu},
+    {"6. WiFi",         NULL, &wifi_page},
+    {"7. Tuning",       NULL, &tuning_menu},
 };
 
 static MenuPage main_menu = {
@@ -1068,13 +1138,17 @@ void menu_request_full_redraw(void)
     menu_request_redraw(1U);
 }
 
-/* 菜单周期任务：处理输入、切换页面并刷新当前显示内容 */
+/* 菜单周期任务：处理输入、切换页面并刷新当前显示内容
+ * 非阻塞节拍：不到 10ms 直接返回，不阻塞主循环。
+ * board_comm_task() 因此可以在间隙高速运行，及时处理 UART 接收。 */
 void menu_task(void)
 {
-    uint32 now_ms;
+    static uint32 menu_last_tick_ms = 0U;
+    uint32 now_ms = system_getval_ms();
 
-    system_delay_ms(10);
-    now_ms = system_getval_ms();
+    if ((now_ms - menu_last_tick_ms) < 10U)
+        return;                         /* 不到 10ms，跳过本次，不阻塞 */
+    menu_last_tick_ms = now_ms;
     my_key_scanner();
     Get_Switch_Num();
     menu_process_status_timeout(now_ms);
@@ -1128,6 +1202,11 @@ void menu_task(void)
         return;
     }
 
+    if (menu_link_handle_view(&link_ctx))
+    {
+        return;
+    }
+
     menu_update_selection_from_encoder();
 
     if (my_key_get_state(MY_KEY_1) == MY_KEY_LONG_PRESS)
@@ -1142,7 +1221,7 @@ void menu_task(void)
         my_key_clear_state(MY_KEY_1);
         menu_execute_current_item();
 
-        if ((PID_VIEW_NONE != pid_display_mode) || (GPS_VIEW_NONE != gps_display_mode) || wifi_menu_is_active() || tuning_soft_is_active() || (ICM_VIEW_NONE != icm_display_mode) || (FUSION_VIEW_NONE != fusion_display_mode) || (PEDAL_VIEW_NONE != pedal_display_mode) || (LINK_VIEW_NONE != link_display_mode))
+        if ((PID_VIEW_NONE != pid_display_mode) || (GPS_VIEW_NONE != gps_display_mode) || (RECORD_PARAM_VIEW_NONE != record_param_view_mode) || wifi_menu_is_active() || tuning_soft_is_active() || (ICM_VIEW_NONE != icm_display_mode) || (FUSION_VIEW_NONE != fusion_display_mode) || (PEDAL_VIEW_NONE != pedal_display_mode) || (LINK_VIEW_NONE != link_display_mode))
         {
             menu_needs_update = 0U;
             menu_footer_needs_update = 0U;

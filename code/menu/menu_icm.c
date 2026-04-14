@@ -16,6 +16,8 @@
 #include "icm_attitude.h"
 #include "icm_ins.h"
 #include "ins_record.h"
+#include "board_comm.h"
+#include "encoder_odom.h"
 #include "menu_ui_utils.h"
 
 #define ICM_GYRO_BIAS_CALIB_SAMPLES 20000U
@@ -511,6 +513,148 @@ static uint8 icm_collect_ins_track_bounds(double *min_x,
     return has_value;
 }
 
+/* ---- Encoder / INS 融合状态页 ----
+ * 页面布局（8×16 字体，ips200 240x320，footer = height_max-16 = 304）：
+ *   y= 2   "Encoder / INS"          黄色标题
+ *   y=16   ─────────────────────   灰色分割线
+ *   y=22   "Odometry Source"        青色分组头
+ *   y=40   "ONLINE: YES/NO"          绿/红
+ *   y=60   "Speed : xxx mm/s"        青色（编码器原始速度）
+ *   y=80   "Dist  : xxx mm"          白色（编码器累计距离）
+ *   y=104  "INS Fusion"              青色分组头
+ *   y=120  "Active: YES/NO"          绿/灰
+ *   y=140  "EncSpd: x.xx m/s"       白色
+ *   y=160  "INSSpd: x.xx m/s"       白色
+ *   y=180  "Odom X: x.xx m"         灰色
+ *   y=200  "Odom Y: x.xx m"         灰色
+ *   y=304  "LONG:Exit"               底部灰色提示
+ */
+#define ICM_ENC_REFRESH_MS    100U
+
+static void icm_draw_encoder_page(uint8 *menu_full_redraw)
+{
+    static uint32 last_refresh_ms_enc_icm = 0U;
+    char     val[64];
+    uint32   now_ms = system_getval_ms();
+    uint16   end_x  = (uint16)(ips200_width_max - 10U);
+    uint16   val_w  = (uint16)(end_x - 74U);   /* 8-char labels */
+
+    if ((NULL != menu_full_redraw) && !(*menu_full_redraw) &&
+        (now_ms - last_refresh_ms_enc_icm < ICM_ENC_REFRESH_MS))
+    {
+        return;
+    }
+    last_refresh_ms_enc_icm = now_ms;
+
+    /* ---- 全屏重绘 ---- */
+    if ((NULL != menu_full_redraw) && *menu_full_redraw)
+    {
+        ips200_full(RGB565_BLACK);
+
+        ips200_set_color(RGB565_YELLOW, RGB565_BLACK);
+        ips200_show_string(10, 2, "Encoder / INS");
+        ips200_draw_line(0, 16, ips200_width_max - 1, 16, RGB565_GRAY);
+
+        ips200_set_color(RGB565_CYAN, RGB565_BLACK);
+        ips200_show_string(10, 22, "Odometry Source");
+
+        ips200_set_color(RGB565_WHITE, RGB565_BLACK);
+        ips200_show_string(10,  40, "ONLINE: ");
+        ips200_set_color(RGB565_CYAN, RGB565_BLACK);
+        ips200_show_string(10,  60, "Speed : ");
+        ips200_set_color(RGB565_WHITE, RGB565_BLACK);
+        ips200_show_string(10,  80, "Dist  : ");
+
+        ips200_set_color(RGB565_CYAN, RGB565_BLACK);
+        ips200_show_string(10, 104, "INS Fusion");
+
+        ips200_set_color(RGB565_WHITE, RGB565_BLACK);
+        ips200_show_string(10, 120, "Active: ");
+        ips200_show_string(10, 140, "EncSpd: ");
+        ips200_show_string(10, 160, "INSSpd: ");
+        ips200_set_color(RGB565_GRAY, RGB565_BLACK);
+        ips200_show_string(10, 180, "Odom X: ");
+        ips200_show_string(10, 200, "Odom Y: ");
+
+        ips200_set_color(RGB565_GRAY, RGB565_BLACK);
+        menu_ui_show_pad(5U, (uint16)(ips200_height_max - 16U),
+                      (uint16)(ips200_width_max - 10U), "K1:Fuse ON/OFF  LONG:Exit");
+
+        *menu_full_redraw = 0U;
+    }
+
+    /* ---- 每帧值刷新 ---- */
+
+    /* ONLINE */
+    {
+        uint8 online = board_comm_encl_is_online();
+        snprintf(val, sizeof(val), "%s", (0U != online) ? "YES" : "NO ");
+        if (0U != online)
+            ips200_set_color(RGB565_GREEN, RGB565_BLACK);
+        else
+            ips200_set_color(RGB565_RED, RGB565_BLACK);
+        menu_ui_show_pad(74, 40, val_w, val);
+    }
+
+    /* Speed (mm/s) */
+    snprintf(val, sizeof(val), "%ld mm/s",
+             (long)board_comm_encl_get_spd_mm_s());
+    ips200_set_color(RGB565_CYAN, RGB565_BLACK);
+    menu_ui_show_pad(74, 60, val_w, val);
+
+    /* Dist (mm) */
+    snprintf(val, sizeof(val), "%ld mm",
+             (long)board_comm_encl_get_dist_mm());
+    ips200_set_color(RGB565_WHITE, RGB565_BLACK);
+    menu_ui_show_pad(74, 80, val_w, val);
+
+    /* Active: OFF(融合关) / IDLE(开但未激活) / YES(正在融合) */
+    {
+        uint8 en  = encoder_odom_is_enabled();
+        uint8 act = encoder_odom_is_active();
+        if (0U == en)
+        {
+            snprintf(val, sizeof(val), "OFF");
+            ips200_set_color(RGB565_RED, RGB565_BLACK);
+        }
+        else if (0U == act)
+        {
+            snprintf(val, sizeof(val), "IDLE");
+            ips200_set_color(RGB565_GRAY, RGB565_BLACK);
+        }
+        else
+        {
+            snprintf(val, sizeof(val), "YES");
+            ips200_set_color(RGB565_GREEN, RGB565_BLACK);
+        }
+        menu_ui_show_pad(74, 120, val_w, val);
+    }
+
+    /* EncSpd (m/s) */
+    snprintf(val, sizeof(val), "%.2f m/s",
+             (double)encoder_odom_get_speed_ms());
+    ips200_set_color(RGB565_WHITE, RGB565_BLACK);
+    menu_ui_show_pad(74, 140, val_w, val);
+
+    /* INSSpd (m/s) */
+    snprintf(val, sizeof(val), "%.2f m/s",
+             (double)icm_ins_get_speed_ms());
+    ips200_set_color(RGB565_WHITE, RGB565_BLACK);
+    menu_ui_show_pad(74, 160, val_w, val);
+
+    /* Odom X */
+    snprintf(val, sizeof(val), "%.2f m",
+             (double)encoder_odom_get_px_m());
+    ips200_set_color(RGB565_GRAY, RGB565_BLACK);
+    menu_ui_show_pad(74, 180, val_w, val);
+
+    /* Odom Y */
+    snprintf(val, sizeof(val), "%.2f m",
+             (double)encoder_odom_get_py_m());
+    ips200_set_color(RGB565_GRAY, RGB565_BLACK);
+    menu_ui_show_pad(74, 200, val_w, val);
+}
+
 static void icm_draw_ins_track_map_page(uint8 *menu_full_redraw)
 {
     static uint32 last_refresh_ms = 0U;
@@ -588,7 +732,7 @@ static void icm_draw_ins_track_map_page(uint8 *menu_full_redraw)
         ips200_set_color(RGB565_GRAY, RGB565_BLACK);
         menu_ui_show_pad(5, (uint16)(ips200_height_max - 20U),
                      (uint16)(ips200_width_max - 10U),
-                     "S:GRN E:CYN C/L:RED LONG:Exit");
+                     "K1:Reset INS  LONG:Exit");
     }
 
     snprintf(line0, sizeof(line0), "PTS:%u REC:%s",
@@ -844,34 +988,36 @@ static void icm_draw_raw_page(uint8 *menu_full_redraw)
     }
 
     /* 动态数据区域 — 仅刷新数值，不重绘标签 */
-    ips200_set_color(RGB565_WHITE, RGB565_BLACK);
+    {
+        uint16 vw = (uint16)(ips200_width_max - 10U - 34U);   /* 全宽减标签 */
+        uint16 hw = (uint16)(ips200_width_max - 10U - 138U);  /* 半宽减标签 */
 
-    /* 加速度 X */
-    snprintf(line, sizeof(line), "%+8.4f", (double)icm42688_acc_x);
-    menu_ui_show_pad(34, 56, 64, line);
+        ips200_set_color(RGB565_WHITE, RGB565_BLACK);
 
-    /* 加速度 Y */
-    snprintf(line, sizeof(line), "%+8.4f", (double)icm42688_acc_y);
-    menu_ui_show_pad(138, 56, 64, line);
+        /* 加速度 X */
+        snprintf(line, sizeof(line), "%+.4f", (double)icm42688_acc_x);
+        menu_ui_show_pad(34, 56, (uint16)(138U - 34U - 10U), line);
 
-    /* 加速度 Z */
-    snprintf(line, sizeof(line), "%+8.4f", (double)icm42688_acc_z);
-    menu_ui_show_pad(34, 78, 64, line);
+        /* 加速度 Y */
+        snprintf(line, sizeof(line), "%+.4f", (double)icm42688_acc_y);
+        menu_ui_show_pad(138, 56, hw, line);
 
-    /* 温度占位行（如后续需要可换成温度读取） */
-    menu_ui_fill_rect(10U, 100U, (uint16)(ips200_width_max - 10U), 106U, RGB565_BLACK);
+        /* 加速度 Z */
+        snprintf(line, sizeof(line), "%+.4f", (double)icm42688_acc_z);
+        menu_ui_show_pad(34, 78, vw, line);
 
-    /* 陀螺仪 X */
-    snprintf(line, sizeof(line), "%+8.2f", (double)icm42688_gyro_x);
-    menu_ui_show_pad(34, 126, 64, line);
+        /* 陀螺仪 X */
+        snprintf(line, sizeof(line), "%+.2f", (double)icm42688_gyro_x);
+        menu_ui_show_pad(34, 126, (uint16)(138U - 34U - 10U), line);
 
-    /* 陀螺仪 Y */
-    snprintf(line, sizeof(line), "%+8.2f", (double)icm42688_gyro_y);
-    menu_ui_show_pad(138, 126, 64, line);
+        /* 陀螺仪 Y */
+        snprintf(line, sizeof(line), "%+.2f", (double)icm42688_gyro_y);
+        menu_ui_show_pad(138, 126, hw, line);
 
-    /* 陀螺仪 Z */
-    snprintf(line, sizeof(line), "%+8.2f", (double)icm42688_gyro_z);
-    menu_ui_show_pad(34, 148, 64, line);
+        /* 陀螺仪 Z */
+        snprintf(line, sizeof(line), "%+.2f", (double)icm42688_gyro_z);
+        menu_ui_show_pad(34, 148, vw, line);
+    }
 }
 
 static void icm_draw_attitude_page(uint8 *menu_full_redraw)
@@ -1242,6 +1388,28 @@ uint8 menu_icm_handle_view(menu_view_ctx_t *ctx)
         return 1U;
     }
 
+    /* Encoder 页: K1 短按 → 切换编码器融合开/关 */
+    if ((ICM_VIEW_ENCODER == *(ctx->mode)) &&
+        (MY_KEY_SHORT_PRESS == my_key_get_state(MY_KEY_1)))
+    {
+        menu_ui_consume_key1();
+        encoder_odom_set_enable((uint8)(0U == encoder_odom_is_enabled()));
+        if (NULL != ctx->menu_full_redraw) *(ctx->menu_full_redraw) = 1U;
+        return 1U;
+    }
+
+    /* Track Map 页: K1 短按 → 重置 INS 位置/速度 + 编码器里程计 */
+    if ((ICM_VIEW_INS_MAP == *(ctx->mode)) &&
+        (MY_KEY_SHORT_PRESS == my_key_get_state(MY_KEY_1)))
+    {
+        menu_ui_consume_key1();
+        icm_ins_reset_position();
+        icm_ins_reset_velocity();
+        encoder_odom_reset();
+        if (NULL != ctx->menu_full_redraw) *(ctx->menu_full_redraw) = 1U;
+        return 1U;
+    }
+
     if (ICM_VIEW_RAW == *(ctx->mode))
     {
         icm_draw_raw_page(ctx->menu_full_redraw);
@@ -1261,6 +1429,10 @@ uint8 menu_icm_handle_view(menu_view_ctx_t *ctx)
     else if (ICM_VIEW_INS_MAP == *(ctx->mode))
     {
         icm_draw_ins_track_map_page(ctx->menu_full_redraw);
+    }
+    else if (ICM_VIEW_ENCODER == *(ctx->mode))
+    {
+        icm_draw_encoder_page(ctx->menu_full_redraw);
     }
 
     return 1U;

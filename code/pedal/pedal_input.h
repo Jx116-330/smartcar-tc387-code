@@ -54,4 +54,13 @@ uint8  pedal_input_get_throttle_valid(void);
 uint8  pedal_input_get_throttle_enable_request(void);
 uint16 pedal_input_get_throttle_cmd(void);      /* 0~1000 */
 
+/* ---- 驱动控制参数（菜单设置，影响 THR 发送到 TC264 的门控和限幅） ---- */
+void   pedal_input_set_drive_enable(uint8 en);  /* 0=禁止驱动 1=允许 */
+uint8  pedal_input_get_drive_enable(void);
+void   pedal_input_set_pwm_limit(uint16 limit); /* 0~1000, PWM占空比上限 */
+uint16 pedal_input_get_pwm_limit(void);
+
+/* ---- 方向按钮（P20.7，按一次切换前进/倒车） ---- */
+uint8  pedal_input_get_direction(void);          /* 0=前进, 1=倒车 */
+
 #endif /* __PEDAL_INPUT_H__ */

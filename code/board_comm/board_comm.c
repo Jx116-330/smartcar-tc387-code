@@ -83,6 +83,20 @@ static uint8  bc_enc_has_frame  = 0U;
 static int32  bc_spd2_cps       = 0;
 static int32  bc_spd3_cps       = 0;
 
+/* ==== ENCL 左后轮编码器帧（TC264 处理后上报） ===========================
+ * 协议：ENCL,<count>,<dist_mm>,<spd_mm_s>\r\n
+ * 三个有符号 int32，TC264 每 20ms 发一帧。仅左后轮有效。
+ */
+#define BC_ENCL_TIMEOUT_MS      2000U   /* 容忍偶尔丢帧，从 500 放宽到 2000 */
+
+static int32  bc_encl_count      = 0;
+static int32  bc_encl_dist_mm    = 0;
+static int32  bc_encl_spd_mm_s   = 0;
+static uint32 bc_encl_last_rx_ms = 0U;
+static uint8  bc_encl_seen       = 0U;
+static uint32 bc_encl_ok_count   = 0U;  /* ENCL 解析成功计数 */
+static uint32 bc_encl_fail_count = 0U;  /* 前缀匹配但解析失败计数 */
+
 /* ==== HQ 状态帧解析（hq 板 10Hz 周期上报） ============================
  * 协议：HQ,<arm>,<fresh>,<valid>,<en>,<drv>,<cmd>,<out>,<duty>\r\n
  *
@@ -175,6 +189,112 @@ static uint8 bc_parse_enc_line(const char *s, int16 *out_t2, int16 *out_t3)
     *out_t3 = (int16)((int32)sign * v);
 
     /* 行尾必须是 '\0'（board_comm_task 拼行后已加）或其他非数字字符——都视为合法收尾 */
+    return 1U;
+}
+
+/* ==== ENCL 左后轮编码器帧解析 =========================================
+ * 识别格式：  "ENCL,<count>,<dist_mm>,<spd_mm_s>"
+ * 三个有符号 int32，逗号分隔。手写状态机，与 bc_parse_enc_line 同款。
+ * 成功返回 1 并写 out；否则返回 0。
+ */
+static uint8 bc_parse_encl_line(const char *s,
+                                int32 *out_count,
+                                int32 *out_dist,
+                                int32 *out_spd)
+{
+    int32 v;
+    int8  sign;
+    uint8 i;
+    uint8 have_digit;
+
+    /* 前缀: "ENCL," (5 字符) */
+    if ((s[0] != 'E') || (s[1] != 'N') || (s[2] != 'C') ||
+        (s[3] != 'L') || (s[4] != ','))
+    {
+        return 0U;
+    }
+    i = 5U;
+
+    /* --- field 1: count (signed int32) --- */
+    sign = 1;
+    if (s[i] == '-')      { sign = -1; i++; }
+    else if (s[i] == '+') {             i++; }
+    v = 0;
+    have_digit = 0U;
+    while ((s[i] >= '0') && (s[i] <= '9'))
+    {
+        v = (v * 10) + (int32)(s[i] - '0');
+        have_digit = 1U;
+        i++;
+    }
+    if ((0U == have_digit) || (s[i] != ',')) { return 0U; }
+    *out_count = (int32)sign * v;
+    i++;
+
+    /* --- field 2: dist_mm (signed int32) --- */
+    sign = 1;
+    if (s[i] == '-')      { sign = -1; i++; }
+    else if (s[i] == '+') {             i++; }
+    v = 0;
+    have_digit = 0U;
+    while ((s[i] >= '0') && (s[i] <= '9'))
+    {
+        v = (v * 10) + (int32)(s[i] - '0');
+        have_digit = 1U;
+        i++;
+    }
+    if ((0U == have_digit) || (s[i] != ',')) { return 0U; }
+    *out_dist = (int32)sign * v;
+    i++;
+
+    /* --- field 3: spd_mm_s (signed int32) --- */
+    sign = 1;
+    if (s[i] == '-')      { sign = -1; i++; }
+    else if (s[i] == '+') {             i++; }
+    v = 0;
+    have_digit = 0U;
+    while ((s[i] >= '0') && (s[i] <= '9'))
+    {
+        v = (v * 10) + (int32)(s[i] - '0');
+        have_digit = 1U;
+        i++;
+    }
+    if (0U == have_digit) { return 0U; }
+    *out_spd = (int32)sign * v;
+
+    /* --- 可选 XOR 校验: *XX（兼容无校验的旧固件） --- */
+    if (s[i] == '*')
+    {
+        uint8 expected_xor = 0U;
+        uint8 rx_xor = 0U;
+        uint8 hi;
+        uint8 lo;
+        uint8 j;
+
+        /* 算 'E' 到 '*' 之前所有字节的 XOR */
+        for (j = 0U; j < i; j++)
+            expected_xor ^= (uint8)s[j];
+
+        /* 读两位十六进制 */
+        i++;
+        hi = (uint8)s[i];
+        if      (hi >= '0' && hi <= '9') { hi = (uint8)(hi - '0'); }
+        else if (hi >= 'A' && hi <= 'F') { hi = (uint8)(hi - 'A' + 10U); }
+        else if (hi >= 'a' && hi <= 'f') { hi = (uint8)(hi - 'a' + 10U); }
+        else { return 0U; }
+
+        i++;
+        lo = (uint8)s[i];
+        if      (lo >= '0' && lo <= '9') { lo = (uint8)(lo - '0'); }
+        else if (lo >= 'A' && lo <= 'F') { lo = (uint8)(lo - 'A' + 10U); }
+        else if (lo >= 'a' && lo <= 'f') { lo = (uint8)(lo - 'a' + 10U); }
+        else { return 0U; }
+
+        rx_xor = (uint8)((hi << 4U) | lo);
+        if (rx_xor != expected_xor) { return 0U; }  /* 校验失败 → 丢弃 */
+    }
+    /* else: 无 '*' → 旧固件无校验，照常接受 */
+
     return 1U;
 }
 
@@ -383,6 +503,15 @@ void board_comm_init(void)
     bc_spd2_cps      = 0;
     bc_spd3_cps      = 0;
 
+    /* ENCL 解析状态归零 */
+    bc_encl_count      = 0;
+    bc_encl_dist_mm    = 0;
+    bc_encl_spd_mm_s   = 0;
+    bc_encl_last_rx_ms = 0U;
+    bc_encl_seen       = 0U;
+    bc_encl_ok_count   = 0U;
+    bc_encl_fail_count = 0U;
+
     /* HQ 状态帧归零 */
     bc_hq_arm        = 0U;
     bc_hq_fresh      = 0U;
@@ -436,23 +565,28 @@ void board_comm_task(void)
             {
                 bc_line[bc_line_pos] = '\0';
 
-                /* a. debug 串口打印（原始行，不分类） */
-                uart_write_string(DEBUG_UART_INDEX, "[BC264] ");
-                uart_write_string(DEBUG_UART_INDEX, bc_line);
-                uart_write_string(DEBUG_UART_INDEX, "\r\n");
-
-                /* a2. 前缀分类打印（现场联调用，和 [BC264] 并存，信息量最大）
-                 *     不论后面 parse 成功/失败，这一条都先打，让你能在串口滚动里
-                 *     一眼看出"本次收到的整行到底是什么类型":
-                 *       - THR,...    → [BCRX-THR]
-                 *       - HQ,...     → [BCRX-HQ]
-                 *       - ENC,...    → [BCRX-ENC]
-                 *       - 其它       → [BCRX-OTHER]
-                 *     只做 uart_write_string 多段拼装，不 snprintf，不修改 bc_line。
+                /* a. debug 串口打印（节流版：高频帧降频，避免阻塞主循环）
+                 *    ENCL 帧 50Hz 到达，逐字节阻塞发送 (~4ms/帧) 是主循环的最大瓶颈。
+                 *    改为：ENCL 每 50 帧打 1 次 (~1Hz)；其它帧照常打。
                  */
                 {
-                    const char *tag;
-                    if      ((bc_line[0] == 'T') && (bc_line[1] == 'H') &&
+                    static uint32 bc_dbg_encl_skip = 0U;
+                    const char *tag = NULL;
+                    uint8 is_encl = 0U;
+
+                    if      ((bc_line[0] == 'E') && (bc_line[1] == 'N') &&
+                             (bc_line[2] == 'C') && (bc_line[3] == 'L') &&
+                             (bc_line[4] == ','))
+                    {
+                        is_encl = 1U;
+                        bc_dbg_encl_skip++;
+                        if (bc_dbg_encl_skip >= 50U)
+                        {
+                            bc_dbg_encl_skip = 0U;
+                            tag = "[BCRX-ENCL] ";
+                        }
+                    }
+                    else if ((bc_line[0] == 'T') && (bc_line[1] == 'H') &&
                              (bc_line[2] == 'R') && (bc_line[3] == ','))
                     {
                         tag = "[BCRX-THR] ";
@@ -471,9 +605,13 @@ void board_comm_task(void)
                     {
                         tag = "[BCRX-OTHER] ";
                     }
-                    uart_write_string(DEBUG_UART_INDEX, tag);
-                    uart_write_string(DEBUG_UART_INDEX, bc_line);
-                    uart_write_string(DEBUG_UART_INDEX, "\r\n");
+
+                    if (NULL != tag)
+                    {
+                        uart_write_string(DEBUG_UART_INDEX, tag);
+                        uart_write_string(DEBUG_UART_INDEX, bc_line);
+                        uart_write_string(DEBUG_UART_INDEX, "\r\n");
+                    }
                 }
 
                 /* b. 更新菜单只读状态（逐字节拷贝，避免使用 string.h） */
@@ -487,28 +625,47 @@ void board_comm_task(void)
                 bc_rx_count++;
                 bc_last_rx_ms = system_getval_ms();
 
-                /* d. 最小 ENC 解析：成功则更新只读快照 + 派生速度
-                 *    （hq 已停发 ENC，但 ENC 解析分支保留，兼容旧流量或回退） */
+                /* d. 前缀路由 — 按首字母分发到对应 parser，避免每行盲扫全部 */
+                if (bc_line[0] == 'E' && bc_line[1] == 'N' && bc_line[2] == 'C')
                 {
-                    int16 t2;
-                    int16 t3;
-                    if (0U != bc_parse_enc_line(bc_line, &t2, &t3))
+                    if (bc_line[3] == 'L' && bc_line[4] == ',')
                     {
-                        bc_enc_tim2      = t2;
-                        bc_enc_tim3      = t3;
-                        bc_enc_has_frame = 1U;
-
-                        /* 派生速度：整数裸值，spd = delta * 50 (counts/sec) */
-                        bc_spd2_cps = (int32)t2 * (int32)BC_CPS_SCALE;
-                        bc_spd3_cps = (int32)t3 * (int32)BC_CPS_SCALE;
+                        /* ENCL 左后轮处理后编码器帧 */
+                        int32 el_count;
+                        int32 el_dist;
+                        int32 el_spd;
+                        if (0U != bc_parse_encl_line(bc_line, &el_count, &el_dist, &el_spd))
+                        {
+                            bc_encl_count      = el_count;
+                            bc_encl_dist_mm    = el_dist;
+                            bc_encl_spd_mm_s   = el_spd;
+                            bc_encl_last_rx_ms = system_getval_ms();
+                            bc_encl_seen       = 1U;
+                            if (bc_encl_ok_count < 0xFFFFFFFFU) { bc_encl_ok_count++; }
+                        }
+                        else
+                        {
+                            if (bc_encl_fail_count < 0xFFFFFFFFU) { bc_encl_fail_count++; }
+                        }
+                    }
+                    else if (bc_line[3] == ',')
+                    {
+                        /* ENC 旧双编码器帧（兼容保留） */
+                        int16 t2;
+                        int16 t3;
+                        if (0U != bc_parse_enc_line(bc_line, &t2, &t3))
+                        {
+                            bc_enc_tim2      = t2;
+                            bc_enc_tim3      = t3;
+                            bc_enc_has_frame = 1U;
+                            bc_spd2_cps = (int32)t2 * (int32)BC_CPS_SCALE;
+                            bc_spd3_cps = (int32)t3 * (int32)BC_CPS_SCALE;
+                        }
                     }
                 }
-
-                /* e. 最小 HQ 状态帧解析：hq 周期上报的整机状态快照
-                 *    成功 → 整体覆盖 8 个字段 + 更新 last_rx_ms + 打印 [HQRX]
-                 *    失败 → 静默丢弃（保留上次快照，超时后由 is_online 自然判离线）
-                 */
+                else if (bc_line[0] == 'H' && bc_line[1] == 'Q' && bc_line[2] == ',')
                 {
+                    /* HQ 状态帧 */
                     uint8  h_arm;
                     uint8  h_fresh;
                     uint8  h_valid;
@@ -533,12 +690,20 @@ void board_comm_task(void)
                         bc_hq_last_rx_ms = system_getval_ms();
                         bc_hq_seen       = 1U;
 
-                        /* [HQRX] debug 打印（和 [BC264] 同款多段写法，避开 snprintf） */
-                        uart_write_string(DEBUG_UART_INDEX, "[HQRX] ");
-                        uart_write_string(DEBUG_UART_INDEX, bc_line);
-                        uart_write_string(DEBUG_UART_INDEX, " online=1\r\n");
+                        /* [HQRX] debug 打印：每 10 帧打 1 次 (~1Hz) */
+                        {
+                            static uint32 bc_hq_dbg_skip = 0U;
+                            if (++bc_hq_dbg_skip >= 10U)
+                            {
+                                bc_hq_dbg_skip = 0U;
+                                uart_write_string(DEBUG_UART_INDEX, "[HQRX] ");
+                                uart_write_string(DEBUG_UART_INDEX, bc_line);
+                                uart_write_string(DEBUG_UART_INDEX, " online=1\r\n");
+                            }
+                        }
                     }
                 }
+                /* 其它前缀: 不做 parser 尝试 */
 
                 bc_line_pos = 0U;
             }
@@ -621,6 +786,29 @@ int32 board_comm_get_spd2_cps(void)
 int32 board_comm_get_spd3_cps(void)
 {
     return bc_spd3_cps;
+}
+
+/* ---- ENCL 左后轮编码器 getter ---------------------------------------- */
+int32  board_comm_encl_get_count(void)       { return bc_encl_count; }
+int32  board_comm_encl_get_dist_mm(void)     { return bc_encl_dist_mm; }
+int32  board_comm_encl_get_spd_mm_s(void)    { return bc_encl_spd_mm_s; }
+uint32 board_comm_encl_get_last_rx_ms(void)  { return bc_encl_last_rx_ms; }
+
+uint8 board_comm_encl_has_frame(void)
+{
+    return bc_encl_seen;
+}
+
+uint32 board_comm_encl_get_ok_count(void)   { return bc_encl_ok_count; }
+uint32 board_comm_encl_get_fail_count(void) { return bc_encl_fail_count; }
+
+uint8 board_comm_encl_is_online(void)
+{
+    uint32 now_ms;
+    if (0U == bc_encl_seen) { return 0U; }
+    now_ms = system_getval_ms();
+    if ((now_ms - bc_encl_last_rx_ms) <= BC_ENCL_TIMEOUT_MS) { return 1U; }
+    return 0U;
 }
 
 /* ---- HQ 状态帧 getter ------------------------------------------------ */

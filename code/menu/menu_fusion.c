@@ -32,7 +32,6 @@ static void fusion_draw_debug_page(uint8 *menu_full_redraw)
     char val[48];
     const icm_gps_fusion_debug_t *d = icm_gps_fusion_get_debug();
     uint32 now_ms = system_getval_ms();
-    uint16 end_x  = (uint16)(ips200_width_max - 10U);
     uint16 val_w  = (uint16)(ips200_width_max - 36U);  /* 26 起始的值宽 */
     uint16 val_w3 = (uint16)(ips200_width_max - 44U);  /* 34 起始的值宽 */
 

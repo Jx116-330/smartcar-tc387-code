@@ -19,9 +19,12 @@
 /* ------------------------------------------------------------------ */
 /* 容量配置                                                             */
 /* ------------------------------------------------------------------ */
-#define INS_RECORD_MAX_POINTS       300U    /* 最多存储点数               */
-#define INS_RECORD_INTERVAL_MS      100U    /* 默认采样周期 ms             */
-#define INS_RECORD_MIN_DIST_M       0.05f   /* 最小位移门限 m（0 = 仅按时间）*/
+#define INS_RECORD_MAX_POINTS       2000U   /* 最多存储点数（~64KB RAM，总 RAM 84+64=148KB/240KB） */
+#define INS_RECORD_POLL_MS          20U     /* task 最小调用间隔 ms        */
+#define INS_RECORD_YAW_THRESH_DEG   3.0f    /* 航向变化触发阈值（度）       */
+#define INS_RECORD_DIST_MAX_M       0.50f   /* 最大距离触发（直线每 50cm）   */
+#define INS_RECORD_DIST_MIN_M       0.02f   /* 最小距离门限（防静止堆点）    */
+#define INS_RECORD_TIME_MAX_MS      500U    /* 最大时间兜底 ms（低速兜底）   */
 
 /* ------------------------------------------------------------------ */
 /* 数据类型                                                             */
@@ -32,7 +35,7 @@ typedef enum
     INS_REC_RECORDING
 } ins_rec_state_t;
 
-/** 单条轨迹点，数据来自 icm_ins + icm_attitude */
+/** 单条轨迹点，数据来自 icm_ins + icm_attitude + encoder */
 typedef struct
 {
     uint32 t_ms;        /**< 系统时间戳，ms                    */
@@ -41,7 +44,8 @@ typedef struct
     float  vx_ms;       /**< 导航系 X 速度，m/s                */
     float  vy_ms;       /**< 导航系 Y 速度，m/s                */
     float  yaw_deg;     /**< 偏航角，°                         */
-    uint8  stationary;  /**< 静止标志（ZUPT 输出）              */
+    int32  enc_spd_mm_s;/**< 编码器速度 mm/s（回放速度参考）     */
+    int32  enc_dist_mm; /**< 编码器累计距离 mm（段间距计算）     */
 } ins_record_point_t;
 
 /** 轨迹记录运行时数据（可按需 extern 暴露给 display 等模块） */
@@ -53,8 +57,7 @@ typedef struct
     uint32         last_record_ms;
     float          last_px_m;
     float          last_py_m;
-    uint32         interval_ms;     /**< 采样周期，可运行时修改 */
-    float          min_dist_m;      /**< 最小位移门限，可运行时修改 */
+    float          last_yaw_deg;    /**< 上次记录时的航向角（度） */
 } ins_record_data_t;
 
 extern ins_record_data_t ins_record_data;
@@ -102,11 +105,5 @@ const ins_record_point_t *ins_record_get_last_point(void);
 
 /** 获取终点（同 get_last_point，为 playback 预留语义） */
 const ins_record_point_t *ins_record_get_endpoint(void);
-
-/** 修改采样周期 ms（钳位到 [20, 2000]） */
-void ins_record_set_interval_ms(uint32 interval_ms);
-
-/** 修改最小位移门限 m（0 = 仅按时间，钳位到 [0, 5.0]） */
-void ins_record_set_min_dist_m(float min_dist_m);
 
 #endif /* __INS_RECORD_H__ */

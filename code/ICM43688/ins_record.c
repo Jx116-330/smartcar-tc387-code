@@ -4,13 +4,19 @@
  * @author JX116
  * @date 2026-04-07
  *
+ * 存点策略（航向自适应）：
+ *   满足以下任一条件即存点（前提：位移 ≥ DIST_MIN 且非静止）
+ *   1. 航向变化 ≥ YAW_THRESH_DEG  → 弯道密采
+ *   2. 距离 ≥ DIST_MAX_M          → 直线兜底
+ *   3. 时间 ≥ TIME_MAX_MS         → 极低速兜底
+ *
  * 数据来源：icm_ins（位置/速度/静止）+ icm_attitude（yaw）
- * 设计风格参考 path_recorder.c，不重复实现 INS 核心。
  */
 
 #include "ins_record.h"
 #include "icm_ins.h"
 #include "icm_attitude.h"
+#include "board_comm.h"
 #include "zf_common_headfile.h"
 
 #include <math.h>
@@ -27,9 +33,7 @@ ins_record_data_t ins_record_data;
 static void ins_record_reset_runtime(void)
 {
     memset(&ins_record_data, 0, sizeof(ins_record_data));
-    ins_record_data.state       = INS_REC_IDLE;
-    ins_record_data.interval_ms = INS_RECORD_INTERVAL_MS;
-    ins_record_data.min_dist_m  = INS_RECORD_MIN_DIST_M;
+    ins_record_data.state = INS_REC_IDLE;
 }
 
 static float ins_record_dist2d(float dx, float dy)
@@ -37,40 +41,44 @@ static float ins_record_dist2d(float dx, float dy)
     return sqrtf(dx * dx + dy * dy);
 }
 
-static uint8 ins_record_add_point(void)
+/** 计算两个角度之差的绝对值，归一化到 [0, 180] */
+static float ins_record_yaw_delta(float a_deg, float b_deg)
+{
+    float d = a_deg - b_deg;
+    while (d >  180.0f) { d -= 360.0f; }
+    while (d < -180.0f) { d += 360.0f; }
+    return (d < 0.0f) ? -d : d;
+}
+
+static uint8 ins_record_add_point(float px, float py, float yaw)
 {
     ins_record_point_t *pt;
-    float px = 0.0f;
-    float py = 0.0f;
     float vx = 0.0f;
     float vy = 0.0f;
-    float roll  = 0.0f;
-    float pitch = 0.0f;
-    float yaw   = 0.0f;
 
     if (ins_record_data.point_count >= INS_RECORD_MAX_POINTS)
     {
         return 0U;
     }
 
-    icm_ins_get_position(&px, &py);
     icm_ins_get_velocity(&vx, &vy, NULL);
-    icm_attitude_get_euler(&roll, &pitch, &yaw);
 
     pt = &ins_record_data.points[ins_record_data.point_count];
-    pt->t_ms       = system_getval_ms();
-    pt->px_m       = px;
-    pt->py_m       = py;
-    pt->vx_ms      = vx;
-    pt->vy_ms      = vy;
-    pt->yaw_deg    = yaw;
-    pt->stationary = icm_ins_is_stationary();
+    pt->t_ms         = system_getval_ms();
+    pt->px_m         = px;
+    pt->py_m         = py;
+    pt->vx_ms        = vx;
+    pt->vy_ms        = vy;
+    pt->yaw_deg      = yaw;
+    pt->enc_spd_mm_s = board_comm_encl_get_spd_mm_s();
+    pt->enc_dist_mm  = board_comm_encl_get_dist_mm();
 
     ins_record_data.point_count++;
 
-    /* 更新"上次记录"位置 */
+    /* 更新"上次记录"状态 */
     ins_record_data.last_px_m      = px;
     ins_record_data.last_py_m      = py;
+    ins_record_data.last_yaw_deg   = yaw;
     ins_record_data.last_record_ms = pt->t_ms;
 
     return 1U;
@@ -86,16 +94,28 @@ void ins_record_init(void)
 
 void ins_record_start(void)
 {
+    float px = 0.0f;
+    float py = 0.0f;
+    float roll = 0.0f;
+    float pitch = 0.0f;
+    float yaw = 0.0f;
+
     if (INS_REC_RECORDING == ins_record_data.state)
     {
         return;
     }
 
-    ins_record_data.state         = INS_REC_RECORDING;
-    ins_record_data.last_record_ms = system_getval_ms();
+    icm_ins_get_position(&px, &py);
+    icm_attitude_get_euler(&roll, &pitch, &yaw);
 
-    /* 以当前位置为起点 */
-    icm_ins_get_position(&ins_record_data.last_px_m, &ins_record_data.last_py_m);
+    ins_record_data.state          = INS_REC_RECORDING;
+    ins_record_data.last_record_ms = system_getval_ms();
+    ins_record_data.last_px_m      = px;
+    ins_record_data.last_py_m      = py;
+    ins_record_data.last_yaw_deg   = yaw;
+
+    /* 立即存第一个点（起点），不等触发条件 */
+    ins_record_add_point(px, py, yaw);
 }
 
 void ins_record_stop(void)
@@ -111,9 +131,15 @@ void ins_record_clear(void)
 void ins_record_task(void)
 {
     uint32 now_ms;
+    uint32 dt_ms;
     float  px = 0.0f;
     float  py = 0.0f;
-    float  dist = 0.0f;
+    float  roll = 0.0f;
+    float  pitch = 0.0f;
+    float  yaw = 0.0f;
+    float  dist;
+    float  dyaw;
+    uint8  should_record;
 
     if (INS_REC_RECORDING != ins_record_data.state)
     {
@@ -122,34 +148,58 @@ void ins_record_task(void)
 
     now_ms = system_getval_ms();
 
-    /* 时间门限 */
-    if ((uint32)(now_ms - ins_record_data.last_record_ms) < ins_record_data.interval_ms)
+    /* 最小调用间隔，节省 CPU */
+    if ((uint32)(now_ms - ins_record_data.last_record_ms) < INS_RECORD_POLL_MS)
     {
         return;
     }
 
-    /* 静止时跳过：ZUPT 已将速度清零，位置不变，无需写重复点 */
+    /* 静止时跳过 */
     if (icm_ins_is_stationary())
     {
-        ins_record_data.last_record_ms = now_ms;
         return;
     }
 
-    /* 位移门限（仅当 min_dist_m > 0 且已有至少一个点时生效） */
-    if ((ins_record_data.min_dist_m > 0.0f) && (ins_record_data.point_count > 0U))
+    /* 采集当前状态 */
+    icm_ins_get_position(&px, &py);
+    icm_attitude_get_euler(&roll, &pitch, &yaw);
+
+    dist  = ins_record_dist2d(px - ins_record_data.last_px_m,
+                               py - ins_record_data.last_py_m);
+    dyaw  = ins_record_yaw_delta(yaw, ins_record_data.last_yaw_deg);
+    dt_ms = (uint32)(now_ms - ins_record_data.last_record_ms);
+
+    /* 最小位移门限：防止静止抖动堆点 */
+    if (dist < INS_RECORD_DIST_MIN_M)
     {
-        icm_ins_get_position(&px, &py);
-        dist = ins_record_dist2d(px - ins_record_data.last_px_m,
-                                  py - ins_record_data.last_py_m);
-        if (dist < ins_record_data.min_dist_m)
-        {
-            /* 时间窗口已过，但位移不够：更新时间戳避免连续跳过导致统计混乱 */
-            ins_record_data.last_record_ms = now_ms;
-            return;
-        }
+        return;
     }
 
-    if (!ins_record_add_point())
+    /* 判断是否需要存点 */
+    should_record = 0U;
+
+    /* 条件 1: 航向变化 ≥ 阈值（弯道密采） */
+    if (dyaw >= INS_RECORD_YAW_THRESH_DEG)
+    {
+        should_record = 1U;
+    }
+    /* 条件 2: 距离 ≥ 上限（直线兜底） */
+    else if (dist >= INS_RECORD_DIST_MAX_M)
+    {
+        should_record = 1U;
+    }
+    /* 条件 3: 时间 ≥ 上限（极低速兜底） */
+    else if (dt_ms >= INS_RECORD_TIME_MAX_MS)
+    {
+        should_record = 1U;
+    }
+
+    if (!should_record)
+    {
+        return;
+    }
+
+    if (!ins_record_add_point(px, py, yaw))
     {
         /* 缓冲区满，自动停止 */
         ins_record_stop();
@@ -200,32 +250,4 @@ const ins_record_point_t *ins_record_get_last_point(void)
 const ins_record_point_t *ins_record_get_endpoint(void)
 {
     return ins_record_get_last_point();
-}
-
-void ins_record_set_interval_ms(uint32 interval_ms)
-{
-    if (interval_ms < 20U)
-    {
-        interval_ms = 20U;
-    }
-    else if (interval_ms > 2000U)
-    {
-        interval_ms = 2000U;
-    }
-
-    ins_record_data.interval_ms = interval_ms;
-}
-
-void ins_record_set_min_dist_m(float min_dist_m)
-{
-    if (min_dist_m < 0.0f)
-    {
-        min_dist_m = 0.0f;
-    }
-    else if (min_dist_m > 5.0f)
-    {
-        min_dist_m = 5.0f;
-    }
-
-    ins_record_data.min_dist_m = min_dist_m;
 }
