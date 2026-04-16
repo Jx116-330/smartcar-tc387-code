@@ -376,3 +376,11 @@ isr.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\ICM43688\icm_ins.h"
 "E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\ICM43688\icm_ins.h" :
 isr.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\board_comm\board_comm.h"
 "E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\board_comm\board_comm.h" :
+isr.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\pedal\pedal_input.h"
+"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\pedal\pedal_input.h" :
+isr.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\ICM43688\ins_record.h"
+"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\ICM43688\ins_record.h" :
+isr.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\ICM43688\ins_playback.h"
+"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\ICM43688\ins_playback.h" :
+isr.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\ICM43688\ins_ctrl.h"
+"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\ICM43688\ins_ctrl.h" :

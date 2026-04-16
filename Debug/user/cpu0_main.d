@@ -380,3 +380,5 @@ cpu0_main.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\pedal\pedal_inp
 "E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\pedal\pedal_input.h" :
 cpu0_main.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\board_comm\board_comm.h"
 "E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\board_comm\board_comm.h" :
+cpu0_main.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\board_comm\encoder_odom.h"
+"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\board_comm\encoder_odom.h" :

@@ -22,9 +22,13 @@
 #define INS_RECORD_MAX_POINTS       2000U   /* 最多存储点数（~64KB RAM，总 RAM 84+64=148KB/240KB） */
 #define INS_RECORD_POLL_MS          20U     /* task 最小调用间隔 ms        */
 #define INS_RECORD_YAW_THRESH_DEG   3.0f    /* 航向变化触发阈值（度）       */
-#define INS_RECORD_DIST_MAX_M       0.50f   /* 最大距离触发（直线每 50cm）   */
+#define INS_RECORD_DIST_MAX_M       0.50f   /* 直道距离触发（每 50cm）      */
+#define INS_RECORD_DIST_TURN_M      0.10f   /* 弯道距离触发（每 10cm，更密）*/
 #define INS_RECORD_DIST_MIN_M       0.02f   /* 最小距离门限（防静止堆点）    */
-#define INS_RECORD_TIME_MAX_MS      500U    /* 最大时间兜底 ms（低速兜底）   */
+#define INS_RECORD_TIME_MAX_MS      500U    /* 最大时间兜底 ms             */
+#define INS_RECORD_TURN_RATE_THRESH 15.0f   /* deg/s，yaw变化率超此值=弯道 */
+#define INS_RECORD_SMOOTH_YAW_THRESH 2.0f   /* 平滑pass：相邻yaw差>此值才平滑 */
+#define INS_RECORD_SMOOTH_PASSES    2U      /* 平滑迭代次数                */
 
 /* ------------------------------------------------------------------ */
 /* 数据类型                                                             */
@@ -72,8 +76,11 @@ void ins_record_init(void);
 /** 开始记录；若已在 RECORDING 状态则忽略 */
 void ins_record_start(void);
 
-/** 停止记录（保留已记录点） */
+/** 停止记录（自动执行弯道平滑） */
 void ins_record_stop(void);
+
+/** 对已录轨迹执行弯道平滑（stop 时自动调用，也可手动调） */
+void ins_record_smooth(void);
 
 /** 清空所有轨迹点并回到 IDLE */
 void ins_record_clear(void);

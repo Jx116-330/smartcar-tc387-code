@@ -118,9 +118,45 @@ void ins_record_start(void)
     ins_record_add_point(px, py, yaw);
 }
 
+void ins_record_smooth(void)
+{
+    uint16 count = ins_record_data.point_count;
+    uint16 pass;
+    uint16 i;
+
+    if (count < 3U)
+    {
+        return;
+    }
+
+    for (pass = 0U; pass < INS_RECORD_SMOOTH_PASSES; pass++)
+    {
+        for (i = 1U; i < (count - 1U); i++)
+        {
+            ins_record_point_t *prev = &ins_record_data.points[i - 1U];
+            ins_record_point_t *cur  = &ins_record_data.points[i];
+            ins_record_point_t *next = &ins_record_data.points[i + 1U];
+
+            /* 只平滑弯道段：前后点的 yaw 差异超过阈值 */
+            float dyaw = ins_record_yaw_delta(prev->yaw_deg, next->yaw_deg);
+            if (dyaw < INS_RECORD_SMOOTH_YAW_THRESH)
+            {
+                continue;   /* 直道段，不动 */
+            }
+
+            /* 3 点加权平均：0.25 * prev + 0.5 * cur + 0.25 * next */
+            cur->px_m = 0.25f * prev->px_m + 0.5f * cur->px_m + 0.25f * next->px_m;
+            cur->py_m = 0.25f * prev->py_m + 0.5f * cur->py_m + 0.25f * next->py_m;
+        }
+    }
+}
+
 void ins_record_stop(void)
 {
     ins_record_data.state = INS_REC_IDLE;
+
+    /* 停止录制时自动平滑弯道 */
+    ins_record_smooth();
 }
 
 void ins_record_clear(void)
@@ -175,23 +211,31 @@ void ins_record_task(void)
         return;
     }
 
-    /* 判断是否需要存点 */
-    should_record = 0U;
+    /* 弯道/直道自动判别：用 yaw 变化率决定距离阈值 */
+    {
+        float yaw_rate_dps = (dt_ms > 0U) ? (dyaw * 1000.0f / (float)dt_ms) : 0.0f;
+        float dist_thresh  = (yaw_rate_dps > INS_RECORD_TURN_RATE_THRESH)
+                             ? INS_RECORD_DIST_TURN_M    /* 弯道：10cm 密采 */
+                             : INS_RECORD_DIST_MAX_M;    /* 直道：50cm 稀采 */
 
-    /* 条件 1: 航向变化 ≥ 阈值（弯道密采） */
-    if (dyaw >= INS_RECORD_YAW_THRESH_DEG)
-    {
-        should_record = 1U;
-    }
-    /* 条件 2: 距离 ≥ 上限（直线兜底） */
-    else if (dist >= INS_RECORD_DIST_MAX_M)
-    {
-        should_record = 1U;
-    }
-    /* 条件 3: 时间 ≥ 上限（极低速兜底） */
-    else if (dt_ms >= INS_RECORD_TIME_MAX_MS)
-    {
-        should_record = 1U;
+        /* 判断是否需要存点 */
+        should_record = 0U;
+
+        /* 条件 1: 航向变化 ≥ 阈值（弯道密采） */
+        if (dyaw >= INS_RECORD_YAW_THRESH_DEG)
+        {
+            should_record = 1U;
+        }
+        /* 条件 2: 距离 ≥ 动态阈值（弯道/直道自适应） */
+        else if (dist >= dist_thresh)
+        {
+            should_record = 1U;
+        }
+        /* 条件 3: 时间 ≥ 上限（极低速兜底） */
+        else if (dt_ms >= INS_RECORD_TIME_MAX_MS)
+        {
+            should_record = 1U;
+        }
     }
 
     if (!should_record)

@@ -116,6 +116,7 @@ enum icm42688_godr
 *
 **/
 void Init_ICM42688(void);
+uint8 icm42688_is_ready(void);
 
 /**
 *

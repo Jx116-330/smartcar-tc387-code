@@ -22,10 +22,10 @@
 #define ICM_ATTITUDE_KI_GYRO_MAX_DPS       20.0f    /* Ki 门控：角速度幅值上限 */
 #define ICM_ATTITUDE_KI_INT_LIMIT          0.40f    /* 积分项饱和限幅（无量纲误差×s；最大修正 Ki×0.40=0.002 rad/s） */
 #define ICM_ATTITUDE_KI_LEAK               0.9999f  /* 极端情况泄放系数：1s后保留~90%，10s后保留~37% */
-#define ICM_ATTITUDE_BIAS_TRACK_ACC_MIN    0.97f    /* ???????????????????? */
-#define ICM_ATTITUDE_BIAS_TRACK_ACC_MAX    1.03f
-#define ICM_ATTITUDE_BIAS_TRACK_GYRO_MAX   6.0f     /* dps????????? */
-#define ICM_ATTITUDE_BIAS_TRACK_RATE       0.03f    /* 1/s?? 33s ????????? */
+/* FusionOffset 风格在线零偏跟踪参数（移植自 xioTechnologies/Fusion） */
+#define ICM_ATTITUDE_OFFSET_CUTOFF_HZ      0.02f    /* 零偏低通截止频率 Hz */
+#define ICM_ATTITUDE_OFFSET_THRESHOLD      3.0f     /* 静止判断门限 dps（校正后残差） */
+#define ICM_ATTITUDE_OFFSET_TIMEOUT_S      5U       /* 连续静止秒数后才开始跟踪 */
 #define ICM_ATTITUDE_CALIB_SAMPLES_DEFAULT 20000U
 
 typedef struct
@@ -53,6 +53,11 @@ typedef struct
     float ex_int;   /* Mahony Ki 积分状态 x（roll/pitch 修正） */
     float ey_int;   /* Mahony Ki 积分状态 y（roll/pitch 修正） */
     /* ez_int 不使用：6轴无航向参考，gz 不加 Ki，避免 yaw 自强化漂移 */
+
+    /* FusionOffset 在线零偏跟踪 */
+    float  offset_filter_coeff;  /* 低通滤波系数 = 2π * cutoff * dt */
+    uint32 offset_timeout;       /* 静止超时阈值（采样数） */
+    uint32 offset_timer;         /* 连续静止计时器 */
 
     /* ---- yaw 调试 / 调参状态 ---- */
     float yaw_gz_raw;       /* 最新 gz 原始值（dps） */
@@ -126,41 +131,59 @@ static void icm_attitude_reset_gyro_bias_calibration_state(void)
     g_icm_attitude.gyro_bias_calibrating = 0U;
 }
 
+/**
+ * FusionOffset 风格在线零偏跟踪（移植自 xioTechnologies/Fusion）
+ *
+ * 与旧版区别：
+ *  1. 用校正后残差判静止，不会把慢速转弯当静止
+ *  2. 需连续静止 5 秒后才开始跟踪，短暂停车不触发
+ *  3. 三轴全跟踪（含 Z 轴），因为有超时保护不会误吸收转弯角速度
+ *  4. 不依赖加速度模长门控
+ */
 static void icm_attitude_track_gyro_bias(float gyro_x_dps,
                                          float gyro_y_dps,
                                          float gyro_z_dps,
                                          float acc_norm_g,
                                          float dt_s)
 {
-    float gyro_sq;
-    float gyro_lim_sq;
-    float alpha;
+    float cx, cy, cz;
 
-    if ((!g_icm_attitude.gyro_bias_valid) || (dt_s <= 0.0f))
+    (void)acc_norm_g;
+    (void)dt_s;
+
+    if (!g_icm_attitude.gyro_bias_valid)
     {
         return;
     }
 
-    if ((acc_norm_g < ICM_ATTITUDE_BIAS_TRACK_ACC_MIN) ||
-        (acc_norm_g > ICM_ATTITUDE_BIAS_TRACK_ACC_MAX))
+    /* 先减去当前 bias 得到校正后残差 */
+    cx = gyro_x_dps - g_icm_attitude.gyro_bias_x_dps;
+    cy = gyro_y_dps - g_icm_attitude.gyro_bias_y_dps;
+    cz = gyro_z_dps - g_icm_attitude.gyro_bias_z_dps;
+
+    /* 任何一轴校正后残差超门限 → 非静止 → 重置计时器 */
+    if ((cx > ICM_ATTITUDE_OFFSET_THRESHOLD) || (cx < -ICM_ATTITUDE_OFFSET_THRESHOLD) ||
+        (cy > ICM_ATTITUDE_OFFSET_THRESHOLD) || (cy < -ICM_ATTITUDE_OFFSET_THRESHOLD) ||
+        (cz > ICM_ATTITUDE_OFFSET_THRESHOLD) || (cz < -ICM_ATTITUDE_OFFSET_THRESHOLD))
     {
+        g_icm_attitude.offset_timer = 0U;
         return;
     }
 
-    gyro_sq = gyro_x_dps * gyro_x_dps
-            + gyro_y_dps * gyro_y_dps
-            + gyro_z_dps * gyro_z_dps;
-    gyro_lim_sq = ICM_ATTITUDE_BIAS_TRACK_GYRO_MAX * ICM_ATTITUDE_BIAS_TRACK_GYRO_MAX;
-    if (gyro_sq > gyro_lim_sq)
+    /* 静止中，但未达到超时 → 计时，不跟踪 */
+    if (g_icm_attitude.offset_timer < g_icm_attitude.offset_timeout)
     {
+        g_icm_attitude.offset_timer++;
         return;
     }
 
-    alpha = icm_attitude_clamp(ICM_ATTITUDE_BIAS_TRACK_RATE * dt_s, 0.0f, 1.0f);
-    g_icm_attitude.gyro_bias_x_dps += (gyro_x_dps - g_icm_attitude.gyro_bias_x_dps) * alpha;
-    g_icm_attitude.gyro_bias_y_dps += (gyro_y_dps - g_icm_attitude.gyro_bias_y_dps) * alpha;
-    /* Z 轴不跟踪：6轴无航向参考，慢速转弯时角速度仅 3~5 dps，
-     * 跟踪器会误将其吸收为零偏导致 yaw 冻结。Z 偏置仅靠开机校准。 */
+    /* 连续静止超过 5 秒 → 用低通滤波缓慢跟踪零偏（三轴全跟踪） */
+    {
+        float k = g_icm_attitude.offset_filter_coeff;
+        g_icm_attitude.gyro_bias_x_dps += cx * k;
+        g_icm_attitude.gyro_bias_y_dps += cy * k;
+        g_icm_attitude.gyro_bias_z_dps += cz * k;
+    }
     g_icm_attitude.gyro_bias_from_flash = 0U;
 }
 
@@ -237,6 +260,14 @@ void icm_attitude_init(void)
     g_icm_attitude.gyro_bias_valid = 0U;
     g_icm_attitude.gyro_bias_from_flash = 0U;
     icm_attitude_reset_gyro_bias_calibration_state();
+
+    /* FusionOffset 在线零偏参数 (1kHz 采样率) */
+    {
+        const float sample_rate = 1000.0f;
+        g_icm_attitude.offset_filter_coeff = 2.0f * ICM_ATTITUDE_PI * ICM_ATTITUDE_OFFSET_CUTOFF_HZ / sample_rate;
+        g_icm_attitude.offset_timeout = ICM_ATTITUDE_OFFSET_TIMEOUT_S * (uint32)sample_rate;
+        g_icm_attitude.offset_timer = 0U;
+    }
 
     /* yaw 调试状态初始化 */
     g_icm_attitude.yaw_gz_raw       = 0.0f;

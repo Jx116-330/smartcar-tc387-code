@@ -7,8 +7,13 @@
 #ifndef _isr_config_h
 #define _isr_config_h
 
+/* TC3xx SRPN note:
+ * larger numeric priority has higher CPU interrupt priority; 0 disables IRQ.
+ * Keep the 1 ms ICM task (50) above the 10 ms tasks (43/44).
+ */
+
 #define CCU6_0_CH0_INT_SERVICE  IfxSrc_Tos_cpu0     // 配置 CCU6_0 PIT 通道 0 的中断服务目标，可选 IfxSrc_Tos_cpu0 / IfxSrc_Tos_cpu1 / IfxSrc_Tos_dma，以下同理
-#define CCU6_0_CH0_ISR_PRIORITY 50                  // 配置 CCU6_0 PIT 通道 0 的中断优先级，范围 1~255，数值越小优先级越高，建议与常用外设中断错开
+#define CCU6_0_CH0_ISR_PRIORITY 50                  // 配置 CCU6_0 PIT 通道 0 的中断优先级，范围 1~255，数值越大优先级越高，建议与常用外设中断错开
 
 #define CCU6_0_CH1_INT_SERVICE  IfxSrc_Tos_cpu0
 #define CCU6_0_CH1_ISR_PRIORITY 43              /* 10ms 踏板输入 — 低于 1ms ICM(50) 以免抢占 */
@@ -20,7 +25,7 @@
 #define CCU6_1_CH1_ISR_PRIORITY 53
 
 #define EXTI_CH0_CH4_INT_SERVICE IfxSrc_Tos_cpu0    // 配置 ERU 通道 0 和通道 4 的中断服务目标，以下同理
-#define EXTI_CH0_CH4_INT_PRIO   60                  // 配置 ERU 通道 0 和通道 4 的中断优先级，范围 1~255，数值越小优先级越高
+#define EXTI_CH0_CH4_INT_PRIO   60                  // 配置 ERU 通道 0 和通道 4 的中断优先级，范围 1~255，数值越大优先级越高
 
 #define EXTI_CH1_CH5_INT_SERVICE IfxSrc_Tos_cpu0    // 配置 ERU 通道 1 和通道 5 的中断服务目标
 #define EXTI_CH1_CH5_INT_PRIO   61                  // 配置 ERU 通道 1 和通道 5 的中断优先级
@@ -32,12 +37,12 @@
 #define EXTI_CH3_CH7_INT_PRIO   62                  // 配置 ERU 通道 3 和通道 7 的中断优先级
 
 #define DMA_INT_SERVICE         IfxSrc_Tos_cpu0     // 配置 DMA 中断服务目标，可选 IfxSrc_Tos_cpu0 / IfxSrc_Tos_cpu1 / IfxSrc_Tos_dma
-#define DMA_INT_PRIO            70                  // 配置 DMA 中断优先级，范围 1~255，数值越小优先级越高
+#define DMA_INT_PRIO            70                  // 配置 DMA 中断优先级，范围 1~255，数值越大优先级越高
 
 #define UART0_INT_SERVICE       IfxSrc_Tos_cpu0     // 配置串口 0 中断服务目标，可选 IfxSrc_Tos_cpu0 / IfxSrc_Tos_cpu1 / IfxSrc_Tos_dma
-#define UART0_TX_INT_PRIO       11                  // 配置串口 0 发送中断优先级，范围 1~255，数值越小优先级越高
-#define UART0_RX_INT_PRIO       10                  // 配置串口 0 接收中断优先级，范围 1~255，数值越小优先级越高
-#define UART0_ER_INT_PRIO       12                  // 配置串口 0 错误中断优先级，范围 1~255，数值越小优先级越高
+#define UART0_TX_INT_PRIO       11                  // 配置串口 0 发送中断优先级，范围 1~255，数值越大优先级越高
+#define UART0_RX_INT_PRIO       10                  // 配置串口 0 接收中断优先级，范围 1~255，数值越大优先级越高
+#define UART0_ER_INT_PRIO       12                  // 配置串口 0 错误中断优先级，范围 1~255，数值越大优先级越高
 
 #define UART1_INT_SERVICE       IfxSrc_Tos_cpu0
 #define UART1_TX_INT_PRIO       13

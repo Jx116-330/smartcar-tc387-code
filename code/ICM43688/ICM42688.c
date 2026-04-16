@@ -21,6 +21,22 @@ static SOFT_SPI_struct ICM42688_SPI;
 
 static float icm42688_acc_inv = 1, icm42688_gyro_inv = 1;               // ����ת��Ϊʵ���������ݵ�ת��ϵ��
 #define ICM42688_ACC_GYRO_BURST_LEN 12U
+static volatile uint8 icm42688_ready = 0U;
+
+static void icm42688_clear_sample(void)
+{
+    icm42688_acc_x  = 0.0f;
+    icm42688_acc_y  = 0.0f;
+    icm42688_acc_z  = 0.0f;
+    icm42688_gyro_x = 0.0f;
+    icm42688_gyro_y = 0.0f;
+    icm42688_gyro_z = 0.0f;
+}
+
+uint8 icm42688_is_ready(void)
+{
+    return icm42688_ready;
+}
 
 /**
 *
@@ -35,6 +51,8 @@ void Init_ICM42688(void)
 {
     unsigned char model = 0xff;
     unsigned char retry = 50U;
+    icm42688_ready = 0U;
+    icm42688_clear_sample();
 
     // SPI???
 #if ICM42688_HARD_SPI
@@ -58,6 +76,13 @@ void Init_ICM42688(void)
         system_delay_ms(10);
     }
 
+    if (model != 0x47U)
+    {
+        uart_write_string(DEBUG_UART_INDEX,
+                          "[ICM42688] WHO_AM_I mismatch, init skipped\r\n");
+        return;
+    }
+
     Write_Data_ICM42688(ICM42688_PWR_MGMT0, 0x00);      // ????
     system_delay_ms(10);                                // ?? PWR_MGMT0 ????
 
@@ -68,6 +93,7 @@ void Init_ICM42688(void)
                                      ICM42688_INS_GYRO_ODR);
     Write_Data_ICM42688(ICM42688_PWR_MGMT0, 0x0f);      // ?? GYRO / ACCEL ??????
     system_delay_ms(10);
+    icm42688_ready = 1U;
 }
 
 /**
@@ -82,6 +108,12 @@ void Init_ICM42688(void)
 void Get_Acc_ICM42688(void)
 {
     unsigned char data[6];
+    if (0U == icm42688_ready)
+    {
+        icm42688_clear_sample();
+        return;
+    }
+
     Read_Datas_ICM42688(ICM42688_ACCEL_DATA_X1, data, 6);
     icm42688_acc_x = icm42688_acc_inv * (short int)(((short int)data[0] << 8) | data[1]);
     icm42688_acc_y = icm42688_acc_inv * (short int)(((short int)data[2] << 8) | data[3]);
@@ -100,6 +132,12 @@ void Get_Acc_ICM42688(void)
 void Get_Gyro_ICM42688(void)
 {
     unsigned char data[6];
+    if (0U == icm42688_ready)
+    {
+        icm42688_clear_sample();
+        return;
+    }
+
     Read_Datas_ICM42688(ICM42688_GYRO_DATA_X1, data, 6);
     icm42688_gyro_x = icm42688_gyro_inv * (short int)(((short int)data[0] << 8) | data[1]);
     icm42688_gyro_y = icm42688_gyro_inv * (short int)(((short int)data[2] << 8) | data[3]);
@@ -109,6 +147,11 @@ void Get_Gyro_ICM42688(void)
 void Get_AccGyro_ICM42688(void)
 {
     unsigned char data[ICM42688_ACC_GYRO_BURST_LEN];
+    if (0U == icm42688_ready)
+    {
+        icm42688_clear_sample();
+        return;
+    }
 
     Read_Datas_ICM42688(ICM42688_ACCEL_DATA_X1, data, ICM42688_ACC_GYRO_BURST_LEN);
 

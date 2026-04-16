@@ -26,6 +26,7 @@
 #include "zf_driver_uart.h"
 #include "zf_driver_timer.h"   /* system_getval_ms */
 #include "zf_common_debug.h"
+#include "zf_common_interrupt.h"
 
 /* ==== 硬件配置 ======================================================== */
 #define BC_UART         UART_1
@@ -445,8 +446,11 @@ static uint8 bc_parse_hq_line(const char *s,
  *       极端情况下 bc_tail 可能被并发修改丢一个字节，
  *       这对 ISR-vs-polling 二分诊断结论没有影响，可接受。
  */
+/* ISR and polling both feed this ring buffer; protect the write index. */
 static void bc_feed_byte(uint8 byte)
 {
+    uint32 irq_state = interrupt_global_disable();
+
     bc_rx_byte_count++;
 
     if (!bc_is_full())
@@ -462,6 +466,8 @@ static void bc_feed_byte(uint8 byte)
             bc_overflow_count++;
         }
     }
+
+    interrupt_global_enable(irq_state);
 }
 
 /* ==== ISR 入口 ======================================================== */
@@ -472,7 +478,7 @@ static void bc_feed_byte(uint8 byte)
 void board_comm_uart1_rx_handler(void)
 {
     uint8 byte;
-    if (0U != uart_query_byte(BC_UART, &byte))
+    while (0U != uart_query_byte(BC_UART, &byte))
     {
         bc_feed_byte(byte);
     }
@@ -528,6 +534,7 @@ void board_comm_init(void)
     bc_latest_display[0]  = '\0';
 
     uart_init(BC_UART, BC_BAUD, BC_TX_PIN, BC_RX_PIN);
+    uart_rx_interrupt(BC_UART, 1U);
 
     uart_write_string(DEBUG_UART_INDEX,
                       "[BC] board_comm_init: UART1 115200 P33_12/P33_13 ready\r\n");

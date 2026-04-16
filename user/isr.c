@@ -20,6 +20,11 @@ IFX_INTERRUPT(cc60_pit_ch0_isr, CCU6_0_CH0_INT_VECTAB_NUM, CCU6_0_CH0_ISR_PRIORI
 {
     interrupt_global_enable(0);                     // 开启中断嵌套
     pit_clear_flag(CCU60_CH0);
+    if (0U == icm42688_is_ready())
+    {
+        return;
+    }
+
     Get_AccGyro_ICM42688();
     icm_attitude_update(icm42688_gyro_x,
                         icm42688_gyro_y,

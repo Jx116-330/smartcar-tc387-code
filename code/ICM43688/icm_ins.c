@@ -15,10 +15,16 @@
 
 #include "icm_ins.h"
 #include "icm_attitude.h"
+#include "zf_common_interrupt.h"
 
 #include <math.h>
 
 #define INS_GRAVITY_MS2      9.80665f
+
+/* 速度衰减：每 1ms 积分步乘此系数，防止纯惯导段速度积分发散。
+ * 0.9998^1000 ≈ 0.82，即 1 秒内无外部校正时速度自然衰减 18%。
+ * 有编码器/GPS 校正时，校正量远大于衰减量，影响可忽略。 */
+#define INS_VEL_DAMPING      0.9998f
 
 /* ZUPT: both conditions must hold for ZUPT_HOLD samples (1 sample = 1 ms). */
 /* Gyro threshold is intentionally relaxed to tolerate residual bias error.  */
@@ -194,9 +200,11 @@ void icm_ins_update(float acc_x_g, float acc_y_g, float acc_z_g,
     g_icm_ins.lin_ay_ms2 = ny * INS_GRAVITY_MS2;
     g_icm_ins.lin_az_ms2 = nz * INS_GRAVITY_MS2;
 
-    /* Velocity integration */
+    /* Velocity integration + damping */
     g_icm_ins.vel_x_ms += g_icm_ins.lin_ax_ms2 * dt_s;
     g_icm_ins.vel_y_ms += g_icm_ins.lin_ay_ms2 * dt_s;
+    g_icm_ins.vel_x_ms *= INS_VEL_DAMPING;
+    g_icm_ins.vel_y_ms *= INS_VEL_DAMPING;
 
     /* Position integration (horizontal only) */
     g_icm_ins.pos_x_m += g_icm_ins.vel_x_ms * dt_s;
@@ -204,23 +212,30 @@ void icm_ins_update(float acc_x_g, float acc_y_g, float acc_z_g,
 
     /* 应用外部校正（主循环写入 pending，ISR 内原子消费） */
     {
-        float cpx = g_icm_ins.correct_px_pending;
-        float cpy = g_icm_ins.correct_py_pending;
-        float cvx = g_icm_ins.correct_vx_pending;
-        float cvy = g_icm_ins.correct_vy_pending;
+        float cpx;
+        float cpy;
+        float cvx;
+        float cvy;
+        uint32 irq_state = interrupt_global_disable();
+
+        cpx = g_icm_ins.correct_px_pending;
+        cpy = g_icm_ins.correct_py_pending;
+        cvx = g_icm_ins.correct_vx_pending;
+        cvy = g_icm_ins.correct_vy_pending;
+        g_icm_ins.correct_px_pending = 0.0f;
+        g_icm_ins.correct_py_pending = 0.0f;
+        g_icm_ins.correct_vx_pending = 0.0f;
+        g_icm_ins.correct_vy_pending = 0.0f;
+        interrupt_global_enable(irq_state);
         if ((cpx != 0.0f) || (cpy != 0.0f))
         {
             g_icm_ins.pos_x_m += cpx;
             g_icm_ins.pos_y_m += cpy;
-            g_icm_ins.correct_px_pending = 0.0f;
-            g_icm_ins.correct_py_pending = 0.0f;
         }
         if ((cvx != 0.0f) || (cvy != 0.0f))
         {
             g_icm_ins.vel_x_ms += cvx;
             g_icm_ins.vel_y_ms += cvy;
-            g_icm_ins.correct_vx_pending = 0.0f;
-            g_icm_ins.correct_vy_pending = 0.0f;
         }
     }
 }
@@ -257,20 +272,22 @@ uint8 icm_ins_is_stationary(void)
     return g_icm_ins.is_stationary;
 }
 
-/* ---------- 外部校正接口（供 GPS 融合等模块调用） ---------- */
-/* 主循环调用：写入 pending 缓冲区，由 ISR 内 icm_ins_update 原子消费。
- * 这样避免主循环对 pos/vel 做非原子 +=，消除与 1kHz ISR 的竞争。
- * 注意：两次 GNSS 更新之间只应写入一次，后写会覆盖前值。
- * 当前 GNSS 频率（1~10Hz）远低于 ISR（1kHz），ISR 总能在下次写入前消费完。 */
-
+/* ---------- External correction API ---------- */
+/* Pending corrections are accumulated so GPS and encoder updates in the same
+ * 1 ms cycle do not overwrite each other.
+ */
 void icm_ins_correct_position(float delta_px_m, float delta_py_m)
 {
-    g_icm_ins.correct_px_pending = delta_px_m;
-    g_icm_ins.correct_py_pending = delta_py_m;
+    uint32 irq_state = interrupt_global_disable();
+    g_icm_ins.correct_px_pending += delta_px_m;
+    g_icm_ins.correct_py_pending += delta_py_m;
+    interrupt_global_enable(irq_state);
 }
 
 void icm_ins_correct_velocity(float delta_vx_ms, float delta_vy_ms)
 {
-    g_icm_ins.correct_vx_pending = delta_vx_ms;
-    g_icm_ins.correct_vy_pending = delta_vy_ms;
+    uint32 irq_state = interrupt_global_disable();
+    g_icm_ins.correct_vx_pending += delta_vx_ms;
+    g_icm_ins.correct_vy_pending += delta_vy_ms;
+    interrupt_global_enable(irq_state);
 }
