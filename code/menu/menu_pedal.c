@@ -72,9 +72,17 @@ static void pedal_draw_debug_page(uint8 *menu_full_redraw)
         ips200_set_color(RGB565_GRAY, RGB565_BLACK);
         ips200_show_string(10, 172, "A45 raw : ");
 
-        /* Fully static line: brake unavailable */
-        ips200_set_color(RGB565_RED, RGB565_BLACK);
-        ips200_show_string(10, 186, "Brake: unavailable");
+        /* Section: Brake (A24) */
+        ips200_set_color(RGB565_CYAN, RGB565_BLACK);
+        ips200_show_string(10, 190, "Brake (A24)");
+
+        ips200_set_color(RGB565_WHITE, RGB565_BLACK);
+        ips200_show_string(10, 204, "A24 raw : ");
+        ips200_show_string(10, 218, "BrkFilt : ");
+        ips200_show_string(10, 232, "BrkPct  : ");
+        ips200_show_string(10, 246, "BrkPress: ");
+        ips200_show_string(10, 260, "BrkValid: ");
+        ips200_show_string(10, 274, "BrkCmd  : ");
 
         /* Footer */
         ips200_set_color(RGB565_GRAY, RGB565_BLACK);
@@ -141,6 +149,38 @@ static void pedal_draw_debug_page(uint8 *menu_full_redraw)
     snprintf(val, sizeof(val), "%4u", (unsigned int)pedal_input_get_a45());
     ips200_set_color(RGB565_GRAY, RGB565_BLACK);
     menu_ui_show_pad(98, 172, val_w, val);
+
+    snprintf(val, sizeof(val), "%4u", (unsigned int)pedal_input_get_a24());
+    ips200_set_color(RGB565_WHITE, RGB565_BLACK);
+    menu_ui_show_pad(98, 204, val_w, val);
+
+    snprintf(val, sizeof(val), "%4u", (unsigned int)pedal_input_get_brake_filtered());
+    ips200_set_color(RGB565_WHITE, RGB565_BLACK);
+    menu_ui_show_pad(98, 218, val_w, val);
+
+    snprintf(val, sizeof(val), "%4u/1000", (unsigned int)pedal_input_get_brake_percent());
+    ips200_set_color(RGB565_WHITE, RGB565_BLACK);
+    menu_ui_show_pad(98, 232, val_w, val);
+
+    {
+        uint8 pressed = pedal_input_get_brake_pressed();
+        uint16 val_w15 = (uint16)(end_x - 98U);
+        snprintf(val, sizeof(val), "%s", (0U != pressed) ? "YES" : "no ");
+        ips200_set_color((0U != pressed) ? RGB565_GREEN : RGB565_WHITE, RGB565_BLACK);
+        menu_ui_show_pad(98, 246, val_w15, val);
+    }
+
+    {
+        uint8 valid = pedal_input_get_brake_valid();
+        uint16 val_w15 = (uint16)(end_x - 98U);
+        snprintf(val, sizeof(val), "%s", (0U != valid) ? "YES" : "NO ");
+        ips200_set_color((0U != valid) ? RGB565_GREEN : RGB565_RED, RGB565_BLACK);
+        menu_ui_show_pad(98, 260, val_w15, val);
+    }
+
+    snprintf(val, sizeof(val), "%4u/1000", (unsigned int)pedal_input_get_brake_cmd());
+    ips200_set_color(RGB565_WHITE, RGB565_BLACK);
+    menu_ui_show_pad(98, 274, val_w, val);
 }
 
 /* ---- 驱动控制页 --------------------------------------------------------

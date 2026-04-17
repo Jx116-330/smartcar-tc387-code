@@ -9,6 +9,8 @@
 #include "ICM42688.h"
 #include "icm_attitude.h"
 #include "icm_ins.h"
+#include "Turn.h"
+#include "rear_right_encoder.h"
 #include "board_comm.h"   /* TC264 板间通信 RX 处理 */
 #include "pedal_input.h"  /* 踏板输入（10ms ISR 调用） */
 #include "ins_record.h"   /* 惯导记录（10ms ISR 调用） */
@@ -50,6 +52,8 @@ IFX_INTERRUPT(cc60_pit_ch1_isr, CCU6_0_CH1_INT_VECTAB_NUM, CCU6_0_CH1_ISR_PRIORI
     interrupt_global_enable(0);
     pit_clear_flag(CCU60_CH1);
     pedal_input_task();
+    Turn_ControlTask();
+    rear_right_encoder_task();
 }
 
 /* 10ms 定时中断：惯导记录 / 回放 / 控制（固定 100Hz 节拍）
@@ -68,6 +72,7 @@ IFX_INTERRUPT(cc61_pit_ch1_isr, CCU6_1_CH1_INT_VECTAB_NUM, CCU6_1_CH1_ISR_PRIORI
 {
     interrupt_global_enable(0);                     // 开启中断嵌套
     pit_clear_flag(CCU61_CH1);
+    rear_right_encoder_poll_isr();
 }
 
 

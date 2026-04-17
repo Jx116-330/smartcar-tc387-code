@@ -6,6 +6,9 @@
 #include "ins_playback.h"
 #include "ins_ctrl.h"
 #include "pedal_input.h"
+#include "Turn.h"
+#include "rear_right_encoder.h"
+#include "encoder_odom_right.h"
 #include "board_comm.h"   /* TC264 板间通信（接收诊断链路，用于收 ENC） */
 #include "encoder_odom.h" /* 编码器里程计 → INS 融合 */
 #pragma section all "cpu0_dsram"
@@ -36,6 +39,7 @@ int core0_main(void)
     ins_ctrl_init();
     icm_gps_fusion_init();
     pedal_input_init();
+    Turn_Init();
     board_comm_init();    /* TC264 板间通信：初始化 UART1 115200 P33_12/P33_13 */
     encoder_odom_init();  /* 编码器里程计融合：初始化状态 */
 
@@ -43,6 +47,8 @@ int core0_main(void)
      * CCU60_CH1 (prio 43): pedal_input_task — 保证油门采集 100Hz 确定性
      * CCU61_CH0 (prio 44): ins_record/playback/ctrl — 惯导记录控制 100Hz
      * 两者优先级均低于 1ms ICM (prio 50)，不会抢占惯导采样 */
+    rear_right_encoder_init();
+    encoder_odom_right_init();
     pit_ms_init(CCU60_CH1, 10);
     pit_ms_init(CCU61_CH0, 10);
 
@@ -109,6 +115,7 @@ int core0_main(void)
 
         board_comm_task();   /* 从 UART1 RX 收 ENCL/HQ 并解析 */
         encoder_odom_task(); /* 编码器里程计 → INS 速度+位置双校正 (25Hz) */
+        encoder_odom_right_task();
         menu_task();         /* 菜单 + tuning_soft_task() */
     }
 }

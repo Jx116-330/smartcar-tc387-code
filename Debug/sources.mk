@@ -29,9 +29,11 @@ code/GPS \
 code/ICM43688 \
 code/MyEncoder \
 code/MyKey \
+code/Turn \
 code/board_comm \
 code/menu \
 code/pedal \
+code/rear_right_encoder \
 code/tuning \
 libraries/infineon_libraries/Configurations \
 libraries/infineon_libraries/Infra/Platform/Tricore/Compilers \

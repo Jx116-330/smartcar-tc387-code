@@ -370,10 +370,20 @@ isr.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\tuning\tuning_soft.h"
 "E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\tuning\tuning_soft.h" :
 isr.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\tuning\autotune.h"
 "E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\tuning\autotune.h" :
+isr.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\Turn\Turn.h"
+"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\Turn\Turn.h" :
+isr.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\libraries\\zf_common\zf_common_headfile.h"
+"E:\\ads\\Seekfree_TC387_Opensource_Library\\libraries\\zf_common\zf_common_headfile.h" :
+isr.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\rear_right_encoder\rear_right_encoder.h"
+"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\rear_right_encoder\rear_right_encoder.h" :
+isr.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\board_comm\encoder_odom_right.h"
+"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\board_comm\encoder_odom_right.h" :
 isr.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\ICM43688\icm_attitude.h"
 "E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\ICM43688\icm_attitude.h" :
 isr.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\ICM43688\icm_ins.h"
 "E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\ICM43688\icm_ins.h" :
+isr.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\Turn\Turn.h"
+"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\Turn\Turn.h" :
 isr.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\board_comm\board_comm.h"
 "E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\board_comm\board_comm.h" :
 isr.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\pedal\pedal_input.h"

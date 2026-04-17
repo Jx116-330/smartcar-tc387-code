@@ -15,6 +15,11 @@
 #include "ins_ctrl.h"
 #include "icm_gps_fusion.h"
 #include "board_comm.h"
+#include "encoder_odom.h"
+#include "Turn.h"
+#include "rear_right_encoder.h"
+#include "encoder_odom_right.h"
+#include "pedal_input.h"
 #include <math.h>
 
 #define TUNING_DEFAULT_PERIOD_MS 20U
@@ -471,6 +476,89 @@ static uint8 tuning_send_once(void)
     }
 
     /* ---- TELY：yaw 专用调参遥测包 ---- */
+    snprintf(line,
+             sizeof(line),
+             "TELTURN,ms=%lu,target=%.3f,current=%.3f,encoder=%ld,enable=%u\r\n",
+             (unsigned long)now_ms,
+             turn_target_angle_deg,
+             turn_current_angle_deg,
+             (long)Turn_GetEncoderCount(),
+             (unsigned int)Turn_GetMotorEnable());
+    if (!tuning_send_line(line))
+    {
+        ok = 0U;
+    }
+
+    snprintf(line,
+             sizeof(line),
+             "TELENR,ms=%lu,count=%ld,dist_mm=%ld,spd_mm_s=%ld,"
+             "odom_px=%.3f,odom_py=%.3f,odom_spd=%.3f,active=%u\r\n",
+             (unsigned long)now_ms,
+             (long)rear_right_get_count(),
+             (long)rear_right_get_dist_mm(),
+             (long)rear_right_get_spd_mm_s(),
+             encoder_odom_right_get_px_m(),
+             encoder_odom_right_get_py_m(),
+             encoder_odom_right_get_speed_ms(),
+             (unsigned int)encoder_odom_right_is_active());
+    if (!tuning_send_line(line))
+    {
+        ok = 0U;
+    }
+
+    {
+        float ins_px = 0.0f;
+        float ins_py = 0.0f;
+
+        icm_ins_get_position(&ins_px, &ins_py);
+        snprintf(line,
+                 sizeof(line),
+                 "TELODOM,ms=%lu,"
+                 "L_cnt=%ld,L_dst=%ld,L_spd=%ld,L_act=%u,"
+                 "R_cnt=%ld,R_dst=%ld,R_spd=%ld,R_act=%u,"
+                 "ins_px=%.3f,ins_py=%.3f,ins_spd=%.3f,"
+                 "L_px=%.3f,L_py=%.3f,R_px=%.3f,R_py=%.3f\r\n",
+                 (unsigned long)now_ms,
+                 (long)board_comm_encl_get_count(),
+                 (long)board_comm_encl_get_dist_mm(),
+                 (long)board_comm_encl_get_spd_mm_s(),
+                 (unsigned int)encoder_odom_is_active(),
+                 (long)rear_right_get_count(),
+                 (long)rear_right_get_dist_mm(),
+                 (long)rear_right_get_spd_mm_s(),
+                 (unsigned int)encoder_odom_right_is_active(),
+                 ins_px,
+                 ins_py,
+                 icm_ins_get_speed_ms(),
+                 encoder_odom_get_px_m(),
+                 encoder_odom_get_py_m(),
+                 encoder_odom_right_get_px_m(),
+                 encoder_odom_right_get_py_m());
+        if (!tuning_send_line(line))
+        {
+            ok = 0U;
+        }
+    }
+
+    snprintf(line,
+             sizeof(line),
+             "TELBRK,ms=%lu,a24=%u,filt=%u,pct=%u,pressed=%u,valid=%u,cmd=%u,"
+             "thr_cmd=%u,thr_en=%u,brake_overrides=%u\r\n",
+             (unsigned long)now_ms,
+             (unsigned int)pedal_input_get_a24(),
+             (unsigned int)pedal_input_get_brake_filtered(),
+             (unsigned int)pedal_input_get_brake_percent(),
+             (unsigned int)pedal_input_get_brake_pressed(),
+             (unsigned int)pedal_input_get_brake_valid(),
+             (unsigned int)pedal_input_get_brake_cmd(),
+             (unsigned int)pedal_input_get_throttle_cmd(),
+             (unsigned int)pedal_input_get_throttle_enable_request(),
+             (unsigned int)(pedal_input_get_brake_pressed() && pedal_input_get_brake_valid()));
+    if (!tuning_send_line(line))
+    {
+        ok = 0U;
+    }
+
     {
         float gz_raw = 0.0f, gz_bias = 0.0f, gz_comp = 0.0f;
         float gz_scaled = 0.0f, yaw_integral = 0.0f;

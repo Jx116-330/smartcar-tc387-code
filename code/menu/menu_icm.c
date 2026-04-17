@@ -18,6 +18,8 @@
 #include "ins_record.h"
 #include "board_comm.h"
 #include "encoder_odom.h"
+#include "rear_right_encoder.h"
+#include "encoder_odom_right.h"
 #include "menu_ui_utils.h"
 
 #define ICM_GYRO_BIAS_CALIB_SAMPLES 20000U
@@ -529,8 +531,9 @@ static uint8 icm_collect_ins_track_bounds(double *min_x,
  *   y=200  "Odom Y: x.xx m"         灰色
  *   y=304  "LONG:Exit"               底部灰色提示
  */
-#define ICM_ENC_REFRESH_MS    100U
+#define ICM_ENC_REFRESH_MS    50U
 
+#if 0
 static void icm_draw_encoder_page(uint8 *menu_full_redraw)
 {
     static uint32 last_refresh_ms_enc_icm = 0U;
@@ -578,7 +581,7 @@ static void icm_draw_encoder_page(uint8 *menu_full_redraw)
 
         ips200_set_color(RGB565_GRAY, RGB565_BLACK);
         menu_ui_show_pad(5U, (uint16)(ips200_height_max - 16U),
-                      (uint16)(ips200_width_max - 10U), "K1:Fuse ON/OFF  LONG:Exit");
+                      (uint16)(ips200_width_max - 10U), "K1:Fusion  LONG:Exit");
 
         *menu_full_redraw = 0U;
     }
@@ -653,6 +656,145 @@ static void icm_draw_encoder_page(uint8 *menu_full_redraw)
              (double)encoder_odom_get_py_m());
     ips200_set_color(RGB565_GRAY, RGB565_BLACK);
     menu_ui_show_pad(74, 200, val_w, val);
+}
+#endif
+
+static void icm_draw_encoder_page(uint8 *menu_full_redraw)
+{
+    static uint32 last_refresh_ms_enc_icm = 0U;
+    char val[64];
+    uint32 now_ms = system_getval_ms();
+    uint16 end_x = (uint16)(ips200_width_max - 10U);
+    uint16 left_w = (uint16)(150U - 70U);
+    uint16 right_w = (uint16)(end_x - 150U);
+    uint32 left_last_ms;
+    uint32 right_last_ms;
+    uint32 left_age_ms;
+    uint32 right_age_ms;
+
+    if ((NULL != menu_full_redraw) && !(*menu_full_redraw) &&
+        (now_ms - last_refresh_ms_enc_icm < ICM_ENC_REFRESH_MS))
+    {
+        return;
+    }
+    last_refresh_ms_enc_icm = now_ms;
+
+    if ((NULL != menu_full_redraw) && *menu_full_redraw)
+    {
+        ips200_full(RGB565_BLACK);
+
+        ips200_set_color(RGB565_YELLOW, RGB565_BLACK);
+        ips200_show_string(10, 2, "Encoder LR");
+        ips200_draw_line(0, 16, ips200_width_max - 1, 16, RGB565_GRAY);
+
+        ips200_set_color(RGB565_CYAN, RGB565_BLACK);
+        ips200_show_string(70, 22, "LEFT");
+        ips200_show_string(150, 22, "RIGHT");
+
+        ips200_set_color(RGB565_WHITE, RGB565_BLACK);
+        ips200_show_string(10,  38, "Online:");
+        ips200_show_string(10,  54, "Count :");
+        ips200_show_string(10,  70, "Dist  :");
+        ips200_show_string(10,  86, "Speed :");
+        ips200_show_string(10, 102, "OdomPx:");
+        ips200_show_string(10, 118, "OdomPy:");
+        ips200_show_string(10, 134, "OdomSp:");
+        ips200_show_string(10, 150, "Active:");
+        ips200_show_string(10, 166, "AGEms :");
+
+        ips200_set_color(RGB565_GRAY, RGB565_BLACK);
+        menu_ui_show_pad(5U, (uint16)(ips200_height_max - 16U),
+                      (uint16)(ips200_width_max - 10U), "K1:Fusion  LONG:Exit");
+
+        *menu_full_redraw = 0U;
+    }
+
+    left_last_ms = board_comm_encl_get_last_rx_ms();
+    right_last_ms = rear_right_get_last_rx_ms();
+    left_age_ms = (0U != left_last_ms) ? (now_ms - left_last_ms) : 0U;
+    right_age_ms = (0U != right_last_ms) ? (now_ms - right_last_ms) : 0U;
+
+    {
+        uint8 online = board_comm_encl_is_online();
+        snprintf(val, sizeof(val), "%s", (0U != online) ? "YES" : "NO ");
+        ips200_set_color((0U != online) ? RGB565_GREEN : RGB565_RED, RGB565_BLACK);
+        menu_ui_show_pad(70, 38, left_w, val);
+
+        online = rear_right_is_online();
+        snprintf(val, sizeof(val), "%s", (0U != online) ? "YES" : "NO ");
+        ips200_set_color((0U != online) ? RGB565_GREEN : RGB565_RED, RGB565_BLACK);
+        menu_ui_show_pad(150, 38, right_w, val);
+    }
+
+    snprintf(val, sizeof(val), "%ld", (long)board_comm_encl_get_count());
+    ips200_set_color(RGB565_WHITE, RGB565_BLACK);
+    menu_ui_show_pad(70, 54, left_w, val);
+    snprintf(val, sizeof(val), "%ld", (long)rear_right_get_count());
+    ips200_set_color(RGB565_WHITE, RGB565_BLACK);
+    menu_ui_show_pad(150, 54, right_w, val);
+
+    snprintf(val, sizeof(val), "%ld mm", (long)board_comm_encl_get_dist_mm());
+    ips200_set_color(RGB565_WHITE, RGB565_BLACK);
+    menu_ui_show_pad(70, 70, left_w, val);
+    snprintf(val, sizeof(val), "%ld mm", (long)rear_right_get_dist_mm());
+    ips200_set_color(RGB565_WHITE, RGB565_BLACK);
+    menu_ui_show_pad(150, 70, right_w, val);
+
+    snprintf(val, sizeof(val), "%ld mm/s", (long)board_comm_encl_get_spd_mm_s());
+    ips200_set_color(RGB565_CYAN, RGB565_BLACK);
+    menu_ui_show_pad(70, 86, left_w, val);
+    snprintf(val, sizeof(val), "%ld mm/s", (long)rear_right_get_spd_mm_s());
+    ips200_set_color(RGB565_CYAN, RGB565_BLACK);
+    menu_ui_show_pad(150, 86, right_w, val);
+
+    snprintf(val, sizeof(val), "%.3f", (double)encoder_odom_get_px_m());
+    ips200_set_color(RGB565_WHITE, RGB565_BLACK);
+    menu_ui_show_pad(70, 102, left_w, val);
+    snprintf(val, sizeof(val), "%.3f", (double)encoder_odom_right_get_px_m());
+    ips200_set_color(RGB565_WHITE, RGB565_BLACK);
+    menu_ui_show_pad(150, 102, right_w, val);
+
+    snprintf(val, sizeof(val), "%.3f", (double)encoder_odom_get_py_m());
+    ips200_set_color(RGB565_WHITE, RGB565_BLACK);
+    menu_ui_show_pad(70, 118, left_w, val);
+    snprintf(val, sizeof(val), "%.3f", (double)encoder_odom_right_get_py_m());
+    ips200_set_color(RGB565_WHITE, RGB565_BLACK);
+    menu_ui_show_pad(150, 118, right_w, val);
+
+    snprintf(val, sizeof(val), "%.3f", (double)encoder_odom_get_speed_ms());
+    ips200_set_color(RGB565_CYAN, RGB565_BLACK);
+    menu_ui_show_pad(70, 134, left_w, val);
+    snprintf(val, sizeof(val), "%.3f", (double)encoder_odom_right_get_speed_ms());
+    ips200_set_color(RGB565_CYAN, RGB565_BLACK);
+    menu_ui_show_pad(150, 134, right_w, val);
+
+    {
+        uint8 active = ((0U != encoder_odom_is_enabled()) &&
+                        (0U != encoder_odom_is_active())) ? 1U : 0U;
+        snprintf(val, sizeof(val), "%s", (0U != active) ? "ON " : "OFF");
+        ips200_set_color((0U != active) ? RGB565_GREEN : RGB565_GRAY, RGB565_BLACK);
+        menu_ui_show_pad(70, 150, left_w, val);
+
+        active = ((0U != encoder_odom_right_is_enabled()) &&
+                  (0U != encoder_odom_right_is_active())) ? 1U : 0U;
+        snprintf(val, sizeof(val), "%s", (0U != active) ? "ON " : "OFF");
+        ips200_set_color((0U != active) ? RGB565_GREEN : RGB565_GRAY, RGB565_BLACK);
+        menu_ui_show_pad(150, 150, right_w, val);
+    }
+
+    if (0U != left_last_ms)
+        snprintf(val, sizeof(val), "%lu", (unsigned long)left_age_ms);
+    else
+        snprintf(val, sizeof(val), "--");
+    ips200_set_color((left_age_ms > 500U || 0U == left_last_ms) ? RGB565_RED : RGB565_WHITE, RGB565_BLACK);
+    menu_ui_show_pad(70, 166, left_w, val);
+
+    if (0U != right_last_ms)
+        snprintf(val, sizeof(val), "%lu", (unsigned long)right_age_ms);
+    else
+        snprintf(val, sizeof(val), "--");
+    ips200_set_color((right_age_ms > 500U || 0U == right_last_ms) ? RGB565_RED : RGB565_WHITE, RGB565_BLACK);
+    menu_ui_show_pad(150, 166, right_w, val);
 }
 
 static void icm_draw_ins_track_map_page(uint8 *menu_full_redraw)
@@ -1392,8 +1534,11 @@ uint8 menu_icm_handle_view(menu_view_ctx_t *ctx)
     if ((ICM_VIEW_ENCODER == *(ctx->mode)) &&
         (MY_KEY_SHORT_PRESS == my_key_get_state(MY_KEY_1)))
     {
+        uint8 next_enable;
         menu_ui_consume_key1();
-        encoder_odom_set_enable((uint8)(0U == encoder_odom_is_enabled()));
+        next_enable = (encoder_odom_is_enabled() || encoder_odom_right_is_enabled()) ? 0U : 1U;
+        encoder_odom_set_enable(next_enable);
+        encoder_odom_right_set_enable(next_enable);
         if (NULL != ctx->menu_full_redraw) *(ctx->menu_full_redraw) = 1U;
         return 1U;
     }

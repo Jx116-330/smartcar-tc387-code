@@ -25,6 +25,7 @@ void   pedal_input_task(void);
 /* ---- Raw（两通道都保留，用于调试对比） -------------------------------- */
 uint16 pedal_input_get_a45(void);
 uint16 pedal_input_get_a47(void);
+uint16 pedal_input_get_a24(void);
 
 /* ---- 油门通道（当前物理源 = A47） -------------------------------------- */
 /* 经 adc 均值 + 一阶 IIR 后的滤波值（0~4095） */
@@ -39,7 +40,14 @@ uint8  pedal_input_get_throttle_pressed(void);
  * 当前硬件未提供可用的刹车输入通道，本函数固定返回 0。
  * 上层任何刹车相关逻辑都应据此跳过，不要接入控制回路。
  */
+/* A24 brake input is available; active brake only releases throttle. */
 uint8  pedal_input_is_brake_available(void);
+uint16 pedal_input_get_brake_filtered(void);
+uint16 pedal_input_get_brake_percent(void);
+uint8  pedal_input_get_brake_pressed(void);
+uint8  pedal_input_get_brake_valid(void);
+uint8  pedal_input_get_brake_enable_request(void);
+uint16 pedal_input_get_brake_cmd(void);
 
 /* ---- 控制层接口层（Step 3） --------------------------------------------
  * 提供“上层控制可安全读取的标准命令量”：

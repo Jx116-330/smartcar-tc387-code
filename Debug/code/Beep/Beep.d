@@ -366,3 +366,11 @@ Beep.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\tuning\tuning_soft.h
 "E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\tuning\tuning_soft.h" :
 Beep.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\tuning\autotune.h"
 "E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\tuning\autotune.h" :
+Beep.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\Turn\Turn.h"
+"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\Turn\Turn.h" :
+Beep.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\libraries\\zf_common\zf_common_headfile.h"
+"E:\\ads\\Seekfree_TC387_Opensource_Library\\libraries\\zf_common\zf_common_headfile.h" :
+Beep.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\rear_right_encoder\rear_right_encoder.h"
+"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\rear_right_encoder\rear_right_encoder.h" :
+Beep.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\board_comm\encoder_odom_right.h"
+"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\board_comm\encoder_odom_right.h" :

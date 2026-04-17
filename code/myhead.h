@@ -13,6 +13,9 @@
 #include "path_display.h"
 #include "tuning_soft.h"
 #include "autotune.h"
+#include "Turn.h"
+#include "rear_right_encoder.h"
+#include "encoder_odom_right.h"
 
 typedef enum
 {

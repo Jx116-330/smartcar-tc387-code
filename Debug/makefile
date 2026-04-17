@@ -47,9 +47,11 @@ RM := rm -rf
 -include libraries/infineon_libraries/Infra/Platform/Tricore/Compilers/subdir.mk
 -include libraries/infineon_libraries/Configurations/subdir.mk
 -include code/tuning/subdir.mk
+-include code/rear_right_encoder/subdir.mk
 -include code/pedal/subdir.mk
 -include code/menu/subdir.mk
 -include code/board_comm/subdir.mk
+-include code/Turn/subdir.mk
 -include code/MyKey/subdir.mk
 -include code/MyEncoder/subdir.mk
 -include code/ICM43688/subdir.mk

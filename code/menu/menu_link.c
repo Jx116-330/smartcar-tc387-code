@@ -454,7 +454,7 @@ static void link_draw_hq_page(uint8 *menu_full_redraw)
  * 页面布局（8×16 字体，ips200 240x320，footer = height_max-16 = 304）：
  *   y= 2   "Encoder LR"            黄色标题
  *   y=16   ─────────────────────  灰色分割线
- *   y=22   "Left Rear Only"         青色单编码器提示
+ *   y=22   "Left Rear"              青色左后轮提示
  *   y=40   "ONLINE: YES/NO"         绿/红
  *   y=60   "Wheel : Left Rear"      灰色静态标签
  *   y=80   "Count : <n>"            白色，累计 count
@@ -491,7 +491,7 @@ static void link_draw_encoder_page(uint8 *menu_full_redraw)
         ips200_draw_line(0, 16, ips200_width_max - 1, 16, RGB565_GRAY);
 
         ips200_set_color(RGB565_CYAN, RGB565_BLACK);
-        ips200_show_string(10, 22, "Left Rear Only");
+        ips200_show_string(10, 22, "Left Rear");
 
         ips200_set_color(RGB565_WHITE, RGB565_BLACK);
         ips200_show_string(10,  40, "ONLINE: ");

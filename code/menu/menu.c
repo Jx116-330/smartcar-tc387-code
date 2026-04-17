@@ -22,6 +22,7 @@
 #include "menu_icm.h"
 #include "menu_pedal.h"
 #include "menu_link.h"
+#include "menu_turn.h"
 #include "ins_record.h"
 #include "ins_playback.h"
 #include "encoder_odom.h"
@@ -661,6 +662,7 @@ static MenuItem main_items[] = {
     {"5. PID",          NULL, &pid_menu},
     {"6. WiFi",         NULL, &wifi_page},
     {"7. Tuning",       NULL, &tuning_menu},
+    {"8. Turn",         NULL, &turn_menu},
 };
 
 static MenuPage main_menu = {
@@ -1010,6 +1012,12 @@ static void menu_execute_current_item(void)
             return;
         }
 
+        if (menu_turn_is_active())
+        {
+            menu_turn_handle_view();
+            return;
+        }
+
         menu_request_redraw(1U);
     }
     else if (NULL != item->sub_page)
@@ -1062,6 +1070,7 @@ void menu_init(void)
     menu_sync_ins_rec_item();
     menu_sync_ins_replay_labels();
     tuning_soft_init();
+    Turn_Page_Init();
 
     current_page = &main_menu;
     current_page->parent = NULL;
@@ -1155,6 +1164,7 @@ void menu_task(void)
     menu_sync_gps_record_item();
     menu_sync_ins_rec_item();
     menu_sync_ins_replay_labels();
+    menu_turn_sync_labels();
     tuning_soft_task();
 
     if (current_page == NULL || current_page->num_items <= 0)
@@ -1207,6 +1217,11 @@ void menu_task(void)
         return;
     }
 
+    if (menu_turn_handle_view())
+    {
+        return;
+    }
+
     menu_update_selection_from_encoder();
 
     if (my_key_get_state(MY_KEY_1) == MY_KEY_LONG_PRESS)
@@ -1221,7 +1236,7 @@ void menu_task(void)
         my_key_clear_state(MY_KEY_1);
         menu_execute_current_item();
 
-        if ((PID_VIEW_NONE != pid_display_mode) || (GPS_VIEW_NONE != gps_display_mode) || (RECORD_PARAM_VIEW_NONE != record_param_view_mode) || wifi_menu_is_active() || tuning_soft_is_active() || (ICM_VIEW_NONE != icm_display_mode) || (FUSION_VIEW_NONE != fusion_display_mode) || (PEDAL_VIEW_NONE != pedal_display_mode) || (LINK_VIEW_NONE != link_display_mode))
+        if ((PID_VIEW_NONE != pid_display_mode) || (GPS_VIEW_NONE != gps_display_mode) || (RECORD_PARAM_VIEW_NONE != record_param_view_mode) || wifi_menu_is_active() || tuning_soft_is_active() || menu_turn_is_active() || (ICM_VIEW_NONE != icm_display_mode) || (FUSION_VIEW_NONE != fusion_display_mode) || (PEDAL_VIEW_NONE != pedal_display_mode) || (LINK_VIEW_NONE != link_display_mode))
         {
             menu_needs_update = 0U;
             menu_footer_needs_update = 0U;

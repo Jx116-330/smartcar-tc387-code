@@ -364,6 +364,14 @@ cpu0_main.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\tuning\tuning_s
 "E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\tuning\tuning_soft.h" :
 cpu0_main.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\tuning\autotune.h"
 "E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\tuning\autotune.h" :
+cpu0_main.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\Turn\Turn.h"
+"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\Turn\Turn.h" :
+cpu0_main.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\libraries\\zf_common\zf_common_headfile.h"
+"E:\\ads\\Seekfree_TC387_Opensource_Library\\libraries\\zf_common\zf_common_headfile.h" :
+cpu0_main.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\rear_right_encoder\rear_right_encoder.h"
+"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\rear_right_encoder\rear_right_encoder.h" :
+cpu0_main.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\board_comm\encoder_odom_right.h"
+"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\board_comm\encoder_odom_right.h" :
 cpu0_main.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\ICM43688\icm_attitude.h"
 "E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\ICM43688\icm_attitude.h" :
 cpu0_main.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\ICM43688\icm_ins.h"
@@ -378,6 +386,8 @@ cpu0_main.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\ICM43688\ins_ct
 "E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\ICM43688\ins_ctrl.h" :
 cpu0_main.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\pedal\pedal_input.h"
 "E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\pedal\pedal_input.h" :
+cpu0_main.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\Turn\Turn.h"
+"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\Turn\Turn.h" :
 cpu0_main.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\board_comm\board_comm.h"
 "E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\board_comm\board_comm.h" :
 cpu0_main.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\board_comm\encoder_odom.h"
