@@ -89,6 +89,7 @@ static int32  bc_spd3_cps       = 0;
  * 三个有符号 int32，TC264 每 20ms 发一帧。仅左后轮有效。
  */
 #define BC_ENCL_TIMEOUT_MS      2000U   /* 容忍偶尔丢帧，从 500 放宽到 2000 */
+#define BC_ENCL_SIGN            (-1)    /* vehicle test: invert left rear ENCL sign to match forward motion */
 
 static int32  bc_encl_count      = 0;
 static int32  bc_encl_dist_mm    = 0;
@@ -796,9 +797,9 @@ int32 board_comm_get_spd3_cps(void)
 }
 
 /* ---- ENCL 左后轮编码器 getter ---------------------------------------- */
-int32  board_comm_encl_get_count(void)       { return bc_encl_count; }
-int32  board_comm_encl_get_dist_mm(void)     { return bc_encl_dist_mm; }
-int32  board_comm_encl_get_spd_mm_s(void)    { return bc_encl_spd_mm_s; }
+int32  board_comm_encl_get_count(void)       { return BC_ENCL_SIGN * bc_encl_count; }
+int32  board_comm_encl_get_dist_mm(void)     { return BC_ENCL_SIGN * bc_encl_dist_mm; }
+int32  board_comm_encl_get_spd_mm_s(void)    { return BC_ENCL_SIGN * bc_encl_spd_mm_s; }
 uint32 board_comm_encl_get_last_rx_ms(void)  { return bc_encl_last_rx_ms; }
 
 uint8 board_comm_encl_has_frame(void)

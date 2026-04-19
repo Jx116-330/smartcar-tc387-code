@@ -16,7 +16,7 @@
 /* ==== Polarity, tune on vehicle ==== */
 #define RREAR_PULSE_ACTIVE_RISING   1          /* 1=rising edge, 0=falling edge */
 #define RREAR_DIR_FORWARD_LEVEL     1          /* DIR=1 means forward; set 0 if reversed */
-#define RREAR_SIGN                  1          /* set -1 to invert final sign */
+#define RREAR_SIGN                  -1         /* vehicle test: invert final sign to match forward motion */
 
 /* ==== Lifecycle ==== */
 void   rear_right_encoder_init(void);
