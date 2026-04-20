@@ -24,7 +24,7 @@
 #include "tuning_soft.h"
 #include "menu_icm.h"
 #include "menu_pedal.h"
-#include "menu_link.h"
+/* menu_link removed together with board_comm (TC264 inter-board link) */
 #include "menu_turn.h"
 #include "encoder_odom.h"
 #include "encoder_odom_right.h"
@@ -57,11 +57,9 @@ static record_param_view_mode_t record_param_view_mode = RECORD_PARAM_VIEW_NONE;
 static uint8 icm_display_mode    = ICM_VIEW_NONE;
 static uint8 fusion_display_mode = FUSION_VIEW_NONE;
 static uint8 pedal_display_mode  = PEDAL_VIEW_NONE;
-static uint8 link_display_mode   = LINK_VIEW_NONE;
 static menu_view_ctx_t icm_ctx;
 static menu_view_ctx_t fusion_ctx;
 static menu_view_ctx_t pedal_ctx;
-static menu_view_ctx_t link_ctx;
 static char gps_status_hint[64] = "";
 static MenuPage *current_page = NULL;
 static MenuPage gps_menu;
@@ -389,11 +387,6 @@ static void menu_sync_ins_rec_item(void)
 
 /* ---- Pedal ---- */
 
-/* ---- TC264 Link ---- */
-
-static void link_action_debug(void)     { menu_link_action_enter(&link_ctx, LINK_VIEW_DEBUG); }
-static void link_action_hq_status(void) { menu_link_action_enter(&link_ctx, LINK_VIEW_HQ_STATUS); }
-
 /* ---- Pedal ---- */
 
 static void pedal_action_debug(void)      { menu_pedal_action_enter(&pedal_ctx, PEDAL_VIEW_DEBUG); }
@@ -645,27 +638,14 @@ static MenuPage pedal_menu = {
     NULL
 };
 
-static MenuItem link_items[] = {
-    {"1. Link Debug", link_action_debug,     NULL},
-    {"2. HQ Status",  link_action_hq_status, NULL},
-};
-
-static MenuPage link_menu = {
-    "TC264 Link",
-    link_items,
-    sizeof(link_items) / sizeof(MenuItem),
-    NULL
-};
-
 static MenuItem main_items[] = {
     {"1. GPS",          NULL, &gps_menu},
     {"2. INS",          NULL, &icm_menu},
     {"3. Pedal",        NULL, &pedal_menu},
-    {"4. TC264 Link",   NULL, &link_menu},
-    {"5. PID",          NULL, &pid_menu},
-    {"6. WiFi",         NULL, &wifi_page},
-    {"7. Tuning",       NULL, &tuning_menu},
-    {"8. Turn",         NULL, &turn_menu},
+    {"4. PID",          NULL, &pid_menu},
+    {"5. WiFi",         NULL, &wifi_page},
+    {"6. Tuning",       NULL, &tuning_menu},
+    {"7. Turn",         NULL, &turn_menu},
 };
 
 static MenuPage main_menu = {
@@ -912,7 +892,6 @@ static void menu_return_to_parent(void)
     icm_display_mode    = 0U;
     fusion_display_mode = 0U;
     pedal_display_mode  = 0U;
-    link_display_mode   = 0U;
     gps_clear_status_hint();
     menu_reset_dynamic_region();
     menu_request_redraw(1U);
@@ -1009,12 +988,6 @@ static void menu_execute_current_item(void)
             return;
         }
 
-        if (LINK_VIEW_NONE != link_display_mode)
-        {
-            menu_link_handle_view(&link_ctx);
-            return;
-        }
-
         if (menu_turn_is_active())
         {
             menu_turn_handle_view();
@@ -1060,12 +1033,6 @@ void menu_init(void)
     pedal_ctx.drain_encoder_events = menu_drain_encoder_events;
     pedal_ctx.request_redraw       = menu_request_redraw;
     pedal_ctx.reset_dynamic_region = menu_reset_dynamic_region;
-
-    link_ctx.mode                 = &link_display_mode;
-    link_ctx.menu_full_redraw     = &menu_full_redraw;
-    link_ctx.drain_encoder_events = menu_drain_encoder_events;
-    link_ctx.request_redraw       = menu_request_redraw;
-    link_ctx.reset_dynamic_region = menu_reset_dynamic_region;
 
     Init_Load_Params();
     menu_sync_gps_record_item();
@@ -1151,8 +1118,7 @@ void menu_request_full_redraw(void)
 }
 
 /* 菜单周期任务：处理输入、切换页面并刷新当前显示内容
- * 非阻塞节拍：不到 10ms 直接返回，不阻塞主循环。
- * board_comm_task() 因此可以在间隙高速运行，及时处理 UART 接收。 */
+ * 非阻塞节拍：不到 10ms 直接返回，不阻塞主循环。 */
 void menu_task(void)
 {
     static uint32 menu_last_tick_ms = 0U;
@@ -1215,11 +1181,6 @@ void menu_task(void)
         return;
     }
 
-    if (menu_link_handle_view(&link_ctx))
-    {
-        return;
-    }
-
     if (menu_turn_handle_view())
     {
         return;
@@ -1239,7 +1200,7 @@ void menu_task(void)
         my_key_clear_state(MY_KEY_1);
         menu_execute_current_item();
 
-        if ((PID_VIEW_NONE != pid_display_mode) || (GPS_VIEW_NONE != gps_display_mode) || (RECORD_PARAM_VIEW_NONE != record_param_view_mode) || wifi_menu_is_active() || tuning_soft_is_active() || menu_turn_is_active() || (ICM_VIEW_NONE != icm_display_mode) || (FUSION_VIEW_NONE != fusion_display_mode) || (PEDAL_VIEW_NONE != pedal_display_mode) || (LINK_VIEW_NONE != link_display_mode))
+        if ((PID_VIEW_NONE != pid_display_mode) || (GPS_VIEW_NONE != gps_display_mode) || (RECORD_PARAM_VIEW_NONE != record_param_view_mode) || wifi_menu_is_active() || tuning_soft_is_active() || menu_turn_is_active() || (ICM_VIEW_NONE != icm_display_mode) || (FUSION_VIEW_NONE != fusion_display_mode) || (PEDAL_VIEW_NONE != pedal_display_mode))
         {
             menu_needs_update = 0U;
             menu_footer_needs_update = 0U;

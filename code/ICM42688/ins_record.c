@@ -16,7 +16,7 @@
 #include <ICM42688/icm_attitude.h>
 #include <ICM42688/icm_ins.h>
 #include <ICM42688/ins_record.h>
-#include "board_comm.h"
+#include "rear_left_encoder.h"
 #include "zf_common_headfile.h"
 
 #include <math.h>
@@ -70,8 +70,8 @@ static uint8 ins_record_add_point(float px, float py, float yaw)
     pt->vx_ms        = vx;
     pt->vy_ms        = vy;
     pt->yaw_deg      = yaw;
-    pt->enc_spd_mm_s = board_comm_encl_get_spd_mm_s();
-    pt->enc_dist_mm  = board_comm_encl_get_dist_mm();
+    pt->enc_spd_mm_s = rear_left_get_spd_mm_s();
+    pt->enc_dist_mm  = rear_left_get_dist_mm();
 
     ins_record_data.point_count++;
 

@@ -50,10 +50,6 @@ cpu0_main.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\ICM42688\ins_rec
 "E:\\ads\\Seekfree_TC387_Opensource_Library\\code\ICM42688\ins_record.h" :
 cpu0_main.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\myhead.h"
 "E:\\ads\\Seekfree_TC387_Opensource_Library\\code\myhead.h" :
-cpu0_main.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\ICM42688\ICM42688.h"
-"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\ICM42688\ICM42688.h" :
-cpu0_main.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\myhead.h"
-"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\myhead.h" :
 cpu0_main.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\libraries\\zf_common\zf_common_headfile.h"
 "E:\\ads\\Seekfree_TC387_Opensource_Library\\libraries\\zf_common\zf_common_headfile.h" :
 cpu0_main.o :	"E:\ZNC\AURIX-Studio-1.10.6\tools\Compilers\Tasking_1.1r8\ctc\include\stdbool.h"
@@ -346,6 +342,10 @@ cpu0_main.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\libraries\\zf_compone
 "E:\\ads\\Seekfree_TC387_Opensource_Library\\libraries\\zf_components\seekfree_assistant.h" :
 cpu0_main.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\libraries\\zf_components\seekfree_assistant_interface.h"
 "E:\\ads\\Seekfree_TC387_Opensource_Library\\libraries\\zf_components\seekfree_assistant_interface.h" :
+cpu0_main.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\ICM42688\ICM42688.h"
+"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\ICM42688\ICM42688.h" :
+cpu0_main.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\myhead.h"
+"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\myhead.h" :
 cpu0_main.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\GPS\display_gps.h"
 "E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\GPS\display_gps.h" :
 cpu0_main.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\GPS\path_config.h"
@@ -388,7 +388,9 @@ cpu0_main.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\pedal\pedal_inp
 "E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\pedal\pedal_input.h" :
 cpu0_main.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\Turn\Turn.h"
 "E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\Turn\Turn.h" :
-cpu0_main.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\board_comm\board_comm.h"
-"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\board_comm\board_comm.h" :
+cpu0_main.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\rear_left_encoder\rear_left_encoder.h"
+"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\rear_left_encoder\rear_left_encoder.h" :
+cpu0_main.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\drive_motor\drive_motor.h"
+"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\drive_motor\drive_motor.h" :
 cpu0_main.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\board_comm\encoder_odom.h"
 "E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\board_comm\encoder_odom.h" :

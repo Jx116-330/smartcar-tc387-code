@@ -14,7 +14,7 @@
 #include "MyKey.h"
 #include "MyEncoder.h"
 #include "autotune.h"
-#include "board_comm.h"
+#include "rear_left_encoder.h"
 #include "encoder_odom.h"
 #include "Turn.h"
 #include "rear_right_encoder.h"
@@ -519,9 +519,9 @@ static uint8 tuning_send_once(void)
                  "ins_px=%.3f,ins_py=%.3f,ins_spd=%.3f,"
                  "L_px=%.3f,L_py=%.3f,R_px=%.3f,R_py=%.3f\r\n",
                  (unsigned long)now_ms,
-                 (long)board_comm_encl_get_count(),
-                 (long)board_comm_encl_get_dist_mm(),
-                 (long)board_comm_encl_get_spd_mm_s(),
+                 (long)rear_left_get_count(),
+                 (long)rear_left_get_dist_mm(),
+                 (long)rear_left_get_spd_mm_s(),
                  (unsigned int)encoder_odom_is_active(),
                  (long)rear_right_get_count(),
                  (long)rear_right_get_dist_mm(),
@@ -630,8 +630,8 @@ static void tuning_send_track_point(void)
              (unsigned int)icm_ins_is_stationary(),
              fdbg ? fdbg->gps_x_m : 0.0f,
              fdbg ? fdbg->gps_y_m : 0.0f,
-             (long)board_comm_encl_get_spd_mm_s(),
-             (long)board_comm_encl_get_dist_mm());
+             (long)rear_left_get_spd_mm_s(),
+             (long)rear_left_get_dist_mm());
     tuning_send_line(line);
 }
 

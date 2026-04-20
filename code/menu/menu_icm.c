@@ -16,7 +16,7 @@
 #include "zf_common_headfile.h"
 #include "zf_device_ips200.h"
 #include "display_gps.h"
-#include "board_comm.h"
+#include "rear_left_encoder.h"
 #include "encoder_odom.h"
 #include "rear_right_encoder.h"
 #include "encoder_odom_right.h"
@@ -588,13 +588,13 @@ static void icm_draw_encoder_page(uint8 *menu_full_redraw)
         *menu_full_redraw = 0U;
     }
 
-    left_last_ms = board_comm_encl_get_last_rx_ms();
+    left_last_ms = rear_left_get_last_rx_ms();
     right_last_ms = rear_right_get_last_rx_ms();
     left_age_ms = (0U != left_last_ms) ? (now_ms - left_last_ms) : 0U;
     right_age_ms = (0U != right_last_ms) ? (now_ms - right_last_ms) : 0U;
 
     {
-        uint8 online = board_comm_encl_is_online();
+        uint8 online = rear_left_is_online();
         snprintf(val, sizeof(val), "%s", (0U != online) ? "YES" : "NO ");
         ips200_set_color((0U != online) ? RGB565_GREEN : RGB565_RED, RGB565_BLACK);
         menu_ui_show_pad(70, 38, left_w, val);
@@ -605,21 +605,21 @@ static void icm_draw_encoder_page(uint8 *menu_full_redraw)
         menu_ui_show_pad(150, 38, right_w, val);
     }
 
-    snprintf(val, sizeof(val), "%ld", (long)board_comm_encl_get_count());
+    snprintf(val, sizeof(val), "%ld", (long)rear_left_get_count());
     ips200_set_color(RGB565_WHITE, RGB565_BLACK);
     menu_ui_show_pad(70, 54, left_w, val);
     snprintf(val, sizeof(val), "%ld", (long)rear_right_get_count());
     ips200_set_color(RGB565_WHITE, RGB565_BLACK);
     menu_ui_show_pad(150, 54, right_w, val);
 
-    snprintf(val, sizeof(val), "%ld mm", (long)board_comm_encl_get_dist_mm());
+    snprintf(val, sizeof(val), "%ld mm", (long)rear_left_get_dist_mm());
     ips200_set_color(RGB565_WHITE, RGB565_BLACK);
     menu_ui_show_pad(70, 70, left_w, val);
     snprintf(val, sizeof(val), "%ld mm", (long)rear_right_get_dist_mm());
     ips200_set_color(RGB565_WHITE, RGB565_BLACK);
     menu_ui_show_pad(150, 70, right_w, val);
 
-    snprintf(val, sizeof(val), "%ld mm/s", (long)board_comm_encl_get_spd_mm_s());
+    snprintf(val, sizeof(val), "%ld mm/s", (long)rear_left_get_spd_mm_s());
     ips200_set_color(RGB565_CYAN, RGB565_BLACK);
     menu_ui_show_pad(70, 86, left_w, val);
     snprintf(val, sizeof(val), "%ld mm/s", (long)rear_right_get_spd_mm_s());

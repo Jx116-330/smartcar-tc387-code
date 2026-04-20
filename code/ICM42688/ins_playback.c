@@ -18,7 +18,7 @@
 #include <ICM42688/icm_ins.h>
 #include <ICM42688/ins_playback.h>
 #include <ICM42688/ins_record.h>
-#include "board_comm.h"
+#include "rear_left_encoder.h"
 
 #include <math.h>
 
@@ -105,7 +105,7 @@ void ins_playback_start(void)
 
     g_play.current_target_idx = 0U;
     g_play.last_dist_m        = -1.0f;
-    g_play.start_enc_dist_mm  = board_comm_encl_get_dist_mm();
+    g_play.start_enc_dist_mm  = rear_left_get_dist_mm();
     g_play.state              = INS_PLAY_RUNNING;
 }
 
@@ -153,7 +153,7 @@ void ins_playback_task(void)
     g_play.last_dist_m = play_dist2d(cur_px - tgt->px_m, cur_py - tgt->py_m);
 
     /* 里程驱动：当前回放里程 vs 目标点录制里程 */
-    current_mileage_mm = board_comm_encl_get_dist_mm() - g_play.start_enc_dist_mm;
+    current_mileage_mm = rear_left_get_dist_mm() - g_play.start_enc_dist_mm;
     target_mileage_mm  = play_point_mileage_mm(g_play.current_target_idx);
 
     /* 取绝对值（编码器可能倒转） */

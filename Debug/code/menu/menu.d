@@ -352,12 +352,12 @@ menu.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\MyKey\MyKey.h"
 "E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\MyKey\MyKey.h" :
 menu.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\myhead.h"
 "E:\\ads\\Seekfree_TC387_Opensource_Library\\code\myhead.h" :
+menu.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\libraries\\zf_common\zf_common_headfile.h"
+"E:\\ads\\Seekfree_TC387_Opensource_Library\\libraries\\zf_common\zf_common_headfile.h" :
 menu.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\ICM42688\ICM42688.h"
 "E:\\ads\\Seekfree_TC387_Opensource_Library\\code\ICM42688\ICM42688.h" :
 menu.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\myhead.h"
 "E:\\ads\\Seekfree_TC387_Opensource_Library\\code\myhead.h" :
-menu.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\libraries\\zf_common\zf_common_headfile.h"
-"E:\\ads\\Seekfree_TC387_Opensource_Library\\libraries\\zf_common\zf_common_headfile.h" :
 menu.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\GPS\display_gps.h"
 "E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\GPS\display_gps.h" :
 menu.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\libraries\\zf_common\zf_common_headfile.h"
@@ -414,10 +414,6 @@ menu.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\MyKey\MyKey.h"
 "E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\MyKey\MyKey.h" :
 menu.o :	..\code\menu\menu_pedal.h
 ..\code\menu\menu_pedal.h :
-menu.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\MyKey\MyKey.h"
-"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\MyKey\MyKey.h" :
-menu.o :	..\code\menu\menu_link.h
-..\code\menu\menu_link.h :
 menu.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\MyKey\MyKey.h"
 "E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\MyKey\MyKey.h" :
 menu.o :	..\code\menu\menu_turn.h

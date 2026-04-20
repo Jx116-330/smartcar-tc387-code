@@ -330,8 +330,8 @@ MyKey.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\libraries\\zf_components\
 "E:\\ads\\Seekfree_TC387_Opensource_Library\\libraries\\zf_components\seekfree_assistant.h" :
 MyKey.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\libraries\\zf_components\seekfree_assistant_interface.h"
 "E:\\ads\\Seekfree_TC387_Opensource_Library\\libraries\\zf_components\seekfree_assistant_interface.h" :
-MyKey.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\ICM43688\ICM42688.h"
-"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\ICM43688\ICM42688.h" :
+MyKey.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\ICM42688\ICM42688.h"
+"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\ICM42688\ICM42688.h" :
 MyKey.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\myhead.h"
 "E:\\ads\\Seekfree_TC387_Opensource_Library\\code\myhead.h" :
 MyKey.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\GPS\display_gps.h"

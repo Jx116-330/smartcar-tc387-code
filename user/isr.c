@@ -14,7 +14,8 @@
 #include "isr.h"
 #include "Turn.h"
 #include "rear_right_encoder.h"
-#include "board_comm.h"   /* TC264 板间通信 RX 处理 */
+#include "rear_left_encoder.h"
+#include "drive_motor.h"
 #include "pedal_input.h"  /* 踏板输入（10ms ISR 调用） */
 
 /* 1ms 定时中断：以固定 1kHz 采样 ICM42688，保证惯导积分 dt 稳定 */
@@ -54,6 +55,8 @@ IFX_INTERRUPT(cc60_pit_ch1_isr, CCU6_0_CH1_INT_VECTAB_NUM, CCU6_0_CH1_ISR_PRIORI
     pedal_input_task();
     Turn_ControlTask();
     rear_right_encoder_task();
+    rear_left_encoder_task();
+    drive_motor_apply_from_pedal();
 }
 
 /* 10ms 定时中断：惯导记录 / 回放 / 控制（固定 100Hz 节拍）
@@ -73,6 +76,7 @@ IFX_INTERRUPT(cc61_pit_ch1_isr, CCU6_1_CH1_INT_VECTAB_NUM, CCU6_1_CH1_ISR_PRIORI
     interrupt_global_enable(0);                     // 开启中断嵌套
     pit_clear_flag(CCU61_CH1);
     rear_right_encoder_poll_isr();
+    rear_left_encoder_poll_isr();
 }
 
 
@@ -159,10 +163,8 @@ IFX_INTERRUPT(uart1_tx_isr, UART1_INT_VECTAB_NUM, UART1_TX_INT_PRIO)
 IFX_INTERRUPT(uart1_rx_isr, UART1_INT_VECTAB_NUM, UART1_RX_INT_PRIO)
 {
     interrupt_global_enable(0);                     // 开启中断嵌套
-    uart1_rx_isr_hit_count++;                       // 诊断：ISR 命中计数（extern in board_comm.h）
-    /* 原来调用 camera_uart_handler()，现暂时切换为 TC264 板间通信接收。
-     * 恢复相机：将下一行改回 camera_uart_handler(); 即可。           */
-    board_comm_uart1_rx_handler();                  // TC264 板间通信接收
+    /* UART1 pins (P33.12/P33.13) are now owned by drive_motor (PWM + DIR).
+     * This vector is kept as a stub so the runtime table stays valid. */
 }
 
 IFX_INTERRUPT(uart2_tx_isr, UART2_INT_VECTAB_NUM, UART2_TX_INT_PRIO)

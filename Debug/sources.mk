@@ -31,8 +31,10 @@ code/MyEncoder \
 code/MyKey \
 code/Turn \
 code/board_comm \
+code/drive_motor \
 code/menu \
 code/pedal \
+code/rear_left_encoder \
 code/rear_right_encoder \
 code/tuning \
 libraries/infineon_libraries/Configurations \

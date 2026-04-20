@@ -17,13 +17,17 @@
 #include <ICM42688/icm_attitude.h>
 #include <ICM42688/icm_ins.h>
 #include "encoder_odom.h"
-#include "board_comm.h"
+#include "rear_left_encoder.h"
 #include <math.h>
 
-/* ==== 融合增益 ============================================================ */
-#define EO_VEL_GAIN     0.15f   /* 速度校正增益（编码器速度可靠，比 GPS 的 0.03 更激进） */
-#define EO_POS_GAIN     0.03f   /* 位置校正增益（编码器位置靠航向积分，保守一些） */
-#define EO_SYNC_RATE    0.01f   /* DR 位置向 INS 回拉速率（防航向漂移导致 DR 位置发散） */
+/* ==== 融合增益 ============================================================
+ * 本地编码器每 10ms 采样一次，encoder_odom 以 100Hz 触发。
+ * 老 TC264 链路是 25Hz，增益依次是 0.15 / 0.03 / 0.01。
+ * 这里按 1/4 缩放：每秒累计校正量保持不变，但分摊到 4 倍的采样间隔，
+ * INS 校正更平滑、响应更快，且与 encoder_odom_right 的结构对称。 */
+#define EO_VEL_GAIN     0.0375f /* 原 0.15 / 4 */
+#define EO_POS_GAIN     0.0075f /* 原 0.03 / 4 */
+#define EO_SYNC_RATE    0.0025f /* 原 0.01 / 4 */
 
 #ifndef M_PI
 #define M_PI            3.14159265358979323846f
@@ -69,7 +73,7 @@ void encoder_odom_task(void)
     float  ins_px, ins_py;
 
     /* ---- 帧率门控: 只在新 ENCL 帧到达时处理 ---- */
-    rx_ms = board_comm_encl_get_last_rx_ms();
+    rx_ms = rear_left_get_last_rx_ms();
     if (rx_ms == eo_last_process_ms)
     {
         return;                             /* 没有新帧，跳过 */
@@ -77,7 +81,7 @@ void encoder_odom_task(void)
     eo_last_process_ms = rx_ms;
 
     /* 采集编码器速度（即使融合关闭也更新，供菜单显示） */
-    eo_spd_ms = (float)board_comm_encl_get_spd_mm_s() * 0.001f;
+    eo_spd_ms = (float)rear_left_get_spd_mm_s() * 0.001f;
 
     /* ---- 前置检查 ---- */
     if (0U == eo_enabled)
@@ -85,7 +89,7 @@ void encoder_odom_task(void)
         eo_active = 0U;
         return;                             /* 融合已关闭 */
     }
-    if (0U == board_comm_encl_is_online())
+    if (0U == rear_left_is_online())
     {
         eo_active = 0U;
         return;                             /* 编码器离线 */
@@ -107,14 +111,14 @@ void encoder_odom_task(void)
     {
         eo_px_m         = ins_px;
         eo_py_m         = ins_py;
-        eo_last_dist_mm = board_comm_encl_get_dist_mm();
+        eo_last_dist_mm = rear_left_get_dist_mm();
         eo_initialized  = 1U;
         eo_active       = 1U;
         return;                             /* 首帧不校正，仅同步 */
     }
 
     /* ---- 计算距离增量 ---- */
-    cur_dist_mm  = board_comm_encl_get_dist_mm();
+    cur_dist_mm  = rear_left_get_dist_mm();
     delta_dist_mm = cur_dist_mm - eo_last_dist_mm;
     eo_last_dist_mm = cur_dist_mm;
     delta_dist_m = (float)delta_dist_mm * 0.001f;

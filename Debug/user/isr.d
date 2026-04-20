@@ -50,8 +50,6 @@ isr.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\ICM42688\ICM42688.h"
 "E:\\ads\\Seekfree_TC387_Opensource_Library\\code\ICM42688\ICM42688.h" :
 isr.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\myhead.h"
 "E:\\ads\\Seekfree_TC387_Opensource_Library\\code\myhead.h" :
-isr.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\ICM42688\ICM42688.h"
-"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\ICM42688\ICM42688.h" :
 isr.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\libraries\\zf_common\zf_common_headfile.h"
 "E:\\ads\\Seekfree_TC387_Opensource_Library\\libraries\\zf_common\zf_common_headfile.h" :
 isr.o :	"E:\ZNC\AURIX-Studio-1.10.6\tools\Compilers\Tasking_1.1r8\ctc\include\stdbool.h"
@@ -344,6 +342,8 @@ isr.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\libraries\\zf_components\se
 "E:\\ads\\Seekfree_TC387_Opensource_Library\\libraries\\zf_components\seekfree_assistant.h" :
 isr.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\libraries\\zf_components\seekfree_assistant_interface.h"
 "E:\\ads\\Seekfree_TC387_Opensource_Library\\libraries\\zf_components\seekfree_assistant_interface.h" :
+isr.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\ICM42688\ICM42688.h"
+"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\ICM42688\ICM42688.h" :
 isr.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\GPS\display_gps.h"
 "E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\GPS\display_gps.h" :
 isr.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\GPS\path_config.h"
@@ -390,7 +390,9 @@ isr.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\libraries\\zf_common\zf_com
 "E:\\ads\\Seekfree_TC387_Opensource_Library\\libraries\\zf_common\zf_common_headfile.h" :
 isr.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\Turn\Turn.h"
 "E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\Turn\Turn.h" :
-isr.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\board_comm\board_comm.h"
-"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\board_comm\board_comm.h" :
+isr.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\rear_left_encoder\rear_left_encoder.h"
+"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\rear_left_encoder\rear_left_encoder.h" :
+isr.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\drive_motor\drive_motor.h"
+"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\drive_motor\drive_motor.h" :
 isr.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\pedal\pedal_input.h"
 "E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\pedal\pedal_input.h" :

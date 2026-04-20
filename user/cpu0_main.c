@@ -9,19 +9,10 @@
 #include "Turn.h"
 #include "rear_right_encoder.h"
 #include "encoder_odom_right.h"
-#include "board_comm.h"   /* TC264 板间通信（接收诊断链路，用于收 ENC） */
+#include "rear_left_encoder.h" /* 本地左后编码器（TIM2 硬件 DIR 模式） */
+#include "drive_motor.h"       /* 本地两路电机驱动（ATOM2_CH4/CH1 + DIR） */
 #include "encoder_odom.h" /* 编码器里程计 → INS 融合 */
 #pragma section all "cpu0_dsram"
-
-/* ==== UART1 发送 THR 命令 ====
- * 主板作为"命令源"：每周期把 pedal_input 产出的控制层快照打成 ASCII：
- *     THR,<cmd 0~1000>,<enable 0/1>,<valid 0/1>\r\n
- * 经 UART1 → MAX3232 → 对端 hq 板。
- * UART1 已由 board_comm_init() 完成 115200 P33_12/P33_13 初始化，
- * 此处只调用 uart_write_string 发送，不动初始化。
- */
-#define TXTHR_UART              UART_1
-#define TXTHR_PERIOD_MS         20U    /* 与 hq 侧 ENC 上行节拍一致 */
 
 int core0_main(void)
 {
@@ -40,7 +31,8 @@ int core0_main(void)
     icm_gps_fusion_init();
     pedal_input_init();
     Turn_Init();
-    board_comm_init();    /* TC264 板间通信：初始化 UART1 115200 P33_12/P33_13 */
+    drive_motor_init();   /* 本地两路电机 PWM + DIR */
+    rear_left_encoder_init();
     encoder_odom_init();  /* 编码器里程计融合：初始化状态 */
 
     /* 启动 10ms 定时中断：把固定节拍任务从主循环搬到 ISR
@@ -72,48 +64,9 @@ int core0_main(void)
             }
         }
 
-        /* pedal_input_task / ins_record / ins_playback / ins_ctrl
+        /* pedal_input_task / ins_record / ins_playback / ins_ctrl / drive_motor_apply
          * 已搬入 10ms 定时中断 (CCU60_CH1 / CCU61_CH0)，不再在主循环调用 */
 
-        /* ==== UART1 发送 THR,<cmd>,<enable>,<valid>,<limit>\r\n（20ms 一次）====
-         * enable 已叠加菜单 drive_enable 总开关：只有菜单允许 AND 踏板请求才 = 1
-         * limit 是菜单设定的 PWM 占空比上限 (0~1000)
-         * TC264 侧用 cmd*limit/1000 算最终 duty，实现百分比出力控制
-         */
-        {
-            static uint32 txthr_last_ms = 0U;
-            uint32 now_ms = system_getval_ms();
-            if ((now_ms - txthr_last_ms) >= TXTHR_PERIOD_MS)
-            {
-                uint16 cmd   = pedal_input_get_throttle_cmd();
-                uint8  en    = pedal_input_get_throttle_enable_request()
-                               && pedal_input_get_drive_enable();    /* 菜单总开关门控 */
-                uint8  vld   = pedal_input_get_throttle_valid();
-                uint16 limit = pedal_input_get_pwm_limit();
-                char   txthr_buf[48];
-
-                txthr_last_ms = now_ms;
-                {
-                    uint8 dir = pedal_input_get_direction();
-                    sprintf(txthr_buf, "THR,%u,%u,%u,%u,%u\r\n",
-                            (unsigned)cmd, (unsigned)en, (unsigned)vld, (unsigned)limit, (unsigned)dir);
-                    uart_write_string(TXTHR_UART, txthr_buf);
-                }
-                /* debug printf 降频 */
-                {
-                    static uint32 txthr_dbg_skip = 0U;
-                    if (++txthr_dbg_skip >= 50U)
-                    {
-                        txthr_dbg_skip = 0U;
-                        printf("[TXTHR] THR,%u,%u,%u,%u,%u\r\n",
-                               (unsigned)cmd, (unsigned)en, (unsigned)vld, (unsigned)limit,
-                               (unsigned)pedal_input_get_direction());
-                    }
-                }
-            }
-        }
-
-        board_comm_task();   /* 从 UART1 RX 收 ENCL/HQ 并解析 */
         encoder_odom_task(); /* 编码器里程计 → INS 速度+位置双校正 (25Hz) */
         encoder_odom_right_task();
         menu_task();         /* 菜单 + tuning_soft_task() */
