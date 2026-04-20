@@ -8,6 +8,7 @@
 #include <ICM42688/icm_ins.h>
 #include <ICM42688/ins_playback.h>
 #include <ICM42688/ins_record.h>
+#include "IfxStm.h"
 #include "menu.h"
 #include "menu_params.h"
 #include "menu_pid.h"
@@ -24,6 +25,8 @@
 #include "tuning_soft.h"
 #include "menu_icm.h"
 #include "menu_pedal.h"
+#include "startup_animation_data.h"
+#include "startup_animation2_data.h"
 /* menu_link removed together with board_comm (TC264 inter-board link) */
 #include "menu_turn.h"
 #include "encoder_odom.h"
@@ -31,6 +34,17 @@
 #include "menu_ui_utils.h"
 
 MyParams_t g_params;
+
+typedef struct
+{
+    const uint16 * const *frames;
+    const uint16 *frame_delays_ms;
+    uint16 frame_width;
+    uint16 frame_height;
+    uint16 display_width;
+    uint16 display_height;
+    uint16 frame_count;
+} menu_startup_animation_info_t;
 
 #define MENU_STATUS_SHOW_MS         1200U
 #define MENU_TITLE_HEIGHT           30U
@@ -76,6 +90,26 @@ static char gps_record_menu_label[48] = "2. Track Record [IDLE]";
 static char gps_record_distance_label[48] = "1. Point Dist [0.20m]";
 static char gps_record_interval_label[48] = "2. Point Intv [50ms]";
 static char gps_record_sat_label[48] = "3. Min Sat [4]";
+static const menu_startup_animation_info_t menu_startup_animations[] = {
+    {
+        menu_startup_animation_frames,
+        menu_startup_animation_frame_delays_ms,
+        MENU_STARTUP_ANIMATION_FRAME_WIDTH,
+        MENU_STARTUP_ANIMATION_FRAME_HEIGHT,
+        MENU_STARTUP_ANIMATION_DISPLAY_WIDTH,
+        MENU_STARTUP_ANIMATION_DISPLAY_HEIGHT,
+        MENU_STARTUP_ANIMATION_FRAME_COUNT,
+    },
+    {
+        menu_startup_animation2_frames,
+        menu_startup_animation2_frame_delays_ms,
+        MENU_STARTUP_ANIMATION2_FRAME_WIDTH,
+        MENU_STARTUP_ANIMATION2_FRAME_HEIGHT,
+        MENU_STARTUP_ANIMATION2_DISPLAY_WIDTH,
+        MENU_STARTUP_ANIMATION2_DISPLAY_HEIGHT,
+        MENU_STARTUP_ANIMATION2_FRAME_COUNT,
+    },
+};
 
 static void menu_set_status_message(const char *text, uint32 duration_ms);
 static void menu_draw_footer(void);
@@ -89,6 +123,8 @@ static void menu_sync_gps_record_item(void);
 static void menu_sync_gps_record_param_items(void);
 static void menu_draw_item(int index, uint8 selected);
 static void menu_draw_page(void);
+static uint32 menu_select_startup_animation_index(void);
+static void menu_show_startup_animation(void);
 static void menu_enter_page(MenuPage *page);
 static void menu_return_to_parent(void);
 static void menu_execute_current_item(void);
@@ -854,6 +890,51 @@ static void menu_draw_page(void)
     menu_needs_update = 0U;
 }
 
+static uint32 menu_select_startup_animation_index(void)
+{
+    uint32 seed = IfxStm_getLower(&MODULE_STM0);
+
+    seed ^= (system_getval_ms() << 8);
+    seed ^= (seed >> 11);
+    seed ^= (seed << 7);
+
+    return seed % (uint32)(sizeof(menu_startup_animations) / sizeof(menu_startup_animations[0]));
+}
+
+static void menu_show_startup_animation(void)
+{
+    const menu_startup_animation_info_t *animation;
+    uint16 draw_x = 0U;
+    uint16 draw_y = 0U;
+    uint32 frame_index;
+    uint32 animation_index = menu_select_startup_animation_index();
+
+    animation = &menu_startup_animations[animation_index];
+
+    if (ips200_width_max > animation->display_width)
+    {
+        draw_x = (uint16)((ips200_width_max - animation->display_width) / 2U);
+    }
+    if (ips200_height_max > animation->display_height)
+    {
+        draw_y = (uint16)((ips200_height_max - animation->display_height) / 2U);
+    }
+
+    ips200_full(RGB565_BLACK);
+    for (frame_index = 0U; frame_index < animation->frame_count; ++frame_index)
+    {
+        ips200_show_rgb565_image(draw_x,
+                                 draw_y,
+                                 animation->frames[frame_index],
+                                 animation->frame_width,
+                                 animation->frame_height,
+                                 animation->display_width,
+                                 animation->display_height,
+                                 0U);
+        system_delay_ms(animation->frame_delays_ms[frame_index]);
+    }
+}
+
 static void menu_enter_page(MenuPage *page)
 {
     if (NULL == page)
@@ -1009,6 +1090,7 @@ void menu_init(void)
     ips200_set_dir(IPS200_DEFAULT_DISPLAY_DIR);
     ips200_set_font(IPS200_DEFAULT_DISPLAY_FONT);
     ips200_set_color(RGB565_WHITE, RGB565_BLACK);
+    menu_show_startup_animation();
     ips200_full(RGB565_BLACK);
 
     my_key_init(10);

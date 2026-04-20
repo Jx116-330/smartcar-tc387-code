@@ -53,10 +53,11 @@ int core0_main(void)
         {
             gnss_flag = 0;
 
-            /* GPS+INS 融合：每次 GNSS 更新时校正 INS */
-            icm_gps_fusion_update(gnss.latitude, gnss.longitude,
-                                  gnss.speed, gnss.direction,
-                                  gnss.state, gnss.satellite_used);
+            /* GPS+INS 融合暂时关闭（不用 GPS 校正 INS，也不触发首帧锁原点 +
+             * encoder_odom_reset 的副作用）。重新启用时恢复下面这段调用即可。 */
+            /* icm_gps_fusion_update(gnss.latitude, gnss.longitude,
+                                     gnss.speed, gnss.direction,
+                                     gnss.state, gnss.satellite_used); */
 
             if (path_recorder_get_state() == PATH_STATE_RECORDING)
             {
