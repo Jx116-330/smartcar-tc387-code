@@ -1,9 +1,7 @@
 menu.o :	../code/menu/menu.c
 ../code/menu/menu.c :
-menu.o :	..\code\menu\menu.h
-..\code\menu\menu.h :
-menu.o :	..\code\menu\pid_runtime.h
-..\code\menu\pid_runtime.h :
+menu.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\ICM42688\icm_ins.h"
+"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\ICM42688\icm_ins.h" :
 menu.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\libraries\\zf_common\zf_common_typedef.h"
 "E:\\ads\\Seekfree_TC387_Opensource_Library\\libraries\\zf_common\zf_common_typedef.h" :
 menu.o :	"E:\ZNC\AURIX-Studio-1.10.6\tools\Compilers\Tasking_1.1r8\ctc\include\math.h"
@@ -40,6 +38,14 @@ menu.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\libraries\\infineon_librar
 "E:\\ads\\Seekfree_TC387_Opensource_Library\\libraries\\infineon_libraries\\iLLD\\TC38A\\Tricore\\Cpu\\Std\Ifx_TypesTasking.h" :
 menu.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\libraries\\infineon_libraries\\iLLD\\TC38A\\Tricore\\Cpu\\Std\PLATFORM_TYPES.H"
 "E:\\ads\\Seekfree_TC387_Opensource_Library\\libraries\\infineon_libraries\\iLLD\\TC38A\\Tricore\\Cpu\\Std\PLATFORM_TYPES.H" :
+menu.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\ICM42688\ins_playback.h"
+"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\ICM42688\ins_playback.h" :
+menu.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\ICM42688\ins_record.h"
+"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\ICM42688\ins_record.h" :
+menu.o :	..\code\menu\menu.h
+..\code\menu\menu.h :
+menu.o :	..\code\menu\pid_runtime.h
+..\code\menu\pid_runtime.h :
 menu.o :	..\code\menu\menu_params.h
 ..\code\menu\menu_params.h :
 menu.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\GPS\path_config.h"
@@ -346,12 +352,12 @@ menu.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\MyKey\MyKey.h"
 "E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\MyKey\MyKey.h" :
 menu.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\myhead.h"
 "E:\\ads\\Seekfree_TC387_Opensource_Library\\code\myhead.h" :
-menu.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\libraries\\zf_common\zf_common_headfile.h"
-"E:\\ads\\Seekfree_TC387_Opensource_Library\\libraries\\zf_common\zf_common_headfile.h" :
-menu.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\ICM43688\ICM42688.h"
-"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\ICM43688\ICM42688.h" :
+menu.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\ICM42688\ICM42688.h"
+"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\ICM42688\ICM42688.h" :
 menu.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\myhead.h"
 "E:\\ads\\Seekfree_TC387_Opensource_Library\\code\myhead.h" :
+menu.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\libraries\\zf_common\zf_common_headfile.h"
+"E:\\ads\\Seekfree_TC387_Opensource_Library\\libraries\\zf_common\zf_common_headfile.h" :
 menu.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\GPS\display_gps.h"
 "E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\GPS\display_gps.h" :
 menu.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\libraries\\zf_common\zf_common_headfile.h"
@@ -418,11 +424,5 @@ menu.o :	..\code\menu\menu_turn.h
 ..\code\menu\menu_turn.h :
 menu.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\Turn\Turn.h"
 "E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\Turn\Turn.h" :
-menu.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\ICM43688\ins_record.h"
-"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\ICM43688\ins_record.h" :
-menu.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\ICM43688\ins_playback.h"
-"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\ICM43688\ins_playback.h" :
 menu.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\board_comm\encoder_odom.h"
 "E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\board_comm\encoder_odom.h" :
-menu.o :	"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\ICM43688\icm_ins.h"
-"E:\\ads\\Seekfree_TC387_Opensource_Library\\code\\ICM43688\icm_ins.h" :

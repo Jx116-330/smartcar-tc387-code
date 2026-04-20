@@ -7,6 +7,8 @@
 * 是后续"使用导航位置/速度"功能的入口。
 *********************************************************************************************************************/
 
+#include <ICM42688/icm_gps_fusion.h>
+#include <ICM42688/icm_ins.h>
 #include "menu_fusion.h"
 
 #include <stdio.h>
@@ -14,8 +16,8 @@
 
 #include "zf_common_headfile.h"
 #include "zf_device_ips200.h"
-#include "icm_gps_fusion.h"
-#include "icm_ins.h"
+#include "encoder_odom.h"
+#include "encoder_odom_right.h"
 #include "menu_ui_utils.h"
 
 #define FUSION_REFRESH_MS         100U
@@ -83,6 +85,8 @@ static void fusion_draw_debug_page(uint8 *menu_full_redraw)
         icm_gps_fusion_reset_origin();
         icm_ins_reset_position();
         icm_ins_reset_velocity();
+        encoder_odom_reset();
+        encoder_odom_right_reset();
         menu_ui_consume_key1();
     }
 

@@ -4,18 +4,18 @@
 * 备注              已按 UTF-8 重新整理注释，程序逻辑保持不变
 *********************************************************************************************************************/
 
+#include <ICM42688/icm_attitude.h>
+#include <ICM42688/icm_ins.h>
+#include <ICM42688/ins_ctrl.h>     /* 惯导控制（10ms ISR 调用） */
+#include <ICM42688/ins_playback.h> /* 惯导回放（10ms ISR 调用） */
+#include <ICM42688/ins_record.h>   /* 惯导记录（10ms ISR 调用） */
+#include <ICM42688/ICM42688.h>
 #include "isr_config.h"
 #include "isr.h"
-#include "ICM42688.h"
-#include "icm_attitude.h"
-#include "icm_ins.h"
 #include "Turn.h"
 #include "rear_right_encoder.h"
 #include "board_comm.h"   /* TC264 板间通信 RX 处理 */
 #include "pedal_input.h"  /* 踏板输入（10ms ISR 调用） */
-#include "ins_record.h"   /* 惯导记录（10ms ISR 调用） */
-#include "ins_playback.h" /* 惯导回放（10ms ISR 调用） */
-#include "ins_ctrl.h"     /* 惯导控制（10ms ISR 调用） */
 
 /* 1ms 定时中断：以固定 1kHz 采样 ICM42688，保证惯导积分 dt 稳定 */
 IFX_INTERRUPT(cc60_pit_ch0_isr, CCU6_0_CH0_INT_VECTAB_NUM, CCU6_0_CH0_ISR_PRIORITY)

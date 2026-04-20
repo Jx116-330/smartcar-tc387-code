@@ -5,6 +5,9 @@
 * Note: 负责菜单绘制、编码器和按键交互，以及 GPS / PID 页面切换与参数加载保存逻辑
 *********************************************************************************************************************/
 
+#include <ICM42688/icm_ins.h>
+#include <ICM42688/ins_playback.h>
+#include <ICM42688/ins_record.h>
 #include "menu.h"
 #include "menu_params.h"
 #include "menu_pid.h"
@@ -23,10 +26,8 @@
 #include "menu_pedal.h"
 #include "menu_link.h"
 #include "menu_turn.h"
-#include "ins_record.h"
-#include "ins_playback.h"
 #include "encoder_odom.h"
-#include "icm_ins.h"
+#include "encoder_odom_right.h"
 #include "menu_ui_utils.h"
 
 MyParams_t g_params;
@@ -293,6 +294,7 @@ static void icm_action_clear_track(void)
     ins_record_clear();
     ins_playback_stop();
     encoder_odom_reset();
+    encoder_odom_right_reset();
     menu_set_status_message("Track Cleared", MENU_STATUS_SHOW_MS);
     menu_request_full_redraw();
 }
@@ -302,6 +304,7 @@ static void icm_action_reset_ins(void)
     icm_ins_reset_position();
     icm_ins_reset_velocity();
     encoder_odom_reset();
+    encoder_odom_right_reset();
     menu_set_status_message("INS Reset", MENU_STATUS_SHOW_MS);
     menu_request_full_redraw();
 }

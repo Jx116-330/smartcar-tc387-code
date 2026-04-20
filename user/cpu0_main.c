@@ -1,10 +1,10 @@
+#include <ICM42688/icm_attitude.h>
+#include <ICM42688/icm_gps_fusion.h>
+#include <ICM42688/icm_ins.h>
+#include <ICM42688/ins_ctrl.h>
+#include <ICM42688/ins_playback.h>
+#include <ICM42688/ins_record.h>
 #include "myhead.h"
-#include "icm_attitude.h"
-#include "icm_ins.h"
-#include "icm_gps_fusion.h"
-#include "ins_record.h"
-#include "ins_playback.h"
-#include "ins_ctrl.h"
 #include "pedal_input.h"
 #include "Turn.h"
 #include "rear_right_encoder.h"

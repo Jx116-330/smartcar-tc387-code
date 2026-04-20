@@ -26,7 +26,7 @@ SECONDARY_SIZE :=
 SUBDIRS := \
 code/Beep \
 code/GPS \
-code/ICM43688 \
+code/ICM42688 \
 code/MyEncoder \
 code/MyKey \
 code/Turn \

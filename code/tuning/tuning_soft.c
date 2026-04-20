@@ -1,3 +1,9 @@
+#include <ICM42688/icm_attitude.h>
+#include <ICM42688/icm_gps_fusion.h>
+#include <ICM42688/icm_ins.h>
+#include <ICM42688/ins_ctrl.h>
+#include <ICM42688/ins_playback.h>
+#include <ICM42688/ins_record.h>
 #include "tuning_soft.h"
 
 #include "zf_common_headfile.h"
@@ -8,12 +14,6 @@
 #include "MyKey.h"
 #include "MyEncoder.h"
 #include "autotune.h"
-#include "icm_attitude.h"
-#include "icm_ins.h"
-#include "ins_record.h"
-#include "ins_playback.h"
-#include "ins_ctrl.h"
-#include "icm_gps_fusion.h"
 #include "board_comm.h"
 #include "encoder_odom.h"
 #include "Turn.h"

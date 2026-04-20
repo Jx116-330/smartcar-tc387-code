@@ -14,10 +14,10 @@
  * Author: JX116
  *********************************************************************************************************************/
 
+#include <ICM42688/icm_attitude.h>
+#include <ICM42688/icm_ins.h>
 #include "encoder_odom.h"
 #include "board_comm.h"
-#include "icm_ins.h"
-#include "icm_attitude.h"
 #include <math.h>
 
 /* ==== 融合增益 ============================================================ */

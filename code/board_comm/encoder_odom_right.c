@@ -6,11 +6,11 @@
  * It is intentionally independent from the left rear odometry state so both wheels can be fused in parallel.
  *********************************************************************************************************************/
 
+#include <ICM42688/icm_attitude.h>
+#include <ICM42688/icm_ins.h>
 #include "encoder_odom_right.h"
 
 #include "rear_right_encoder.h"
-#include "icm_ins.h"
-#include "icm_attitude.h"
 #include <math.h>
 
 #define EOR_VEL_GAIN     0.04f

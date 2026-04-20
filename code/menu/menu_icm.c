@@ -4,6 +4,10 @@
 * Author: JX116
 *********************************************************************************************************************/
 
+#include <ICM42688/icm_attitude.h>
+#include <ICM42688/icm_ins.h>
+#include <ICM42688/ins_record.h>
+#include <ICM42688/ICM42688.h>
 #include "menu_icm.h"
 
 #include <stdio.h>
@@ -11,11 +15,7 @@
 
 #include "zf_common_headfile.h"
 #include "zf_device_ips200.h"
-#include "ICM42688.h"
 #include "display_gps.h"
-#include "icm_attitude.h"
-#include "icm_ins.h"
-#include "ins_record.h"
 #include "board_comm.h"
 #include "encoder_odom.h"
 #include "rear_right_encoder.h"
@@ -23,6 +23,7 @@
 #include "menu_ui_utils.h"
 
 #define ICM_GYRO_BIAS_CALIB_SAMPLES 20000U
+#define ICM_GYRO_BIAS_FEEDBACK_MS   1500U
 #define ICM_INS_MAP_REFRESH_MS      250U
 #define ICM_TRACK_LINE_COLOR        RGB565_WHITE
 #define ICM_TRACK_START_COLOR       RGB565_GREEN
@@ -38,6 +39,8 @@ static double icm_ins_map_max_x = 0.0;
 static double icm_ins_map_min_y = 0.0;
 static double icm_ins_map_max_y = 0.0;
 static uint16 icm_ins_map_rendered_point_count = 0U;
+static uint32 icm_gyro_bias_feedback_until_ms = 0U;
+static uint8 icm_gyro_bias_feedback_ok = 0U;
 static uint16 icm_ins_map_area_x = 0U;
 static uint16 icm_ins_map_area_y = 0U;
 static uint16 icm_ins_map_area_w = 0U;
@@ -533,131 +536,7 @@ static uint8 icm_collect_ins_track_bounds(double *min_x,
  */
 #define ICM_ENC_REFRESH_MS    50U
 
-#if 0
-static void icm_draw_encoder_page(uint8 *menu_full_redraw)
-{
-    static uint32 last_refresh_ms_enc_icm = 0U;
-    char     val[64];
-    uint32   now_ms = system_getval_ms();
-    uint16   end_x  = (uint16)(ips200_width_max - 10U);
-    uint16   val_w  = (uint16)(end_x - 74U);   /* 8-char labels */
-
-    if ((NULL != menu_full_redraw) && !(*menu_full_redraw) &&
-        (now_ms - last_refresh_ms_enc_icm < ICM_ENC_REFRESH_MS))
-    {
-        return;
-    }
-    last_refresh_ms_enc_icm = now_ms;
-
-    /* ---- 全屏重绘 ---- */
-    if ((NULL != menu_full_redraw) && *menu_full_redraw)
-    {
-        ips200_full(RGB565_BLACK);
-
-        ips200_set_color(RGB565_YELLOW, RGB565_BLACK);
-        ips200_show_string(10, 2, "Encoder / INS");
-        ips200_draw_line(0, 16, ips200_width_max - 1, 16, RGB565_GRAY);
-
-        ips200_set_color(RGB565_CYAN, RGB565_BLACK);
-        ips200_show_string(10, 22, "Odometry Source");
-
-        ips200_set_color(RGB565_WHITE, RGB565_BLACK);
-        ips200_show_string(10,  40, "ONLINE: ");
-        ips200_set_color(RGB565_CYAN, RGB565_BLACK);
-        ips200_show_string(10,  60, "Speed : ");
-        ips200_set_color(RGB565_WHITE, RGB565_BLACK);
-        ips200_show_string(10,  80, "Dist  : ");
-
-        ips200_set_color(RGB565_CYAN, RGB565_BLACK);
-        ips200_show_string(10, 104, "INS Fusion");
-
-        ips200_set_color(RGB565_WHITE, RGB565_BLACK);
-        ips200_show_string(10, 120, "Active: ");
-        ips200_show_string(10, 140, "EncSpd: ");
-        ips200_show_string(10, 160, "INSSpd: ");
-        ips200_set_color(RGB565_GRAY, RGB565_BLACK);
-        ips200_show_string(10, 180, "Odom X: ");
-        ips200_show_string(10, 200, "Odom Y: ");
-
-        ips200_set_color(RGB565_GRAY, RGB565_BLACK);
-        menu_ui_show_pad(5U, (uint16)(ips200_height_max - 16U),
-                      (uint16)(ips200_width_max - 10U), "K1:Fusion  LONG:Exit");
-
-        *menu_full_redraw = 0U;
-    }
-
-    /* ---- 每帧值刷新 ---- */
-
-    /* ONLINE */
-    {
-        uint8 online = board_comm_encl_is_online();
-        snprintf(val, sizeof(val), "%s", (0U != online) ? "YES" : "NO ");
-        if (0U != online)
-            ips200_set_color(RGB565_GREEN, RGB565_BLACK);
-        else
-            ips200_set_color(RGB565_RED, RGB565_BLACK);
-        menu_ui_show_pad(74, 40, val_w, val);
-    }
-
-    /* Speed (mm/s) */
-    snprintf(val, sizeof(val), "%ld mm/s",
-             (long)board_comm_encl_get_spd_mm_s());
-    ips200_set_color(RGB565_CYAN, RGB565_BLACK);
-    menu_ui_show_pad(74, 60, val_w, val);
-
-    /* Dist (mm) */
-    snprintf(val, sizeof(val), "%ld mm",
-             (long)board_comm_encl_get_dist_mm());
-    ips200_set_color(RGB565_WHITE, RGB565_BLACK);
-    menu_ui_show_pad(74, 80, val_w, val);
-
-    /* Active: OFF(融合关) / IDLE(开但未激活) / YES(正在融合) */
-    {
-        uint8 en  = encoder_odom_is_enabled();
-        uint8 act = encoder_odom_is_active();
-        if (0U == en)
-        {
-            snprintf(val, sizeof(val), "OFF");
-            ips200_set_color(RGB565_RED, RGB565_BLACK);
-        }
-        else if (0U == act)
-        {
-            snprintf(val, sizeof(val), "IDLE");
-            ips200_set_color(RGB565_GRAY, RGB565_BLACK);
-        }
-        else
-        {
-            snprintf(val, sizeof(val), "YES");
-            ips200_set_color(RGB565_GREEN, RGB565_BLACK);
-        }
-        menu_ui_show_pad(74, 120, val_w, val);
-    }
-
-    /* EncSpd (m/s) */
-    snprintf(val, sizeof(val), "%.2f m/s",
-             (double)encoder_odom_get_speed_ms());
-    ips200_set_color(RGB565_WHITE, RGB565_BLACK);
-    menu_ui_show_pad(74, 140, val_w, val);
-
-    /* INSSpd (m/s) */
-    snprintf(val, sizeof(val), "%.2f m/s",
-             (double)icm_ins_get_speed_ms());
-    ips200_set_color(RGB565_WHITE, RGB565_BLACK);
-    menu_ui_show_pad(74, 160, val_w, val);
-
-    /* Odom X */
-    snprintf(val, sizeof(val), "%.2f m",
-             (double)encoder_odom_get_px_m());
-    ips200_set_color(RGB565_GRAY, RGB565_BLACK);
-    menu_ui_show_pad(74, 180, val_w, val);
-
-    /* Odom Y */
-    snprintf(val, sizeof(val), "%.2f m",
-             (double)encoder_odom_get_py_m());
-    ips200_set_color(RGB565_GRAY, RGB565_BLACK);
-    menu_ui_show_pad(74, 200, val_w, val);
-}
-#endif
+/* 旧的单列 Encoder 页面已被下方双列版本替换；旧版本通过 git 历史可取回 */
 
 static void icm_draw_encoder_page(uint8 *menu_full_redraw)
 {
@@ -1284,8 +1163,8 @@ static void icm_draw_gyro_bias_calib_page(uint8 *menu_full_redraw)
 
         ips200_set_color(RGB565_GRAY, RGB565_BLACK);
         menu_ui_show_pad(10, 40, (uint16)(ips200_width_max - 20U), "Keep the car still");
-        menu_ui_show_pad(10, 56, (uint16)(ips200_width_max - 20U), "K1:Restart  LONG:Back");
-        menu_ui_show_pad(10, 72, (uint16)(ips200_width_max - 20U), "Auto-save to flash on done");
+        menu_ui_show_pad(10, 56, (uint16)(ips200_width_max - 20U), "K1:Restart/Save LONG:Back");
+        menu_ui_show_pad(10, 72, (uint16)(ips200_width_max - 20U), "Save to flash manually after done");
 
         ips200_set_color(RGB565_CYAN, RGB565_BLACK);
         ips200_show_string(10, 94, "Calibration Status");
@@ -1314,13 +1193,13 @@ static void icm_draw_gyro_bias_calib_page(uint8 *menu_full_redraw)
     }
     else if (icm_attitude_is_gyro_bias_valid())
     {
-        if (icm_attitude_is_gyro_bias_from_flash())
+        if (icm_attitude_is_gyro_bias_flash_synced())
         {
             snprintf(line, sizeof(line), " DONE [FLASH]");
         }
         else
         {
-            snprintf(line, sizeof(line), " DONE [SAVED]");
+            snprintf(line, sizeof(line), " DONE [RAM]");
         }
     }
     else
@@ -1345,6 +1224,23 @@ static void icm_draw_gyro_bias_calib_page(uint8 *menu_full_redraw)
     /* Bz value (3ch label at x=106, val x=130) */
     snprintf(line, sizeof(line), "%+8.3f", (double)bias_z);
     menu_ui_show_pad(130, 200, 64, line);
+
+    if (now_ms < icm_gyro_bias_feedback_until_ms)
+    {
+        ips200_set_color(icm_gyro_bias_feedback_ok ? RGB565_GREEN : RGB565_RED,
+                         RGB565_BLACK);
+        menu_ui_show_pad(10, 220, (uint16)(ips200_width_max - 20U),
+                         icm_gyro_bias_feedback_ok ? "Flash save OK"
+                                                   : "Flash save FAILED");
+        ips200_set_color(RGB565_WHITE, RGB565_BLACK);
+    }
+    else
+    {
+        ips200_set_color(RGB565_GRAY, RGB565_BLACK);
+        menu_ui_show_pad(10, 220, (uint16)(ips200_width_max - 20U),
+                         "K1 to save after calibration");
+        ips200_set_color(RGB565_WHITE, RGB565_BLACK);
+    }
 }
 
 /* ---- INS Dead Reckoning: ZUPT + velocity + position ------------------- */
@@ -1421,6 +1317,8 @@ static void icm_draw_ins_debug_page(uint8 *menu_full_redraw)
     {
         icm_ins_reset_velocity();
         icm_ins_reset_position();
+        encoder_odom_reset();
+        encoder_odom_right_reset();
         menu_ui_consume_key1();
     }
 
@@ -1496,6 +1394,7 @@ void menu_icm_action_enter(menu_view_ctx_t *ctx, uint8 target_mode)
     }
     else if (ICM_VIEW_GYRO_BIAS_CALIB == target_mode)
     {
+        icm_gyro_bias_feedback_until_ms = 0U;
         icm_attitude_start_gyro_bias_calibration(ICM_GYRO_BIAS_CALIB_SAMPLES);
     }
 
@@ -1525,7 +1424,16 @@ uint8 menu_icm_handle_view(menu_view_ctx_t *ctx)
         (MY_KEY_SHORT_PRESS == my_key_get_state(MY_KEY_1)))
     {
         menu_ui_consume_key1();
-        icm_attitude_start_gyro_bias_calibration(ICM_GYRO_BIAS_CALIB_SAMPLES);
+        if (icm_attitude_is_gyro_bias_calibrating())
+        {
+            icm_gyro_bias_feedback_until_ms = 0U;
+            icm_attitude_start_gyro_bias_calibration(ICM_GYRO_BIAS_CALIB_SAMPLES);
+        }
+        else if (icm_attitude_is_gyro_bias_valid())
+        {
+            icm_gyro_bias_feedback_ok = icm_attitude_save_gyro_bias_to_flash();
+            icm_gyro_bias_feedback_until_ms = system_getval_ms() + ICM_GYRO_BIAS_FEEDBACK_MS;
+        }
         if (NULL != ctx->menu_full_redraw) *(ctx->menu_full_redraw) = 1U;
         return 1U;
     }
@@ -1551,6 +1459,7 @@ uint8 menu_icm_handle_view(menu_view_ctx_t *ctx)
         icm_ins_reset_position();
         icm_ins_reset_velocity();
         encoder_odom_reset();
+        encoder_odom_right_reset();
         if (NULL != ctx->menu_full_redraw) *(ctx->menu_full_redraw) = 1U;
         return 1U;
     }
