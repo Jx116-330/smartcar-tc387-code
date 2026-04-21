@@ -25,6 +25,7 @@ struct MenuPage
     MenuItem *items;
     int num_items;
     MenuPage *parent;
+    int last_selection;
 };
 
 typedef void (*menu_dynamic_draw_t)(uint16 x, uint16 y, uint16 w, uint16 h);

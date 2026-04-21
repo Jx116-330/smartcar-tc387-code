@@ -480,25 +480,10 @@ static void menu_sync_ins_replay_labels(void)
 {
     char buf[64];
     ins_play_state_t play_st = ins_playback_get_state();
-    float dist;
 
-    /* ---- 1. Load Track 标签：显示已加载点数或回放进度 ---- */
-    if (INS_PLAY_RUNNING == play_st)
-    {
-        sprintf(buf, "1. Load [RUN:%u/%u]",
-                (unsigned int)ins_playback_get_target_idx(),
-                (unsigned int)ins_playback_get_total_points());
-    }
-    else if (INS_PLAY_READY == play_st)
-    {
-        sprintf(buf, "1. Load [RDY:%u pts]",
-                (unsigned int)ins_playback_get_total_points());
-    }
-    else
-    {
-        sprintf(buf, "1. Load Track [%u pts]",
-                (unsigned int)ins_record_get_point_count());
-    }
+    /* ---- 1. Load Track：只显示可加载的录制点数 ---- */
+    sprintf(buf, "1. Load Track [%u pts]",
+            (unsigned int)ins_record_get_point_count());
     if (menu_ui_update_label(ins_replay_load_label, sizeof(ins_replay_load_label), buf)
         && (current_page == &ins_replay_menu) && !menu_full_redraw)
     {
@@ -523,12 +508,9 @@ static void menu_sync_ins_replay_labels(void)
     /* ---- 6. PLAY 状态行 ---- */
     if (INS_PLAY_RUNNING == play_st)
     {
-        dist = ins_playback_get_dist_to_target();
-        if (dist < 0.0f) { dist = 0.0f; }
-        sprintf(buf, "6. PLAY:RUN %u/%u %.2fm",
+        sprintf(buf, "6. PLAY:RUN %u/%u",
                 (unsigned int)ins_playback_get_target_idx(),
-                (unsigned int)ins_playback_get_total_points(),
-                dist);
+                (unsigned int)ins_playback_get_total_points());
     }
     else if (INS_PLAY_READY == play_st)
     {
@@ -953,9 +935,18 @@ static void menu_enter_page(MenuPage *page)
         menu_sync_gps_record_param_items();
     }
 
+    /* 记住离开前父页的高亮位置；进入时恢复目标页上次停留位置 */
+    if (NULL != current_page)
+    {
+        current_page->last_selection = current_selection;
+    }
     page->parent = current_page;
     current_page = page;
-    current_selection = 0;
+    current_selection = page->last_selection;
+    if ((current_selection < 0) || (current_selection >= page->num_items))
+    {
+        current_selection = 0;
+    }
     menu_request_redraw(1U);
 }
 
@@ -966,8 +957,14 @@ static void menu_return_to_parent(void)
         return;
     }
 
+    /* 离开子页前记下自身位置，再跳回父页恢复其上次位置 */
+    current_page->last_selection = current_selection;
     current_page = current_page->parent;
-    current_selection = 0;
+    current_selection = current_page->last_selection;
+    if ((current_selection < 0) || (current_selection >= current_page->num_items))
+    {
+        current_selection = 0;
+    }
     gps_display_mode = GPS_VIEW_NONE;
     record_param_view_mode = RECORD_PARAM_VIEW_NONE;
     icm_display_mode    = 0U;
