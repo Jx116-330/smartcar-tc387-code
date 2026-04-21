@@ -315,7 +315,9 @@ static uint8 turn_handle_edit_view(turn_view_mode_t mode)
         return 1U;
     }
 
-    if (If_Switch_Encoder_Change())
+    /* while 抽干 pending 队列，快转不滞后；menu_param_adjust_float 每次按当前
+     * change_num 的方向应用 1 步 step */
+    while (If_Switch_Encoder_Change())
     {
         menu_param_adjust_float(value_ptr,
                                 menu_step_get_float(&turn_step_descs[step_index]),

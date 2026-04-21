@@ -9,13 +9,13 @@
 #include <ICM42688/icm_attitude.h>
 #include <ICM42688/icm_ins.h>
 #include "encoder_odom_right.h"
+#include "ins_enc_tune.h"
 
 #include "rear_right_encoder.h"
 #include <math.h>
 
-#define EOR_VEL_GAIN     0.04f
-#define EOR_POS_GAIN     0.008f
-#define EOR_SYNC_RATE    0.0025f
+/* 融合增益运行时可调：默认值定义在 ins_enc_tune.h，桌面端通过
+ * SET INSENC_R_* / SAVE INSENC 修改与持久化。*/
 
 #ifndef M_PI
 #define M_PI             3.14159265358979323846f
@@ -108,14 +108,20 @@ void encoder_odom_right_task(void)
     eor_px_m += delta_dist_m * cosf(yaw_rad);
     eor_py_m += delta_dist_m * sinf(yaw_rad);
 
-    eor_px_m += EOR_SYNC_RATE * (ins_px - eor_px_m);
-    eor_py_m += EOR_SYNC_RATE * (ins_py - eor_py_m);
+    {
+        float sync_rate = ins_enc_tune_get_r_sync_rate();
+        float vel_gain  = ins_enc_tune_get_r_vel_gain();
+        float pos_gain  = ins_enc_tune_get_r_pos_gain();
 
-    icm_ins_correct_velocity(EOR_VEL_GAIN * (enc_vx - ins_vx),
-                             EOR_VEL_GAIN * (enc_vy - ins_vy));
+        eor_px_m += sync_rate * (ins_px - eor_px_m);
+        eor_py_m += sync_rate * (ins_py - eor_py_m);
 
-    icm_ins_correct_position(EOR_POS_GAIN * (eor_px_m - ins_px),
-                             EOR_POS_GAIN * (eor_py_m - ins_py));
+        icm_ins_correct_velocity(vel_gain * (enc_vx - ins_vx),
+                                 vel_gain * (enc_vy - ins_vy));
+
+        icm_ins_correct_position(pos_gain * (eor_px_m - ins_px),
+                                 pos_gain * (eor_py_m - ins_py));
+    }
 
     eor_active = 1U;
 }

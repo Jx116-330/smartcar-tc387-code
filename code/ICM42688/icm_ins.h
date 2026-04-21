@@ -20,4 +20,9 @@ uint8 icm_ins_is_stationary(void);
 void  icm_ins_correct_position(float delta_px_m, float delta_py_m);
 void  icm_ins_correct_velocity(float delta_vx_ms, float delta_vy_ms);
 
+/* 运动提示：编码器/轮速来源在主循环周期调用，告诉 INS 当前"确实在动"。
+ * |mm_s| ≥ 内部阈值时抑制 ZUPT 进入并立即退出静止态；若超过 TTL 不再更新，
+ * 自动回退到纯 IMU 的 ZUPT 判据。参数带符号，便于未来利用方向信息。 */
+void  icm_ins_set_motion_hint_mm_s(int32 mm_s);
+
 #endif /* __ICM_INS_H__ */

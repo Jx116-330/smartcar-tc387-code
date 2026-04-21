@@ -519,24 +519,10 @@ static uint8 icm_collect_ins_track_bounds(double *min_x,
 }
 
 /* ---- Encoder / INS 融合状态页 ----
- * 页面布局（8×16 字体，ips200 240x320，footer = height_max-16 = 304）：
- *   y= 2   "Encoder / INS"          黄色标题
- *   y=16   ─────────────────────   灰色分割线
- *   y=22   "Odometry Source"        青色分组头
- *   y=40   "ONLINE: YES/NO"          绿/红
- *   y=60   "Speed : xxx mm/s"        青色（编码器原始速度）
- *   y=80   "Dist  : xxx mm"          白色（编码器累计距离）
- *   y=104  "INS Fusion"              青色分组头
- *   y=120  "Active: YES/NO"          绿/灰
- *   y=140  "EncSpd: x.xx m/s"       白色
- *   y=160  "INSSpd: x.xx m/s"       白色
- *   y=180  "Odom X: x.xx m"         灰色
- *   y=200  "Odom Y: x.xx m"         灰色
- *   y=304  "LONG:Exit"               底部灰色提示
+ * 精简版：仅保留核心 6 行（Online / Speed / Dist / OdomX / OdomY / Active）。
+ * Count / OdomSp / AGEms 已移除，如需调试可通过 git 历史取回。
  */
 #define ICM_ENC_REFRESH_MS    50U
-
-/* 旧的单列 Encoder 页面已被下方双列版本替换；旧版本通过 git 历史可取回 */
 
 static void icm_draw_encoder_page(uint8 *menu_full_redraw)
 {
@@ -546,10 +532,6 @@ static void icm_draw_encoder_page(uint8 *menu_full_redraw)
     uint16 end_x = (uint16)(ips200_width_max - 10U);
     uint16 left_w = (uint16)(150U - 70U);
     uint16 right_w = (uint16)(end_x - 150U);
-    uint32 left_last_ms;
-    uint32 right_last_ms;
-    uint32 left_age_ms;
-    uint32 right_age_ms;
 
     if ((NULL != menu_full_redraw) && !(*menu_full_redraw) &&
         (now_ms - last_refresh_ms_enc_icm < ICM_ENC_REFRESH_MS))
@@ -571,15 +553,12 @@ static void icm_draw_encoder_page(uint8 *menu_full_redraw)
         ips200_show_string(150, 22, "RIGHT");
 
         ips200_set_color(RGB565_WHITE, RGB565_BLACK);
-        ips200_show_string(10,  38, "Online:");
-        ips200_show_string(10,  54, "Count :");
-        ips200_show_string(10,  70, "Dist  :");
-        ips200_show_string(10,  86, "Speed :");
-        ips200_show_string(10, 102, "OdomPx:");
-        ips200_show_string(10, 118, "OdomPy:");
-        ips200_show_string(10, 134, "OdomSp:");
-        ips200_show_string(10, 150, "Active:");
-        ips200_show_string(10, 166, "AGEms :");
+        ips200_show_string(10,  44, "Online:");
+        ips200_show_string(10,  68, "Speed :");
+        ips200_show_string(10,  92, "Dist  :");
+        ips200_show_string(10, 116, "OdomX :");
+        ips200_show_string(10, 140, "OdomY :");
+        ips200_show_string(10, 164, "Active:");
 
         ips200_set_color(RGB565_GRAY, RGB565_BLACK);
         menu_ui_show_pad(5U, (uint16)(ips200_height_max - 16U),
@@ -588,92 +567,59 @@ static void icm_draw_encoder_page(uint8 *menu_full_redraw)
         *menu_full_redraw = 0U;
     }
 
-    left_last_ms = rear_left_get_last_rx_ms();
-    right_last_ms = rear_right_get_last_rx_ms();
-    left_age_ms = (0U != left_last_ms) ? (now_ms - left_last_ms) : 0U;
-    right_age_ms = (0U != right_last_ms) ? (now_ms - right_last_ms) : 0U;
-
     {
         uint8 online = rear_left_is_online();
         snprintf(val, sizeof(val), "%s", (0U != online) ? "YES" : "NO ");
         ips200_set_color((0U != online) ? RGB565_GREEN : RGB565_RED, RGB565_BLACK);
-        menu_ui_show_pad(70, 38, left_w, val);
+        menu_ui_show_pad(70, 44, left_w, val);
 
         online = rear_right_is_online();
         snprintf(val, sizeof(val), "%s", (0U != online) ? "YES" : "NO ");
         ips200_set_color((0U != online) ? RGB565_GREEN : RGB565_RED, RGB565_BLACK);
-        menu_ui_show_pad(150, 38, right_w, val);
+        menu_ui_show_pad(150, 44, right_w, val);
     }
-
-    snprintf(val, sizeof(val), "%ld", (long)rear_left_get_count());
-    ips200_set_color(RGB565_WHITE, RGB565_BLACK);
-    menu_ui_show_pad(70, 54, left_w, val);
-    snprintf(val, sizeof(val), "%ld", (long)rear_right_get_count());
-    ips200_set_color(RGB565_WHITE, RGB565_BLACK);
-    menu_ui_show_pad(150, 54, right_w, val);
-
-    snprintf(val, sizeof(val), "%ld mm", (long)rear_left_get_dist_mm());
-    ips200_set_color(RGB565_WHITE, RGB565_BLACK);
-    menu_ui_show_pad(70, 70, left_w, val);
-    snprintf(val, sizeof(val), "%ld mm", (long)rear_right_get_dist_mm());
-    ips200_set_color(RGB565_WHITE, RGB565_BLACK);
-    menu_ui_show_pad(150, 70, right_w, val);
 
     snprintf(val, sizeof(val), "%ld mm/s", (long)rear_left_get_spd_mm_s());
     ips200_set_color(RGB565_CYAN, RGB565_BLACK);
-    menu_ui_show_pad(70, 86, left_w, val);
+    menu_ui_show_pad(70, 68, left_w, val);
     snprintf(val, sizeof(val), "%ld mm/s", (long)rear_right_get_spd_mm_s());
     ips200_set_color(RGB565_CYAN, RGB565_BLACK);
-    menu_ui_show_pad(150, 86, right_w, val);
+    menu_ui_show_pad(150, 68, right_w, val);
+
+    snprintf(val, sizeof(val), "%ld mm", (long)rear_left_get_dist_mm());
+    ips200_set_color(RGB565_WHITE, RGB565_BLACK);
+    menu_ui_show_pad(70, 92, left_w, val);
+    snprintf(val, sizeof(val), "%ld mm", (long)rear_right_get_dist_mm());
+    ips200_set_color(RGB565_WHITE, RGB565_BLACK);
+    menu_ui_show_pad(150, 92, right_w, val);
 
     snprintf(val, sizeof(val), "%.3f", (double)encoder_odom_get_px_m());
     ips200_set_color(RGB565_WHITE, RGB565_BLACK);
-    menu_ui_show_pad(70, 102, left_w, val);
+    menu_ui_show_pad(70, 116, left_w, val);
     snprintf(val, sizeof(val), "%.3f", (double)encoder_odom_right_get_px_m());
     ips200_set_color(RGB565_WHITE, RGB565_BLACK);
-    menu_ui_show_pad(150, 102, right_w, val);
+    menu_ui_show_pad(150, 116, right_w, val);
 
     snprintf(val, sizeof(val), "%.3f", (double)encoder_odom_get_py_m());
     ips200_set_color(RGB565_WHITE, RGB565_BLACK);
-    menu_ui_show_pad(70, 118, left_w, val);
+    menu_ui_show_pad(70, 140, left_w, val);
     snprintf(val, sizeof(val), "%.3f", (double)encoder_odom_right_get_py_m());
     ips200_set_color(RGB565_WHITE, RGB565_BLACK);
-    menu_ui_show_pad(150, 118, right_w, val);
-
-    snprintf(val, sizeof(val), "%.3f", (double)encoder_odom_get_speed_ms());
-    ips200_set_color(RGB565_CYAN, RGB565_BLACK);
-    menu_ui_show_pad(70, 134, left_w, val);
-    snprintf(val, sizeof(val), "%.3f", (double)encoder_odom_right_get_speed_ms());
-    ips200_set_color(RGB565_CYAN, RGB565_BLACK);
-    menu_ui_show_pad(150, 134, right_w, val);
+    menu_ui_show_pad(150, 140, right_w, val);
 
     {
         uint8 active = ((0U != encoder_odom_is_enabled()) &&
                         (0U != encoder_odom_is_active())) ? 1U : 0U;
         snprintf(val, sizeof(val), "%s", (0U != active) ? "ON " : "OFF");
         ips200_set_color((0U != active) ? RGB565_GREEN : RGB565_GRAY, RGB565_BLACK);
-        menu_ui_show_pad(70, 150, left_w, val);
+        menu_ui_show_pad(70, 164, left_w, val);
 
         active = ((0U != encoder_odom_right_is_enabled()) &&
                   (0U != encoder_odom_right_is_active())) ? 1U : 0U;
         snprintf(val, sizeof(val), "%s", (0U != active) ? "ON " : "OFF");
         ips200_set_color((0U != active) ? RGB565_GREEN : RGB565_GRAY, RGB565_BLACK);
-        menu_ui_show_pad(150, 150, right_w, val);
+        menu_ui_show_pad(150, 164, right_w, val);
     }
-
-    if (0U != left_last_ms)
-        snprintf(val, sizeof(val), "%lu", (unsigned long)left_age_ms);
-    else
-        snprintf(val, sizeof(val), "--");
-    ips200_set_color((left_age_ms > 500U || 0U == left_last_ms) ? RGB565_RED : RGB565_WHITE, RGB565_BLACK);
-    menu_ui_show_pad(70, 166, left_w, val);
-
-    if (0U != right_last_ms)
-        snprintf(val, sizeof(val), "%lu", (unsigned long)right_age_ms);
-    else
-        snprintf(val, sizeof(val), "--");
-    ips200_set_color((right_age_ms > 500U || 0U == right_last_ms) ? RGB565_RED : RGB565_WHITE, RGB565_BLACK);
-    menu_ui_show_pad(150, 166, right_w, val);
 }
 
 static void icm_draw_ins_track_map_page(uint8 *menu_full_redraw)
@@ -1255,9 +1201,6 @@ static void icm_draw_ins_debug_page(uint8 *menu_full_redraw)
     float vy = 0.0f;
     float px = 0.0f;
     float py = 0.0f;
-    float yaw_deg = 0.0f;
-    float pitch_deg = 0.0f;
-    float roll_deg = 0.0f;
     uint32 now_ms = system_getval_ms();
 
     if ((NULL != menu_full_redraw) && !(*menu_full_redraw) &&
@@ -1301,9 +1244,6 @@ static void icm_draw_ins_debug_page(uint8 *menu_full_redraw)
         ips200_show_string(106, 132, "m/s");      /* unit suffix (1ch gap) */
         ips200_show_string(10, 170, "Px:");       /* 3ch => val x=34 */
         ips200_show_string(106, 170, "Py:");      /* 3ch => val x=130 */
-        ips200_show_string(10, 192, "Yaw:");      /* 4ch => val x=42 */
-        ips200_show_string(10, 210, "R:");        /* 2ch => val x=26 */
-        ips200_show_string(82, 210, "P:");        /* 2ch => val x=98 */
 
         ips200_set_color(RGB565_GRAY, RGB565_BLACK);
         menu_ui_show_pad(5, (uint16)(ips200_height_max - 20U),
@@ -1325,7 +1265,6 @@ static void icm_draw_ins_debug_page(uint8 *menu_full_redraw)
     icm_ins_get_linear_acc(&ax, &ay, NULL);
     icm_ins_get_velocity(&vx, &vy, NULL);
     icm_ins_get_position(&px, &py);
-    icm_attitude_get_euler(&roll_deg, &pitch_deg, &yaw_deg);
 
     ips200_set_color(RGB565_WHITE, RGB565_BLACK);
 
@@ -1369,18 +1308,6 @@ static void icm_draw_ins_debug_page(uint8 *menu_full_redraw)
     /* Position Y (3ch label at x=106, val x=130, 8ch = 64px) */
     snprintf(line, sizeof(line), "%+8.2f", (double)py);
     menu_ui_show_pad(130, 170, 64, line);
-
-    /* Yaw value (4ch label, val x=42, 7ch = 56px) */
-    snprintf(line, sizeof(line), "%+7.1f", (double)yaw_deg);
-    menu_ui_show_pad(42, 192, 56, line);
-
-    /* Roll value (2ch label, val x=26, 6ch = 48px) */
-    snprintf(line, sizeof(line), "%+6.1f", (double)roll_deg);
-    menu_ui_show_pad(26, 210, 48, line);
-
-    /* Pitch value (2ch label at x=82, val x=98, 6ch = 48px) */
-    snprintf(line, sizeof(line), "%+6.1f", (double)pitch_deg);
-    menu_ui_show_pad(98, 210, 48, line);
 }
 
 /* ---- 公共接口 ---------------------------------------------------------- */

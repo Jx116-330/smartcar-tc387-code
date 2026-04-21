@@ -433,7 +433,8 @@ uint8 menu_gps_handle_record_param_view(record_param_view_mode_t *record_mode, M
         return 1U;
     }
 
-    if (If_Switch_Encoder_Change()) menu_gps_record_param_apply_encoder_adjustment(*record_mode, sync_record_param_items);
+    /* 抽干 pending 队列：快转不滞后 */
+    while (If_Switch_Encoder_Change()) menu_gps_record_param_apply_encoder_adjustment(*record_mode, sync_record_param_items);
     if (MY_KEY_SHORT_PRESS == my_key_get_state(MY_KEY_1))
     {
         my_key_clear_state(MY_KEY_1);

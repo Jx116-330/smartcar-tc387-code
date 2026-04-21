@@ -19,6 +19,7 @@
 #include "Turn.h"
 #include "rear_right_encoder.h"
 #include "encoder_odom_right.h"
+#include "ins_enc_tune.h"
 #include "pedal_input.h"
 #include <math.h>
 
@@ -42,14 +43,22 @@ typedef enum
     TUNING_VIEW_STATUS,
 } tuning_view_mode_t;
 
-static volatile uint8 tuning_enabled = 0U;
+/* tuning_period_ms: default streaming period applied when a stream is started
+ *   without an explicit period, and used when the on-car menu toggle turns
+ *   Phase-1 streams on. Each active stream tracks its own period in the
+ *   registry below.
+ *
+ * Streams follow an on-demand subscription model driven by desktop commands:
+ *   START STREAM <name> [period_ms] / STOP STREAM <name> / STOP ALL STREAMS /
+ *   GET ONCE <name> / LIST STREAMS / GET STREAMS.
+ * On TCP disconnect, all subscriptions are cleared automatically. */
 static uint16 tuning_period_ms = TUNING_DEFAULT_PERIOD_MS;
-static uint32 tuning_last_send_ms = 0U;
 static uint32 tuning_total_sent = 0U;
 static uint32 tuning_total_fail = 0U;
 static tuning_view_mode_t tuning_view_mode = TUNING_VIEW_NONE;
 static uint8 tuning_full_redraw = 1U;
 static uint32 tuning_last_view_ms = 0U;
+static uint8 tuning_tcp_was_connected = 0U;   /* 1 once TCP saw first up-edge */
 
 /* ---- Track streaming / dump state ---- */
 volatile uint8 track_stream_enabled = 0U;
@@ -86,7 +95,6 @@ static void tuning_action_period_minus(void);
 static void tuning_action_track_stream_toggle(void);
 static void tuning_action_track_record_toggle(void);
 static void tuning_action_track_rate_cycle(void);
-static uint8 tuning_send_once(void);
 static uint8 tuning_send_line(const char *line);
 static void tuning_send_track_point(void);
 static void tuning_send_track_dump_batch(void);
@@ -95,6 +103,54 @@ static void tuning_reply_error(const char *cmd, const char *reason);
 static void tuning_reply_ack_pid(const char *cmd);
 static void tuning_process_rx_line(char *line);
 static void tuning_receive_task(void);
+
+/* ============================================================================
+ * Stream registry — on-demand subscription model
+ * ---------------------------------------------------------------------------
+ *   Desktop tool drives all continuous telemetry via explicit subscriptions.
+ *   Each registered stream has a send_fn that formats + sends one packet.
+ *   tuning_soft_task() iterates the registry and calls send_fn whenever
+ *   (now_ms - last_send_ms) >= period_ms for enabled streams.
+ *
+ *   Migrating a new stream in a future round:
+ *     1. Write a static void send_telXYZ(void) that emits one line.
+ *     2. Add { "XYZ", 0U, default_period, default_period, 0U, send_telXYZ }
+ *        to g_streams[]. No other plumbing is required.
+ * ========================================================================== */
+
+typedef void (*tuning_stream_send_fn)(void);
+
+typedef struct
+{
+    const char *name;                  /* stream short name, upper-case */
+    volatile uint8  enabled;           /* 1 while subscribed            */
+    volatile uint16 period_ms;         /* active period                 */
+    uint16 default_period_ms;          /* default on START w/o period   */
+    uint32 last_send_ms;               /* last time send_fn ran         */
+    tuning_stream_send_fn send_fn;
+} tuning_stream_t;
+
+#define TUNING_STREAM_MIN_PERIOD_MS   5U
+#define TUNING_STREAM_MAX_PERIOD_MS   5000U
+
+/* Per-stream builders (defined below) */
+static void tuning_send_telinsenc(void);
+static void tuning_send_tely(void);
+static void tuning_send_telins(void);
+
+static tuning_stream_t g_streams[] = {
+    { "INSENC", 0U, TUNING_DEFAULT_PERIOD_MS, TUNING_DEFAULT_PERIOD_MS, 0U, tuning_send_telinsenc },
+    { "YAW",    0U, TUNING_DEFAULT_PERIOD_MS, TUNING_DEFAULT_PERIOD_MS, 0U, tuning_send_tely      },
+    { "INS",    0U, TUNING_DEFAULT_PERIOD_MS, TUNING_DEFAULT_PERIOD_MS, 0U, tuning_send_telins    },
+};
+#define TUNING_STREAM_COUNT ((uint8)(sizeof(g_streams)/sizeof(g_streams[0])))
+
+static tuning_stream_t *tuning_stream_find(const char *name);
+static uint8 tuning_streams_any_enabled(void);
+static void  tuning_streams_clear_all(void);
+static void  tuning_streams_tick(uint32 now_ms);
+static uint8 tuning_stream_start(tuning_stream_t *s, uint16 period_ms);
+static void  tuning_stream_stop(tuning_stream_t *s);
 
 static MenuItem tuning_items[] = {
     {tuning_toggle_label, tuning_action_toggle, NULL},
@@ -172,7 +228,9 @@ static void tuning_draw_footer(const char *hint)
 
 static void tuning_update_labels(void)
 {
-    snprintf(tuning_toggle_label, sizeof(tuning_toggle_label), "1. Telemetry [%s]", tuning_enabled ? "ON" : "OFF");
+    /* "Telemetry" reflects whether any Phase-1 stream is currently active. */
+    snprintf(tuning_toggle_label, sizeof(tuning_toggle_label),
+             "1. Telemetry [%s]", tuning_streams_any_enabled() ? "ON" : "OFF");
     snprintf(tuning_period_plus_label, sizeof(tuning_period_plus_label), "3. Period + [%ums]", (unsigned int)tuning_period_ms);
     snprintf(tuning_period_minus_label, sizeof(tuning_period_minus_label), "4. Period - [%ums]", (unsigned int)tuning_period_ms);
     snprintf(track_stream_label, sizeof(track_stream_label), "5. Track Stream [%s]", track_stream_enabled ? "ON" : "OFF");
@@ -197,14 +255,16 @@ static void tuning_set_period(uint16 period_ms)
 
 void tuning_soft_init(void)
 {
-    tuning_enabled = 0U;    /* 默认关闭，WiFi 连上后由命令或菜单开启 */
+    /* All streams start disabled; desktop owns subscriptions. Menu toggle
+     * below provides an on-car convenience to enable all Phase-1 streams. */
+    tuning_streams_clear_all();
     tuning_period_ms = TUNING_DEFAULT_PERIOD_MS;
-    tuning_last_send_ms = system_getval_ms();
     tuning_total_sent = 0U;
     tuning_total_fail = 0U;
     tuning_view_mode = TUNING_VIEW_NONE;
     tuning_full_redraw = 1U;
     tuning_last_view_ms = 0U;
+    tuning_tcp_was_connected = 0U;
     track_stream_enabled = 0U;
     track_stream_interval_ms = 50U;
     track_stream_last_ms = system_getval_ms();
@@ -231,8 +291,20 @@ static void tuning_exit_view(void)
 
 static void tuning_action_toggle(void)
 {
-    tuning_enabled = tuning_enabled ? 0U : 1U;
-    tuning_last_send_ms = system_getval_ms();
+    /* On-car convenience: ON enables every registered Phase-1 stream at the
+     * current tuning_period_ms; OFF clears all subscriptions. */
+    if (tuning_streams_any_enabled())
+    {
+        tuning_streams_clear_all();
+    }
+    else
+    {
+        uint8 i;
+        for (i = 0U; i < TUNING_STREAM_COUNT; i++)
+        {
+            (void)tuning_stream_start(&g_streams[i], tuning_period_ms);
+        }
+    }
     tuning_update_labels();
     menu_request_full_redraw();
 }
@@ -316,292 +388,186 @@ static uint8 tuning_send_line(const char *line)
     return 0U;
 }
 
-static uint8 tuning_send_once(void)
+/* ---- INS stream: INS position/velocity/yaw/stationary (TELINS) ---- */
+static void tuning_send_telins(void)
 {
     char line[TUNING_SEND_BUFFER_LEN];
-    uint32 now_ms = system_getval_ms();
-    float gyro_x = icm42688_gyro_x;
-    float gyro_y = icm42688_gyro_y;
-    float gyro_z = icm42688_gyro_z;
-    float acc_x = icm42688_acc_x;
-    float acc_y = icm42688_acc_y;
-    float acc_z = icm42688_acc_z;
-    float gyro_bias_x = 0.0f;
-    float gyro_bias_y = 0.0f;
-    float gyro_bias_z = 0.0f;
-    float gyro_corr_x = 0.0f;
-    float gyro_corr_y = 0.0f;
-    float gyro_corr_z = 0.0f;
-    float roll_deg = 0.0f;
-    float pitch_deg = 0.0f;
+    float ins_px = 0.0f, ins_py = 0.0f;
+    float ins_vx = 0.0f, ins_vy = 0.0f;
     float yaw_deg = 0.0f;
-    float q0 = 1.0f;
-    float q1 = 0.0f;
-    float q2 = 0.0f;
-    float q3 = 0.0f;
-    float acc_norm_g = 0.0f;
-    float gyro_norm = 0.0f;
-    float nx = 0.0f;
-    float ny = 0.0f;
-    float nz = 0.0f;
-    uint32 attitude_update_count = 0U;
-    uint32 bias_sample_count = 0U;
-    uint32 bias_target_count = 0U;
-    uint8 ok = 1U;
 
-    icm_attitude_get_gyro_bias(&gyro_bias_x, &gyro_bias_y, &gyro_bias_z);
-    icm_attitude_get_gyro_bias_calibration_progress(&bias_sample_count, &bias_target_count);
-    icm_attitude_get_euler(&roll_deg, &pitch_deg, &yaw_deg);
-    icm_attitude_get_quaternion(&q0, &q1, &q2, &q3);
-    acc_norm_g = icm_attitude_get_acc_norm_g();
-    attitude_update_count = icm_attitude_get_update_count();
-
-    gyro_corr_x = gyro_x - gyro_bias_x;
-    gyro_corr_y = gyro_y - gyro_bias_y;
-    gyro_corr_z = gyro_z - gyro_bias_z;
-    gyro_norm = sqrtf(gyro_corr_x * gyro_corr_x + gyro_corr_y * gyro_corr_y + gyro_corr_z * gyro_corr_z);
-
-    nx = (q0 * q0 + q1 * q1 - q2 * q2 - q3 * q3) * acc_x
-       + 2.0f * (q1 * q2 - q0 * q3) * acc_y
-       + 2.0f * (q1 * q3 + q0 * q2) * acc_z;
-    ny = 2.0f * (q1 * q2 + q0 * q3) * acc_x
-       + (q0 * q0 - q1 * q1 + q2 * q2 - q3 * q3) * acc_y
-       + 2.0f * (q2 * q3 - q0 * q1) * acc_z;
-    nz = 2.0f * (q1 * q3 - q0 * q2) * acc_x
-       + 2.0f * (q2 * q3 + q0 * q1) * acc_y
-       + (q0 * q0 - q1 * q1 - q2 * q2 + q3 * q3) * acc_z - 1.0f;
+    icm_ins_get_position(&ins_px, &ins_py);
+    icm_ins_get_velocity(&ins_vx, &ins_vy, NULL);
+    icm_attitude_get_euler(NULL, NULL, &yaw_deg);
 
     snprintf(line,
              sizeof(line),
-             "TELG,ms=%lu,fix=%d,sat=%d,spd=%.2f,enc=%d,gx=%.3f,gy=%.3f,gz=%.3f,gcx=%.3f,gcy=%.3f,gcz=%.3f,gxyz=%.3f,gbx=%.3f,gby=%.3f,gbz=%.3f,bias_ok=%u,bias_cal=%u,bias_n=%lu,bias_t=%lu,bias_flash=%u\r\n",
-             (unsigned long)now_ms,
-             gnss.state,
-             gnss.satellite_used,
-             gnss.speed,
-             switch_encoder_num,
-             gyro_x,
-             gyro_y,
-             gyro_z,
-             gyro_corr_x,
-             gyro_corr_y,
-             gyro_corr_z,
-             gyro_norm,
-             gyro_bias_x,
-             gyro_bias_y,
-             gyro_bias_z,
-             (unsigned int)icm_attitude_is_gyro_bias_valid(),
-             (unsigned int)icm_attitude_is_gyro_bias_calibrating(),
-             (unsigned long)bias_sample_count,
-             (unsigned long)bias_target_count,
-             (unsigned int)icm_attitude_is_gyro_bias_from_flash());
-    if (!tuning_send_line(line))
-    {
-        ok = 0U;
-    }
-
-    snprintf(line,
-             sizeof(line),
-             "TELA,ms=%lu,roll=%.2f,pitch=%.2f,yaw=%.2f,q0=%.5f,q1=%.5f,q2=%.5f,q3=%.5f,ax=%.4f,ay=%.4f,az=%.4f,anorm=%.4f,nx=%.4f,ny=%.4f,nz=%.4f,att_upd=%lu,lat=%.6f,lon=%.6f\r\n",
-             (unsigned long)now_ms,
-             roll_deg,
-             pitch_deg,
+             "TELINS,ms=%lu,ins_rec=%u,ins_pts=%u,px=%.3f,py=%.3f,vx=%.3f,vy=%.3f,yaw=%.2f,stat=%u\r\n",
+             (unsigned long)system_getval_ms(),
+             (unsigned int)ins_record_is_recording(),
+             (unsigned int)ins_record_get_point_count(),
+             ins_px,
+             ins_py,
+             ins_vx,
+             ins_vy,
              yaw_deg,
-             q0,
-             q1,
-             q2,
-             q3,
-             acc_x,
-             acc_y,
-             acc_z,
-             acc_norm_g,
-             nx,
-             ny,
-             nz,
-             (unsigned long)attitude_update_count,
-             gnss.latitude,
-             gnss.longitude);
-    if (!tuning_send_line(line))
-    {
-        ok = 0U;
-    }
+             (unsigned int)icm_ins_is_stationary());
+    (void)tuning_send_line(line);
+}
 
-    {
-        float ins_px = 0.0f;
-        float ins_py = 0.0f;
-        float ins_vx = 0.0f;
-        float ins_vy = 0.0f;
+/* ---- YAW stream: yaw-axis tuning telemetry (TELY) ---- */
+static void tuning_send_tely(void)
+{
+    char line[TUNING_SEND_BUFFER_LEN];
+    float gz_raw = 0.0f, gz_bias = 0.0f, gz_comp = 0.0f;
+    float gz_scaled = 0.0f, yaw_integral = 0.0f;
+    float yaw_final = 0.0f, yaw_corr = 0.0f, yaw_dt = 0.0f;
+    uint8  zero_busy = 0U, zero_ok = 0U;
+    uint32 zero_n = 0U;
+    float  zero_gbz = 0.0f;
 
-        icm_ins_get_position(&ins_px, &ins_py);
-        icm_ins_get_velocity(&ins_vx, &ins_vy, NULL);
-
-        snprintf(line,
-                 sizeof(line),
-                 "TELINS,ms=%lu,ins_rec=%u,ins_pts=%u,px=%.3f,py=%.3f,vx=%.3f,vy=%.3f,yaw=%.2f,stat=%u\r\n",
-                 (unsigned long)now_ms,
-                 (unsigned int)ins_record_is_recording(),
-                 (unsigned int)ins_record_get_point_count(),
-                 ins_px,
-                 ins_py,
-                 ins_vx,
-                 ins_vy,
-                 yaw_deg,
-                 (unsigned int)icm_ins_is_stationary());
-        if (!tuning_send_line(line))
-        {
-            ok = 0U;
-        }
-    }
-
-    {
-        const ins_ctrl_output_t *ctrl = ins_ctrl_get_output();
-
-        snprintf(line,
-                 sizeof(line),
-                 "TELPLAY,ms=%lu,play=%u,tgt_idx=%u,tgt_px=%.3f,tgt_py=%.3f"
-                 ",tgt_dist=%.3f,tgt_yaw=%.2f,yaw_err=%.2f,spd=%.3f,drv=%u\r\n",
-                 (unsigned long)now_ms,
-                 (unsigned int)ins_playback_is_running(),
-                 (unsigned int)ins_playback_get_target_idx(),
-                 ctrl->tgt_px_m,
-                 ctrl->tgt_py_m,
-                 ctrl->tgt_dist_m,
-                 ctrl->tgt_yaw_deg,
-                 ctrl->yaw_err_deg,
-                 ctrl->speed_cmd,
-                 (unsigned int)ctrl->drive_enable);
-        if (!tuning_send_line(line))
-        {
-            ok = 0U;
-        }
-    }
-
-    /* ---- TELY：yaw 专用调参遥测包 ---- */
-    snprintf(line,
-             sizeof(line),
-             "TELTURN,ms=%lu,target=%.3f,current=%.3f,encoder=%ld,enable=%u\r\n",
-             (unsigned long)now_ms,
-             turn_target_angle_deg,
-             turn_current_angle_deg,
-             (long)Turn_GetEncoderCount(),
-             (unsigned int)Turn_GetMotorEnable());
-    if (!tuning_send_line(line))
-    {
-        ok = 0U;
-    }
+    icm_attitude_yaw_get_debug(&gz_raw, &gz_bias, &gz_comp,
+                               &gz_scaled, &yaw_integral,
+                               &yaw_final, &yaw_corr, &yaw_dt);
+    icm_attitude_yaw_zero_get_state(&zero_busy, &zero_ok, &zero_n, &zero_gbz);
 
     snprintf(line,
              sizeof(line),
-             "TELENR,ms=%lu,count=%ld,dist_mm=%ld,spd_mm_s=%ld,"
-             "odom_px=%.3f,odom_py=%.3f,odom_spd=%.3f,active=%u\r\n",
-             (unsigned long)now_ms,
-             (long)rear_right_get_count(),
-             (long)rear_right_get_dist_mm(),
-             (long)rear_right_get_spd_mm_s(),
+             "TELY,ms=%lu"
+             ",gzr=%.3f,gzb=%.3f,gzc=%.3f"
+             ",gzs=%.4f,gzd=%.3f"
+             ",yi=%.2f,yf=%.2f,yc=%.4f"
+             ",dt=%lu"
+             ",dbg=%u,ver=%lu"
+             ",ton=%u,tst=%.1f,tdl=%.1f"
+             ",zb=%u,zok=%u,zn=%lu,zgz=%.3f\r\n",
+             (unsigned long)system_getval_ms(),
+             gz_raw, gz_bias, gz_comp,
+             icm_attitude_yaw_get_scale(), gz_scaled,
+             yaw_integral, yaw_final, yaw_corr,
+             (unsigned long)(uint32)(yaw_dt * 1000000.0f),
+             (unsigned int)icm_attitude_yaw_get_debug_enable(),
+             (unsigned long)icm_attitude_yaw_get_param_version(),
+             (unsigned int)icm_attitude_yaw_test_is_on(),
+             icm_attitude_yaw_test_get_start(),
+             icm_attitude_yaw_test_get_last_delta(),
+             (unsigned int)zero_busy, (unsigned int)zero_ok,
+             (unsigned long)zero_n, zero_gbz);
+    (void)tuning_send_line(line);
+}
+
+/* ---- INSENC stream: INS<->encoder fusion gains + live state (TELINSENC) ---- */
+static void tuning_send_telinsenc(void)
+{
+    char line[TUNING_SEND_BUFFER_LEN];
+    float ins_px = 0.0f, ins_py = 0.0f;
+    float ins_vx = 0.0f, ins_vy = 0.0f;
+
+    icm_ins_get_position(&ins_px, &ins_py);
+    icm_ins_get_velocity(&ins_vx, &ins_vy, NULL);
+
+    snprintf(line,
+             sizeof(line),
+             "TELINSENC,ms=%lu"
+             ",L_vg=%.5f,L_pg=%.5f,L_sr=%.5f"
+             ",R_vg=%.5f,R_pg=%.5f,R_sr=%.5f"
+             ",ver=%lu,fls=%u,syn=%u"
+             ",L_spd=%.3f,R_spd=%.3f,ins_spd=%.3f"
+             ",L_px=%.3f,L_py=%.3f,R_px=%.3f,R_py=%.3f"
+             ",ins_px=%.3f,ins_py=%.3f,ins_vx=%.3f,ins_vy=%.3f"
+             ",L_act=%u,R_act=%u,stat=%u\r\n",
+             (unsigned long)system_getval_ms(),
+             ins_enc_tune_get_l_vel_gain(),
+             ins_enc_tune_get_l_pos_gain(),
+             ins_enc_tune_get_l_sync_rate(),
+             ins_enc_tune_get_r_vel_gain(),
+             ins_enc_tune_get_r_pos_gain(),
+             ins_enc_tune_get_r_sync_rate(),
+             (unsigned long)ins_enc_tune_get_param_version(),
+             (unsigned int)ins_enc_tune_is_from_flash(),
+             (unsigned int)ins_enc_tune_is_flash_synced(),
+             encoder_odom_get_speed_ms(),
+             encoder_odom_right_get_speed_ms(),
+             icm_ins_get_speed_ms(),
+             encoder_odom_get_px_m(),
+             encoder_odom_get_py_m(),
              encoder_odom_right_get_px_m(),
              encoder_odom_right_get_py_m(),
-             encoder_odom_right_get_speed_ms(),
-             (unsigned int)encoder_odom_right_is_active());
-    if (!tuning_send_line(line))
-    {
-        ok = 0U;
-    }
+             ins_px, ins_py, ins_vx, ins_vy,
+             (unsigned int)encoder_odom_is_active(),
+             (unsigned int)encoder_odom_right_is_active(),
+             (unsigned int)icm_ins_is_stationary());
+    (void)tuning_send_line(line);
+}
 
-    {
-        float ins_px = 0.0f;
-        float ins_py = 0.0f;
+/* ---- Stream registry helpers ---- */
 
-        icm_ins_get_position(&ins_px, &ins_py);
-        snprintf(line,
-                 sizeof(line),
-                 "TELODOM,ms=%lu,"
-                 "L_cnt=%ld,L_dst=%ld,L_spd=%ld,L_act=%u,"
-                 "R_cnt=%ld,R_dst=%ld,R_spd=%ld,R_act=%u,"
-                 "ins_px=%.3f,ins_py=%.3f,ins_spd=%.3f,"
-                 "L_px=%.3f,L_py=%.3f,R_px=%.3f,R_py=%.3f\r\n",
-                 (unsigned long)now_ms,
-                 (long)rear_left_get_count(),
-                 (long)rear_left_get_dist_mm(),
-                 (long)rear_left_get_spd_mm_s(),
-                 (unsigned int)encoder_odom_is_active(),
-                 (long)rear_right_get_count(),
-                 (long)rear_right_get_dist_mm(),
-                 (long)rear_right_get_spd_mm_s(),
-                 (unsigned int)encoder_odom_right_is_active(),
-                 ins_px,
-                 ins_py,
-                 icm_ins_get_speed_ms(),
-                 encoder_odom_get_px_m(),
-                 encoder_odom_get_py_m(),
-                 encoder_odom_right_get_px_m(),
-                 encoder_odom_right_get_py_m());
-        if (!tuning_send_line(line))
+static tuning_stream_t *tuning_stream_find(const char *name)
+{
+    uint8 i;
+    if (NULL == name) return NULL;
+    for (i = 0U; i < TUNING_STREAM_COUNT; i++)
+    {
+        if (0 == strcmp(name, g_streams[i].name))
         {
-            ok = 0U;
+            return &g_streams[i];
         }
     }
+    return NULL;
+}
 
-    snprintf(line,
-             sizeof(line),
-             "TELBRK,ms=%lu,a24=%u,filt=%u,pct=%u,pressed=%u,valid=%u,cmd=%u,"
-             "thr_cmd=%u,thr_en=%u,brake_overrides=%u\r\n",
-             (unsigned long)now_ms,
-             (unsigned int)pedal_input_get_a24(),
-             (unsigned int)pedal_input_get_brake_filtered(),
-             (unsigned int)pedal_input_get_brake_percent(),
-             (unsigned int)pedal_input_get_brake_pressed(),
-             (unsigned int)pedal_input_get_brake_valid(),
-             (unsigned int)pedal_input_get_brake_cmd(),
-             (unsigned int)pedal_input_get_throttle_cmd(),
-             (unsigned int)pedal_input_get_throttle_enable_request(),
-             (unsigned int)(pedal_input_get_brake_pressed() && pedal_input_get_brake_valid()));
-    if (!tuning_send_line(line))
+static uint8 tuning_streams_any_enabled(void)
+{
+    uint8 i;
+    for (i = 0U; i < TUNING_STREAM_COUNT; i++)
     {
-        ok = 0U;
+        if (g_streams[i].enabled) return 1U;
     }
+    return 0U;
+}
 
+static void tuning_streams_clear_all(void)
+{
+    uint8 i;
+    for (i = 0U; i < TUNING_STREAM_COUNT; i++)
     {
-        float gz_raw = 0.0f, gz_bias = 0.0f, gz_comp = 0.0f;
-        float gz_scaled = 0.0f, yaw_integral = 0.0f;
-        float yaw_final = 0.0f, yaw_corr = 0.0f, yaw_dt = 0.0f;
-        uint8  zero_busy = 0U, zero_ok = 0U;
-        uint32 zero_n = 0U;
-        float  zero_gbz = 0.0f;
+        g_streams[i].enabled = 0U;
+    }
+}
 
-        icm_attitude_yaw_get_debug(&gz_raw, &gz_bias, &gz_comp,
-                                    &gz_scaled, &yaw_integral,
-                                    &yaw_final, &yaw_corr, &yaw_dt);
-        icm_attitude_yaw_zero_get_state(&zero_busy, &zero_ok,
-                                         &zero_n, &zero_gbz);
-
-        snprintf(line,
-                 sizeof(line),
-                 "TELY,ms=%lu"
-                 ",gzr=%.3f,gzb=%.3f,gzc=%.3f"
-                 ",gzs=%.4f,gzd=%.3f"
-                 ",yi=%.2f,yf=%.2f,yc=%.4f"
-                 ",dt=%lu"
-                 ",dbg=%u,ver=%lu"
-                 ",ton=%u,tst=%.1f,tdl=%.1f"
-                 ",zb=%u,zok=%u,zn=%lu,zgz=%.3f\r\n",
-                 (unsigned long)now_ms,
-                 gz_raw, gz_bias, gz_comp,
-                 icm_attitude_yaw_get_scale(), gz_scaled,
-                 yaw_integral, yaw_final, yaw_corr,
-                 (unsigned long)(uint32)(yaw_dt * 1000000.0f),
-                 (unsigned int)icm_attitude_yaw_get_debug_enable(),
-                 (unsigned long)icm_attitude_yaw_get_param_version(),
-                 (unsigned int)icm_attitude_yaw_test_is_on(),
-                 icm_attitude_yaw_test_get_start(),
-                 icm_attitude_yaw_test_get_last_delta(),
-                 (unsigned int)zero_busy, (unsigned int)zero_ok,
-                 (unsigned long)zero_n, zero_gbz);
-        if (!tuning_send_line(line))
+static void tuning_streams_tick(uint32 now_ms)
+{
+    uint8 i;
+    for (i = 0U; i < TUNING_STREAM_COUNT; i++)
+    {
+        tuning_stream_t *s = &g_streams[i];
+        uint16 period;
+        if (!s->enabled) continue;
+        period = s->period_ms;
+        if ((uint32)(now_ms - s->last_send_ms) >= (uint32)period)
         {
-            ok = 0U;
+            s->last_send_ms = now_ms;
+            s->send_fn();
         }
     }
+}
 
-    return ok;
+static uint8 tuning_stream_start(tuning_stream_t *s, uint16 period_ms)
+{
+    if (NULL == s) return 0U;
+    if (0U == period_ms) period_ms = s->default_period_ms;
+    if (period_ms < TUNING_STREAM_MIN_PERIOD_MS) period_ms = TUNING_STREAM_MIN_PERIOD_MS;
+    if (period_ms > TUNING_STREAM_MAX_PERIOD_MS) period_ms = TUNING_STREAM_MAX_PERIOD_MS;
+    s->period_ms   = period_ms;
+    s->last_send_ms = system_getval_ms();
+    s->enabled     = 1U;
+    return 1U;
+}
+
+static void tuning_stream_stop(tuning_stream_t *s)
+{
+    if (NULL == s) return;
+    s->enabled = 0U;
 }
 
 static void tuning_send_track_point(void)
@@ -698,18 +664,32 @@ static void tuning_send_track_dump_batch(void)
 void tuning_soft_task(void)
 {
     uint32 now_ms;
+    uint8  tcp_up;
 
     /* WiFi SPI 未初始化时不能调用任何 wifi_spi 函数，否则访问未初始化外设会硬错误。
      * wifi_tcp_connected 只在 wifi_spi_init + TCP 连接成功后才为 1，
-     * 此时 SPI 一定可用。连接成功后由命令自动开启 tuning_enabled。 */
-    if (!wifi_menu_get_tcp_status())
+     * 此时 SPI 一定可用。 */
+    tcp_up = wifi_menu_get_tcp_status() ? 1U : 0U;
+    if (!tcp_up)
     {
+        /* TCP just went down -> clear all subscriptions so the car does not
+         * resume pushing to a stale peer on next reconnect. */
+        if (tuning_tcp_was_connected)
+        {
+            tuning_streams_clear_all();
+            track_stream_enabled = 0U;
+            track_dump_active    = 0U;
+            tuning_tcp_was_connected = 0U;
+            tuning_update_labels();
+        }
         return;
     }
+    tuning_tcp_was_connected = 1U;
 
     tuning_receive_task();
 
-    /* Track streaming runs independently of tuning_enabled */
+    /* Track streaming remains on its own subscription (legacy TRACK STREAM
+     * ON/OFF) — it will be folded into the stream registry in a later phase. */
     now_ms = system_getval_ms();
     if (track_stream_enabled)
     {
@@ -725,19 +705,8 @@ void tuning_soft_task(void)
         tuning_send_track_dump_batch();
     }
 
-    if (!tuning_enabled)
-    {
-        return;
-    }
-
-    now_ms = system_getval_ms();
-    if ((uint32)(now_ms - tuning_last_send_ms) < tuning_period_ms)
-    {
-        return;
-    }
-
-    tuning_last_send_ms = now_ms;
-    (void)tuning_send_once();
+    /* Dispatch subscribed streams. */
+    tuning_streams_tick(now_ms);
 }
 
 static void tuning_send_response(const char *response)
@@ -778,6 +747,28 @@ static void tuning_reply_ack_pid(const char *cmd)
              (NULL != pid_param) ? pid_param->kp : 0.0f,
              (NULL != pid_param) ? pid_param->ki : 0.0f,
              (NULL != pid_param) ? pid_param->kd : 0.0f);
+    tuning_send_response(response);
+}
+
+static void tuning_reply_insenc(const char *cmd)
+{
+    char response[TUNING_RESP_BUFFER_LEN];
+    snprintf(response, sizeof(response),
+             "ACK,cmd=%s,ms=%lu"
+             ",L_vg=%.5f,L_pg=%.5f,L_sr=%.5f"
+             ",R_vg=%.5f,R_pg=%.5f,R_sr=%.5f"
+             ",ver=%lu,fls=%u,syn=%u\r\n",
+             (NULL != cmd) ? cmd : "INSENC",
+             (unsigned long)system_getval_ms(),
+             ins_enc_tune_get_l_vel_gain(),
+             ins_enc_tune_get_l_pos_gain(),
+             ins_enc_tune_get_l_sync_rate(),
+             ins_enc_tune_get_r_vel_gain(),
+             ins_enc_tune_get_r_pos_gain(),
+             ins_enc_tune_get_r_sync_rate(),
+             (unsigned long)ins_enc_tune_get_param_version(),
+             (unsigned int)ins_enc_tune_is_from_flash(),
+             (unsigned int)ins_enc_tune_is_flash_synced());
     tuning_send_response(response);
 }
 
@@ -1187,6 +1178,217 @@ static void tuning_process_rx_line(char *line)
         return;
     }
 
+    /* ================================================================
+     *  INSENC —— 惯导/编码器融合增益调参
+     * ================================================================ */
+
+    if (0 == strcmp(line, "GET INSENC"))
+    {
+        tuning_reply_insenc("GET_INSENC");
+        return;
+    }
+
+    if (0 == strcmp(line, "SAVE INSENC"))
+    {
+        if (ins_enc_tune_save_to_flash())
+        {
+            tuning_reply_insenc("SAVE_INSENC");
+        }
+        else
+        {
+            tuning_reply_error("SAVE_INSENC", "FLASH_SAVE_FAILED");
+        }
+        return;
+    }
+
+    if (0 == strcmp(line, "LOAD INSENC"))
+    {
+        if (ins_enc_tune_load_from_flash())
+        {
+            tuning_reply_insenc("LOAD_INSENC");
+        }
+        else
+        {
+            tuning_reply_error("LOAD_INSENC", "FLASH_INVALID");
+        }
+        return;
+    }
+
+    if (0 == strcmp(line, "RESET INSENC"))
+    {
+        ins_enc_tune_reset_to_default();
+        tuning_reply_insenc("RESET_INSENC");
+        return;
+    }
+
+    /* SET INSENC_<KEY> <float>
+     *   KEY ∈ { L_VG, L_PG, L_SR, R_VG, R_PG, R_SR } */
+    {
+        char key[16] = {0};
+        float value = 0.0f;
+        if (2 == sscanf(line, "SET INSENC_%15s %f", key, &value))
+        {
+            uint8 ok = 0U;
+            if      (0 == strcmp(key, "L_VG")) ok = ins_enc_tune_set_l_vel_gain(value);
+            else if (0 == strcmp(key, "L_PG")) ok = ins_enc_tune_set_l_pos_gain(value);
+            else if (0 == strcmp(key, "L_SR")) ok = ins_enc_tune_set_l_sync_rate(value);
+            else if (0 == strcmp(key, "R_VG")) ok = ins_enc_tune_set_r_vel_gain(value);
+            else if (0 == strcmp(key, "R_PG")) ok = ins_enc_tune_set_r_pos_gain(value);
+            else if (0 == strcmp(key, "R_SR")) ok = ins_enc_tune_set_r_sync_rate(value);
+            else
+            {
+                tuning_reply_error("SET_INSENC", "UNKNOWN_KEY");
+                return;
+            }
+
+            if (ok)
+            {
+                char ack_cmd[32];
+                snprintf(ack_cmd, sizeof(ack_cmd), "SET_INSENC_%s", key);
+                tuning_reply_insenc(ack_cmd);
+            }
+            else
+            {
+                tuning_reply_error("SET_INSENC", "OUT_OF_RANGE");
+            }
+            return;
+        }
+    }
+
+    /* ================================================================
+     *  STREAM control (on-demand telemetry subscription model)
+     *
+     *    LIST STREAMS                  -> names of all registered streams
+     *    GET STREAMS                   -> name=enabled/period for each
+     *    START STREAM <name> [period]  -> enable (optional explicit period)
+     *    STOP STREAM <name>            -> disable a single stream
+     *    STOP ALL STREAMS              -> disable everything
+     *    GET ONCE <name>               -> emit one packet, no subscription
+     * ================================================================ */
+    if (0 == strcmp(line, "LIST STREAMS"))
+    {
+        char resp[TUNING_RESP_BUFFER_LEN];
+        char names[128];
+        uint8 i;
+        size_t off = 0;
+        names[0] = '\0';
+        for (i = 0U; i < TUNING_STREAM_COUNT; i++)
+        {
+            off += (size_t)snprintf(names + off,
+                                    (off < sizeof(names)) ? (sizeof(names) - off) : 0U,
+                                    "%s%s",
+                                    (i == 0U) ? "" : ",",
+                                    g_streams[i].name);
+            if (off >= sizeof(names)) break;
+        }
+        snprintf(resp, sizeof(resp),
+                 "ACK,cmd=LIST_STREAMS,count=%u,names=%s\r\n",
+                 (unsigned int)TUNING_STREAM_COUNT, names);
+        tuning_send_response(resp);
+        return;
+    }
+
+    if (0 == strcmp(line, "GET STREAMS"))
+    {
+        char resp[TUNING_RESP_BUFFER_LEN];
+        char body[192];
+        uint8 i;
+        size_t off = 0;
+        body[0] = '\0';
+        for (i = 0U; i < TUNING_STREAM_COUNT; i++)
+        {
+            off += (size_t)snprintf(body + off,
+                                    (off < sizeof(body)) ? (sizeof(body) - off) : 0U,
+                                    ",%s=%u/%u",
+                                    g_streams[i].name,
+                                    (unsigned int)g_streams[i].enabled,
+                                    (unsigned int)g_streams[i].period_ms);
+            if (off >= sizeof(body)) break;
+        }
+        snprintf(resp, sizeof(resp),
+                 "ACK,cmd=GET_STREAMS,count=%u%s\r\n",
+                 (unsigned int)TUNING_STREAM_COUNT, body);
+        tuning_send_response(resp);
+        return;
+    }
+
+    if (0 == strcmp(line, "STOP ALL STREAMS"))
+    {
+        char resp[TUNING_RESP_BUFFER_LEN];
+        tuning_streams_clear_all();
+        tuning_update_labels();
+        snprintf(resp, sizeof(resp),
+                 "ACK,cmd=STOP_ALL_STREAMS,active=0\r\n");
+        tuning_send_response(resp);
+        return;
+    }
+
+    /* START STREAM <NAME> [period_ms] */
+    {
+        char name[16] = {0};
+        unsigned int period_u = 0U;
+        int n = sscanf(line, "START STREAM %15s %u", name, &period_u);
+        if (n >= 1)
+        {
+            tuning_stream_t *s = tuning_stream_find(name);
+            char resp[TUNING_RESP_BUFFER_LEN];
+            if (NULL == s)
+            {
+                tuning_reply_error("START_STREAM", "UNKNOWN_STREAM");
+                return;
+            }
+            (void)tuning_stream_start(s, (n >= 2) ? (uint16)period_u : 0U);
+            tuning_update_labels();
+            snprintf(resp, sizeof(resp),
+                     "ACK,cmd=START_STREAM,name=%s,enabled=1,period=%u\r\n",
+                     s->name, (unsigned int)s->period_ms);
+            tuning_send_response(resp);
+            return;
+        }
+    }
+
+    /* STOP STREAM <NAME> */
+    {
+        char name[16] = {0};
+        if (1 == sscanf(line, "STOP STREAM %15s", name))
+        {
+            tuning_stream_t *s = tuning_stream_find(name);
+            char resp[TUNING_RESP_BUFFER_LEN];
+            if (NULL == s)
+            {
+                tuning_reply_error("STOP_STREAM", "UNKNOWN_STREAM");
+                return;
+            }
+            tuning_stream_stop(s);
+            tuning_update_labels();
+            snprintf(resp, sizeof(resp),
+                     "ACK,cmd=STOP_STREAM,name=%s,enabled=0\r\n",
+                     s->name);
+            tuning_send_response(resp);
+            return;
+        }
+    }
+
+    /* GET ONCE <NAME> — fire one packet, leave subscription state untouched */
+    {
+        char name[16] = {0};
+        if (1 == sscanf(line, "GET ONCE %15s", name))
+        {
+            tuning_stream_t *s = tuning_stream_find(name);
+            char resp[TUNING_RESP_BUFFER_LEN];
+            if (NULL == s)
+            {
+                tuning_reply_error("GET_ONCE", "UNKNOWN_STREAM");
+                return;
+            }
+            s->send_fn();
+            snprintf(resp, sizeof(resp),
+                     "ACK,cmd=GET_ONCE,name=%s\r\n", s->name);
+            tuning_send_response(resp);
+            return;
+        }
+    }
+
     tuning_reply_error("UNKNOWN", "UNKNOWN_COMMAND");
 }
 
@@ -1204,12 +1406,9 @@ static void tuning_receive_task(void)
         return;
     }
 
-    /* 首次收到数据 → 自动开启遥测（用户不需手动到 Tuning 菜单开） */
-    if (!tuning_enabled)
-    {
-        tuning_enabled = 1U;
-        tuning_update_labels();
-    }
+    /* Note: the old "auto-enable telemetry on first RX byte" behavior was
+     * intentionally removed. Telemetry is now strictly on-demand, driven by
+     * START STREAM / GET ONCE commands from the desktop. */
 
     for (i = 0U; i < raw_len; i++)
     {
@@ -1264,7 +1463,16 @@ static void tuning_draw_status(void)
     }
 
     ips200_set_color(RGB565_WHITE, RGB565_BLACK);
-    snprintf(line, sizeof(line), "Telemetry: %s", tuning_enabled ? "ON" : "OFF");
+    {
+        uint8 cnt = 0U;
+        uint8 i;
+        for (i = 0U; i < TUNING_STREAM_COUNT; i++)
+        {
+            if (g_streams[i].enabled) cnt++;
+        }
+        snprintf(line, sizeof(line), "Streams: %u/%u active", (unsigned int)cnt,
+                 (unsigned int)TUNING_STREAM_COUNT);
+    }
     tuning_show_padded(TUNING_PAD_X, TUNING_LINE_START, line);
 
     snprintf(line, sizeof(line), "Period: %ums TCP:%s", (unsigned int)tuning_period_ms, wifi_menu_get_tcp_status() ? "OK" : "DOWN");

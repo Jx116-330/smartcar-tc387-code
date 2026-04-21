@@ -338,22 +338,27 @@ uint8 menu_pid_handle_view(pid_view_mode_t *mode,
         return 1U;
     }
 
-    if ((switch_encoder_change_num != 0) && (*mode <= PID_VIEW_EDIT_KD))
+    /* 旋钮调节 PID 参数：必须主动调 If_Switch_Encoder_Change() 把 pending
+     * 转成 change_num（View 激活时 menu_update_selection_from_encoder 不运行）。
+     * while 循环抽干队列，避免快转后参数还在继续跳的滞后感。 */
+    if (*mode <= PID_VIEW_EDIT_KD)
     {
         step = menu_step_get_float(&pid_step_descs[*mode - PID_VIEW_EDIT_KP]);
-        if (PID_VIEW_EDIT_KP == *mode)
+        while (If_Switch_Encoder_Change())
         {
-            menu_param_adjust_float(&params->pid_p, step, PARAM_PID_P_MIN, PARAM_PID_P_MAX, (switch_encoder_change_num < 0) ? 1U : 0U);
-            updated = 1U;
-        }
-        else if (PID_VIEW_EDIT_KI == *mode)
-        {
-            menu_param_adjust_float(&params->pid_i, step, PARAM_PID_I_MIN, PARAM_PID_I_MAX, (switch_encoder_change_num < 0) ? 1U : 0U);
-            updated = 1U;
-        }
-        else if (PID_VIEW_EDIT_KD == *mode)
-        {
-            menu_param_adjust_float(&params->pid_d, step, PARAM_PID_D_MIN, PARAM_PID_D_MAX, (switch_encoder_change_num < 0) ? 1U : 0U);
+            uint8 is_add = (switch_encoder_change_num < 0) ? 1U : 0U;
+            if (PID_VIEW_EDIT_KP == *mode)
+            {
+                menu_param_adjust_float(&params->pid_p, step, PARAM_PID_P_MIN, PARAM_PID_P_MAX, is_add);
+            }
+            else if (PID_VIEW_EDIT_KI == *mode)
+            {
+                menu_param_adjust_float(&params->pid_i, step, PARAM_PID_I_MIN, PARAM_PID_I_MAX, is_add);
+            }
+            else if (PID_VIEW_EDIT_KD == *mode)
+            {
+                menu_param_adjust_float(&params->pid_d, step, PARAM_PID_D_MIN, PARAM_PID_D_MAX, is_add);
+            }
             updated = 1U;
         }
 

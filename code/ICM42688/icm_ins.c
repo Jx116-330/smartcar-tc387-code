@@ -34,6 +34,11 @@
 #define ZUPT_HOLD            200U    /* samples to enter stationary  = 200 ms */
 #define ZUPT_EXIT_COUNT      100U    /* samples to leave stationary  = 100 ms */
 
+/* Motion-hint gate: 编码器/轮速外部证据。每次 set 刷新 TTL，
+ * 每个 1 kHz ISR 递减 1，归零后视为无提示、回退到纯 IMU 判据。 */
+#define MOTION_HINT_MM_S_THRESH   30U    /* |v|>=30 mm/s 视为在动（含噪声余量） */
+#define MOTION_HINT_TTL_MAX       500U   /* ~500 ms @ 1 kHz ISR */
+
 typedef struct
 {
     float  vel_x_ms;
@@ -53,6 +58,9 @@ typedef struct
     float  correct_py_pending;
     float  correct_vx_pending;
     float  correct_vy_pending;
+    /* 运动提示（外部轮速证据，用于抑制 IMU-only ZUPT 误触发） */
+    int32  motion_hint_mm_s;
+    uint32 motion_hint_ttl;
 } icm_ins_state_t;
 
 static volatile icm_ins_state_t g_icm_ins = {
@@ -61,7 +69,8 @@ static volatile icm_ins_state_t g_icm_ins = {
     0.0f, 0.0f, 0.0f,
     0U, 0U,
     0U,
-    0.0f, 0.0f, 0.0f, 0.0f
+    0.0f, 0.0f, 0.0f, 0.0f,
+    0, 0U
 };
 
 void icm_ins_init(void)
@@ -81,6 +90,8 @@ void icm_ins_init(void)
     g_icm_ins.correct_py_pending = 0.0f;
     g_icm_ins.correct_vx_pending = 0.0f;
     g_icm_ins.correct_vy_pending = 0.0f;
+    g_icm_ins.motion_hint_mm_s   = 0;
+    g_icm_ins.motion_hint_ttl    = 0U;
 }
 
 void icm_ins_reset_velocity(void)
@@ -118,6 +129,7 @@ void icm_ins_update(float acc_x_g, float acc_y_g, float acc_z_g,
     float ny = 0.0f;
     float nz = 0.0f;
     float acc_norm = 0.0f;
+    uint8 hint_moving = 0U;
 
     if (dt_s <= 0.0f)
     {
@@ -129,15 +141,31 @@ void icm_ins_update(float acc_x_g, float acc_y_g, float acc_z_g,
         return;
     }
 
+    /* 运动提示 TTL 递减，判定是否仍视为"外部证据在动" */
+    if (g_icm_ins.motion_hint_ttl > 0U)
+    {
+        g_icm_ins.motion_hint_ttl--;
+        {
+            int32 v = g_icm_ins.motion_hint_mm_s;
+            int32 av = (v < 0) ? -v : v;
+            if (av >= (int32)MOTION_HINT_MM_S_THRESH)
+            {
+                hint_moving = 1U;
+            }
+        }
+    }
+
     /* ZUPT state machine with entry and exit hysteresis.
      * Entry: condition must hold for ZUPT_HOLD  consecutive samples (200 ms).
      * Exit : condition must fail  for ZUPT_EXIT_COUNT samples (100 ms) while
-     *        already stationary -- prevents flickering from momentary noise. */
+     *        already stationary -- prevents flickering from momentary noise.
+     * Motion hint（若有效）一票否决进入并立即强制退出，避免低速爬行误判。 */
     acc_norm = icm_attitude_get_acc_norm_g();
     if ((acc_norm > ZUPT_ACC_LO) && (acc_norm < ZUPT_ACC_HI) &&
         (gyro_x_dps > -ZUPT_GYRO_THRESH) && (gyro_x_dps < ZUPT_GYRO_THRESH) &&
         (gyro_y_dps > -ZUPT_GYRO_THRESH) && (gyro_y_dps < ZUPT_GYRO_THRESH) &&
-        (gyro_z_dps > -ZUPT_GYRO_THRESH) && (gyro_z_dps < ZUPT_GYRO_THRESH))
+        (gyro_z_dps > -ZUPT_GYRO_THRESH) && (gyro_z_dps < ZUPT_GYRO_THRESH) &&
+        (0U == hint_moving))
     {
         g_icm_ins.zupt_exit_count = 0U;
         if (g_icm_ins.zupt_count < ZUPT_HOLD)
@@ -150,11 +178,20 @@ void icm_ins_update(float acc_x_g, float acc_y_g, float acc_z_g,
         g_icm_ins.zupt_count = 0U;
         if (g_icm_ins.is_stationary)
         {
-            g_icm_ins.zupt_exit_count++;
-            if (g_icm_ins.zupt_exit_count >= ZUPT_EXIT_COUNT)
+            if (hint_moving)
             {
+                /* 外部证据在动 → 立即退出静止（不等 100 ms 迟滞） */
                 g_icm_ins.is_stationary = 0U;
                 g_icm_ins.zupt_exit_count = 0U;
+            }
+            else
+            {
+                g_icm_ins.zupt_exit_count++;
+                if (g_icm_ins.zupt_exit_count >= ZUPT_EXIT_COUNT)
+                {
+                    g_icm_ins.is_stationary = 0U;
+                    g_icm_ins.zupt_exit_count = 0U;
+                }
             }
         }
     }
@@ -289,5 +326,13 @@ void icm_ins_correct_velocity(float delta_vx_ms, float delta_vy_ms)
     uint32 irq_state = interrupt_global_disable();
     g_icm_ins.correct_vx_pending += delta_vx_ms;
     g_icm_ins.correct_vy_pending += delta_vy_ms;
+    interrupt_global_enable(irq_state);
+}
+
+void icm_ins_set_motion_hint_mm_s(int32 mm_s)
+{
+    uint32 irq_state = interrupt_global_disable();
+    g_icm_ins.motion_hint_mm_s = mm_s;
+    g_icm_ins.motion_hint_ttl  = MOTION_HINT_TTL_MAX;
     interrupt_global_enable(irq_state);
 }
