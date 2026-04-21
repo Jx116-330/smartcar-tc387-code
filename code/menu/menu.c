@@ -755,22 +755,32 @@ static void menu_process_status_timeout(uint32 now_ms)
 
 static void menu_update_selection_from_encoder(void)
 {
-    if (If_Switch_Encoder_Change())
+    /* 一个 tick 内抽干 pending 队列，避免快转后"菜单还在继续走"的滞后感。
+     * ISR 5kHz 累积最快可达 +/- PENDING_LIMIT 步（当前 8）。 */
+    int total_delta = 0;
+
+    while (If_Switch_Encoder_Change())
     {
-        current_selection -= switch_encoder_change_num;
-
-        while (current_selection >= current_page->num_items)
-        {
-            current_selection -= current_page->num_items;
-        }
-
-        while (current_selection < 0)
-        {
-            current_selection += current_page->num_items;
-        }
-
-        menu_request_redraw(0U);
+        total_delta += switch_encoder_change_num;   /* +1 / -1 每步 */
     }
+
+    if (0 == total_delta)
+    {
+        return;
+    }
+
+    current_selection -= total_delta;
+
+    while (current_selection >= current_page->num_items)
+    {
+        current_selection -= current_page->num_items;
+    }
+    while (current_selection < 0)
+    {
+        current_selection += current_page->num_items;
+    }
+
+    menu_request_redraw(0U);
 }
 
 static uint8 menu_is_gps_root_idle(void)
@@ -1092,7 +1102,7 @@ void menu_init(void)
 
     my_key_init(10);
     my_key_clear_all_state();
-    MyEncoder_Init();
+    /* MyEncoder_Init() 已移至 cpu0_main，在 CCU61_CH1 5kHz ISR 启动前完成 */
 
     /* 初始化 4 个视图上下文 */
     icm_ctx.mode                 = &icm_display_mode;
@@ -1207,7 +1217,7 @@ void menu_task(void)
         return;                         /* 不到 10ms，跳过本次，不阻塞 */
     menu_last_tick_ms = now_ms;
     my_key_scanner();
-    Get_Switch_Num();
+    /* Get_Switch_Num() 已移至 CCU61_CH1 (5kHz) ISR，此处仅消费 pending 步数 */
     menu_process_status_timeout(now_ms);
     menu_sync_gps_record_item();
     menu_sync_ins_rec_item();

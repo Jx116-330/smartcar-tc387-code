@@ -17,6 +17,7 @@
 #include "rear_left_encoder.h"
 #include "drive_motor.h"
 #include "pedal_input.h"  /* 踏板输入（10ms ISR 调用） */
+#include "MyEncoder.h"    /* 菜单旋钮软件解码（5kHz ISR 调用） */
 
 /* 1ms 定时中断：以固定 1kHz 采样 ICM42688，保证惯导积分 dt 稳定 */
 IFX_INTERRUPT(cc60_pit_ch0_isr, CCU6_0_CH0_INT_VECTAB_NUM, CCU6_0_CH0_ISR_PRIORITY)
@@ -71,12 +72,15 @@ IFX_INTERRUPT(cc61_pit_ch0_isr, CCU6_1_CH0_INT_VECTAB_NUM, CCU6_1_CH0_ISR_PRIORI
     ins_ctrl_task();
 }
 
+/* 5 kHz (200us) 共享 ISR：后轮编码器脉冲轮询 + 菜单旋钮正交解码
+ * 单次耗时 ~1 us，总负荷约 0.5% CPU */
 IFX_INTERRUPT(cc61_pit_ch1_isr, CCU6_1_CH1_INT_VECTAB_NUM, CCU6_1_CH1_ISR_PRIORITY)
 {
     interrupt_global_enable(0);                     // 开启中断嵌套
     pit_clear_flag(CCU61_CH1);
     rear_right_encoder_poll_isr();
     rear_left_encoder_poll_isr();
+    Get_Switch_Num();                               /* 菜单旋钮 A/B 相采样 */
 }
 
 

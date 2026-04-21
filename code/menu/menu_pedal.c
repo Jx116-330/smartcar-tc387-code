@@ -340,16 +340,23 @@ uint8 menu_pedal_handle_view(menu_view_ctx_t *ctx)
             return 1U;
         }
 
-        /* 旋钮调节 PWM 上限：每格 ±5%（50/1000），钳位 0~1000
-         * 必须主动调 If_Switch_Encoder_Change() 把 pending_steps 转成 change_num，
-         * 因为 view 激活时 menu_update_selection_from_encoder 不运行 */
-        if (If_Switch_Encoder_Change())
+        /* 旋钮调节 PWM 上限：每格 ±1%（10/1000），钳位 0~1000
+         * View 激活时 menu_update_selection_from_encoder 不运行，必须主动 drain；
+         * while 循环抽干 pending，避免快转后滞后继续走 */
         {
-            int16 cur = (int16)pedal_input_get_pwm_limit();
-            cur -= (int16)switch_encoder_change_num * 10;   /* 反向，每格 1%（10/1000） */
-            if (cur < 0)    cur = 0;
-            if (cur > 1000) cur = 1000;
-            pedal_input_set_pwm_limit((uint16)cur);
+            int total_delta = 0;
+            while (If_Switch_Encoder_Change())
+            {
+                total_delta += switch_encoder_change_num;
+            }
+            if (0 != total_delta)
+            {
+                int16 cur = (int16)pedal_input_get_pwm_limit();
+                cur -= (int16)total_delta * 10;     /* 反向，每格 1% */
+                if (cur < 0)    cur = 0;
+                if (cur > 1000) cur = 1000;
+                pedal_input_set_pwm_limit((uint16)cur);
+            }
         }
     }
 
