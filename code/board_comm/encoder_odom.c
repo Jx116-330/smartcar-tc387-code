@@ -17,17 +17,12 @@
 #include <ICM42688/icm_attitude.h>
 #include <ICM42688/icm_ins.h>
 #include "encoder_odom.h"
+#include "ins_enc_tune.h"
 #include "rear_left_encoder.h"
 #include <math.h>
 
-/* ==== 融合增益 ============================================================
- * 本地编码器每 10ms 采样一次，encoder_odom 以 100Hz 触发。
- * 老 TC264 链路是 25Hz，增益依次是 0.15 / 0.03 / 0.01。
- * 这里按 1/4 缩放：每秒累计校正量保持不变，但分摊到 4 倍的采样间隔，
- * INS 校正更平滑、响应更快，且与 encoder_odom_right 的结构对称。 */
-#define EO_VEL_GAIN     0.0375f /* 原 0.15 / 4 */
-#define EO_POS_GAIN     0.0075f /* 原 0.03 / 4 */
-#define EO_SYNC_RATE    0.0025f /* 原 0.01 / 4 */
+/* 融合增益运行时可调：默认值定义在 ins_enc_tune.h，桌面调参工具通过
+ * SET INSENC_L_* / SAVE INSENC 在线修改与持久化。 */
 
 #ifndef M_PI
 #define M_PI            3.14159265358979323846f
@@ -139,16 +134,22 @@ void encoder_odom_task(void)
     eo_py_m += delta_dist_m * sinf(yaw_rad);
 
     /* 防漂移回拉: 缓慢向 INS 位置靠拢（~4 秒时间常数 @ 25Hz） */
-    eo_px_m += EO_SYNC_RATE * (ins_px - eo_px_m);
-    eo_py_m += EO_SYNC_RATE * (ins_py - eo_py_m);
+    {
+        float sync_rate = ins_enc_tune_get_l_sync_rate();
+        float vel_gain  = ins_enc_tune_get_l_vel_gain();
+        float pos_gain  = ins_enc_tune_get_l_pos_gain();
 
-    /* ---- 速度校正 ---- */
-    icm_ins_correct_velocity(EO_VEL_GAIN * (enc_vx - ins_vx),
-                             EO_VEL_GAIN * (enc_vy - ins_vy));
+        eo_px_m += sync_rate * (ins_px - eo_px_m);
+        eo_py_m += sync_rate * (ins_py - eo_py_m);
 
-    /* ---- 位置校正 ---- */
-    icm_ins_correct_position(EO_POS_GAIN * (eo_px_m - ins_px),
-                             EO_POS_GAIN * (eo_py_m - ins_py));
+        /* ---- 速度校正 ---- */
+        icm_ins_correct_velocity(vel_gain * (enc_vx - ins_vx),
+                                 vel_gain * (enc_vy - ins_vy));
+
+        /* ---- 位置校正 ---- */
+        icm_ins_correct_position(pos_gain * (eo_px_m - ins_px),
+                                 pos_gain * (eo_py_m - ins_py));
+    }
 
     eo_active = 1U;
 }

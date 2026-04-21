@@ -12,6 +12,7 @@
 #include "rear_left_encoder.h" /* 本地左后编码器（TIM2 硬件 DIR 模式） */
 #include "drive_motor.h"       /* 本地两路电机驱动（ATOM2_CH4/CH1 + DIR） */
 #include "encoder_odom.h" /* 编码器里程计 → INS 融合 */
+#include "ins_enc_tune.h" /* INS/编码器融合增益 运行时可调 + flash 持久化 */
 #pragma section all "cpu0_dsram"
 
 int core0_main(void)
@@ -33,6 +34,7 @@ int core0_main(void)
     Turn_Init();
     drive_motor_init();   /* 本地两路电机 PWM + DIR */
     rear_left_encoder_init();
+    ins_enc_tune_init();  /* 加载 INS/编码器融合增益（flash 失败回默认值） */
     encoder_odom_init();  /* 编码器里程计融合：初始化状态 */
 
     /* 启动 10ms 定时中断：把固定节拍任务从主循环搬到 ISR
