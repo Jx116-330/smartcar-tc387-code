@@ -81,7 +81,14 @@ void encoder_odom_task(void)
     eo_last_process_ms = rx_ms;
 
     /* 采集编码器速度（即使融合关闭也更新，供菜单显示） */
-    eo_spd_ms = (float)rear_left_get_spd_mm_s() * 0.001f;
+    {
+        int32 spd_mm_s = rear_left_get_spd_mm_s();
+        eo_spd_ms = (float)spd_mm_s * 0.001f;
+        /* 外部证据喂给 icm_ins，抑制 IMU-only ZUPT 的低速误触发。
+         * 放在 enabled / online 前置检查之前，确保只要编码器还在产出速度，
+         * 提示就持续刷新；若编码器掉线或融合关闭，TTL 自然过期回退纯 IMU。 */
+        icm_ins_set_motion_hint_mm_s(spd_mm_s);
+    }
 
     /* ---- 前置检查 ---- */
     if (0U == eo_enabled)

@@ -26,7 +26,8 @@
 #define INS_RECORD_DIST_TURN_M      0.10f   /* 弯道距离触发（每 10cm，更密）*/
 #define INS_RECORD_DIST_MIN_M       0.02f   /* 最小距离门限（防静止堆点）    */
 #define INS_RECORD_TIME_MAX_MS      500U    /* 最大时间兜底 ms             */
-#define INS_RECORD_TURN_RATE_THRESH 15.0f   /* deg/s，yaw变化率超此值=弯道 */
+#define INS_RECORD_TURN_RATE_THRESH 15.0f   /* deg/s，弯直过渡起点（距离阈值开始收紧）*/
+#define INS_RECORD_TURN_RATE_FULL   30.0f   /* deg/s，≥此值：距离阈值取最小（全密采）*/
 #define INS_RECORD_SMOOTH_YAW_THRESH 2.0f   /* 平滑pass：相邻yaw差>此值才平滑 */
 #define INS_RECORD_SMOOTH_PASSES    2U      /* 平滑迭代次数                */
 

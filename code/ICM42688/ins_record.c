@@ -41,12 +41,18 @@ static float ins_record_dist2d(float dx, float dy)
     return sqrtf(dx * dx + dy * dy);
 }
 
+/** 归一化角度差到 [-180, 180]（有符号） */
+static float ins_record_yaw_wrap_signed(float d_deg)
+{
+    while (d_deg >  180.0f) { d_deg -= 360.0f; }
+    while (d_deg < -180.0f) { d_deg += 360.0f; }
+    return d_deg;
+}
+
 /** 计算两个角度之差的绝对值，归一化到 [0, 180] */
 static float ins_record_yaw_delta(float a_deg, float b_deg)
 {
-    float d = a_deg - b_deg;
-    while (d >  180.0f) { d -= 360.0f; }
-    while (d < -180.0f) { d += 360.0f; }
+    float d = ins_record_yaw_wrap_signed(a_deg - b_deg);
     return (d < 0.0f) ? -d : d;
 }
 
@@ -131,6 +137,7 @@ void ins_record_smooth(void)
 
     for (pass = 0U; pass < INS_RECORD_SMOOTH_PASSES; pass++)
     {
+        /* ---- 中段：3 点加权（仅弯道） ---- */
         for (i = 1U; i < (count - 1U); i++)
         {
             ins_record_point_t *prev = &ins_record_data.points[i - 1U];
@@ -144,9 +151,45 @@ void ins_record_smooth(void)
                 continue;   /* 直道段，不动 */
             }
 
-            /* 3 点加权平均：0.25 * prev + 0.5 * cur + 0.25 * next */
+            /* 位置：0.25/0.5/0.25 加权 */
             cur->px_m = 0.25f * prev->px_m + 0.5f * cur->px_m + 0.25f * next->px_m;
             cur->py_m = 0.25f * prev->py_m + 0.5f * cur->py_m + 0.25f * next->py_m;
+
+            /* yaw：同权重，但用有符号 wrap 差分，避免跨 ±180° 跳变 */
+            {
+                float dyaw_p = ins_record_yaw_wrap_signed(prev->yaw_deg - cur->yaw_deg);
+                float dyaw_n = ins_record_yaw_wrap_signed(next->yaw_deg - cur->yaw_deg);
+                cur->yaw_deg = ins_record_yaw_wrap_signed(
+                    cur->yaw_deg + 0.25f * dyaw_p + 0.25f * dyaw_n);
+            }
+        }
+
+        /* ---- 端点：2 点加权（仅当与邻点存在弯道级差异） ---- */
+        {
+            ins_record_point_t *p0 = &ins_record_data.points[0];
+            ins_record_point_t *p1 = &ins_record_data.points[1];
+            ins_record_point_t *pn = &ins_record_data.points[count - 1U];
+            ins_record_point_t *pm = &ins_record_data.points[count - 2U];
+
+            if (ins_record_yaw_delta(p0->yaw_deg, p1->yaw_deg)
+                >= INS_RECORD_SMOOTH_YAW_THRESH)
+            {
+                p0->px_m = 0.67f * p0->px_m + 0.33f * p1->px_m;
+                p0->py_m = 0.67f * p0->py_m + 0.33f * p1->py_m;
+                p0->yaw_deg = ins_record_yaw_wrap_signed(
+                    p0->yaw_deg
+                    + 0.33f * ins_record_yaw_wrap_signed(p1->yaw_deg - p0->yaw_deg));
+            }
+
+            if (ins_record_yaw_delta(pn->yaw_deg, pm->yaw_deg)
+                >= INS_RECORD_SMOOTH_YAW_THRESH)
+            {
+                pn->px_m = 0.67f * pn->px_m + 0.33f * pm->px_m;
+                pn->py_m = 0.67f * pn->py_m + 0.33f * pm->py_m;
+                pn->yaw_deg = ins_record_yaw_wrap_signed(
+                    pn->yaw_deg
+                    + 0.33f * ins_record_yaw_wrap_signed(pm->yaw_deg - pn->yaw_deg));
+            }
         }
     }
 }
@@ -211,12 +254,22 @@ void ins_record_task(void)
         return;
     }
 
-    /* 弯道/直道自动判别：用 yaw 变化率决定距离阈值 */
+    /* 弯道/直道自动判别：yaw 变化率在 [THRESH, FULL] 区间内线性插值，
+     * 避免硬切阈值附近"忽密忽疏"。
+     *   yaw_rate ≤ 15 dps → 0.50 m（直道）
+     *   yaw_rate ≥ 30 dps → 0.10 m（全密采）
+     *   之间          → 线性过渡 */
     {
         float yaw_rate_dps = (dt_ms > 0U) ? (dyaw * 1000.0f / (float)dt_ms) : 0.0f;
-        float dist_thresh  = (yaw_rate_dps > INS_RECORD_TURN_RATE_THRESH)
-                             ? INS_RECORD_DIST_TURN_M    /* 弯道：10cm 密采 */
-                             : INS_RECORD_DIST_MAX_M;    /* 直道：50cm 稀采 */
+        float band = INS_RECORD_TURN_RATE_FULL - INS_RECORD_TURN_RATE_THRESH;
+        float t    = (band > 0.0f)
+                     ? ((yaw_rate_dps - INS_RECORD_TURN_RATE_THRESH) / band)
+                     : 0.0f;
+        float dist_thresh;
+        if (t < 0.0f) { t = 0.0f; }
+        else if (t > 1.0f) { t = 1.0f; }
+        dist_thresh = INS_RECORD_DIST_MAX_M
+                    - (INS_RECORD_DIST_MAX_M - INS_RECORD_DIST_TURN_M) * t;
 
         /* 判断是否需要存点 */
         should_record = 0U;
